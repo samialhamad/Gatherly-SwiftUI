@@ -9,27 +9,27 @@ import Foundation
 
 struct SampleData {
     static let sampleEvents: [Event] = [
-        Event(description: "A gathering for Swift developers",
-              endTimestamp: Int(Date().timeIntervalSince1970) + 7200,
-              id: 1,
-              leaderID: 101,
-              memberIDs: [101, 102, 103],
-              title: "Swift Meetup",
-              startTimestamp: Int(Date().timeIntervalSince1970) + 3600),
-        
-        Event(description: "Team lunch at a cafe",
-              endTimestamp: Int(Date().timeIntervalSince1970) - 3600,
-              id: 2,
-              leaderID: 102,
-              memberIDs: [102, 105, 106],
-              title: "Lunch with Team",
-              startTimestamp: Int(Date().timeIntervalSince1970) - 7200),
-        
-        Event(description: "Evening workout at the gym",
-              endTimestamp: Int(Date().timeIntervalSince1970) + 21600, id: 3,
-              leaderID: 103,
-              memberIDs: [103, 107],
-              title: "Workout Session",
-              startTimestamp: Int(Date().timeIntervalSince1970) + 18000)
+        Event(
+            date: Calendar.current.date(byAdding: .day, value: 1, to: Date()),
+            endTimestamp: Int(Date().addingTimeInterval(90000).timeIntervalSince1970),
+            id: 1,
+            title: "Event Tomorrow",
+            startTimestamp: Int(Date().addingTimeInterval(86400).timeIntervalSince1970)
+        ),
+        Event(
+            date: Calendar.current.date(byAdding: .day, value: 7, to: Date()),
+            endTimestamp: Int(Date().addingTimeInterval((7 * 86400) + 3600).timeIntervalSince1970),
+            id: 2,
+            title: "Event in One Week",
+            startTimestamp: Int(Date().addingTimeInterval(7 * 86400).timeIntervalSince1970)
+        ),
+        Event(
+            date: Calendar.current.date(byAdding: .day, value: 30, to: Date()),
+            endTimestamp: Int(Date().addingTimeInterval((30 * 86400) + 7200).timeIntervalSince1970),
+            id: 3,
+            title: "Event in One Month",
+            startTimestamp: Int(Date().addingTimeInterval(30 * 86400).timeIntervalSince1970)
+        )
     ]
 }
+
