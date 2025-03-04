@@ -29,9 +29,30 @@
 		F11CDC3A2D77958B007BC1F1 /* Gatherly-SwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Gatherly-SwiftUIUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		F11CDC642D779DC7007BC1F1 /* Exceptions for "Gatherly-SwiftUI" folder in "Gatherly-SwiftUITests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Model/User/UserTests.swift,
+			);
+			target = F11CDC2F2D77958B007BC1F1 /* Gatherly-SwiftUITests */;
+		};
+		F11CDC652D779DE7007BC1F1 /* Exceptions for "Gatherly-SwiftUI" folder in "Gatherly-SwiftUI" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Model/User/UserTests.swift,
+			);
+			target = F11CDC1F2D77958A007BC1F1 /* Gatherly-SwiftUI */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F11CDC222D77958A007BC1F1 /* Gatherly-SwiftUI */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				F11CDC652D779DE7007BC1F1 /* Exceptions for "Gatherly-SwiftUI" folder in "Gatherly-SwiftUI" target */,
+				F11CDC642D779DC7007BC1F1 /* Exceptions for "Gatherly-SwiftUI" folder in "Gatherly-SwiftUITests" target */,
+			);
 			path = "Gatherly-SwiftUI";
 			sourceTree = "<group>";
 		};
