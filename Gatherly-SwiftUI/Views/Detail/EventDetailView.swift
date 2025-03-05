@@ -13,22 +13,69 @@ struct EventDetailView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(event.title ?? "Untitled Event")
-                .font(.title)
-                .bold()
-            
+            eventTitleView
+            eventDescriptionView
+            eventDateView
+            eventTimeView
+            eventLeaderAndMembersView
+            Spacer()
+        }
+        .padding()
+        .navigationTitle("Event Details")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+// MARK: - Subviews
+
+private extension EventDetailView {
+    var eventTitleView: some View {
+        Text(event.title ?? "Untitled Event")
+            .font(.title)
+            .bold()
+    }
+    
+    var eventDescriptionView: some View {
+        Group {
             if let description = event.description {
                 Text(description)
                     .font(.body)
             }
-            
+        }
+    }
+    
+    var eventDateView: some View {
+        Group {
             if let date = event.date {
-                Text("Date: \(date.formatted(date: .long, time: .shortened))")
+                // Show only the day (e.g., "March 5, 2025")
+                Text("Date: \(date.formatted(date: .long, time: .omitted))")
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
+    
+    var eventTimeView: some View {
+        Group {
+            // Start time
+            if let startTimestamp = event.startTimestamp {
+                let startDate = Date(timeIntervalSince1970: TimeInterval(startTimestamp))
+                Text("Start: \(startDate.formatted(date: .omitted, time: .shortened))")
                     .foregroundColor(.secondary)
             }
             
-            if let leader = leader {
-                Text("Leader: \(leader.firstName ?? "") \(leader.lastName ?? "")")
+            // End time
+            if let endTimestamp = event.endTimestamp {
+                let endDate = Date(timeIntervalSince1970: TimeInterval(endTimestamp))
+                Text("End: \(endDate.formatted(date: .omitted, time: .shortened))")
+                    .foregroundColor(.secondary)
+            }
+        }
+    }
+    
+    var eventLeaderAndMembersView: some View {
+        Group {
+            if let planner = planner {
+                Text("Leader: \(planner.firstName ?? "") \(planner.lastName ?? "")")
                     .font(.headline)
             }
             
@@ -39,14 +86,11 @@ struct EventDetailView: View {
                     Text("\(user.firstName ?? "") \(user.lastName ?? "")")
                 }
             }
-            
-            Spacer()
         }
-        .padding()
-        .navigationTitle("Event Details")
-        .navigationBarTitleDisplayMode(.inline)
     }
 }
+
+// MARK: - Computed Vars
 
 private extension EventDetailView {
     var planner: User? {
@@ -56,9 +100,16 @@ private extension EventDetailView {
         
         return users.first(where: { $0.id == plannerID })
     }
-
+    
     var members: [User] {
-        guard let memberIDs = event.memberIDs else { return [] }
+        guard let memberIDs = event.memberIDs else {
+            return []
+        }
+        
         return users.filter { memberIDs.contains($0.id ?? 0) }
     }
+}
+
+#Preview {
+    EventDetailView(event: SampleData.sampleEvents[1], users: SampleData.sampleUsers)
 }
