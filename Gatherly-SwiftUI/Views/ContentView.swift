@@ -10,10 +10,13 @@ import SwiftUI
 struct ContentView: View {
     var body: some View {
         TabView {
-            CalendarView(events: SampleData.sampleEvents) // Pass user events
-                .tabItem {
-                    Label("My Events", systemImage: "calendar")
-                }
+            NavigationStack {
+                CalendarView(events: SampleData.sampleEvents, users: SampleData.sampleUsers)
+                    .navigationTitle("My Events")
+            }
+            .tabItem {
+                Label("My Events", systemImage: "calendar")
+            }
             
             Text("Create Event")
                 .tabItem {
