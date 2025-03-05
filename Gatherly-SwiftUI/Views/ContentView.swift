@@ -8,10 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var events: [Event] = SampleData.sampleEvents
+    @State private var users: [User] = SampleData.sampleUsers
+    
     var body: some View {
         TabView {
             NavigationStack {
-                CalendarView(events: SampleData.sampleEvents, users: SampleData.sampleUsers)
+                CalendarView(events: $events, users: users)
                     .navigationTitle("My Events")
             }
             .tabItem {

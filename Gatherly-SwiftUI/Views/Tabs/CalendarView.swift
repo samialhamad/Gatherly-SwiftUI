@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CalendarView: View {
     @State private var selectedDate = Date()
-    let events: [Event]
+    @Binding var events: [Event]
     let users: [User]
     
     var body: some View {
@@ -44,13 +44,23 @@ struct CalendarView: View {
     
     private var eventList: some View {
         List(filteredEvents) { event in
-            NavigationLink(destination: EventDetailView(event: event, users: users)) {
+            NavigationLink {
+                EventDetailView(
+                    event: event,
+                    users: users,
+                    onSave: { updatedEvent in
+                        // Update the event in the binding
+                        if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
+                            events[index] = updatedEvent
+                        }
+                    }
+                )
+            } label: {
                 EventRow(event: event)
             }
         }
         .listStyle(PlainListStyle())
     }
-    
     private var filteredEvents: [Event] {
         events.filter { event in
             guard let eventDate = event.date else {
@@ -63,5 +73,5 @@ struct CalendarView: View {
 }
 
 #Preview {
-    CalendarView(events: SampleData.sampleEvents, users: SampleData.sampleUsers)
+    CalendarView(events: .constant(SampleData.sampleEvents), users: SampleData.sampleUsers)
 }

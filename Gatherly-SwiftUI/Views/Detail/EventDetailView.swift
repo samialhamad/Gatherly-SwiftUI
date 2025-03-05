@@ -10,6 +10,7 @@ import SwiftUI
 struct EventDetailView: View {
     let event: Event
     let users: [User]
+    var onSave: ((Event) -> Void)? = nil
     
     @State private var isShowingEditView = false
     
