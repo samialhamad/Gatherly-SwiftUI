@@ -53,17 +53,47 @@ struct SampleData {
             description: "Event from yesterday",
             endTimestamp: Int(Date().addingTimeInterval(-3600).timeIntervalSince1970),
             id: 1,
-            leaderID: 1,
+            plannerID: 1,
             memberIDs: [2, 3],
             title: "Event Yesterday",
             startTimestamp: Int(Date().addingTimeInterval(-86400).timeIntervalSince1970)
         ),
         Event(
+            date: Date(),
+            description: "Event 1 for today, finished",
+            endTimestamp: Int(Date().addingTimeInterval(-3600).timeIntervalSince1970),
+            id: 2,
+            plannerID: 1,
+            memberIDs: [2, 3],
+            title: "Event 1 Today",
+            startTimestamp: Int(Date().addingTimeInterval(-7200).timeIntervalSince1970)
+        ),
+        Event(
+            date: Date(),
+            description: "Event 2 for today, ongoing",
+            endTimestamp: Int(Date().addingTimeInterval(3600).timeIntervalSince1970),
+            id: 3,
+            plannerID: 1,
+            memberIDs: [2, 3],
+            title: "Event 2 Today",
+            startTimestamp: Int(Date().addingTimeInterval(-3600).timeIntervalSince1970)
+        ),
+        Event(
+            date: Date(),
+            description: "Event 3 for today, in an hour",
+            endTimestamp: Int(Date().addingTimeInterval(7200).timeIntervalSince1970),
+            id: 4,
+            plannerID: 1,
+            memberIDs: [2, 3],
+            title: "Event 3 Today",
+            startTimestamp: Int(Date().addingTimeInterval(3600).timeIntervalSince1970)
+        ),
+        Event(
             date: Calendar.current.date(byAdding: .day, value: 1, to: Date()),
             description: "Event planned for tomorrow, hope to see you there!",
             endTimestamp: Int(Date().addingTimeInterval(90000).timeIntervalSince1970),
-            id: 2,
-            leaderID: 2,
+            id: 5,
+            plannerID: 2,
             memberIDs: [1, 3],
             title: "Event Tomorrow",
             startTimestamp: Int(Date().addingTimeInterval(86400).timeIntervalSince1970)
@@ -72,8 +102,8 @@ struct SampleData {
             date: Calendar.current.date(byAdding: .day, value: 7, to: Date()),
             description: "Event planned for next week, hope to see you there!",
             endTimestamp: Int(Date().addingTimeInterval((7 * 86400) + 3600).timeIntervalSince1970),
-            id: 3,
-            leaderID: 3,
+            id: 6,
+            plannerID: 3,
             memberIDs: [1, 2],
             title: "Event in One Week",
             startTimestamp: Int(Date().addingTimeInterval(7 * 86400).timeIntervalSince1970)
@@ -82,8 +112,8 @@ struct SampleData {
             date: Calendar.current.date(byAdding: .day, value: 30, to: Date()),
             description: "Event planned for a month from today, hope to see you there!",
             endTimestamp: Int(Date().addingTimeInterval((30 * 86400) + 7200).timeIntervalSince1970),
-            id: 4,
-            leaderID: 1,
+            id: 7,
+            plannerID: 1,
             memberIDs: [2, 3],
             title: "Event in One Month",
             startTimestamp: Int(Date().addingTimeInterval(30 * 86400).timeIntervalSince1970)
