@@ -21,10 +21,13 @@ struct ContentView: View {
                 Label("My Events", systemImage: "calendar")
             }
             
-            Text("Create Event")
-                .tabItem {
-                    Label("Create", systemImage: "plus")
-                }
+            NavigationStack {
+                CreateEventView(events: $events, allUsers: users)
+                    .navigationTitle("Create Event")
+            }
+            .tabItem {
+                Label("Create", systemImage: "plus")
+            }
             
             Text("Friends")
                 .tabItem {
