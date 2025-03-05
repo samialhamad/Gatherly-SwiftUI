@@ -49,9 +49,12 @@ struct EventDetailView: View {
 }
 
 private extension EventDetailView {
-    var leader: User? {
-        guard let leaderID = event.leaderID else { return nil }
-        return users.first(where: { $0.id == leaderID })
+    var planner: User? {
+        guard let plannerID = event.plannerID else {
+            return nil
+        }
+        
+        return users.first(where: { $0.id == plannerID })
     }
 
     var members: [User] {
