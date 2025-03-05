@@ -41,6 +41,7 @@ struct EventDetailView: View {
                 event: event,
                 allUsers: users,
                 onSave: { updatedEvent in
+                    onSave? (updatedEvent)
                     isShowingEditView = false
                 },
                 onCancel: {
