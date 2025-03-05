@@ -49,7 +49,6 @@ struct CalendarView: View {
                     event: event,
                     users: users,
                     onSave: { updatedEvent in
-                        // Update the event in the binding
                         if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
                             events[index] = updatedEvent
                         }
@@ -61,6 +60,7 @@ struct CalendarView: View {
         }
         .listStyle(PlainListStyle())
     }
+    
     private var filteredEvents: [Event] {
         events.filter { event in
             guard let eventDate = event.date else {
