@@ -10,6 +10,7 @@ import SwiftUI
 struct CalendarView: View {
     @State private var selectedDate = Date()
     let events: [Event]
+    let users: [User]
     
     var body: some View {
         VStack {
@@ -18,11 +19,14 @@ struct CalendarView: View {
             eventList
         }
         .padding()
+        .navigationDestination(for: Event.self) { event in
+            EventDetailView(event: event, users: users)
+        }
     }
     
     private var headerView: some View {
         HStack {
-            Text(selectedDate, format: .dateTime.year().month())
+            Text(selectedDate, format: .dateTime.year().month().day())
                 .font(.title2)
                 .bold()
             Spacer()
@@ -40,7 +44,9 @@ struct CalendarView: View {
     
     private var eventList: some View {
         List(filteredEvents) { event in
-            EventRow(event: event)
+            NavigationLink(destination: EventDetailView(event: event, users: users)) {
+                EventRow(event: event)
+            }
         }
         .listStyle(PlainListStyle())
     }
@@ -57,5 +63,5 @@ struct CalendarView: View {
 }
 
 #Preview {
-    CalendarView(events: SampleData.sampleEvents)
+    CalendarView(events: SampleData.sampleEvents, users: SampleData.sampleUsers)
 }
