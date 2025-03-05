@@ -78,7 +78,7 @@ struct EditEventView: View {
         }
     }
     
-    // MARK: - Sections
+    // MARK: - Subviews
     
     private var generalInfoSection: some View {
         Section("General Info") {
