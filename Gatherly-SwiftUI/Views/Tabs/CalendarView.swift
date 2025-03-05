@@ -13,35 +13,45 @@ struct CalendarView: View {
     
     var body: some View {
         VStack {
-            HStack {
-                Text(selectedDate, format: .dateTime.year().month())
-                    .font(.title2)
-                    .bold()
-                Spacer()
-                Image(systemName: "bell.badge")
-                    .font(.title2)
-            }
-            .padding()
-            
-            DatePicker("", selection: $selectedDate, displayedComponents: .date)
-                .datePickerStyle(.graphical)
-                .padding()
-            
-            List(filteredEvents, id: \.id) { event in
-                EventRow(event: event)
-            }
-            .listStyle(PlainListStyle())
+            headerView
+            calendarView
+            eventList
         }
         .padding()
-        
-        var filteredEvents: [Event] {
-            events.filter { event in
-                guard let eventDate = event.date else {
-                    return false
-                }
-                
-                return Calendar.current.isDate(eventDate, inSameDayAs: selectedDate)
+    }
+    
+    private var headerView: some View {
+        HStack {
+            Text(selectedDate, format: .dateTime.year().month())
+                .font(.title2)
+                .bold()
+            Spacer()
+            Image(systemName: "bell.badge")
+                .font(.title2)
+        }
+        .padding()
+    }
+    
+    private var calendarView: some View {
+        DatePicker("", selection: $selectedDate, displayedComponents: .date)
+            .datePickerStyle(.graphical)
+            .padding()
+    }
+    
+    private var eventList: some View {
+        List(filteredEvents) { event in
+            EventRow(event: event)
+        }
+        .listStyle(PlainListStyle())
+    }
+    
+    private var filteredEvents: [Event] {
+        events.filter { event in
+            guard let eventDate = event.date else {
+                return false
             }
+            
+            return Calendar.current.isDate(eventDate, inSameDayAs: selectedDate)
         }
     }
 }
