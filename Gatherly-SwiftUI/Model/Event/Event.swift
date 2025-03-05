@@ -12,7 +12,7 @@ struct Event: Identifiable, Hashable {
     var description: String?
     var endTimestamp: Int?
     var id: Int?
-    var leaderID: Int?
+    var plannerID: Int?
     var memberIDs: [Int]?
     var messages: [Message]?
     var title: String?
