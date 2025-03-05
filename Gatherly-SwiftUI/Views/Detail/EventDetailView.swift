@@ -11,6 +11,8 @@ struct EventDetailView: View {
     let event: Event
     let users: [User]
     
+    @State private var isShowingEditView = false
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             eventTitleView
@@ -23,6 +25,28 @@ struct EventDetailView: View {
         .padding()
         .navigationTitle("Event Details")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Edit") {
+                    isShowingEditView = true
+                }
+                
+                .disabled(event.hasStarted || event.hasEnded)
+            }
+        }
+        
+        .sheet(isPresented: $isShowingEditView) {
+            EditEventView(
+                event: event,
+                allUsers: users,
+                onSave: { updatedEvent in
+                    isShowingEditView = false
+                },
+                onCancel: {
+                    isShowingEditView = false
+                }
+            )
+        }
     }
 }
 
