@@ -22,7 +22,7 @@ struct ContentView: View {
             }
             
             NavigationStack {
-                CreateEventView(events: $events, allUsers: users)
+                CreateEventView(allUsers: users, events: $events)
                     .navigationTitle("Create Event")
             }
             .tabItem {
