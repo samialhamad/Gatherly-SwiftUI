@@ -16,9 +16,23 @@ struct EditEventView: View {
     var body: some View {
         NavigationStack {
             Form {
-                eventInfoSection
-                dateTimeSection
-                membersSection
+                EventDetailsSection(
+                    header: "Event Info",
+                    title: $viewModel.title,
+                    description: $viewModel.description)
+                EventDateTimeSection(
+                    header: "Date & Time",
+                    eventDate: $viewModel.selectedDate,
+                    startTime: $viewModel.startTime,
+                    endTime: $viewModel.endTime,
+                    startTimeRange: viewModel.startTimeRange,
+                    endTimeRange: viewModel.endTimeRange
+                )
+                EventMembersSection(
+                    header: "Members",
+                    allUsers: allUsers,
+                    selectedMemberIDs: $viewModel.selectedMemberIDs
+                )
                 saveButtonSection
             }
             .navigationTitle("Edit Event")
@@ -36,41 +50,6 @@ struct EditEventView: View {
 // MARK: - Subviews
 
 private extension EditEventView {
-    var eventInfoSection: some View {
-        Section("Event Info") {
-            TextField("Title", text: $viewModel.title)
-            TextField("Description", text: $viewModel.description, axis: .vertical)
-                .lineLimit(3, reservesSpace: true)
-        }
-    }
-    
-    var dateTimeSection: some View {
-        Section("Date & Time") {
-            DatePicker("Event Date", selection: $viewModel.selectedDate, displayedComponents: .date)
-            DatePicker("Start Time", selection: $viewModel.startTime, displayedComponents: .hourAndMinute)
-            DatePicker("End Time", selection: $viewModel.endTime, displayedComponents: .hourAndMinute)
-        }
-    }
-    
-    var membersSection: some View {
-        Section("Members") {
-            ForEach(allUsers, id: \.id) { user in
-                Toggle("\(user.firstName ?? "") \(user.lastName ?? "")",
-                       isOn: Binding(
-                        get: { viewModel.selectedMemberIDs.contains(user.id ?? -1) },
-                        set: { newValue in
-                            if newValue {
-                                viewModel.selectedMemberIDs.insert(user.id ?? -1)
-                            } else {
-                                viewModel.selectedMemberIDs.remove(user.id ?? -1)
-                            }
-                        }
-                       )
-                )
-            }
-        }
-    }
-    
     var saveButtonSection: some View {
         Section {
             Button("Save") {
