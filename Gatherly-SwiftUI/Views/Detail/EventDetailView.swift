@@ -20,7 +20,7 @@ struct EventDetailView: View {
             eventDescriptionView
             eventDateView
             eventTimeView
-            eventLeaderAndMembersView
+            eventPlannerAndMembersView
             Spacer()
         }
         .padding()
@@ -98,15 +98,15 @@ private extension EventDetailView {
         }
     }
     
-    var eventLeaderAndMembersView: some View {
+    var eventPlannerAndMembersView: some View {
         Group {
             if let planner = planner {
-                Text("Leader: \(planner.firstName ?? "") \(planner.lastName ?? "")")
+                Text("Planner: \(planner.firstName ?? "") \(planner.lastName ?? "")")
                     .font(.headline)
             }
             
             if !members.isEmpty {
-                Text("Members:")
+                Text("Attendees:")
                     .font(.headline)
                 ForEach(members, id: \.id) { user in
                     Text("\(user.firstName ?? "") \(user.lastName ?? "")")
