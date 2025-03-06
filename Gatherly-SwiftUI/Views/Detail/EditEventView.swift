@@ -60,3 +60,17 @@ private extension EditEventView {
     }
 }
 
+#Preview {
+    NavigationStack {
+        EditEventView(
+            viewModel: EditEventViewModel(event: SampleData.sampleEvents.first!),
+            allUsers: SampleData.sampleUsers,
+            onSave: { updatedEvent in
+                print("Event updated: \(updatedEvent)")
+            },
+            onCancel: {
+                print("Edit cancelled")
+            }
+        )
+    }
+}
