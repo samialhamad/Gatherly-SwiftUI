@@ -12,6 +12,8 @@ struct CalendarView: View {
     @Binding var events: [Event]
     let users: [User]
     
+    @StateObject private var viewModel = CalendarViewModel()
+    
     var body: some View {
         VStack {
             headerView
@@ -24,12 +26,21 @@ struct CalendarView: View {
         }
     }
     
+    // MARK: - Subviews
+    
     private var headerView: some View {
         HStack {
-            Text(selectedDate, format: .dateTime.year().month().day())
-                .font(.title2)
-                .bold()
+            VStack(alignment: .leading, spacing: 4) {
+                Text(selectedDate, format: .dateTime.year().month().day())
+                    .font(.title2)
+                    .bold()
+                Text(viewModel.eventCountLabel(for: selectedDate, events: events))
+                        .font(.body)
+                        .foregroundColor(.black)
+            }
+            
             Spacer()
+            
             Image(systemName: "bell.badge")
                 .font(.title2)
         }
@@ -60,6 +71,8 @@ struct CalendarView: View {
         }
         .listStyle(PlainListStyle())
     }
+    
+    // MARK: - Computed Vars
     
     private var filteredEvents: [Event] {
         events.filter { event in
