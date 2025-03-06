@@ -128,8 +128,20 @@ private extension EventDetailView {
         guard let memberIDs = event.memberIDs else {
             return []
         }
+        // Filter out the planner's id from the memberIDs, so they dont show up in the attendee's section
+        let filteredMemberIDs = memberIDs.filter { id in
+            if let plannerID = event.plannerID, id == plannerID {
+                return false
+            }
+            return true
+        }
         
-        return users.filter { memberIDs.contains($0.id ?? 0) }
+        return users.filter { user in
+            if let userID = user.id {
+                return filteredMemberIDs.contains(userID)
+            }
+            return false
+        }
     }
 }
 
