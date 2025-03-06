@@ -40,3 +40,7 @@ struct EventRow: View {
         return formatter.string(from: date)
     }
 }
+
+#Preview {
+    EventRow(event: SampleData.sampleEvents.first!)
+}
