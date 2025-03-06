@@ -38,7 +38,7 @@ struct EventDetailView: View {
         
         .sheet(isPresented: $isShowingEditView) {
             EditEventView(
-                event: event,
+                viewModel: EditEventViewModel(event: event),
                 allUsers: users,
                 onSave: { updatedEvent in
                     onSave? (updatedEvent)
