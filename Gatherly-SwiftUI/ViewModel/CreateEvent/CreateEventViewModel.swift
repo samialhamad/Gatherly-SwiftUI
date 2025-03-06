@@ -16,33 +16,16 @@ class CreateEventViewModel: ObservableObject {
     @Published var endTime: Date = Date().addingTimeInterval(3600)
     @Published var selectedMemberIDs: Set<Int> = []
     
-    func mergedStartDate() -> Date {
-        DateUtils.merge(date: selectedDate, time: startTime)
-    }
-
-    func mergedEndDate() -> Date {
-        DateUtils.merge(date: selectedDate, time: endTime)
-    }
-        
     func createEvent(with plannerID: Int) -> Event {
-        let calendar = Calendar.current
-        let mergedStart = mergedStartDate()
-        let mergedEnd = mergedEndDate()
-        
-        return Event(
-            date: calendar.startOfDay(for: selectedDate),
-            description: description,
-            endTimestamp: Int(mergedEnd.timeIntervalSince1970),
-            id: generateEventID(),
-            plannerID: plannerID,
-            memberIDs: Array(selectedMemberIDs),
+        return EventEditor.createEvent(
             title: title,
-            startTimestamp: Int(mergedStart.timeIntervalSince1970)
+            description: description,
+            selectedDate: selectedDate,
+            startTime: startTime,
+            endTime: endTime,
+            selectedMemberIDs: selectedMemberIDs,
+            plannerID: plannerID
         )
-    }
-    
-    private func generateEventID() -> Int {
-        Int.random(in: 1000...9999)
     }
     
     func clearFields() {
@@ -54,3 +37,4 @@ class CreateEventViewModel: ObservableObject {
         selectedMemberIDs.removeAll()
     }
 }
+
