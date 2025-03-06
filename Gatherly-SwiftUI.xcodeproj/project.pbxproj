@@ -37,6 +37,7 @@
 				Model/Event/EventTests.swift,
 				Model/Message/MessageTests.swift,
 				Model/User/UserTests.swift,
+				ViewModel/CalendarView/CalendarViewModelTests.swift,
 				ViewModel/CreateEvent/CreateEventViewModelTests.swift,
 				ViewModel/EditEvent/EditEventViewModelTests.swift,
 			);
@@ -49,6 +50,7 @@
 				Model/Event/EventTests.swift,
 				Model/Message/MessageTests.swift,
 				Model/User/UserTests.swift,
+				ViewModel/CalendarView/CalendarViewModelTests.swift,
 				ViewModel/CreateEvent/CreateEventViewModelTests.swift,
 				ViewModel/EditEvent/EditEventViewModelTests.swift,
 			);
