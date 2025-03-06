@@ -57,6 +57,7 @@ final class CreateEventViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.description, "")
         XCTAssertTrue(viewModel.selectedMemberIDs.isEmpty)
         
+        //a small 2 second window to address this unit test failing as a result of time issues.
         let now = Date()
         let tolerance: TimeInterval = 2.0
         XCTAssertLessThan(abs(viewModel.selectedDate.timeIntervalSince(now)), tolerance)
