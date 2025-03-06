@@ -36,5 +36,13 @@ class CreateEventViewModel: ObservableObject {
         endTime = Date().addingTimeInterval(3600)
         selectedMemberIDs.removeAll()
     }
+    
+    var startTimeRange: ClosedRange<Date> {
+        DateUtils.startTimeRange(for: selectedDate)
+    }
+    
+    var endTimeRange: ClosedRange<Date> {
+        DateUtils.endTimeRange(for: selectedDate, startTime: startTime)
+    }
 }
 

@@ -23,5 +23,32 @@ struct DateUtils {
         
         return calendar.date(from: mergedComponents) ?? time
     }
+    
+    static func startTimeRange(for selectedDate: Date) -> ClosedRange<Date> {
+        let now = Date()
+        let calendar = Calendar.current
+        if calendar.isDate(selectedDate, inSameDayAs: now) {
+            let dayEnd = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: now)!
+            return now...dayEnd
+        } else {
+            let dayStart = calendar.startOfDay(for: selectedDate)
+            let dayEnd = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: selectedDate)!
+            return dayStart...dayEnd
+        }
+    }
+    
+    static func endTimeRange(for selectedDate: Date, startTime: Date) -> ClosedRange<Date> {
+        let now = Date()
+        let calendar = Calendar.current
+        if calendar.isDate(selectedDate, inSameDayAs: now) {
+            let dayEnd = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: now)!
+            let lowerBound = max(startTime, now)
+            return lowerBound...dayEnd
+        } else {
+            let dayStart = calendar.startOfDay(for: selectedDate)
+            let dayEnd = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: selectedDate)!
+            return dayStart...dayEnd
+        }
+    }
 }
 

@@ -40,5 +40,13 @@ class EditEventViewModel: ObservableObject {
             selectedMemberIDs: selectedMemberIDs
         )
     }
+    
+    var startTimeRange: ClosedRange<Date> {
+        DateUtils.startTimeRange(for: selectedDate)
+    }
+    
+    var endTimeRange: ClosedRange<Date> {
+        DateUtils.endTimeRange(for: selectedDate, startTime: startTime)
+    }
 }
 
