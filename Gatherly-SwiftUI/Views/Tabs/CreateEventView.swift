@@ -8,17 +8,17 @@
 import SwiftUI
 
 struct CreateEventView: View {
+    // Binding to the shared events array
     @Binding var events: [Event]
+    // All users to invite as members
     let allUsers: [User]
     
-    @State private var eventTitle: String = ""
-    @State private var eventDescription: String = ""
-    @State private var selectedDate: Date = Date()
-    @State private var startTime: Date = Date()
-    @State private var endTime: Date = Date().addingTimeInterval(3600) // just a default for now, 1 hour after startTime
-    @State private var selectedMemberIDs: Set<Int> = []
+    // Use a StateObject for the view model
+    @StateObject private var viewModel = CreateEventViewModel()
     
-    // MARK: - Body
+    // For this example, we hard-code the current planner's ID (current user)
+    let currentPlannerID: Int = 1
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -37,100 +37,48 @@ struct CreateEventView: View {
 private extension CreateEventView {
     var eventDetailsSection: some View {
         Section("Event Details") {
-            TextField("Title", text: $eventTitle)
-            TextField("Description", text: $eventDescription, axis: .vertical)
+            TextField("Title", text: $viewModel.title)
+            TextField("Description", text: $viewModel.description, axis: .vertical)
                 .lineLimit(3, reservesSpace: true)
         }
     }
     
     var dateTimeSection: some View {
         Section("Date & Time") {
-            DatePicker("Event Date", selection: $selectedDate, displayedComponents: .date)
-            DatePicker("Start Time", selection: $startTime, displayedComponents: .hourAndMinute)
-            DatePicker("End Time", selection: $endTime, displayedComponents: .hourAndMinute)
+            DatePicker("Event Date", selection: $viewModel.selectedDate, displayedComponents: .date)
+            DatePicker("Start Time", selection: $viewModel.startTime, displayedComponents: .hourAndMinute)
+            DatePicker("End Time", selection: $viewModel.endTime, displayedComponents: .hourAndMinute)
         }
     }
     
     var membersSection: some View {
         Section("Invite Friends") {
             ForEach(allUsers, id: \.id) { user in
-                Toggle("\(user.firstName ?? "") \(user.lastName ?? "")",
-                       isOn: Binding(
-                        get: { selectedMemberIDs.contains(user.id ?? -1) },
-                        set: { newValue in
-                            if newValue {
-                                selectedMemberIDs.insert(user.id ?? -1)
-                            } else {
-                                selectedMemberIDs.remove(user.id ?? -1)
-                            }
+                Toggle("\(user.firstName ?? "") \(user.lastName ?? "")", isOn: Binding(
+                    get: { viewModel.selectedMemberIDs.contains(user.id ?? -1) },
+                    set: { newValue in
+                        if newValue {
+                            viewModel.selectedMemberIDs.insert(user.id ?? -1)
+                        } else {
+                            viewModel.selectedMemberIDs.remove(user.id ?? -1)
                         }
-                       )
-                )
+                    }
+                ))
             }
         }
     }
     
     var createButtonSection: some View {
         Section {
-            Button(action: createEvent) {
+            Button(action: {
+                let newEvent = viewModel.createEvent(with: currentPlannerID)
+                events.append(newEvent)
+                viewModel.clearFields()
+            }) {
                 Text("Create")
                     .font(.headline)
             }
         }
-    }
-}
-
-// MARK: - Functions
-
-private extension CreateEventView {
-    func createEvent() {
-        let calendar = Calendar.current
-        let mergedStartDate = merge(date: selectedDate, time: startTime)
-        let mergedEndDate = merge(date: selectedDate, time: endTime)
-        
-        let newEvent = Event(
-            date: calendar.startOfDay(for: selectedDate),
-            description: eventDescription,
-            endTimestamp: Int(mergedEndDate.timeIntervalSince1970),
-            id: generateEventID(),
-            plannerID: 1, //for now, planner is always hard coded to sample user id 1
-            memberIDs: Array(selectedMemberIDs),
-            title: eventTitle,
-            startTimestamp: Int(mergedStartDate.timeIntervalSince1970)
-        )
-        
-        events.append(newEvent)
-        clearForm()
-    }
-    
-    func clearForm() {
-        eventTitle = ""
-        eventDescription = ""
-        selectedDate = Date()
-        startTime = Date()
-        endTime = Date().addingTimeInterval(3600)
-        selectedMemberIDs.removeAll()
-    }
-    
-    func merge(date: Date, time: Date) -> Date {
-        let calendar = Calendar.current
-        let dateComponents = calendar.dateComponents([.year, .month, .day], from: date)
-        let timeComponents = calendar.dateComponents([.hour, .minute, .second], from: time)
-        
-        var mergedComponents = DateComponents()
-        mergedComponents.year = dateComponents.year
-        mergedComponents.month = dateComponents.month
-        mergedComponents.day = dateComponents.day
-        mergedComponents.hour = timeComponents.hour
-        mergedComponents.minute = timeComponents.minute
-        mergedComponents.second = timeComponents.second
-        
-        return calendar.date(from: mergedComponents) ?? Date()
-    }
-    
-    //for now, random ID generation for the event. change later
-    func generateEventID() -> Int {
-        Int.random(in: 1000...9999)
     }
 }
 
