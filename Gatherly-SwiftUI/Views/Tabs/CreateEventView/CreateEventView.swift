@@ -8,16 +8,13 @@
 import SwiftUI
 
 struct CreateEventView: View {
-    // Binding to the shared events array
-    @Binding var events: [Event]
-    // All users to invite as members
     let allUsers: [User]
-    
-    // Use a StateObject for the view model
-    @StateObject private var viewModel = CreateEventViewModel()
-    
-    // For this example, we hard-code the current planner's ID (current user)
     let currentPlannerID: Int = 1
+    
+    @StateObject private var viewModel = CreateEventViewModel()
+    @Binding var events: [Event]
+    @State private var navigateToEvent: Event? = nil
+    @State private var shouldNavigate: Bool = false
     
     var body: some View {
         NavigationStack {
@@ -42,6 +39,13 @@ struct CreateEventView: View {
                 createButtonSection
             }
             .navigationTitle("Create Event")
+            .navigationDestination(isPresented: $shouldNavigate) {
+                if let event = navigateToEvent {
+                    EventDetailView(event: event, users: allUsers)
+                } else {
+                    EmptyView()
+                }
+            }
         }
     }
 }
@@ -55,6 +59,8 @@ private extension CreateEventView {
                 let newEvent = viewModel.createEvent(with: currentPlannerID)
                 events.append(newEvent)
                 viewModel.clearFields()
+                navigateToEvent = newEvent
+                shouldNavigate = true
             }) {
                 Text("Create")
                     .font(.headline)
@@ -66,8 +72,8 @@ private extension CreateEventView {
 #Preview {
     NavigationStack {
         CreateEventView(
-            events: .constant(SampleData.sampleEvents),
-            allUsers: SampleData.sampleUsers
+            allUsers: SampleData.sampleUsers,
+            events: .constant(SampleData.sampleEvents)
         )
     }
 }
