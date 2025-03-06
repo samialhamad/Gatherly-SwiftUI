@@ -50,3 +50,8 @@ class EditEventViewModel: ObservableObject {
     }
 }
 
+extension EditEventViewModel {
+    var plannerID: Int? {
+        return originalEvent.plannerID
+    }
+}

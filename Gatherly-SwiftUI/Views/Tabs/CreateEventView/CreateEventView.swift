@@ -34,7 +34,8 @@ struct CreateEventView: View {
                 EventMembersSection(
                     header: "Invite Friends",
                     allUsers: allUsers,
-                    selectedMemberIDs: $viewModel.selectedMemberIDs
+                    selectedMemberIDs: $viewModel.selectedMemberIDs,
+                    plannerID: currentPlannerID
                 )
                 createButtonSection
             }

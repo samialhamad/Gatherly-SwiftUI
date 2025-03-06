@@ -31,7 +31,8 @@ struct EditEventView: View {
                 EventMembersSection(
                     header: "Members",
                     allUsers: allUsers,
-                    selectedMemberIDs: $viewModel.selectedMemberIDs
+                    selectedMemberIDs: $viewModel.selectedMemberIDs,
+                    plannerID: viewModel.plannerID
                 )
                 saveButtonSection
             }

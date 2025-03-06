@@ -43,10 +43,11 @@ struct EventMembersSection: View {
     let header: String
     let allUsers: [User]
     let selectedMemberIDs: Binding<Set<Int>>
+    let plannerID: Int?
     
     var body: some View {
         Section(header: Text(header)) {
-            ForEach(allUsers, id: \.id) { user in
+            ForEach(filteredUsers, id: \.id) { user in
                 Toggle("\(user.firstName ?? "") \(user.lastName ?? "")",
                        isOn: Binding(
                         get: { selectedMemberIDs.wrappedValue.contains(user.id ?? -1) },
@@ -60,6 +61,15 @@ struct EventMembersSection: View {
                        )
                 )
             }
+        }
+    }
+    
+    private var filteredUsers: [User] {
+        allUsers.filter { user in
+            if let id = user.id, let plannerID = plannerID {
+                return id != plannerID
+            }
+            return true
         }
     }
 }
