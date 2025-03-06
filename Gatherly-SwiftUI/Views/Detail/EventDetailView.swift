@@ -73,7 +73,6 @@ private extension EventDetailView {
     var eventDateView: some View {
         Group {
             if let date = event.date {
-                // Show only the day (e.g., "March 5, 2025")
                 Text("Date: \(date.formatted(date: .long, time: .omitted))")
                     .foregroundColor(.secondary)
             }
@@ -82,14 +81,12 @@ private extension EventDetailView {
     
     var eventTimeView: some View {
         Group {
-            // Start time
             if let startTimestamp = event.startTimestamp {
                 let startDate = Date(timeIntervalSince1970: TimeInterval(startTimestamp))
                 Text("Start: \(startDate.formatted(date: .omitted, time: .shortened))")
                     .foregroundColor(.secondary)
             }
             
-            // End time
             if let endTimestamp = event.endTimestamp {
                 let endDate = Date(timeIntervalSince1970: TimeInterval(endTimestamp))
                 Text("End: \(endDate.formatted(date: .omitted, time: .shortened))")
