@@ -13,7 +13,7 @@ class CreateEventViewModel: ObservableObject {
     @Published var description: String = ""
     @Published var selectedDate: Date = Date()
     @Published var startTime: Date = Date()
-    @Published var endTime: Date = Date().addingTimeInterval(3600)
+    @Published var endTime: Date = Date().plus(calendarComponent: .hour, value: 1) ?? Date()
     @Published var selectedMemberIDs: Set<Int> = []
     
     func createEvent(with plannerID: Int) -> Event {
@@ -33,7 +33,7 @@ class CreateEventViewModel: ObservableObject {
         description = ""
         selectedDate = Date()
         startTime = Date()
-        endTime = Date().addingTimeInterval(3600)
+        endTime = Date().plus(calendarComponent: .hour, value: 1) ?? Date()
         selectedMemberIDs.removeAll()
     }
     

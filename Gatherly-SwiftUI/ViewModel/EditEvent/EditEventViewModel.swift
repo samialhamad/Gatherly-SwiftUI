@@ -25,7 +25,7 @@ class EditEventViewModel: ObservableObject {
         self.description = event.description ?? ""
         self.selectedDate = event.date ?? Date()
         self.startTime = event.startTimestamp != nil ? Date(timeIntervalSince1970: TimeInterval(event.startTimestamp!)) : Date()
-        self.endTime = event.endTimestamp != nil ? Date(timeIntervalSince1970: TimeInterval(event.endTimestamp!)) : Date().addingTimeInterval(3600)
+        self.endTime = (event.endTimestamp != nil ? Date(timeIntervalSince1970: TimeInterval(event.endTimestamp!)) : Date().plus(calendarComponent: .hour, value: 1)) ?? Date()
         self.selectedMemberIDs = Set(event.memberIDs ?? [])
     }
     

@@ -10,62 +10,59 @@ import XCTest
 
 final class EventTests: XCTestCase {
     
-    //MARK: - Computed Vars
-    
     func testEventHasStartedTrue() {
-        let pastTimestamp = Int(Date().timestamp) - 3600 // 1 hour ago
+        let pastDate = Date().minus(calendarComponent: .hour, value: 1)!
+        let pastTimestamp = pastDate.timestamp
         let event = Event(startTimestamp: pastTimestamp)
         
         XCTAssertTrue(event.hasStarted)
     }
     
     func testEventHasStartedFalse() {
-        let futureTimestamp = Int(Date().timestamp) + 3600 // 1 hour ahead
+        let futureDate = Date().plus(calendarComponent: .hour, value: 1)!
+        let futureTimestamp = futureDate.timestamp
         let event = Event(startTimestamp: futureTimestamp)
         
         XCTAssertFalse(event.hasStarted)
     }
     
     func testEventHasEndedTrue() {
-        let pastTimestamp = Int(Date().timestamp) - 3600 // 1 hour ago
+        let pastDate = Date().minus(calendarComponent: .hour, value: 1)!
+        let pastTimestamp = pastDate.timestamp
         let event = Event(endTimestamp: pastTimestamp)
         
         XCTAssertTrue(event.hasEnded)
     }
     
     func testEventHasEndedFalse() {
-        let futureTimestamp = Int(Date().timestamp) + 3600 // 1 hour ahead
+        let futureDate = Date().plus(calendarComponent: .hour, value: 1)!
+        let futureTimestamp = futureDate.timestamp
         let event = Event(endTimestamp: futureTimestamp)
         
         XCTAssertFalse(event.hasEnded)
     }
     
     func testEventIsOngoingTrue() {
-        let currentTimestamp = Int(Date().timestamp)
-        let startTimestamp = currentTimestamp - 3600 // Started 1 hour ago
-        let endTimestamp = currentTimestamp + 3600   // Ends 1 hour from now
-        
-        let event = Event(endTimestamp: endTimestamp, startTimestamp: startTimestamp)
+        let currentTimestamp = Date().timestamp
+        let startDate = Date().minus(calendarComponent: .hour, value: 1)!
+        let endDate = Date().plus(calendarComponent: .hour, value: 1)!
+        let event = Event(endTimestamp: endDate.timestamp, startTimestamp: startDate.timestamp)
         
         XCTAssertTrue(event.isOngoing)
     }
     
     func testEventIsOngoingFalse() {
-        let currentTimestamp = Int(Date().timestamp)
-        let startTimestamp = currentTimestamp - 7200 // Started 2 hours ago
-        let endTimestamp = currentTimestamp - 3600   // Ended 1 hour ago
-        
-        let event = Event(endTimestamp: endTimestamp, startTimestamp: startTimestamp)
+        let startDate = Date().minus(calendarComponent: .hour, value: 3)!
+        let endDate = Date().minus(calendarComponent: .hour, value: 1)!
+        let event = Event(endTimestamp: endDate.timestamp, startTimestamp: startDate.timestamp)
         
         XCTAssertFalse(event.isOngoing)
     }
     
     func testEventIsOngoingFalse_EventHasNotStarted() {
-        let currentTimestamp = Int(Date().timestamp)
-        let startTimestamp = currentTimestamp + 3600 // Starts in 1 hour
-        let endTimestamp = currentTimestamp + 7200   // Ends in 2 hours
-        
-        let event = Event(endTimestamp: endTimestamp, startTimestamp: startTimestamp)
+        let startDate = Date().plus(calendarComponent: .hour, value: 1)!
+        let endDate = Date().plus(calendarComponent: .hour, value: 3)!
+        let event = Event(endTimestamp: endDate.timestamp, startTimestamp: startDate.timestamp)
         
         XCTAssertFalse(event.isOngoing)
     }

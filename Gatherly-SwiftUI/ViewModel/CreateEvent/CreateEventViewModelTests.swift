@@ -34,8 +34,8 @@ final class CreateEventViewModelTests: XCTestCase {
         let expectedStartDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 10, minute: 0))!
         let expectedEndDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 12, minute: 0))!
         
-        XCTAssertEqual(event.startTimestamp, Int(expectedStartDate.timeIntervalSince1970))
-        XCTAssertEqual(event.endTimestamp, Int(expectedEndDate.timeIntervalSince1970))
+        XCTAssertEqual(event.startTimestamp, Int(expectedStartDate.timestamp))
+        XCTAssertEqual(event.endTimestamp, Int(expectedEndDate.timestamp))
         
         XCTAssertEqual(event.plannerID, plannerID)
         XCTAssertEqual(Set(event.memberIDs ?? []), Set([2, 3]))

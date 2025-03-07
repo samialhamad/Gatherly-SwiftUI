@@ -35,11 +35,18 @@ struct CalendarView: View {
                     .font(.title2)
                     .bold()
                 Text(viewModel.eventCountLabel(for: selectedDate, events: events))
-                        .font(.body)
-                        .foregroundColor(.black)
+                    .font(.body)
+                    .foregroundColor(.black)
             }
             
             Spacer()
+            
+            if !Date.isSameDay(date1: selectedDate, date2: Date()) {
+                Button("Today") {
+                    selectedDate = Date()
+                }
+                .font(.headline)
+            }
             
             Image(systemName: "bell.badge")
                 .font(.title2)
@@ -80,7 +87,7 @@ struct CalendarView: View {
                 return false
             }
             
-            return Calendar.current.isDate(eventDate, inSameDayAs: selectedDate)
+            return Date.isSameDay(date1: eventDate, date2: selectedDate)
         }
     }
 }
