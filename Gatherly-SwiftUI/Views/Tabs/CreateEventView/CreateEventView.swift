@@ -14,7 +14,8 @@ struct CreateEventView: View {
     @StateObject private var viewModel = CreateEventViewModel()
     @Binding var events: [Event]
     @State private var navigateToEvent: Event? = nil
-    @State private var shouldNavigate: Bool = false
+    
+    @EnvironmentObject var navigationState: NavigationState
     
     var body: some View {
         NavigationStack {
@@ -40,13 +41,6 @@ struct CreateEventView: View {
                 createButtonSection
             }
             .navigationTitle("Create Event")
-            .navigationDestination(isPresented: $shouldNavigate) {
-                if let event = navigateToEvent {
-                    EventDetailView(event: event, users: allUsers)
-                } else {
-                    EmptyView()
-                }
-            }
         }
     }
 }
@@ -60,8 +54,9 @@ private extension CreateEventView {
                 let newEvent = viewModel.createEvent(with: currentPlannerID)
                 events.append(newEvent)
                 viewModel.clearFields()
-                navigateToEvent = newEvent
-                shouldNavigate = true
+                navigationState.calendarSelectedDate = newEvent.date ?? Date()
+                navigationState.navigateToEvent = newEvent
+                navigationState.selectedTab = 0
             }) {
                 Text("Create")
                     .font(.headline)

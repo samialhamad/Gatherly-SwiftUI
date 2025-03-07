@@ -14,6 +14,8 @@ struct CalendarView: View {
     
     @StateObject private var viewModel = CalendarViewModel()
     
+    @EnvironmentObject var navigationState: NavigationState
+    
     var body: some View {
         VStack {
             headerView
@@ -21,8 +23,26 @@ struct CalendarView: View {
             eventList
         }
         .padding()
-        .navigationDestination(for: Event.self) { event in
-            EventDetailView(event: event, users: users)
+        .onAppear {
+            selectedDate = navigationState.calendarSelectedDate
+        }
+        .onChange(of: selectedDate) { newDate, _ in
+            navigationState.calendarSelectedDate = newDate
+        }
+
+        .navigationDestination(isPresented: Binding(
+            get: { navigationState.navigateToEvent != nil },
+            set: { newValue in
+                if !newValue {
+                    navigationState.navigateToEvent = nil
+                }
+            }
+        )) {
+            if let event = navigationState.navigateToEvent {
+                EventDetailView(event: event, users: users)
+            } else {
+                EmptyView()
+            }
         }
     }
     
