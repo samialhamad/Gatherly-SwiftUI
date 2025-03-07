@@ -25,7 +25,7 @@ struct Event: Identifiable, Hashable {
             return false
         }
         
-        let currentTimestamp = Int(Date().timeIntervalSince1970)
+        let currentTimestamp = Int(Date().timestamp)
         return eventStartTimestamp < currentTimestamp
     }
 
@@ -34,7 +34,7 @@ struct Event: Identifiable, Hashable {
             return false
         }
         
-        let currentTimestamp = Int(Date().timeIntervalSince1970)
+        let currentTimestamp = Int(Date().timestamp)
         return eventEndTimestamp < currentTimestamp
     }
     

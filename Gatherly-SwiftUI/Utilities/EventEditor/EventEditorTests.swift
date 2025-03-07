@@ -35,8 +35,8 @@ final class EventEditorTests: XCTestCase {
         let expectedStart = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 10, minute: 0, second: 0))!
         let expectedEnd = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 12, minute: 0, second: 0))!
         
-        XCTAssertEqual(createdEvent.startTimestamp, Int(expectedStart.timeIntervalSince1970))
-        XCTAssertEqual(createdEvent.endTimestamp, Int(expectedEnd.timeIntervalSince1970))
+        XCTAssertEqual(createdEvent.startTimestamp, Int(expectedStart.timestamp))
+        XCTAssertEqual(createdEvent.endTimestamp, Int(expectedEnd.timestamp))
         XCTAssertEqual(createdEvent.plannerID, 1)
         XCTAssertEqual(Set(createdEvent.memberIDs ?? []), Set([2, 3]))
         XCTAssertEqual(createdEvent.id, 101)
@@ -47,12 +47,12 @@ final class EventEditorTests: XCTestCase {
         let originalEvent = Event(
             date: calendar.startOfDay(for: baseDate),
             description: "Old Description",
-            endTimestamp: Int(baseDate.addingTimeInterval(7200).timeIntervalSince1970),
+            endTimestamp: Int(baseDate.addingTimeInterval(7200).timestamp),
             id: 123,
             plannerID: 1,
             memberIDs: [2],
             title: "Old Title",
-            startTimestamp: Int(baseDate.addingTimeInterval(3600).timeIntervalSince1970)
+            startTimestamp: Int(baseDate.addingTimeInterval(3600).timestamp)
         )
         
         let newFixedDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 6))!
@@ -76,8 +76,8 @@ final class EventEditorTests: XCTestCase {
         let expectedStart = calendar.date(from: DateComponents(year: 2025, month: 3, day: 6, hour: 9, minute: 30, second: 0))!
         let expectedEnd = calendar.date(from: DateComponents(year: 2025, month: 3, day: 6, hour: 11, minute: 0, second: 0))!
         
-        XCTAssertEqual(updatedEvent.startTimestamp, Int(expectedStart.timeIntervalSince1970))
-        XCTAssertEqual(updatedEvent.endTimestamp, Int(expectedEnd.timeIntervalSince1970))
+        XCTAssertEqual(updatedEvent.startTimestamp, Int(expectedStart.timestamp))
+        XCTAssertEqual(updatedEvent.endTimestamp, Int(expectedEnd.timestamp))
         XCTAssertEqual(updatedEvent.memberIDs, [2, 3])
         // The plannerID and id remain unchanged when updating event
         XCTAssertEqual(updatedEvent.plannerID, 1)

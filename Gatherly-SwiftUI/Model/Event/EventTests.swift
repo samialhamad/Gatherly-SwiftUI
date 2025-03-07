@@ -13,35 +13,35 @@ final class EventTests: XCTestCase {
     //MARK: - Computed Vars
     
     func testEventHasStartedTrue() {
-        let pastTimestamp = Int(Date().timeIntervalSince1970) - 3600 // 1 hour ago
+        let pastTimestamp = Int(Date().timestamp) - 3600 // 1 hour ago
         let event = Event(startTimestamp: pastTimestamp)
         
         XCTAssertTrue(event.hasStarted)
     }
     
     func testEventHasStartedFalse() {
-        let futureTimestamp = Int(Date().timeIntervalSince1970) + 3600 // 1 hour ahead
+        let futureTimestamp = Int(Date().timestamp) + 3600 // 1 hour ahead
         let event = Event(startTimestamp: futureTimestamp)
         
         XCTAssertFalse(event.hasStarted)
     }
     
     func testEventHasEndedTrue() {
-        let pastTimestamp = Int(Date().timeIntervalSince1970) - 3600 // 1 hour ago
+        let pastTimestamp = Int(Date().timestamp) - 3600 // 1 hour ago
         let event = Event(endTimestamp: pastTimestamp)
         
         XCTAssertTrue(event.hasEnded)
     }
     
     func testEventHasEndedFalse() {
-        let futureTimestamp = Int(Date().timeIntervalSince1970) + 3600 // 1 hour ahead
+        let futureTimestamp = Int(Date().timestamp) + 3600 // 1 hour ahead
         let event = Event(endTimestamp: futureTimestamp)
         
         XCTAssertFalse(event.hasEnded)
     }
     
     func testEventIsOngoingTrue() {
-        let currentTimestamp = Int(Date().timeIntervalSince1970)
+        let currentTimestamp = Int(Date().timestamp)
         let startTimestamp = currentTimestamp - 3600 // Started 1 hour ago
         let endTimestamp = currentTimestamp + 3600   // Ends 1 hour from now
         
@@ -51,7 +51,7 @@ final class EventTests: XCTestCase {
     }
     
     func testEventIsOngoingFalse() {
-        let currentTimestamp = Int(Date().timeIntervalSince1970)
+        let currentTimestamp = Int(Date().timestamp)
         let startTimestamp = currentTimestamp - 7200 // Started 2 hours ago
         let endTimestamp = currentTimestamp - 3600   // Ended 1 hour ago
         
@@ -61,7 +61,7 @@ final class EventTests: XCTestCase {
     }
     
     func testEventIsOngoingFalse_EventHasNotStarted() {
-        let currentTimestamp = Int(Date().timeIntervalSince1970)
+        let currentTimestamp = Int(Date().timestamp)
         let startTimestamp = currentTimestamp + 3600 // Starts in 1 hour
         let endTimestamp = currentTimestamp + 7200   // Ends in 2 hours
         

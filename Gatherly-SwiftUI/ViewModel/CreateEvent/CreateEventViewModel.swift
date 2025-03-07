@@ -38,11 +38,11 @@ class CreateEventViewModel: ObservableObject {
     }
     
     var startTimeRange: ClosedRange<Date> {
-        DateUtils.startTimeRange(for: selectedDate)
+        Date.startTimeRange(for: selectedDate)
     }
     
     var endTimeRange: ClosedRange<Date> {
-        DateUtils.endTimeRange(for: selectedDate, startTime: startTime)
+        Date.endTimeRange(for: selectedDate, startTime: startTime)
     }
 }
 

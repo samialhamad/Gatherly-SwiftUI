@@ -15,12 +15,12 @@ final class EditEventViewModelTests: XCTestCase {
         let originalEvent = Event(
             date: calendar.startOfDay(for: Date()),
             description: "Initial description",
-            endTimestamp: Int(Date().addingTimeInterval(7200).timeIntervalSince1970),
+            endTimestamp: Int(Date().addingTimeInterval(7200).timestamp),
             id: 123,
             plannerID: 1,
             memberIDs: [2, 3],
             title: "Initial Title",
-            startTimestamp: Int(Date().addingTimeInterval(3600).timeIntervalSince1970)
+            startTimestamp: Int(Date().addingTimeInterval(3600).timestamp)
         )
         
         let viewModel = EditEventViewModel(event: originalEvent)
@@ -41,12 +41,12 @@ final class EditEventViewModelTests: XCTestCase {
         let originalEvent = Event(
             date: calendar.startOfDay(for: now),
             description: "Initial description",
-            endTimestamp: Int(now.addingTimeInterval(7200).timeIntervalSince1970),
+            endTimestamp: Int(now.addingTimeInterval(7200).timestamp),
             id: 123,
             plannerID: 1,
             memberIDs: [2, 3],
             title: "Initial Title",
-            startTimestamp: Int(now.addingTimeInterval(3600).timeIntervalSince1970)
+            startTimestamp: Int(now.addingTimeInterval(3600).timestamp)
         )
         
         let viewModel = EditEventViewModel(event: originalEvent)
@@ -62,8 +62,8 @@ final class EditEventViewModelTests: XCTestCase {
         let mergedStart = calendar.date(bySettingHour: 10, minute: 0, second: 0, of: fixedDate)!
         let mergedEnd = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: fixedDate)!
         
-        XCTAssertEqual(updatedEvent.startTimestamp, Int(mergedStart.timeIntervalSince1970))
-        XCTAssertEqual(updatedEvent.endTimestamp, Int(mergedEnd.timeIntervalSince1970))
+        XCTAssertEqual(updatedEvent.startTimestamp, Int(mergedStart.timestamp))
+        XCTAssertEqual(updatedEvent.endTimestamp, Int(mergedEnd.timestamp))
         XCTAssertEqual(updatedEvent.date, calendar.startOfDay(for: fixedDate))
     }
     
@@ -72,12 +72,12 @@ final class EditEventViewModelTests: XCTestCase {
         let originalEvent = Event(
             date: calendar.startOfDay(for: Date()),
             description: "Initial description",
-            endTimestamp: Int(Date().addingTimeInterval(7200).timeIntervalSince1970),
+            endTimestamp: Int(Date().addingTimeInterval(7200).timestamp),
             id: 123,
             plannerID: 1,
             memberIDs: [2, 3],
             title: "Initial Title",
-            startTimestamp: Int(Date().addingTimeInterval(3600).timeIntervalSince1970)
+            startTimestamp: Int(Date().addingTimeInterval(3600).timestamp)
         )
         
         let viewModel = EditEventViewModel(event: originalEvent)
