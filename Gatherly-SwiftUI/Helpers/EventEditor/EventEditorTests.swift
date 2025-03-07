@@ -60,7 +60,7 @@ final class EventEditorTests: XCTestCase {
         let newEndTime = calendar.date(from: DateComponents(hour: 11, minute: 0, second: 0))!
         
         let updatedEvent = EventEditor.updateEvent(
-            original: originalEvent,
+            originalEvent: originalEvent,
             title: "Updated Title",
             description: "Updated Description",
             selectedDate: newFixedDate,

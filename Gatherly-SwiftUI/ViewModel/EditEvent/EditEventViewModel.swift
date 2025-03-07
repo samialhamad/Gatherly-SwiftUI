@@ -31,7 +31,7 @@ class EditEventViewModel: ObservableObject {
     
     func updatedEvent() -> Event {
         return EventEditor.updateEvent(
-            original: originalEvent,
+            originalEvent: originalEvent,
             title: title,
             description: description,
             selectedDate: selectedDate,

@@ -36,7 +36,7 @@ struct EventEditor {
     }
     
     static func updateEvent(
-        original: Event,
+        originalEvent: Event,
         title: String,
         description: String,
         selectedDate: Date,
@@ -44,18 +44,18 @@ struct EventEditor {
         endTime: Date,
         selectedMemberIDs: Set<Int>
     ) -> Event {
-        var updated = original
+        var updatedEvent = originalEvent
         let calendar = Calendar.current
         let mergedStart = DateUtils.merge(date: selectedDate, time: startTime)
         let mergedEnd = DateUtils.merge(date: selectedDate, time: endTime)
         
-        updated.title = title
-        updated.description = description
-        updated.startTimestamp = Int(mergedStart.timeIntervalSince1970)
-        updated.endTimestamp = Int(mergedEnd.timeIntervalSince1970)
-        updated.date = calendar.startOfDay(for: selectedDate)
-        updated.memberIDs = Array(selectedMemberIDs)
-        return updated
+        updatedEvent.title = title
+        updatedEvent.description = description
+        updatedEvent.startTimestamp = Int(mergedStart.timeIntervalSince1970)
+        updatedEvent.endTimestamp = Int(mergedEnd.timeIntervalSince1970)
+        updatedEvent.date = calendar.startOfDay(for: selectedDate)
+        updatedEvent.memberIDs = Array(selectedMemberIDs)
+        return updatedEvent
     }
 }
 
