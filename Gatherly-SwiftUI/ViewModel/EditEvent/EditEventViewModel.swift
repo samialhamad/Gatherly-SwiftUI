@@ -30,14 +30,15 @@ class EditEventViewModel: ObservableObject {
     }
     
     func updatedEvent() -> Event {
-        return EventEditor.updateEvent(
+        return EventEditor.saveEvent(
             originalEvent: originalEvent,
             title: title,
             description: description,
             selectedDate: selectedDate,
             startTime: startTime,
             endTime: endTime,
-            selectedMemberIDs: selectedMemberIDs
+            selectedMemberIDs: selectedMemberIDs,
+            plannerID: originalEvent.plannerID ?? 0
         )
     }
     

@@ -17,7 +17,7 @@ final class EventEditorTests: XCTestCase {
         let startTime = calendar.date(from: DateComponents(hour: 10, minute: 0, second: 0))!
         let endTime = calendar.date(from: DateComponents(hour: 12, minute: 0, second: 0))!
         
-        let createdEvent = EventEditor.createEvent(
+        let createdEvent = EventEditor.saveEvent(
             title: "New Event",
             description: "Description",
             selectedDate: fixedDate,
@@ -59,14 +59,15 @@ final class EventEditorTests: XCTestCase {
         let newStartTime = calendar.date(from: DateComponents(hour: 9, minute: 30, second: 0))!
         let newEndTime = calendar.date(from: DateComponents(hour: 11, minute: 0, second: 0))!
         
-        let updatedEvent = EventEditor.updateEvent(
+        let updatedEvent = EventEditor.saveEvent(
             originalEvent: originalEvent,
             title: "Updated Title",
             description: "Updated Description",
             selectedDate: newFixedDate,
             startTime: newStartTime,
             endTime: newEndTime,
-            selectedMemberIDs: Set([2, 3])
+            selectedMemberIDs: Set([2, 3]),
+            plannerID: 1
         )
         
         XCTAssertEqual(updatedEvent.title, "Updated Title")

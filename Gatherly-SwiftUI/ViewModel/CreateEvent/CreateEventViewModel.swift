@@ -17,7 +17,7 @@ class CreateEventViewModel: ObservableObject {
     @Published var selectedMemberIDs: Set<Int> = []
     
     func createEvent(with plannerID: Int) -> Event {
-        return EventEditor.createEvent(
+        return EventEditor.saveEvent(
             title: title,
             description: description,
             selectedDate: selectedDate,
