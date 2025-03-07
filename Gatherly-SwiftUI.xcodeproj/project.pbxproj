@@ -33,11 +33,11 @@
 		F11CDC642D779DC7007BC1F1 /* Exceptions for "Gatherly-SwiftUI" folder in "Gatherly-SwiftUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Helpers/Date/DateUtilsTests.swift,
-				Helpers/EventEditor/EventEditorTests.swift,
+				Extensions/Date/DateTests.swift,
 				Model/Event/EventTests.swift,
 				Model/Message/MessageTests.swift,
 				Model/User/UserTests.swift,
+				Utilities/EventEditor/EventEditorTests.swift,
 				ViewModel/CalendarView/CalendarViewModelTests.swift,
 				ViewModel/CreateEvent/CreateEventViewModelTests.swift,
 				ViewModel/EditEvent/EditEventViewModelTests.swift,
@@ -47,11 +47,11 @@
 		F11CDC652D779DE7007BC1F1 /* Exceptions for "Gatherly-SwiftUI" folder in "Gatherly-SwiftUI" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Helpers/Date/DateUtilsTests.swift,
-				Helpers/EventEditor/EventEditorTests.swift,
+				Extensions/Date/DateTests.swift,
 				Model/Event/EventTests.swift,
 				Model/Message/MessageTests.swift,
 				Model/User/UserTests.swift,
+				Utilities/EventEditor/EventEditorTests.swift,
 				ViewModel/CalendarView/CalendarViewModelTests.swift,
 				ViewModel/CreateEvent/CreateEventViewModelTests.swift,
 				ViewModel/EditEvent/EditEventViewModelTests.swift,
