@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct CalendarView: View {
-    @State private var selectedDate = Date()
     @Binding var events: [Event]
     let users: [User]
     
@@ -23,19 +22,10 @@ struct CalendarView: View {
             eventList
         }
         .padding()
-        .onAppear {
-            selectedDate = navigationState.calendarSelectedDate
-        }
-        .onChange(of: selectedDate) { newDate, _ in
-            navigationState.calendarSelectedDate = newDate
-        }
-
         .navigationDestination(isPresented: Binding(
             get: { navigationState.navigateToEvent != nil },
             set: { newValue in
-                if !newValue {
-                    navigationState.navigateToEvent = nil
-                }
+                if !newValue { navigationState.navigateToEvent = nil }
             }
         )) {
             if let event = navigationState.navigateToEvent {
@@ -51,19 +41,20 @@ struct CalendarView: View {
     private var headerView: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
-                Text(selectedDate, format: .dateTime.year().month().day())
+                Text(navigationState.calendarSelectedDate, format: .dateTime.year().month().day())
                     .font(.title2)
                     .bold()
-                Text(viewModel.eventCountLabel(for: selectedDate, events: events))
+                Text(viewModel.eventCountLabel(for: navigationState.calendarSelectedDate, events: events))
                     .font(.body)
                     .foregroundColor(.black)
             }
             
             Spacer()
             
-            if !Date.isSameDay(date1: selectedDate, date2: Date()) {
+            if !Date.isSameDay(date1: navigationState.calendarSelectedDate, date2: Date()) {
                 Button("Today") {
-                    selectedDate = Date()
+                    let today = Date()
+                    navigationState.calendarSelectedDate = today
                 }
                 .font(.headline)
             }
@@ -75,7 +66,7 @@ struct CalendarView: View {
     }
     
     private var calendarView: some View {
-        DatePicker("", selection: $selectedDate, displayedComponents: .date)
+        DatePicker("", selection: $navigationState.calendarSelectedDate, displayedComponents: .date)
             .datePickerStyle(.graphical)
             .padding()
     }
@@ -107,7 +98,7 @@ struct CalendarView: View {
                 return false
             }
             
-            return Date.isSameDay(date1: eventDate, date2: selectedDate)
+            return Date.isSameDay(date1: eventDate, date2: navigationState.calendarSelectedDate)
         }
     }
 }
