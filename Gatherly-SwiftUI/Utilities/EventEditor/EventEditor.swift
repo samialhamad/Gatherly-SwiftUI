@@ -24,28 +24,23 @@ struct EventEditor {
         let mergedStart = Date.merge(date: selectedDate, time: startTime)
         let mergedEnd = Date.merge(date: selectedDate, time: endTime)
         
-        if var updatedEvent = originalEvent {
-            // Updating an existing event.
-            updatedEvent.title = title
-            updatedEvent.description = description
-            updatedEvent.startTimestamp = Int(mergedStart.timestamp)
-            updatedEvent.endTimestamp = Int(mergedEnd.timestamp)
-            updatedEvent.date = calendar.startOfDay(for: selectedDate)
-            updatedEvent.memberIDs = Array(selectedMemberIDs)
-            // plannerID and id should remain unchanged.
-            return updatedEvent
+        var event = Event()
+        
+        if let originalEvent = originalEvent {
+            event.plannerID = originalEvent.plannerID
+            event.id = originalEvent.id
         } else {
-            // creating a new event
-            return Event(
-                date: calendar.startOfDay(for: selectedDate),
-                description: description,
-                endTimestamp: Int(mergedEnd.timestamp),
-                id: generateEventID(),
-                plannerID: plannerID,
-                memberIDs: Array(selectedMemberIDs),
-                title: title,
-                startTimestamp: Int(mergedStart.timestamp)
-            )
+            event.plannerID = plannerID
+            event.id = generateEventID()
         }
+        
+        event.title = title
+        event.description = description
+        event.startTimestamp = Int(mergedStart.timestamp)
+        event.endTimestamp = Int(mergedEnd.timestamp)
+        event.date = calendar.startOfDay(for: selectedDate)
+        event.memberIDs = Array(selectedMemberIDs)
+        
+        return event
     }
 }
