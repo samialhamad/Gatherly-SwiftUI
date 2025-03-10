@@ -15,6 +15,7 @@ class CreateEventViewModel: ObservableObject {
     @Published var startTime: Date = Date()
     @Published var endTime: Date = Date().plus(calendarComponent: .hour, value: 1) ?? Date()
     @Published var selectedMemberIDs: Set<Int> = []
+    @Published var location: Location? = nil
     
     func createEvent(with plannerID: Int) -> Event {
         return EventEditor.saveEvent(
@@ -24,7 +25,8 @@ class CreateEventViewModel: ObservableObject {
             startTime: startTime,
             endTime: endTime,
             selectedMemberIDs: selectedMemberIDs,
-            plannerID: plannerID
+            plannerID: plannerID,
+            location: location
         )
     }
     
@@ -35,6 +37,7 @@ class CreateEventViewModel: ObservableObject {
         startTime = Date()
         endTime = Date().plus(calendarComponent: .hour, value: 1) ?? Date()
         selectedMemberIDs.removeAll()
+        location = nil
     }
     
     var isFormEmpty: Bool {

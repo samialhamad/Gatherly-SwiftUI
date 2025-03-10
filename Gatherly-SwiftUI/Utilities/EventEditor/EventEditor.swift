@@ -21,6 +21,7 @@ struct EventEditor {
         endTime: Date,
         selectedMemberIDs: Set<Int>,
         plannerID: Int,
+        location: Location? = nil,
         generateEventID: () -> Int = { Int.random(in: 1000...9999) } //for now, random int generation for the id
     ) -> Event {
         let calendar = Calendar.current
@@ -43,6 +44,7 @@ struct EventEditor {
         event.endTimestamp = Int(mergedEnd.timestamp)
         event.date = calendar.startOfDay(for: selectedDate)
         event.memberIDs = Array(selectedMemberIDs).sorted()
+        event.location = location
         
         return event
     }
