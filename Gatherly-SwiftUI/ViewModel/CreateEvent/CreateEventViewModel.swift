@@ -19,7 +19,6 @@ class CreateEventViewModel: ObservableObject {
     @Published var location: Location? = nil
     
     func createEvent(with plannerID: Int) -> Event {
-        updateLocation()
         return EventEditor.saveEvent(
             title: title,
             description: description,
@@ -41,17 +40,7 @@ class CreateEventViewModel: ObservableObject {
         selectedMemberIDs.removeAll()
         location = nil
     }
-    
-    func updateLocation() {
-        let trimmed = locationName.trimmingCharacters(in: .whitespacesAndNewlines)
-        guard !trimmed.isEmpty else {
-            location = nil
-            return
-        }
-        // for now, Folsom
-        location = Location(latitude: 38.6719, longitude: -121.1613, name: trimmed)
-    }
-    
+        
     var isFormEmpty: Bool {
         EventEditor.isFormEmpty(title: title, description: description)
     }
