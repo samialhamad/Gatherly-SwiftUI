@@ -12,6 +12,8 @@ final class EventEditorTests: XCTestCase {
     
     let calendar = Calendar.current
     
+    //MARK: - Create Event
+    
     func testCreateEvent() {
         let fixedDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
         let startTime = calendar.date(from: DateComponents(hour: 10, minute: 0, second: 0))!
@@ -41,6 +43,8 @@ final class EventEditorTests: XCTestCase {
         XCTAssertEqual(Set(createdEvent.memberIDs ?? []), Set([2, 3]))
         XCTAssertEqual(createdEvent.id, 101)
     }
+    
+    //MARK: - Update Event
     
     func testUpdateEvent() {
         let baseDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
@@ -84,6 +88,46 @@ final class EventEditorTests: XCTestCase {
         XCTAssertEqual(updatedEvent.plannerID, 1)
         XCTAssertEqual(updatedEvent.id, 123)
     }
+    
+    //MARK: - Delete Event
+    
+    func testDeleteEvent_RemovesEventAndReturnsDate() {
+        let sampleDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
+        
+        let eventToDelete = Event(
+            date: calendar.startOfDay(for: sampleDate),
+            description: "Event to delete",
+            endTimestamp: Int(sampleDate.addingTimeInterval(7200).timestamp),
+            id: 101,
+            plannerID: 1,
+            memberIDs: [2, 3],
+            title: "Delete Me",
+            startTimestamp: Int(sampleDate.addingTimeInterval(3600).timestamp)
+        )
+        
+        let eventToStay = Event(
+            date: calendar.startOfDay(for: sampleDate),
+            description: "Keep this event",
+            endTimestamp: Int(sampleDate.addingTimeInterval(7200).timestamp),
+            id: 102,
+            plannerID: 1,
+            memberIDs: [2, 3],
+            title: "Keep Me",
+            startTimestamp: Int(sampleDate.addingTimeInterval(3600).timestamp)
+        )
+        
+        let events = [eventToDelete, eventToStay]
+        
+        let (updatedEvents, newSelectedDate) = EventEditor.deleteEvent(from: events, eventToDelete: eventToDelete)
+        
+        // check eventToDelete is removed by id
+        XCTAssertFalse(updatedEvents.contains { $0.id == eventToDelete.id })
+        // check newSelectedDate equals the deleted event's date, since the UI will stay on that date
+        XCTAssertEqual(newSelectedDate, eventToDelete.date)
+        XCTAssertEqual(updatedEvents.count, 1)
+    }
+    
+    //MARK: - isFormEmpty
     
     func testIsFormEmptyTitleAndDescriptionEmpty() {
         let result = EventEditor.isFormEmpty(title: "", description: "")

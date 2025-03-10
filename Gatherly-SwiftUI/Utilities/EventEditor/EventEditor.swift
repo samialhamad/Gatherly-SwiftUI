@@ -9,6 +9,9 @@ import Foundation
 import SwiftUI
 
 struct EventEditor {
+    
+    //MARK: - Save / Edit
+    
     static func saveEvent(
         originalEvent: Event? = nil,
         title: String,
@@ -43,9 +46,20 @@ struct EventEditor {
         
         return event
     }
-}
-
-extension EventEditor {
+    
+    //MARK: - Delete
+    
+    static func deleteEvent(from events: [Event], eventToDelete: Event) -> ([Event], Date) {
+        var updatedEvents = events
+        if let index = updatedEvents.firstIndex(where: { $0.id == eventToDelete.id }) {
+            updatedEvents.remove(at: index)
+        }
+        let newSelectedDate = eventToDelete.date ?? Date()
+        return (updatedEvents, newSelectedDate)
+    }
+    
+    //MARK: - isFormEmpty
+    
     static func isFormEmpty(title: String, description: String) -> Bool {
         title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
         description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty

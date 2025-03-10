@@ -51,11 +51,9 @@ struct EventDetailView: View {
                     isShowingEditView = false
                 },
                 onDelete: { eventToDelete in
-                    if let index = events.firstIndex(where: { $0.id == eventToDelete.id }) {
-                        events.remove(at: index)
-                    }
-                    
-                    navigationState.calendarSelectedDate = eventToDelete.date ?? Date()
+                    let (updatedEvents, newSelectedDate) = EventEditor.deleteEvent(from: events, eventToDelete: eventToDelete)
+                    events = updatedEvents
+                    navigationState.calendarSelectedDate = newSelectedDate
                     navigationState.navigateToEvent = nil
                     isShowingEditView = false
                     dismiss()
