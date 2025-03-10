@@ -68,6 +68,7 @@ private extension EditEventView {
                 let updatedEvent = viewModel.updatedEvent()
                 onSave(updatedEvent)
             }
+            .disabled(viewModel.isFormEmpty)
             
             Button("Delete") {
                 showingDeleteAlert = true

@@ -61,6 +61,7 @@ private extension CreateEventView {
                 Text("Create")
                     .font(.headline)
             }
+            .disabled(viewModel.isFormEmpty)
         }
     }
 }

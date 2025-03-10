@@ -84,4 +84,24 @@ final class EventEditorTests: XCTestCase {
         XCTAssertEqual(updatedEvent.plannerID, 1)
         XCTAssertEqual(updatedEvent.id, 123)
     }
+    
+    func testIsFormEmptyTitleAndDescriptionEmpty() {
+        let result = EventEditor.isFormEmpty(title: "", description: "")
+        XCTAssertTrue(result)
+    }
+    
+    func testIsFormEmptyTitleEmpty() {
+        let result = EventEditor.isFormEmpty(title: "   ", description: "description")
+        XCTAssertTrue(result)
+    }
+    
+    func testIsFormEmptyDescriptionEmpty() {
+        let result = EventEditor.isFormEmpty(title: " title ", description: "")
+        XCTAssertTrue(result)
+    }
+    
+    func testIsFormEmptyValidTitleAndDescription() {
+        let result = EventEditor.isFormEmpty(title: "Title", description: "description")
+        XCTAssertFalse(result)
+    }
 }

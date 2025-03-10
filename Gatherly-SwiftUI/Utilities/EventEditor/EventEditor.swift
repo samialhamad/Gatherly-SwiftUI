@@ -44,3 +44,10 @@ struct EventEditor {
         return event
     }
 }
+
+extension EventEditor {
+    static func isFormEmpty(title: String, description: String) -> Bool {
+        title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
+        description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+}

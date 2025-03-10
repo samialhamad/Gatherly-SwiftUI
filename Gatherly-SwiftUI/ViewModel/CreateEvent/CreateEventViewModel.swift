@@ -37,6 +37,10 @@ class CreateEventViewModel: ObservableObject {
         selectedMemberIDs.removeAll()
     }
     
+    var isFormEmpty: Bool {
+            EventEditor.isFormEmpty(title: title, description: description)
+    }
+    
     var startTimeRange: ClosedRange<Date> {
         Date.startTimeRange(for: selectedDate)
     }
