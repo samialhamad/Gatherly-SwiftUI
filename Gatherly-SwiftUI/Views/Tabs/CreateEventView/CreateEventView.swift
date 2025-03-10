@@ -38,6 +38,11 @@ struct CreateEventView: View {
                     selectedMemberIDs: $viewModel.selectedMemberIDs,
                     plannerID: currentPlannerID
                 )
+                EventLocationSection(
+                    header: "Location",
+                    locationName: $viewModel.locationName,
+                    onSetLocation: { viewModel.updateLocation() }
+                )
                 createButtonSection
             }
             .navigationTitle("Create Event")
