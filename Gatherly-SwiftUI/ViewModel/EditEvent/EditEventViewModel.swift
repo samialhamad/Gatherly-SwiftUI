@@ -16,10 +16,14 @@ class EditEventViewModel: ObservableObject {
     @Published var endTime: Date
     @Published var selectedMemberIDs: Set<Int>
     
-    private let originalEvent: Event
+    private let original: Event
+    
+    var originalEvent: Event {
+        original
+    }
     
     init(event: Event) {
-        self.originalEvent = event
+        self.original = event
         
         self.title = event.title ?? ""
         self.description = event.description ?? ""
