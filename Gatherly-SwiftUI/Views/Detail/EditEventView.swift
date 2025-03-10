@@ -12,6 +12,9 @@ struct EditEventView: View {
     let allUsers: [User]
     let onSave: (Event) -> Void
     let onCancel: () -> Void
+    let onDelete: (Event) -> Void
+    
+    @State private var showingDeleteAlert = false
     
     var body: some View {
         NavigationStack {
@@ -34,7 +37,7 @@ struct EditEventView: View {
                     selectedMemberIDs: $viewModel.selectedMemberIDs,
                     plannerID: viewModel.plannerID
                 )
-                saveButtonSection
+                saveAndDeleteSection
             }
             .navigationTitle("Edit Event")
             .toolbar {
@@ -44,6 +47,14 @@ struct EditEventView: View {
                     }
                 }
             }
+            .alert("Delete Event?", isPresented: $showingDeleteAlert) {
+                Button("Delete", role: .destructive) {
+                    onDelete(viewModel.originalEvent)
+                }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("Are you sure you want to delete this event?")
+            }
         }
     }
 }
@@ -51,12 +62,17 @@ struct EditEventView: View {
 // MARK: - Subviews
 
 private extension EditEventView {
-    var saveButtonSection: some View {
+    var saveAndDeleteSection: some View {
         Section {
             Button("Save") {
                 let updatedEvent = viewModel.updatedEvent()
                 onSave(updatedEvent)
             }
+            
+            Button("Delete") {
+                showingDeleteAlert = true
+            }
+            .foregroundColor(.red)
         }
     }
 }
@@ -71,6 +87,9 @@ private extension EditEventView {
             },
             onCancel: {
                 print("Edit cancelled")
+            },
+            onDelete: { event in
+                print("Delete event: \(event)")
             }
         )
     }

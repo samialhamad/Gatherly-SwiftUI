@@ -29,7 +29,7 @@ struct CalendarView: View {
             }
         )) {
             if let event = navigationState.navigateToEvent {
-                EventDetailView(event: event, users: users)
+                EventDetailView(events: $events, event: event, users: users)
             } else {
                 EmptyView()
             }
@@ -75,6 +75,7 @@ struct CalendarView: View {
         List(filteredEvents) { event in
             NavigationLink {
                 EventDetailView(
+                    events: $events,
                     event: event,
                     users: users,
                     onSave: { updatedEvent in

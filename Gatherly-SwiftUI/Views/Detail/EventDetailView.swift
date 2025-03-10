@@ -8,10 +8,13 @@
 import SwiftUI
 
 struct EventDetailView: View {
+    @Binding var events: [Event]
     let event: Event
     let users: [User]
     var onSave: ((Event) -> Void)? = nil
     
+    @EnvironmentObject var navigationState: NavigationState
+    @Environment(\.dismiss) var dismiss
     @State private var isShowingEditView = false
     
     var body: some View {
@@ -46,6 +49,16 @@ struct EventDetailView: View {
                 },
                 onCancel: {
                     isShowingEditView = false
+                },
+                onDelete: { eventToDelete in
+                    if let index = events.firstIndex(where: { $0.id == eventToDelete.id }) {
+                        events.remove(at: index)
+                    }
+                    
+                    navigationState.calendarSelectedDate = eventToDelete.date ?? Date()
+                    navigationState.navigateToEvent = nil
+                    isShowingEditView = false
+                    dismiss()
                 }
             )
         }
@@ -146,5 +159,10 @@ private extension EventDetailView {
 }
 
 #Preview {
-    EventDetailView(event: SampleData.sampleEvents[1], users: SampleData.sampleUsers)
+    EventDetailView(
+        events: .constant(SampleData.sampleEvents),
+        event: SampleData.sampleEvents[1],
+        users: SampleData.sampleUsers
+    )
+    .environmentObject(NavigationState())
 }
