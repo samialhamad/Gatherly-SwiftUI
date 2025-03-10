@@ -41,7 +41,9 @@ struct CreateEventView: View {
                 EventLocationSection(
                     header: "Location",
                     locationName: $viewModel.locationName,
-                    onSetLocation: { viewModel.updateLocation() }
+                    onSetLocation: { location in
+                        viewModel.location = location
+                    }
                 )
                 createButtonSection
             }
