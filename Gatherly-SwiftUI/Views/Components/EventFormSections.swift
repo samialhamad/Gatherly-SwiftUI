@@ -73,3 +73,18 @@ struct EventMembersSection: View {
         }
     }
 }
+
+struct EventLocationSection: View {
+    let header: String
+    @Binding var locationName: String
+    let onSetLocation: () -> Void
+
+    var body: some View {
+        Section(header: Text(header)) {
+            TextField("Enter location name", text: $locationName)
+                .autocapitalization(.words)
+                .disableAutocorrection(true)
+            Button("Set Location", action: onSetLocation)
+        }
+    }
+}
