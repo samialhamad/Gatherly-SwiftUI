@@ -15,9 +15,11 @@ class CreateEventViewModel: ObservableObject {
     @Published var startTime: Date = Date()
     @Published var endTime: Date = Date().plus(calendarComponent: .hour, value: 1) ?? Date()
     @Published var selectedMemberIDs: Set<Int> = []
+    @Published var locationName: String = ""
     @Published var location: Location? = nil
     
     func createEvent(with plannerID: Int) -> Event {
+        updateLocation()
         return EventEditor.saveEvent(
             title: title,
             description: description,
@@ -40,8 +42,18 @@ class CreateEventViewModel: ObservableObject {
         location = nil
     }
     
+    func updateLocation() {
+        let trimmed = locationName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else {
+            location = nil
+            return
+        }
+        // for now, Folsom
+        location = Location(latitude: 38.6719, longitude: -121.1613, name: trimmed)
+    }
+    
     var isFormEmpty: Bool {
-            EventEditor.isFormEmpty(title: title, description: description)
+        EventEditor.isFormEmpty(title: title, description: description)
     }
     
     var startTimeRange: ClosedRange<Date> {
