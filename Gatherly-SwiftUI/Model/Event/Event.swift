@@ -7,12 +7,13 @@
 
 import Foundation
 
-struct Event: Identifiable, Hashable {
+struct Event: Equatable, Hashable, Identifiable {
     var date: Date?
     var description: String?
     var endTimestamp: Int?
     var id: Int?
     var plannerID: Int?
+    var location: Location?
     var memberIDs: [Int]?
     var messages: [Message]?
     var title: String?
