@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import MapKit
 
 struct EventDetailView: View {
     @Binding var events: [Event]
@@ -23,6 +24,7 @@ struct EventDetailView: View {
             eventDescriptionView
             eventDateView
             eventTimeView
+            mapPreview
             eventPlannerAndMembersView
             Spacer()
         }
@@ -152,6 +154,24 @@ private extension EventDetailView {
                 return filteredMemberIDs.contains(userID)
             }
             return false
+        }
+    }
+}
+
+// MARK: - Map Preview
+
+private extension EventDetailView {
+    var mapPreview: some View {
+        Group {
+            if let location = event.location {
+                let coordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
+                let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+                Map(coordinateRegion: .constant(region), interactionModes: [])
+                    .frame(height: 200)
+                    .cornerRadius(8)
+            } else {
+                EmptyView()
+            }
         }
     }
 }
