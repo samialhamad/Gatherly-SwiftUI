@@ -77,14 +77,44 @@ struct EventMembersSection: View {
 struct EventLocationSection: View {
     let header: String
     @Binding var locationName: String
-    let onSetLocation: () -> Void
-
+    /// When a location is selected, pass the Location back.
+    let onSetLocation: (Location?) -> Void
+    
+    @StateObject private var searchVM = LocationSearchViewModel()
+    
     var body: some View {
         Section(header: Text(header)) {
             TextField("Enter location name", text: $locationName)
                 .autocapitalization(.words)
                 .disableAutocorrection(true)
-            Button("Set Location", action: onSetLocation)
+                .onChange(of: locationName) { newValue in
+                    searchVM.queryFragment = newValue
+                }
+            
+            if !searchVM.suggestions.isEmpty {
+                List(searchVM.suggestions, id: \.self) { suggestion in
+                    Button(action: {
+                        searchVM.search(for: suggestion) { location in
+                            onSetLocation(location)
+                            // Optionally update the text field with the chosen location name:
+                            if let name = location?.name {
+                                locationName = name
+                            }
+                            // Clear suggestions after selection.
+                            searchVM.suggestions = []
+                        }
+                    }) {
+                        VStack(alignment: .leading) {
+                            Text(suggestion.title)
+                                .font(.body)
+                            Text(suggestion.subtitle)
+                                .font(.caption)
+                                .foregroundColor(.gray)
+                        }
+                    }
+                }
+                .frame(maxHeight: 150)
+            }
         }
     }
 }
