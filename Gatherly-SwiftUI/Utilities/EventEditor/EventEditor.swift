@@ -39,7 +39,7 @@ struct EventEditor {
         event.startTimestamp = Int(mergedStart.timestamp)
         event.endTimestamp = Int(mergedEnd.timestamp)
         event.date = calendar.startOfDay(for: selectedDate)
-        event.memberIDs = Array(selectedMemberIDs)
+        event.memberIDs = Array(selectedMemberIDs).sorted()
         
         return event
     }
