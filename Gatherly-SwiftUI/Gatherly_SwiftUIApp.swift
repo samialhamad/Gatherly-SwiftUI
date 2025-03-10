@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct Gatherly_SwiftUIApp: App {
+    @StateObject var navigationState = NavigationState()
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(navigationState)
         }
     }
 }
