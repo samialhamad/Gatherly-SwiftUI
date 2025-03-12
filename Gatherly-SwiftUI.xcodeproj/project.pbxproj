@@ -33,6 +33,7 @@
 		F11CDC642D779DC7007BC1F1 /* Exceptions for "Gatherly-SwiftUI" folder in "Gatherly-SwiftUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Extensions/Array/ArrayTests.swift,
 				Extensions/Date/DateTests.swift,
 				Model/Event/EventTests.swift,
 				Model/Message/MessageTests.swift,
@@ -47,6 +48,7 @@
 		F11CDC652D779DE7007BC1F1 /* Exceptions for "Gatherly-SwiftUI" folder in "Gatherly-SwiftUI" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Extensions/Array/ArrayTests.swift,
 				Extensions/Date/DateTests.swift,
 				Model/Event/EventTests.swift,
 				Model/Message/MessageTests.swift,
