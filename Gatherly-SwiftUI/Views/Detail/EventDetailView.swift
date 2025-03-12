@@ -116,15 +116,13 @@ private extension EventDetailView {
                     center: coordinate,
                     span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
                 )
-                // Create a single annotation
                 let annotation = LocationAnnotation(coordinate: coordinate, name: location.name)
                 
-                // Use the older Map initializer with annotationItems.
-                Map(coordinateRegion: .constant(region), annotationItems: [annotation]) { item in
-                    // Customize the annotation view.
-                    MapAnnotation(coordinate: item.coordinate) {
+                // older Map initializer with annotationItems - is deprecated in iOS 17
+                Map(coordinateRegion: .constant(region), annotationItems: [annotation]) { location in
+                    MapAnnotation(coordinate: location.coordinate) {
                         VStack(spacing: 2) {
-                            if let name = item.name, !name.isEmpty {
+                            if let name = location.name, !name.isEmpty {
                                 Text(name)
                                     .font(.caption)
                                     .padding(4)
