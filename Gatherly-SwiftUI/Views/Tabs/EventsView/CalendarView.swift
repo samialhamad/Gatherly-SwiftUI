@@ -57,12 +57,11 @@ private extension CalendarView {
                 eventListView
             }
         } else {
-            let groupedEvents = Dictionary(grouping: events, by: { Date.startOfDay($0.date) })
+            let groupedEvents = events.groupedByDay
             
             EventsGroupedListView(
                 events: $events,
                 users: users,
-                groupedEvents: groupedEvents,
                 onEventSave: { updatedEvent in
                     // If an event is updated, find & replace it in the array
                     if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
@@ -72,7 +71,6 @@ private extension CalendarView {
             )
         }
     }
-
     
     var headerView: some View {
         HStack {
@@ -133,10 +131,6 @@ private extension CalendarView {
             
             return Date.isSameDay(date1: eventDate, date2: navigationState.calendarSelectedDate)
         }
-    }
-    
-    var groupedEvents: [Date: [Event]] {
-        Dictionary(grouping: events, by: { Date.startOfDay($0.date) })
     }
 }
 
