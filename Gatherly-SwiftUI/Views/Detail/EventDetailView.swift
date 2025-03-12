@@ -24,7 +24,7 @@ struct EventDetailView: View {
             eventDescriptionView
             eventDateView
             eventTimeView
-            mapPreview
+            eventMapPreview
             eventPlannerAndMembersView
             Spacer()
         }
@@ -108,6 +108,44 @@ private extension EventDetailView {
         }
     }
     
+    var eventMapPreview: some View {
+        Group {
+            if let location = event.location {
+                let coordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
+                let region = MKCoordinateRegion(
+                    center: coordinate,
+                    span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+                )
+                // Create a single annotation
+                let annotation = LocationAnnotation(coordinate: coordinate, name: location.name)
+                
+                // Use the older Map initializer with annotationItems.
+                Map(coordinateRegion: .constant(region), annotationItems: [annotation]) { item in
+                    // Customize the annotation view.
+                    MapAnnotation(coordinate: item.coordinate) {
+                        VStack(spacing: 2) {
+                            if let name = item.name, !name.isEmpty {
+                                Text(name)
+                                    .font(.caption)
+                                    .padding(4)
+                                    .background(Color.white)
+                                    .cornerRadius(8)
+                                    .shadow(radius: 2)
+                            }
+                            Image(systemName: "mappin.circle.fill")
+                                .font(.title)
+                                .foregroundColor(.red)
+                        }
+                    }
+                }
+                .frame(height: 200)
+                .cornerRadius(8)
+            } else {
+                EmptyView()
+            }
+        }
+    }
+    
     var eventPlannerAndMembersView: some View {
         Group {
             if let planner = planner {
@@ -154,24 +192,6 @@ private extension EventDetailView {
                 return filteredMemberIDs.contains(userID)
             }
             return false
-        }
-    }
-}
-
-// MARK: - Map Preview
-
-private extension EventDetailView {
-    var mapPreview: some View {
-        Group {
-            if let location = event.location {
-                let coordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
-                let region = MKCoordinateRegion(center: coordinate, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
-                Map(coordinateRegion: .constant(region), interactionModes: [])
-                    .frame(height: 200)
-                    .cornerRadius(8)
-            } else {
-                EmptyView()
-            }
         }
     }
 }
