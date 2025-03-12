@@ -37,10 +37,6 @@ struct Gatherly_SwiftUIApp: App {
         ]
         
         UITabBar.appearance().standardAppearance = tabBarAppearance
-        
-        if #available(iOS 15.0, *) {
-            UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
-        }
     }
     
     var body: some Scene {
