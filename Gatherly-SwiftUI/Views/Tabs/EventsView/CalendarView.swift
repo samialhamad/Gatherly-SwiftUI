@@ -18,7 +18,6 @@ struct CalendarView: View {
     var body: some View {
         NavigationStack {
             content
-                .padding()
                 .navigationTitle("My Events")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
