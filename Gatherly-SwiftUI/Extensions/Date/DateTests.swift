@@ -11,7 +11,7 @@ import XCTest
 final class DateTests: XCTestCase {
     
     //MARK: - Timestamp
-
+    
     func testTimestamp() {
         let timestamp = 780192000
         let date = Date(timestamp)
@@ -25,8 +25,24 @@ final class DateTests: XCTestCase {
         XCTAssertEqual(780130800, dayTimestamp)
     }
     
+    //MARK: - startOfDay
+    
+    func testStartOfDay() {
+        let calendar = Calendar.current
+        let components = DateComponents(year: 2025, month: 3, day: 5, hour: 15, minute: 30, second: 0)
+        guard let sampleDate = calendar.date(from: components) else {
+            XCTFail("Failed to create sample date")
+            return
+        }
+        
+        let result = Date.startOfDay(sampleDate)
+        let expected = calendar.startOfDay(for: sampleDate)
+        
+        XCTAssertEqual(result, expected)
+    }
+    
     //MARK: - Plus / Minus + Between
-
+    
     //years
     
     func testDatePlusYearsAndYearsBetween() {
@@ -76,7 +92,7 @@ final class DateTests: XCTestCase {
     }
     
     //days
-
+    
     func testDatePlusDaysAndDaysBetween() {
         let date1 = Date()
         let date2 = Date().plus(calendarComponent: .day, value: 4)!
@@ -138,14 +154,14 @@ final class DateTests: XCTestCase {
         let secondsBetween = Date.secondsBetween(date1, date2)
         XCTAssertEqual(secondsBetween, 30)
     }
-
+    
     //MARK: - Same
-
+    
     func testIsSameDay() {
         let date1 = Date()
         let date2 = Date()
         let date3 = Date().minus(calendarComponent: .year, value: 3)!
-
+        
         XCTAssertTrue(Date.isSameDay(date1: date1, date2: date2))
         XCTAssertFalse(Date.isSameDay(date1: date1, date2: date3))
     }
@@ -165,15 +181,15 @@ final class DateTests: XCTestCase {
     }
     
     //MARK: - Time String
-
-//    func testTimeString10Days() {
-//        let date1 = Date()
-//        let date2 = Date().plus(calendarComponent: .day, value: 10)!
-//        
-//        let timeString = Date.timeString(date1: date1, date2: date2)
-//        let expectedTimeString = "10d"
-//        XCTAssertEqual(timeString, expectedTimeString)
-//    }
+    
+    //    func testTimeString10Days() {
+    //        let date1 = Date()
+    //        let date2 = Date().plus(calendarComponent: .day, value: 10)!
+    //
+    //        let timeString = Date.timeString(date1: date1, date2: date2)
+    //        let expectedTimeString = "10d"
+    //        XCTAssertEqual(timeString, expectedTimeString)
+    //    }
     
     func testTimeString1Day() {
         let date1 = Date()

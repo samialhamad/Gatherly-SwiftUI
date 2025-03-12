@@ -172,16 +172,9 @@ private extension CalendarView {
             
             return showPastEvents ? (dayOnly(eventDate) < todayStart) : (dayOnly(eventDate) >= todayStart)
         }
-        
-        return Dictionary(grouping: activeEvents, by: { dayOnly($0.date) })
+        return Dictionary(grouping: activeEvents, by: { Date.startOfDay($0.date) })
     }
-    
-    // MARK: - Functions
-    
-    func dayOnly(_ date: Date?) -> Date {
-        guard let date = date else { return Date() }
-        return Calendar.current.startOfDay(for: date)
-    }
+
 }
 
 #Preview {

@@ -30,6 +30,15 @@ extension Date {
         return day?.timestamp
     }
     
+    //MARK: - startOfDay
+    
+    public static func startOfDay(_ date: Date?) -> Date {
+        guard let date = date else {
+            return Date()  // fallback if nil
+        }
+        return Calendar.current.startOfDay(for: date)
+    }
+    
     //MARK: - Plus / Minus
     
     public func plus(
