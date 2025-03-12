@@ -57,8 +57,6 @@ private extension CalendarView {
                 eventListView
             }
         } else {
-            let groupedEvents = events.groupEventsByDay
-            
             EventsGroupedListView(
                 events: $events,
                 users: users,
@@ -129,5 +127,10 @@ private extension CalendarView {
 }
 
 #Preview {
-    CalendarView(events: .constant(SampleData.sampleEvents), users: SampleData.sampleUsers)
+    CalendarView(
+        events: .constant(SampleData.sampleEvents),
+        users: SampleData.sampleUsers
+    )
+    .environmentObject(NavigationState())
 }
+
