@@ -37,6 +37,7 @@ struct Gatherly_SwiftUIApp: App {
         ]
         
         UITabBar.appearance().standardAppearance = tabBarAppearance
+        UITabBar.appearance().scrollEdgeAppearance = tabBarAppearance
     }
     
     var body: some Scene {
