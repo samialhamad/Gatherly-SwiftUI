@@ -25,6 +25,7 @@ struct CalendarView: View {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: { isCalendarView.toggle() }) {
                             Image(systemName: isCalendarView ? "list.bullet" : "calendar")
+                                .foregroundColor(Color(Brand.Colors.secondary))
                         }
                     }
                 }
@@ -61,7 +62,6 @@ private extension CalendarView {
                 events: $events,
                 users: users,
                 onEventSave: { updatedEvent in
-                    // If an event is updated, find & replace it in the array
                     if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
                         events[index] = updatedEvent
                     }
@@ -133,4 +133,3 @@ private extension CalendarView {
     )
     .environmentObject(NavigationState())
 }
-
