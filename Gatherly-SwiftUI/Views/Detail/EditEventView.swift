@@ -31,6 +31,13 @@ struct EditEventView: View {
                     startTimeRange: viewModel.startTimeRange,
                     endTimeRange: viewModel.endTimeRange
                 )
+                EventLocationSection(
+                    header: "Location",
+                    locationName: $viewModel.locationName,
+                    onSetLocation: { location in
+                        viewModel.location = location
+                    }
+                )
                 EventMembersSection(
                     header: "Members",
                     allUsers: allUsers,

@@ -16,6 +16,7 @@ class EditEventViewModel: ObservableObject {
     @Published var endTime: Date
     @Published var selectedMemberIDs: Set<Int>
     @Published var location: Location?
+    @Published var locationName: String
     
     private let original: Event
     
@@ -33,6 +34,7 @@ class EditEventViewModel: ObservableObject {
         self.endTime = (event.endTimestamp != nil ? Date(timeIntervalSince1970: TimeInterval(event.endTimestamp!)) : Date().plus(calendarComponent: .hour, value: 1)) ?? Date()
         self.selectedMemberIDs = Set(event.memberIDs ?? [])
         self.location = event.location
+        self.locationName = event.location?.name ?? ""
     }
     
     func updatedEvent() -> Event {
