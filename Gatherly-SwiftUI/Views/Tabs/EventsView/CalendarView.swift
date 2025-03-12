@@ -57,7 +57,7 @@ private extension CalendarView {
                 eventListView
             }
         } else {
-            let groupedEvents = events.groupedByDay
+            let groupedEvents = events.groupEventsByDay
             
             EventsGroupedListView(
                 events: $events,

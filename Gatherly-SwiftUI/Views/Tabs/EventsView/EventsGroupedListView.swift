@@ -13,7 +13,7 @@ struct EventsGroupedListView: View {
     let onEventSave: (Event) -> Void
     
     var body: some View {
-        let groupedEvents = events.groupedByDay
+        let groupedEvents = events.groupEventsByDay
         let keys = groupedEvents.keys.sorted()
         
         ScrollViewReader { proxy in
