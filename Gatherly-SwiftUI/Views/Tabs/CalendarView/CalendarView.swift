@@ -12,33 +12,67 @@ struct CalendarView: View {
     let users: [User]
     
     @StateObject private var viewModel = CalendarViewModel()
-    
     @EnvironmentObject var navigationState: NavigationState
+    @State private var isCalendarView = true
+    @State private var showPastEvents = false
     
     var body: some View {
-        VStack {
-            headerView
-            calendarView
-            eventList
+        NavigationStack {
+            content
+                .padding()
+                .navigationTitle("My Events")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        if !isCalendarView {
+                            Button {
+                                showPastEvents.toggle()
+                            } label: {
+                                Image(systemName: showPastEvents ? "arrow.uturn.left.circle.fill" : "arrow.uturn.left.circle")
+                            }
+                        }
+                    }
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: { isCalendarView.toggle() }) {
+                            Image(systemName: isCalendarView ? "list.bullet" : "calendar")
+                        }
+                    }
+                }
+                .padding()
+                .navigationDestination(isPresented: Binding(
+                    get: { navigationState.navigateToEvent != nil },
+                    set: { newValue in
+                        if !newValue { navigationState.navigateToEvent = nil }
+                    }
+                )) {
+                    if let event = navigationState.navigateToEvent {
+                        EventDetailView(events: $events, event: event, users: users)
+                    } else {
+                        EmptyView()
+                    }
+                }
         }
-        .padding()
-        .navigationDestination(isPresented: Binding(
-            get: { navigationState.navigateToEvent != nil },
-            set: { newValue in
-                if !newValue { navigationState.navigateToEvent = nil }
+    }
+}
+
+// MARK: - Subviews
+
+private extension CalendarView {
+    
+    @ViewBuilder
+    var content: some View {
+        if isCalendarView {
+            VStack {
+                headerView
+                calendarView
+                eventList
             }
-        )) {
-            if let event = navigationState.navigateToEvent {
-                EventDetailView(events: $events, event: event, users: users)
-            } else {
-                EmptyView()
-            }
+        } else {
+            eventsListView
         }
     }
     
-    // MARK: - Subviews
-    
-    private var headerView: some View {
+    var headerView: some View {
         HStack {
             VStack(alignment: .leading, spacing: 4) {
                 Text(navigationState.calendarSelectedDate, format: .dateTime.year().month().day())
@@ -65,13 +99,13 @@ struct CalendarView: View {
         .padding()
     }
     
-    private var calendarView: some View {
+    var calendarView: some View {
         DatePicker("", selection: $navigationState.calendarSelectedDate, displayedComponents: .date)
             .datePickerStyle(.graphical)
             .padding()
     }
     
-    private var eventList: some View {
+    var eventList: some View {
         List(filteredEvents) { event in
             NavigationLink {
                 EventDetailView(
@@ -91,9 +125,35 @@ struct CalendarView: View {
         .listStyle(PlainListStyle())
     }
     
+    var eventsListView: some View {
+        List {
+            ForEach(groupedEvents.keys.sorted(), id: \.self) { date in
+                Section(header: Text(date.formatted(date: .long, time: .omitted))) {
+                    ForEach(groupedEvents[date] ?? []) { event in
+                        NavigationLink {
+                            EventDetailView(
+                                events: $events,
+                                event: event,
+                                users: users,
+                                onSave: { updatedEvent in
+                                    if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
+                                        events[index] = updatedEvent
+                                    }
+                                }
+                            )
+                        } label: {
+                            EventRow(event: event)
+                        }
+                    }
+                }
+            }
+        }
+        .listStyle(InsetGroupedListStyle())
+    }
+    
     // MARK: - Computed Vars
     
-    private var filteredEvents: [Event] {
+    var filteredEvents: [Event] {
         events.filter { event in
             guard let eventDate = event.date else {
                 return false
@@ -101,6 +161,26 @@ struct CalendarView: View {
             
             return Date.isSameDay(date1: eventDate, date2: navigationState.calendarSelectedDate)
         }
+    }
+    
+    var groupedEvents: [Date: [Event]] {
+        let todayStart = dayOnly(Date())
+        let activeEvents = events.filter { event in
+            guard let eventDate = event.date else {
+                return false
+            }
+            
+            return showPastEvents ? (dayOnly(eventDate) < todayStart) : (dayOnly(eventDate) >= todayStart)
+        }
+        
+        return Dictionary(grouping: activeEvents, by: { dayOnly($0.date) })
+    }
+    
+    // MARK: - Functions
+    
+    func dayOnly(_ date: Date?) -> Date {
+        guard let date = date else { return Date() }
+        return Calendar.current.startOfDay(for: date)
     }
 }
 
