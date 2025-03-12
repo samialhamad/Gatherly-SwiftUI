@@ -164,13 +164,15 @@ private extension CalendarView {
     }
     
     var groupedEvents: [Date: [Event]] {
-        let todayStart = dayOnly(Date())
+        let todayStart = Date.startOfDay(Date())
         let activeEvents = events.filter { event in
             guard let eventDate = event.date else {
                 return false
             }
             
-            return showPastEvents ? (dayOnly(eventDate) < todayStart) : (dayOnly(eventDate) >= todayStart)
+            return showPastEvents
+                ? (Date.startOfDay(eventDate) < todayStart)
+                : (Date.startOfDay(eventDate) >= todayStart)
         }
         return Dictionary(grouping: activeEvents, by: { Date.startOfDay($0.date) })
     }
