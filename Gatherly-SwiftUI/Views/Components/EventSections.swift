@@ -77,7 +77,7 @@ struct EventMembersSection: View {
 struct EventLocationSection: View {
     let header: String
     @Binding var locationName: String
-    /// When a location is selected, pass the Location back.
+    // When a location is selected, pass the Location back.
     let onSetLocation: (Location?) -> Void
     
     @StateObject private var searchVM = LocationSearchViewModel()
@@ -115,6 +115,26 @@ struct EventLocationSection: View {
                 }
                 .frame(maxHeight: 150)
             }
+        }
+    }
+}
+
+struct EventRowLink: View {
+    @Binding var events: [Event]
+    let event: Event
+    let users: [User]
+    let onSave: (Event) -> Void
+
+    var body: some View {
+        NavigationLink {
+            EventDetailView(
+                events: $events,
+                event: event,
+                users: users,
+                onSave: onSave
+            )
+        } label: {
+            EventRow(event: event)
         }
     }
 }
