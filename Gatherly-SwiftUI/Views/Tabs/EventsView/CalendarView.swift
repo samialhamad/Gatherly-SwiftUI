@@ -14,7 +14,6 @@ struct CalendarView: View {
     @StateObject private var viewModel = CalendarViewModel()
     @EnvironmentObject var navigationState: NavigationState
     @State private var isCalendarView = true
-    @State private var showPastEvents = false
     
     var body: some View {
         NavigationStack {
@@ -24,21 +23,11 @@ struct CalendarView: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        if !isCalendarView {
-                            Button {
-                                showPastEvents.toggle()
-                            } label: {
-                                Image(systemName: showPastEvents ? "arrow.uturn.left.circle.fill" : "arrow.uturn.left.circle")
-                            }
-                        }
-                    }
-                    ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: { isCalendarView.toggle() }) {
                             Image(systemName: isCalendarView ? "list.bullet" : "calendar")
                         }
                     }
                 }
-                .padding()
                 .navigationDestination(isPresented: Binding(
                     get: { navigationState.navigateToEvent != nil },
                     set: { newValue in
@@ -68,9 +57,22 @@ private extension CalendarView {
                 eventListView
             }
         } else {
-            eventsGroupedView
+            let groupedEvents = Dictionary(grouping: events, by: { Date.startOfDay($0.date) })
+            
+            EventsGroupedListView(
+                events: $events,
+                users: users,
+                groupedEvents: groupedEvents,
+                onEventSave: { updatedEvent in
+                    // If an event is updated, find & replace it in the array
+                    if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
+                        events[index] = updatedEvent
+                    }
+                }
+            )
         }
     }
+
     
     var headerView: some View {
         HStack {
@@ -107,48 +109,18 @@ private extension CalendarView {
     
     var eventListView: some View {
         List(filteredEvents) { event in
-            NavigationLink {
-                EventDetailView(
-                    events: $events,
-                    event: event,
-                    users: users,
-                    onSave: { updatedEvent in
-                        if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
-                            events[index] = updatedEvent
-                        }
-                    }
-                )
-            } label: {
-                EventRow(event: event)
-            }
-        }
-        .listStyle(PlainListStyle())
-    }
-    
-    var eventsGroupedView: some View {
-        List {
-            ForEach(groupedEvents.keys.sorted(), id: \.self) { date in
-                Section(header: Text(date.formatted(date: .long, time: .omitted))) {
-                    ForEach(groupedEvents[date] ?? []) { event in
-                        NavigationLink {
-                            EventDetailView(
-                                events: $events,
-                                event: event,
-                                users: users,
-                                onSave: { updatedEvent in
-                                    if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
-                                        events[index] = updatedEvent
-                                    }
-                                }
-                            )
-                        } label: {
-                            EventRow(event: event)
-                        }
+            EventRowLink(
+                events: $events,
+                event: event,
+                users: users,
+                onSave: { updatedEvent in
+                    if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
+                        events[index] = updatedEvent
                     }
                 }
-            }
+            )
         }
-        .listStyle(InsetGroupedListStyle())
+        .listStyle(PlainListStyle())
     }
     
     // MARK: - Computed Vars
@@ -164,19 +136,8 @@ private extension CalendarView {
     }
     
     var groupedEvents: [Date: [Event]] {
-        let todayStart = Date.startOfDay(Date())
-        let activeEvents = events.filter { event in
-            guard let eventDate = event.date else {
-                return false
-            }
-            
-            return showPastEvents
-                ? (Date.startOfDay(eventDate) < todayStart)
-                : (Date.startOfDay(eventDate) >= todayStart)
-        }
-        return Dictionary(grouping: activeEvents, by: { Date.startOfDay($0.date) })
+        Dictionary(grouping: events, by: { Date.startOfDay($0.date) })
     }
-
 }
 
 #Preview {
