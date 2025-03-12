@@ -65,10 +65,10 @@ private extension CalendarView {
             VStack {
                 headerView
                 calendarView
-                eventList
+                eventListView
             }
         } else {
-            eventsListView
+            eventsGroupedView
         }
     }
     
@@ -105,7 +105,7 @@ private extension CalendarView {
             .padding()
     }
     
-    var eventList: some View {
+    var eventListView: some View {
         List(filteredEvents) { event in
             NavigationLink {
                 EventDetailView(
@@ -125,7 +125,7 @@ private extension CalendarView {
         .listStyle(PlainListStyle())
     }
     
-    var eventsListView: some View {
+    var eventsGroupedView: some View {
         List {
             ForEach(groupedEvents.keys.sorted(), id: \.self) { date in
                 Section(header: Text(date.formatted(date: .long, time: .omitted))) {
