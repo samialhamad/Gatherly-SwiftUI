@@ -80,11 +80,66 @@ final class ArrayTests: XCTestCase {
         let key1 = calendar.startOfDay(for: date1)
         let key2 = calendar.startOfDay(for: date3)
         
-        XCTAssertEqual(grouped.count, 2)
-        XCTAssertEqual(grouped[key1]?.count, 2)
-        XCTAssertEqual(grouped[key2]?.count, 1)
         XCTAssertEqual(groupedEvents.count, 2)
         XCTAssertEqual(groupedEvents[key1]?.count, 2)
         XCTAssertEqual(groupedEvents[key2]?.count, 1)
+    }
+    
+    //MARK: - filterEvents
+    
+    func testFilterEvents_AllEventsSameDay() {
+        // two events on the same day ( different times).
+        let components1 = DateComponents(year: 2025, month: 3, day: 11, hour: 10, minute: 0)
+        let components2 = DateComponents(year: 2025, month: 3, day: 11, hour: 15, minute: 30)
+        guard let date1 = calendar.date(from: components1),
+              let date2 = calendar.date(from: components2) else {
+            XCTFail("Failed to create dates")
+            return
+        }
+        let event1 = Event(
+            date: date1,
+            id: 1,
+            title: "Event 1"
+        )
+        let event2 = Event(
+            date: date2,
+            id: 2,
+            title: "Event 2"
+        )
+        
+        let events = [event1, event2]
+        let filterDay = calendar.startOfDay(for: date1)
+        let filteredEvents = events.filterEvents(by: filterDay)
+        
+        XCTAssertEqual(filteredEvents.count, 2)
+    }
+    
+    func testFilterEvents_MixedDays() {
+        // events on two different days.
+        let components1 = DateComponents(year: 2025, month: 3, day: 11, hour: 10)
+        let components2 = DateComponents(year: 2025, month: 3, day: 12, hour: 12)
+        guard let date1 = calendar.date(from: components1),
+              let date2 = calendar.date(from: components2) else {
+            XCTFail("Failed to create dates")
+            return
+        }
+        
+        let event1 = Event(
+            date: date1,
+            id: 1,
+            title: "Event 1"
+        )
+        let event2 = Event(
+            date: date2,
+            id: 2,
+            title: "Event 2"
+        )
+        
+        let events = [event1, event2]
+        let filterDay = calendar.startOfDay(for: date1)
+        let filteredEvents = events.filterEvents(by: filterDay)
+        
+        XCTAssertEqual(filteredEvents.count, 1)
+        XCTAssertEqual(filteredEvents.first?.id, event1.id)
     }
 }

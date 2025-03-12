@@ -124,13 +124,7 @@ private extension CalendarView {
     // MARK: - Computed Vars
     
     var filteredEvents: [Event] {
-        events.filter { event in
-            guard let eventDate = event.date else {
-                return false
-            }
-            
-            return Date.isSameDay(date1: eventDate, date2: navigationState.calendarSelectedDate)
-        }
+        events.filterEvents(by: navigationState.calendarSelectedDate)
     }
 }
 

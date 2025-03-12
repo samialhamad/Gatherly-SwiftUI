@@ -15,4 +15,12 @@ extension Array where Element == Event {
     var groupEventsByDay: [Date: [Event]] {
         Dictionary(grouping: self, by: { Date.startOfDay($0.date) })
     }
+    
+    // Returns only events whose date is on the same day as the given date.
+    func filterEvents(by day: Date) -> [Event] {
+        self.filter { event in
+            guard let eventDate = event.date else { return false }
+            return Calendar.current.isDate(eventDate, inSameDayAs: day)
+        }
+    }
 }
