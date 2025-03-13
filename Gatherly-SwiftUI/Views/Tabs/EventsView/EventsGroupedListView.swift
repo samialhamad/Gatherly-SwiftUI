@@ -43,17 +43,15 @@ struct EventsGroupedListView: View {
                 scrollToEarliestDay(in: keys, proxy: proxy)
                 viewModel.scrollToNearestAvailableDay(keys: keys, proxy: proxy)
             }
-        }
-    }
-    
-    //MARK: - Functions
-    
-    private func scrollToEarliestDay(in keys: [Date], proxy: ScrollViewProxy) {
-        let todayStart = Date.startOfDay(Date())
-        if let index = keys.firstIndex(where: { $0 >= todayStart }) {
-            let scrollID = "header-\(keys[index])"
-            DispatchQueue.main.async {
-                proxy.scrollTo(scrollID, anchor: .top)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    if viewModel.shouldShowTodayButton(keys: keys) {
+                        Button("Today") {
+                            viewModel.scrollToNearestAvailableDay(keys: keys, proxy: proxy)
+                        }
+                        .font(.headline)
+                    }
+                }
             }
         }
     }
