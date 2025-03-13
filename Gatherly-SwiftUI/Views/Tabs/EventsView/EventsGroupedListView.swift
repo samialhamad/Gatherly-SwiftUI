@@ -11,6 +11,7 @@ struct EventsGroupedListView: View {
     @Binding var events: [Event]
     let users: [User]
     let onEventSave: (Event) -> Void
+    @StateObject private var viewModel = EventsGroupedListViewModel()
     
     var body: some View {
         let groupedEvents = events.groupEventsByDay
@@ -40,6 +41,7 @@ struct EventsGroupedListView: View {
             .listStyle(InsetGroupedListStyle())
             .onAppear {
                 scrollToEarliestDay(in: keys, proxy: proxy)
+                viewModel.scrollToNearestAvailableDay(keys: keys, proxy: proxy)
             }
         }
     }
