@@ -49,6 +49,17 @@ struct SampleData {
     
     static let sampleEvents: [Event] = [
         Event(
+            date: Calendar.current.date(byAdding: .day, value: -30, to: Date()),
+            description: "Event from the past",
+            endTimestamp: Int(Date().addingTimeInterval((-30 * 86400) + 7200).timestamp),
+            id: 0,
+            plannerID: 1,
+            location: Location(latitude: 37.7749, longitude: -122.4194, name: "San Francisco"),
+            memberIDs: [2],
+            title: "Event from whenever in the past",
+            startTimestamp: Int(Date().addingTimeInterval(-30 * 86400).timestamp)
+        ),
+        Event(
             date: Calendar.current.date(byAdding: .day, value: -1, to: Date()),
             description: "Event from yesterday",
             endTimestamp: Int(Date().addingTimeInterval(-3600).timestamp),
