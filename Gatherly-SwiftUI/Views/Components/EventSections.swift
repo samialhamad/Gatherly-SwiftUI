@@ -65,6 +65,7 @@ struct EventMembersSection: View {
                         }
                        )
                 )
+                .tint(Color(Brand.Colors.primary))
             }
         }
     }
