@@ -30,7 +30,7 @@ struct ContentView: View {
                     .navigationTitle("Create Event")
             }
             .tabItem {
-                Label("Create", systemImage: "plus")
+                Label("Create", systemImage: "plus.app.fill")
             }
             .tag(1)
             
