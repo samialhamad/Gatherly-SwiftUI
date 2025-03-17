@@ -102,19 +102,29 @@ private extension CalendarView {
     }
     
     var eventListView: some View {
-        List(filteredEvents) { event in
-            EventRowLink(
-                events: $events,
-                event: event,
-                users: users,
-                onSave: { updatedEvent in
-                    if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
-                        events[index] = updatedEvent
-                    }
+        VStack {
+            if !filteredEvents.isEmpty {
+                List(filteredEvents) { event in
+                    EventRowLink(
+                        events: $events,
+                        event: event,
+                        users: users,
+                        onSave: { updatedEvent in
+                            if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
+                                events[index] = updatedEvent
+                            }
+                        }
+                    )
                 }
-            )
+                .listStyle(PlainListStyle())
+            } else {
+                Text("Nothing planned for this day!")
+                    .font(.body)
+                    .foregroundColor(.gray)
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            }
         }
-        .listStyle(PlainListStyle())
     }
     
     // MARK: - Computed Vars
