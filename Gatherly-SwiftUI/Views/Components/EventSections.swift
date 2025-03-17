@@ -113,6 +113,8 @@ struct EventLocationSection: View {
                         VStack(alignment: .leading) {
                             Text(suggestion.title)
                                 .font(.body)
+                                .foregroundColor(.primary)
+                            
                             Text(suggestion.subtitle)
                                 .font(.caption)
                                 .foregroundColor(.gray)
