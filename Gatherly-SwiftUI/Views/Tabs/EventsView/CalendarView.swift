@@ -14,7 +14,6 @@ struct CalendarView: View {
     @StateObject private var viewModel = CalendarViewModel()
     @EnvironmentObject var navigationState: NavigationState
     @State private var isCalendarView = true
-    @State private var showCreateEvent = false
     
     var body: some View {
         NavigationStack {
@@ -22,17 +21,11 @@ struct CalendarView: View {
                 .navigationTitle("My Events")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
-                    ToolbarItemGroup(placement: .navigationBarTrailing) {
-                        Button(action: { showCreateEvent.toggle() }) {
-                            Image(systemName: "plus")
-                        }
+                    ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: { isCalendarView.toggle() }) {
                             Image(systemName: isCalendarView ? "list.bullet" : "calendar")
                         }
                     }
-                }
-                .navigationDestination(isPresented: $showCreateEvent) {
-                    CreateEventView(allUsers: users, events: $events)
                 }
                 .navigationDestination(isPresented: Binding(
                     get: { navigationState.navigateToEvent != nil },
