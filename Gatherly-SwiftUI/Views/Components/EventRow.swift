@@ -19,15 +19,22 @@ struct EventRow: View {
             VStack(alignment: .leading) {
                 Text(event.title ?? "Untitled Event")
                     .font(.headline)
+                    .foregroundColor(Color(Brand.Colors.primary))
+                
                 Text(event.description ?? "No description")
                     .font(.subheadline)
                     .foregroundColor(.gray)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
             }
             
             Spacer()
             
             Text(event.startTimestamp != nil ? formattedTime(event.startTimestamp!) : "")
                 .font(.subheadline)
+                .foregroundColor(.gray)
+            
+            Image(systemName: "chevron.right")
                 .foregroundColor(.gray)
         }
         .padding(.vertical, 5)
