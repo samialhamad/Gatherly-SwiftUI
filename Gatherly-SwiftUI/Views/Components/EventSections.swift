@@ -33,8 +33,13 @@ struct EventDateTimeSection: View {
     var body: some View {
         Section(header: Text(header)) {
             DatePicker("Event Date", selection: eventDate, in: Date()..., displayedComponents: .date)
+                .tint(Color(Brand.Colors.primary))
+
             DatePicker("Start Time", selection: startTime, in: startTimeRange, displayedComponents: .hourAndMinute)
+                .tint(Color(Brand.Colors.primary))
+
             DatePicker("End Time", selection: endTime, in: endTimeRange, displayedComponents: .hourAndMinute)
+                .tint(Color(Brand.Colors.primary))
         }
     }
 }
