@@ -50,12 +50,36 @@ private extension CalendarView {
     @ViewBuilder
     var content: some View {
         if isCalendarView {
-            VStack {
-                headerView
-                calendarView
-                eventListView
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    headerView
+                    calendarView
+                    
+                    if !filteredEvents.isEmpty {
+                        ForEach(filteredEvents) { event in
+                            EventRowLink(
+                                events: $events,
+                                event: event,
+                                users: users,
+                                onSave: { updatedEvent in
+                                    if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
+                                        events[index] = updatedEvent
+                                    }
+                                }
+                            )
+                            .padding(.horizontal)
+                            Divider()
+                        }
+                    } else {
+                        Text("Nothing planned for this day!")
+                            .font(.body)
+                            .foregroundColor(.gray)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .padding()
+                    }
+                }
             }
-        } else {
+        }   else {
             EventsGroupedListView(
                 events: $events,
                 users: users,
