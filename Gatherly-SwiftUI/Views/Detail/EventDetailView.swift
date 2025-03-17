@@ -19,16 +19,22 @@ struct EventDetailView: View {
     @State private var isShowingEditView = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            eventTitleView
-            eventDescriptionView
-            eventDateView
-            eventTimeView
-            eventMapPreview
-            eventPlannerAndMembersView
-            Spacer()
+        ScrollView {
+            VStack(alignment: .leading, spacing: 16) {
+                eventTitleView
+                Divider()
+                eventDescriptionView
+                eventDateView
+                eventTimeView
+                Divider()
+                eventMapPreview
+                Divider()
+                eventPlannerAndMembersView
+                Spacer()
+            }
+            .padding()
+            .frame(maxWidth: .infinity)
         }
-        .padding()
         .navigationTitle("Event Details")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -72,6 +78,7 @@ private extension EventDetailView {
         Text(event.title ?? "Untitled Event")
             .font(.title)
             .bold()
+            .centerText()
     }
     
     var eventDescriptionView: some View {
@@ -79,6 +86,7 @@ private extension EventDetailView {
             if let description = event.description {
                 Text(description)
                     .font(.body)
+                    .centerText()
             }
         }
     }
@@ -88,22 +96,20 @@ private extension EventDetailView {
             if let date = event.date {
                 Text("Date: \(date.formatted(date: .long, time: .omitted))")
                     .foregroundColor(.secondary)
+                    .centerText()
             }
         }
     }
     
     var eventTimeView: some View {
         Group {
-            if let startTimestamp = event.startTimestamp {
+            if let startTimestamp = event.startTimestamp, let endTimestamp = event.endTimestamp {
                 let startDate = Date(timeIntervalSince1970: TimeInterval(startTimestamp))
-                Text("Start: \(startDate.formatted(date: .omitted, time: .shortened))")
-                    .foregroundColor(.secondary)
-            }
-            
-            if let endTimestamp = event.endTimestamp {
                 let endDate = Date(timeIntervalSince1970: TimeInterval(endTimestamp))
-                Text("End: \(endDate.formatted(date: .omitted, time: .shortened))")
+                
+                Text("Time: \(startDate.formatted(date: .omitted, time: .shortened)) - \(endDate.formatted(date: .omitted, time: .shortened))")
                     .foregroundColor(.secondary)
+                    .centerText()
             }
         }
     }
@@ -152,13 +158,14 @@ private extension EventDetailView {
             }
             
             if !members.isEmpty {
-                Text("Attendees:")
+                Text("Attendees")
                     .font(.headline)
                 ForEach(members, id: \.id) { user in
                     Text("\(user.firstName ?? "") \(user.lastName ?? "")")
                 }
             }
         }
+        .centerText()
     }
 }
 
