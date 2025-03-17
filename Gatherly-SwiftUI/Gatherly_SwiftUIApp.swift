@@ -14,6 +14,7 @@ struct Gatherly_SwiftUIApp: App {
     init() {
         UINavigationBar.applyGatherlyStyle()
         UITabBar.applyGatherlyStyle()
+        UITextField.appearance().tintColor = .black
     }
     
     var body: some Scene {
