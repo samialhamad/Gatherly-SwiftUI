@@ -11,8 +11,12 @@ extension View {
     func applyGatherlyToolbarStyle() -> some View {
         self.toolbarColor(Color(Brand.Colors.secondary))
     }
-
+    
     private func toolbarColor(_ color: Color) -> some View {
         self.tint(color)
+    }
+    
+    func centerText() -> some View {
+        self.modifier(CenteredTextModifier())
     }
 }
