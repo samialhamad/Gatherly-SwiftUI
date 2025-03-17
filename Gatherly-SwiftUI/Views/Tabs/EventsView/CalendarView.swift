@@ -82,16 +82,14 @@ private extension CalendarView {
             Spacer()
             
             if !Date.isSameDay(date1: navigationState.calendarSelectedDate, date2: Date()) {
-                Button("Today") {
-                    let today = Date()
-                    navigationState.calendarSelectedDate = today
+                Button {
+                    navigationState.calendarSelectedDate = Date()
+                } label: {
+                    Image(systemName: "calendar.badge.clock.rtl")
+                        .font(.title2)
+                        .foregroundColor(Color(Brand.Colors.primary))
                 }
-                .font(.headline)
-                .foregroundColor(Color(Brand.Colors.primary))
             }
-            
-            Image(systemName: "bell.badge")
-                .font(.title2)
         }
         .padding()
     }
