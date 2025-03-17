@@ -50,10 +50,12 @@ struct EventsGroupedListView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     if viewModel.shouldShowTodayButton(keys: keys) {
-                        Button("Today") {
+                        Button {
                             viewModel.scrollToNearestAvailableDay(keys: keys, proxy: proxy)
+                        } label: {
+                            Image(systemName: "calendar.badge.clock.rtl")
+                                .font(.headline)
                         }
-                        .font(.headline)
                     }
                 }
             }
