@@ -24,7 +24,6 @@ struct CalendarView: View {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: { isCalendarView.toggle() }) {
                             Image(systemName: isCalendarView ? "list.bullet" : "calendar")
-                                .foregroundColor(Color(Brand.Colors.secondary))
                         }
                     }
                 }
@@ -88,6 +87,7 @@ private extension CalendarView {
                     navigationState.calendarSelectedDate = today
                 }
                 .font(.headline)
+                .foregroundColor(Color(Brand.Colors.accent))
             }
             
             Image(systemName: "bell.badge")
@@ -99,6 +99,7 @@ private extension CalendarView {
     var calendarView: some View {
         DatePicker("", selection: $navigationState.calendarSelectedDate, displayedComponents: .date)
             .datePickerStyle(.graphical)
+            .tint(Color(Brand.Colors.accent))
             .padding()
     }
     
