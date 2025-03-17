@@ -72,7 +72,7 @@ struct SampleData {
         ),
         Event(
             date: Date(),
-            description: "Event 1 for today, finished",
+            description: "Event 1 for today, finished, test test test test test test test test",
             endTimestamp: Int(Date().addingTimeInterval(-3600).timestamp),
             id: 2,
             plannerID: 1,
