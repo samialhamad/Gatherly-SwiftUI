@@ -19,9 +19,9 @@ extension UITabBar {
             .foregroundColor: Brand.Colors.secondary
         ]
         
-        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = Brand.Colors.tertiary
+        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = Brand.Colors.accent
         tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [
-            .foregroundColor: Brand.Colors.tertiary
+            .foregroundColor: Brand.Colors.accent
         ]
         
         UITabBar.appearance().standardAppearance = tabBarAppearance
