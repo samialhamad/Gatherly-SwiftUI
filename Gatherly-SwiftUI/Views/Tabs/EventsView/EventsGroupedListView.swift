@@ -60,3 +60,13 @@ struct EventsGroupedListView: View {
         }
     }
 }
+
+#Preview {
+    EventsGroupedListView(
+        events: .constant(SampleData.sampleEvents),
+        users: SampleData.sampleUsers,
+        onEventSave: { updatedEvent in
+            print("Updated event: \(updatedEvent)")
+        }
+    )
+}
