@@ -39,9 +39,13 @@ struct EventsGroupedListView: View {
                 }
             }
             .listStyle(InsetGroupedListStyle())
+            .safeAreaInset(edge: .top) {
+                Color.clear.frame(height: 14)
+            }
             .onAppear {
-                scrollToEarliestDay(in: keys, proxy: proxy)
-                viewModel.scrollToNearestAvailableDay(keys: keys, proxy: proxy)
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                    viewModel.scrollToNearestAvailableDay(keys: keys, proxy: proxy)
+                }
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
