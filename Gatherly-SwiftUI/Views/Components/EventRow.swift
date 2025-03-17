@@ -14,7 +14,7 @@ struct EventRow: View {
         HStack {
             Image(systemName: "calendar.circle")
                 .font(.largeTitle)
-                .foregroundColor(.blue)
+                .foregroundColor(Color(Brand.Colors.primary))
             
             VStack(alignment: .leading) {
                 Text(event.title ?? "Untitled Event")

@@ -87,7 +87,7 @@ private extension CalendarView {
                     navigationState.calendarSelectedDate = today
                 }
                 .font(.headline)
-                .foregroundColor(Color(Brand.Colors.accent))
+                .foregroundColor(Color(Brand.Colors.primary))
             }
             
             Image(systemName: "bell.badge")
@@ -99,7 +99,7 @@ private extension CalendarView {
     var calendarView: some View {
         DatePicker("", selection: $navigationState.calendarSelectedDate, displayedComponents: .date)
             .datePickerStyle(.graphical)
-            .tint(Color(Brand.Colors.accent))
+            .tint(Color(Brand.Colors.primary))
             .padding()
     }
     
