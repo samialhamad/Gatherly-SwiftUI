@@ -34,10 +34,10 @@ struct EventDateTimeSection: View {
         Section(header: Text(header)) {
             DatePicker("Event Date", selection: eventDate, in: Date()..., displayedComponents: .date)
                 .tint(Color(Brand.Colors.primary))
-
+            
             DatePicker("Start Time", selection: startTime, in: startTimeRange, displayedComponents: .hourAndMinute)
                 .tint(Color(Brand.Colors.primary))
-
+            
             DatePicker("End Time", selection: endTime, in: endTimeRange, displayedComponents: .hourAndMinute)
                 .tint(Color(Brand.Colors.primary))
         }
@@ -127,12 +127,38 @@ struct EventLocationSection: View {
     }
 }
 
+struct EventCategorySection: View {
+    let header: String
+    @Binding var selectedCategories: [Brand.EventCategory]
+    @State private var showCategoryPicker = false
+    
+    var body: some View {
+        Section(header: Text(header)) {
+            Button(action: {
+                showCategoryPicker.toggle()
+            }) {
+                HStack {
+                    Text(selectedCategories.isEmpty ? "Select Categories" : selectedCategories.map { $0.rawValue }.joined(separator: ", "))
+                        .foregroundColor(selectedCategories.isEmpty ? .gray : .primary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.gray)
+                }
+                .padding(.vertical, 8)
+            }
+        }
+        .sheet(isPresented: $showCategoryPicker) {
+            EventCategoryPicker(selectedCategories: $selectedCategories)
+        }
+    }
+}
+
 struct EventRowLink: View {
     @Binding var events: [Event]
     let event: Event
     let users: [User]
     let onSave: (Event) -> Void
-
+    
     var body: some View {
         NavigationLink {
             EventDetailView(
