@@ -37,7 +37,7 @@ struct EventRow: View {
             
             if showDisclosure {
                 Image(systemName: "chevron.right")
-                    .foregroundColor(.gray)
+                    .foregroundColor(Color(Brand.Colors.primary))
             }
         }
         .padding(.vertical, 5)
