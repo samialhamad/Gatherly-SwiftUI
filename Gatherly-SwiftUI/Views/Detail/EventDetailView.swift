@@ -21,8 +21,6 @@ struct EventDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                eventTitleView
-                Divider()
                 eventDescriptionView
                 eventDateView
                 eventTimeView
@@ -37,8 +35,8 @@ struct EventDetailView: View {
             .padding()
             .frame(maxWidth: .infinity)
         }
-        .navigationTitle("Event Details")
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(event.title ?? "Untitled Event")
+        .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Edit") {
@@ -77,6 +75,8 @@ struct EventDetailView: View {
 // MARK: - Subviews
 
 private extension EventDetailView {
+    
+    //No longer being used, but keeping around for future just in case
     var eventTitleView: some View {
         Text(event.title ?? "Untitled Event")
             .font(.title)
