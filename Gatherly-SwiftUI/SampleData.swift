@@ -75,7 +75,7 @@ struct SampleData {
         Event(
             categories: randomCategories(),
             date: Date(),
-            description: "Event 1 for today, finished, test test test test test test test test test test test test test test",
+            description: "Event 1 for today, finished, test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test",
             endTimestamp: Int(Date().addingTimeInterval(-3600).timestamp),
             id: 2,
             plannerID: 1,
