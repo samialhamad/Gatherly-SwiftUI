@@ -27,6 +27,7 @@ final class EventEditorTests: XCTestCase {
             endTime: endTime,
             selectedMemberIDs: Set([2, 3]),
             plannerID: 1,
+            categories: [.entertainment],
             generateEventID: { 101 }  // Fixed id for testing sake
         )
         
@@ -41,6 +42,7 @@ final class EventEditorTests: XCTestCase {
         XCTAssertEqual(createdEvent.endTimestamp, Int(expectedEnd.timestamp))
         XCTAssertEqual(createdEvent.plannerID, 1)
         XCTAssertEqual(Set(createdEvent.memberIDs ?? []), Set([2, 3]))
+        XCTAssertEqual(createdEvent.categories, [.entertainment])
         XCTAssertEqual(createdEvent.id, 101)
     }
     
@@ -49,6 +51,7 @@ final class EventEditorTests: XCTestCase {
     func testUpdateEvent() {
         let baseDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
         let originalEvent = Event(
+            categories: [.entertainment],
             date: calendar.startOfDay(for: baseDate),
             description: "Old Description",
             endTimestamp: Int(baseDate.addingTimeInterval(7200).timestamp),
@@ -71,7 +74,8 @@ final class EventEditorTests: XCTestCase {
             startTime: newStartTime,
             endTime: newEndTime,
             selectedMemberIDs: Set([2, 3]),
-            plannerID: 1
+            plannerID: 1,
+            categories: [.food, .other]
         )
         
         XCTAssertEqual(updatedEvent.title, "Updated Title")
@@ -87,6 +91,7 @@ final class EventEditorTests: XCTestCase {
         // The plannerID and id remain unchanged when updating event
         XCTAssertEqual(updatedEvent.plannerID, 1)
         XCTAssertEqual(updatedEvent.id, 123)
+        XCTAssertEqual(updatedEvent.categories, [.food, .other])
     }
     
     //MARK: - Delete Event

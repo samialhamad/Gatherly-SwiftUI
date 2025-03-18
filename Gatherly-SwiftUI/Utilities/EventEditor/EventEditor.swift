@@ -22,6 +22,7 @@ struct EventEditor {
         selectedMemberIDs: Set<Int>,
         plannerID: Int,
         location: Location? = nil,
+        categories: [Brand.EventCategory] = [],
         generateEventID: () -> Int = { Int.random(in: 1000...9999) } //for now, random int generation for the id
     ) -> Event {
         let calendar = Calendar.current
@@ -45,6 +46,7 @@ struct EventEditor {
         event.date = calendar.startOfDay(for: selectedDate)
         event.memberIDs = Array(selectedMemberIDs).sorted()
         event.location = location
+        event.categories = categories
         
         return event
     }
