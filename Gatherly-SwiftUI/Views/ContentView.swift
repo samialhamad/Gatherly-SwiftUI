@@ -17,7 +17,6 @@ struct ContentView: View {
             NavigationStack {
                 CalendarView(events: $events, users: users)
                     .environmentObject(navigationState)
-                    .navigationTitle("My Events")
             }
             .tabItem {
                 Label("My Events", systemImage: "calendar")

@@ -48,6 +48,7 @@ struct EventDetailView: View {
                 .disabled(event.hasStarted || event.hasEnded)
             }
         }
+        .toolbarRole(.editor)
         
         .sheet(isPresented: $isShowingEditView) {
             EditEventView(
