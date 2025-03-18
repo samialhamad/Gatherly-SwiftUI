@@ -25,4 +25,18 @@ struct Brand {
             return UIColor(red: 41.0 / 255.0, green: 42.0 / 255.0, blue: 44.0 / 255.0, alpha: 1.0)
         }
     }
+    
+    //MARK: - Categories
+    
+    enum EventCategory: String, Codable, CaseIterable {
+        case food = "Food"
+        case entertainment = "Entertainment"
+        case travel = "Travel"
+        case sports = "Sports"
+        case education = "Education"
+        case networking = "Networking"
+        case other = "Other"
+
+        static let allCases: [EventCategory] = [.food, .entertainment, .travel, .sports, .education, .networking, .other]
+    }
 }
