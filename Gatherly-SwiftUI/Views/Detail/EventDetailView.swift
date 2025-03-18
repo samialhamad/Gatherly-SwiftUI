@@ -89,7 +89,6 @@ private extension EventDetailView {
             if let description = event.description {
                 Text(description)
                     .font(.body)
-                    .centerText()
             }
         }
     }
@@ -99,7 +98,6 @@ private extension EventDetailView {
             if let date = event.date {
                 Text("Date: \(date.formatted(date: .long, time: .omitted))")
                     .foregroundColor(.secondary)
-                    .centerText()
             }
         }
     }
@@ -112,7 +110,6 @@ private extension EventDetailView {
                 
                 Text("Time: \(startDate.formatted(date: .omitted, time: .shortened)) - \(endDate.formatted(date: .omitted, time: .shortened))")
                     .foregroundColor(.secondary)
-                    .centerText()
             }
         }
     }
@@ -172,7 +169,6 @@ private extension EventDetailView {
                 }
             }
         }
-        .centerText()
     }
     
     var eventCategoriesView: some View {
@@ -187,7 +183,6 @@ private extension EventDetailView {
                     .foregroundColor(.primary)
             }
         }
-        .centerText()
     }
 }
 
