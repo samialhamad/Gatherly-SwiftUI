@@ -147,7 +147,11 @@ private extension EventDetailView {
                 .frame(height: 200)
                 .cornerRadius(8)
             } else {
-                EmptyView()
+                Text("No Location Selected")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .centerText()
+                    .padding()
             }
         }
     }
