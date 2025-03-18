@@ -14,17 +14,25 @@ struct EventCategoryPicker: View {
     var body: some View {
         NavigationStack {
             List(Brand.EventCategory.allCases, id: \.self) { category in
-                Toggle(category.rawValue, isOn: Binding(
-                    get: { selectedCategories.contains(category) },
-                    set: { isSelected in
-                        if isSelected {
-                            selectedCategories.append(category)
-                        } else {
-                            selectedCategories.removeAll { $0 == category }
+                Button(action: {
+                    if selectedCategories.contains(category) {
+                        selectedCategories.removeAll { $0 == category }
+                    } else {
+                        selectedCategories.append(category)
+                    }
+                }) {
+                    HStack {
+                        Text(category.rawValue)
+                            .foregroundColor(.primary)
+                        Spacer()
+                        if selectedCategories.contains(category) {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(Color(Brand.Colors.primary))
                         }
                     }
-                ))
-                .tint(Color(Brand.Colors.primary))
+                    .contentShape(Rectangle())
+                }
+                .listRowSeparator(.hidden)
             }
             .navigationTitle("Select Categories")
             .toolbar {
