@@ -9,6 +9,7 @@ import SwiftUI
 
 struct EventRow: View {
     let event: Event
+    var showDisclosure: Bool = true
     
     var body: some View {
         HStack {
@@ -34,8 +35,10 @@ struct EventRow: View {
                 .font(.subheadline)
                 .foregroundColor(.gray)
             
-            Image(systemName: "chevron.right")
-                .foregroundColor(.gray)
+            if showDisclosure {
+                Image(systemName: "chevron.right")
+                    .foregroundColor(.gray)
+            }
         }
         .padding(.vertical, 5)
     }
