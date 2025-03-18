@@ -65,7 +65,8 @@ private extension CalendarView {
                                     if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
                                         events[index] = updatedEvent
                                     }
-                                }
+                                },
+                                showDisclosure: true
                             )
                             .padding(.horizontal)
                             Divider()
@@ -137,7 +138,8 @@ private extension CalendarView {
                             if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
                                 events[index] = updatedEvent
                             }
-                        }
+                        },
+                        showDisclosure: true
                     )
                 }
                 .listStyle(PlainListStyle())

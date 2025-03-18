@@ -29,7 +29,8 @@ struct EventsGroupedListView: View {
                                 events: $events,
                                 event: event,
                                 users: users,
-                                onSave: onEventSave
+                                onSave: onEventSave,
+                                showDisclosure: false
                             )
                             .listRowSeparator(.hidden)
                         }

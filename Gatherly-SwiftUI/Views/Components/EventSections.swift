@@ -158,6 +158,7 @@ struct EventRowLink: View {
     let event: Event
     let users: [User]
     let onSave: (Event) -> Void
+    var showDisclosure: Bool
     
     var body: some View {
         NavigationLink {
@@ -168,7 +169,7 @@ struct EventRowLink: View {
                 onSave: onSave
             )
         } label: {
-            EventRow(event: event)
+            EventRow(event: event, showDisclosure: showDisclosure)
         }
     }
 }
