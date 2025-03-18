@@ -31,6 +31,7 @@ struct EventsGroupedListView: View {
                                 users: users,
                                 onSave: onEventSave
                             )
+                            .listRowSeparator(.hidden)
                         }
                     } header: {
                         Text(dateLabel)
