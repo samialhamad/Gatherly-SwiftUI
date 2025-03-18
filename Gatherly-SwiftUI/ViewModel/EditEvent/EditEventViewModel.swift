@@ -17,6 +17,7 @@ class EditEventViewModel: ObservableObject {
     @Published var selectedMemberIDs: Set<Int>
     @Published var location: Location?
     @Published var locationName: String
+    @Published var selectedCategories: [Brand.EventCategory]
     
     private let original: Event
     
@@ -35,6 +36,7 @@ class EditEventViewModel: ObservableObject {
         self.selectedMemberIDs = Set(event.memberIDs ?? [])
         self.location = event.location
         self.locationName = event.location?.name ?? ""
+        self.selectedCategories = event.categories
     }
     
     func updatedEvent() -> Event {
@@ -47,7 +49,8 @@ class EditEventViewModel: ObservableObject {
             endTime: endTime,
             selectedMemberIDs: selectedMemberIDs,
             plannerID: originalEvent.plannerID ?? 0,
-            location: location
+            location: location,
+            categories: selectedCategories
         )
     }
     

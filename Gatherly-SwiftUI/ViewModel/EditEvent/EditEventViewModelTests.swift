@@ -87,4 +87,26 @@ final class EditEventViewModelTests: XCTestCase {
         
         XCTAssertEqual(Set(updatedEvent.memberIDs ?? []), Set([2, 3, 4]))
     }
+    
+    func testUpdatedEventCategories() {
+        let calendar = Calendar.current
+        let originalEvent = Event(
+            categories: [.food],
+            date: calendar.startOfDay(for: Date()),
+            description: "Initial description",
+            endTimestamp: Int(Date().addingTimeInterval(7200).timestamp),
+            id: 123,
+            plannerID: 1,
+            memberIDs: [2, 3],
+            title: "Initial Title",
+            startTimestamp: Int(Date().addingTimeInterval(3600).timestamp)
+        )
+        
+        let viewModel = EditEventViewModel(event: originalEvent)
+        viewModel.selectedCategories = [.sports, .education]
+        
+        let updatedEvent = viewModel.updatedEvent()
+        
+        XCTAssertEqual(updatedEvent.categories, [.sports, .education])
+    }
 }
