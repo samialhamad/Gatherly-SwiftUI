@@ -8,6 +8,7 @@
 import Foundation
 
 struct Event: Equatable, Hashable, Identifiable {
+    var categories: [Brand.EventCategory] = []
     var date: Date?
     var description: String?
     var endTimestamp: Int?
