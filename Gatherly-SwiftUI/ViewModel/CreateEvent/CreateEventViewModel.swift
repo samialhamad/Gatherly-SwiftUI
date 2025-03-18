@@ -14,6 +14,7 @@ class CreateEventViewModel: ObservableObject {
     @Published var selectedDate: Date = Date()
     @Published var startTime: Date = Date()
     @Published var endTime: Date = Date().plus(calendarComponent: .hour, value: 1) ?? Date()
+    @Published var selectedCategories: [Brand.EventCategory] = []
     @Published var selectedMemberIDs: Set<Int> = []
     @Published var locationName: String = ""
     @Published var location: Location? = nil
@@ -27,7 +28,8 @@ class CreateEventViewModel: ObservableObject {
             endTime: endTime,
             selectedMemberIDs: selectedMemberIDs,
             plannerID: plannerID,
-            location: location
+            location: location,
+            categories: selectedCategories
         )
     }
     
@@ -39,6 +41,7 @@ class CreateEventViewModel: ObservableObject {
         endTime = Date().plus(calendarComponent: .hour, value: 1) ?? Date()
         selectedMemberIDs.removeAll()
         location = nil
+        selectedCategories = []
     }
         
     var isFormEmpty: Bool {

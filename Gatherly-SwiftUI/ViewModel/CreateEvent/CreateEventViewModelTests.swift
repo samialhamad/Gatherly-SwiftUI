@@ -23,22 +23,22 @@ final class CreateEventViewModelTests: XCTestCase {
         viewModel.startTime = fixedStartTime
         viewModel.endTime = fixedEndTime
         viewModel.selectedMemberIDs = Set([2, 3])
+        viewModel.selectedCategories = [.food, .sports]
         
         let plannerID = 1
         let event = viewModel.createEvent(with: plannerID)
         
-        XCTAssertEqual(event.title, "Test Event")
-        XCTAssertEqual(event.description, "Test description")
-        XCTAssertEqual(event.date, calendar.startOfDay(for: fixedDate))
-        
         let expectedStartDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 10, minute: 0))!
         let expectedEndDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 12, minute: 0))!
         
+        XCTAssertEqual(event.title, "Test Event")
+        XCTAssertEqual(event.description, "Test description")
+        XCTAssertEqual(event.date, calendar.startOfDay(for: fixedDate))
         XCTAssertEqual(event.startTimestamp, Int(expectedStartDate.timestamp))
         XCTAssertEqual(event.endTimestamp, Int(expectedEndDate.timestamp))
-        
         XCTAssertEqual(event.plannerID, plannerID)
         XCTAssertEqual(Set(event.memberIDs ?? []), Set([2, 3]))
+        XCTAssertEqual(event.categories, [.food, .sports])
     }
     
     func testClearFieldsResetsViewModel() {
@@ -50,12 +50,14 @@ final class CreateEventViewModelTests: XCTestCase {
         viewModel.selectedDate = Date(timeIntervalSince1970: 0)
         viewModel.startTime = Date(timeIntervalSince1970: 0)
         viewModel.endTime = Date(timeIntervalSince1970: 1000)
+        viewModel.selectedCategories = [.travel, .networking]
         
         viewModel.clearFields()
         
         XCTAssertEqual(viewModel.title, "")
         XCTAssertEqual(viewModel.description, "")
         XCTAssertTrue(viewModel.selectedMemberIDs.isEmpty)
+        XCTAssertTrue(viewModel.selectedCategories.isEmpty)
         
         //a small 2 second window to address this unit test failing as a result of time issues.
         let now = Date()
