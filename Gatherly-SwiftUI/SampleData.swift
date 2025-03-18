@@ -49,6 +49,7 @@ struct SampleData {
     
     static let sampleEvents: [Event] = [
         Event(
+            categories: randomCategories(),
             date: Calendar.current.date(byAdding: .day, value: -30, to: Date()),
             description: "Event from the past",
             endTimestamp: Int(Date().addingTimeInterval((-30 * 86400) + 7200).timestamp),
@@ -60,6 +61,7 @@ struct SampleData {
             startTimestamp: Int(Date().addingTimeInterval(-30 * 86400).timestamp)
         ),
         Event(
+            categories: randomCategories(),
             date: Calendar.current.date(byAdding: .day, value: -1, to: Date()),
             description: "Event from yesterday",
             endTimestamp: Int(Date().addingTimeInterval(-3600).timestamp),
@@ -71,6 +73,7 @@ struct SampleData {
             startTimestamp: Int(Date().addingTimeInterval(-7200).timestamp)
         ),
         Event(
+            categories: randomCategories(),
             date: Date(),
             description: "Event 1 for today, finished, test test test test test test test test test test test test test test",
             endTimestamp: Int(Date().addingTimeInterval(-3600).timestamp),
@@ -82,6 +85,7 @@ struct SampleData {
             startTimestamp: Int(Date().addingTimeInterval(-7200).timestamp)
         ),
         Event(
+            categories: randomCategories(),
             date: Date(),
             description: "Event 2 for today, ongoing",
             endTimestamp: Int(Date().addingTimeInterval(3600).timestamp),
@@ -93,6 +97,7 @@ struct SampleData {
             startTimestamp: Int(Date().addingTimeInterval(-3600).timestamp)
         ),
         Event(
+            categories: randomCategories(),
             date: Date(),
             description: "Event 3 for today, in an hour",
             endTimestamp: Int(Date().addingTimeInterval(7200).timestamp),
@@ -104,6 +109,7 @@ struct SampleData {
             startTimestamp: Int(Date().addingTimeInterval(3600).timestamp)
         ),
         Event(
+            categories: randomCategories(),
             date: Date(),
             description: "Event 4 for today, in an hour",
             endTimestamp: Int(Date().addingTimeInterval(7200).timestamp),
@@ -115,6 +121,7 @@ struct SampleData {
             startTimestamp: Int(Date().addingTimeInterval(3600).timestamp)
         ),
         Event(
+            categories: randomCategories(),
             date: Date(),
             description: "Event 5 for today, in an hour",
             endTimestamp: Int(Date().addingTimeInterval(7200).timestamp),
@@ -126,6 +133,7 @@ struct SampleData {
             startTimestamp: Int(Date().addingTimeInterval(3600).timestamp)
         ),
         Event(
+            categories: randomCategories(),
             date: Date(),
             description: "Event 6 for today, in an hour",
             endTimestamp: Int(Date().addingTimeInterval(7200).timestamp),
@@ -137,6 +145,7 @@ struct SampleData {
             startTimestamp: Int(Date().addingTimeInterval(3600).timestamp)
         ),
         Event(
+            categories: randomCategories(),
             date: Date(),
             description: "Event 7 for today, in an hour",
             endTimestamp: Int(Date().addingTimeInterval(7200).timestamp),
@@ -148,6 +157,7 @@ struct SampleData {
             startTimestamp: Int(Date().addingTimeInterval(3600).timestamp)
         ),
         Event(
+            categories: randomCategories(),
             date: Date(),
             description: "Event 8 for today, in an hour",
             endTimestamp: Int(Date().addingTimeInterval(7200).timestamp),
@@ -159,6 +169,7 @@ struct SampleData {
             startTimestamp: Int(Date().addingTimeInterval(3600).timestamp)
         ),
         Event(
+            categories: randomCategories(),
             date: Calendar.current.date(byAdding: .day, value: 1, to: Date()),
             description: "Event planned for tomorrow, hope to see you there!",
             endTimestamp: Int(Date().addingTimeInterval(90000).timestamp),
@@ -170,6 +181,7 @@ struct SampleData {
             startTimestamp: Int(Date().addingTimeInterval(86400).timestamp)
         ),
         Event(
+            categories: randomCategories(),
             date: Calendar.current.date(byAdding: .day, value: 7, to: Date()),
             description: "Event planned for next week, hope to see you there!",
             endTimestamp: Int(Date().addingTimeInterval((7 * 86400) + 3600).timestamp),
@@ -181,6 +193,7 @@ struct SampleData {
             startTimestamp: Int(Date().addingTimeInterval(7 * 86400).timestamp)
         ),
         Event(
+            categories: randomCategories(),
             date: Calendar.current.date(byAdding: .day, value: 30, to: Date()),
             description: "Event planned for a month from today, hope to see you there!",
             endTimestamp: Int(Date().addingTimeInterval((30 * 86400) + 7200).timestamp),
@@ -194,3 +207,8 @@ struct SampleData {
     ]
 }
 
+private func randomCategories() -> [Brand.EventCategory] {
+    let allCategories = Brand.EventCategory.allCases
+    let randomCount = Int.random(in: 0...3) // Each event gets 1-3 random categories
+    return Array(allCategories.shuffled().prefix(randomCount))
+}
