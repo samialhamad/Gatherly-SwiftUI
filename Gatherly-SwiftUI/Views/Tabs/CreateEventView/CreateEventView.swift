@@ -45,6 +45,10 @@ struct CreateEventView: View {
                         viewModel.location = location
                     }
                 )
+                EventCategorySection(
+                    header: "Categories",
+                    selectedCategories: $viewModel.selectedCategories
+                )
                 createButtonSection
             }
             .navigationTitle("Create Event")

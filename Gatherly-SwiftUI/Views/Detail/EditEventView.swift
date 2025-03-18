@@ -43,6 +43,9 @@ struct EditEventView: View {
                     allUsers: allUsers,
                     selectedMemberIDs: $viewModel.selectedMemberIDs,
                     plannerID: viewModel.plannerID
+                EventCategorySection(
+                    header: "Categories",
+                    selectedCategories: $viewModel.selectedCategories
                 )
                 saveAndDeleteSection
             }
