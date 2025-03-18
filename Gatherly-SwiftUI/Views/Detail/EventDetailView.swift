@@ -30,6 +30,8 @@ struct EventDetailView: View {
                 eventMapPreview
                 Divider()
                 eventPlannerAndMembersView
+                Divider()
+                eventCategoriesView
                 Spacer()
             }
             .padding()
@@ -163,6 +165,21 @@ private extension EventDetailView {
                 ForEach(members, id: \.id) { user in
                     Text("\(user.firstName ?? "") \(user.lastName ?? "")")
                 }
+            }
+        }
+        .centerText()
+    }
+    
+    var eventCategoriesView: some View {
+        Group {
+            if event.categories.isEmpty {
+                Text("No categories assigned.")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            } else {
+                Text("\(event.categories.map { $0.rawValue }.joined(separator: ", "))")
+                    .font(.subheadline)
+                    .foregroundColor(.primary)
             }
         }
         .centerText()
