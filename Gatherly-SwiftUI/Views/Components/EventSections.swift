@@ -102,10 +102,6 @@ struct EventLocationSection: View {
                             onSetLocation(nil)
                         }
                     }
-                
-                ClearButton(text: $locationName) {
-                    onSetLocation(nil)
-                }
             }
             
             if !searchVM.suggestions.isEmpty {
