@@ -15,6 +15,7 @@ struct Gatherly_SwiftUIApp: App {
         UINavigationBar.applyGatherlyStyle()
         UITabBar.applyGatherlyStyle()
         UITextField.appearance().tintColor = .black
+        UITextField.appearance().clearButtonMode = .whileEditing
     }
     
     var body: some Scene {
