@@ -18,7 +18,7 @@ struct ClearButton: View {
                 onClear?()
             }) {
                 Image(systemName: "xmark.circle.fill")
-                    .foregroundColor(.gray)
+                    .foregroundColor(Color(UIColor.tertiaryLabel))
             }
             .buttonStyle(BorderlessButtonStyle())
         }
