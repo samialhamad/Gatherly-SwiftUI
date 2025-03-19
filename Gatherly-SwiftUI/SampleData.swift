@@ -10,19 +10,19 @@ import Foundation
 struct SampleData {
     static let sampleUsers: [User] = [
         User(
-            createdTimestamp: Int(Date().timeIntervalSince1970),
+            createdTimestamp: Int(Date().timestamp),
             deviceToken: "abc123",
-            email: "alice@example.com",
+            email: "sami@example.com",
             eventIDs: nil,
-            firstName: "Alice",
+            firstName: "Sami",
             friendIDs: nil,
             id: 1,
             isEmailEnabled: true,
-            lastName: "Smith",
+            lastName: "Alhamad",
             phone: "1234567890"
         ),
         User(
-            createdTimestamp: Int(Date().timeIntervalSince1970),
+            createdTimestamp: Int(Date().timestamp),
             deviceToken: "def456",
             email: "bob@example.com",
             eventIDs: nil,
@@ -34,7 +34,7 @@ struct SampleData {
             phone: "9876543210"
         ),
         User(
-            createdTimestamp: Int(Date().timeIntervalSince1970),
+            createdTimestamp: Int(Date().timestamp),
             deviceToken: "ghi789",
             email: "charlie@example.com",
             eventIDs: nil,
@@ -44,6 +44,54 @@ struct SampleData {
             isEmailEnabled: true,
             lastName: "Brown",
             phone: "5555555555"
+        ),
+        User(
+            createdTimestamp: Int(Date().timestamp),
+            deviceToken: "def456",
+            email: "bob@example.com",
+            eventIDs: nil,
+            firstName: "Logan",
+            friendIDs: nil,
+            id: 4,
+            isEmailEnabled: true,
+            lastName: "Harrison",
+            phone: "9876543210"
+        ),
+        User(
+            createdTimestamp: Int(Date().timestamp),
+            deviceToken: "def456",
+            email: "bob@example.com",
+            eventIDs: nil,
+            firstName: "Avinav",
+            friendIDs: nil,
+            id: 5,
+            isEmailEnabled: true,
+            lastName: "Baral",
+            phone: "9876543210"
+        ),
+        User(
+            createdTimestamp: Int(Date().timestamp),
+            deviceToken: "def456",
+            email: "bob@example.com",
+            eventIDs: nil,
+            firstName: "Jaiveer",
+            friendIDs: nil,
+            id: 6,
+            isEmailEnabled: true,
+            lastName: "Dhaliwhal",
+            phone: "9876543210"
+        ),
+        User(
+            createdTimestamp: Int(Date().timestamp),
+            deviceToken: "fxc96",
+            email: "bob@example.com",
+            eventIDs: nil,
+            firstName: "Matt",
+            friendIDs: nil,
+            id: 7,
+            isEmailEnabled: true,
+            lastName: "Simon",
+            phone: "9876543210"
         )
     ]
     
