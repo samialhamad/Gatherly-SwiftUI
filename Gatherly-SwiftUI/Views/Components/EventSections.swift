@@ -15,8 +15,15 @@ struct EventDetailsSection: View {
     var body: some View {
         Section(header: Text(header)) {
             TextField("Title", text: $title)
-            TextField("Description", text: $description, axis: .vertical)
-                .lineLimit(3, reservesSpace: true)
+            
+            HStack {
+                TextField("Description", text: $description, axis: .vertical)
+                    .lineLimit(3, reservesSpace: true)
+                    .tint(.primary)
+                
+                ClearButton(text: $description)
+            }
+            
         }
     }
 }
