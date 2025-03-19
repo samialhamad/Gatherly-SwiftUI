@@ -19,7 +19,7 @@ struct ContentView: View {
                     .environmentObject(navigationState)
             }
             .tabItem {
-                Label("My Events", systemImage: "calendar")
+                Image(systemName: "calendar")
             }
             .tag(0)
             
@@ -29,19 +29,19 @@ struct ContentView: View {
                     .navigationTitle("Create Event")
             }
             .tabItem {
-                Label("Create", systemImage: "plus.app.fill")
+                Image(systemName: "plus.app.fill")
             }
             .tag(1)
             
             Text("Friends")
                 .tabItem {
-                    Label("Friends", systemImage: "person.3.fill")
+                    Image(systemName: "person.3.fill")
                 }
                 .tag(2)
             
             Text("Profile")
                 .tabItem {
-                    Label("Profile", systemImage: "person")
+                    Image(systemName: "person")
                 }
                 .tag(3)
         }
