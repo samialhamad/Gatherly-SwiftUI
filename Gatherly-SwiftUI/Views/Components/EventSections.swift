@@ -95,6 +95,11 @@ struct EventLocationSection: View {
                 .disableAutocorrection(true)
                 .onChange(of: locationName) { newValue in
                     searchVM.queryFragment = newValue
+                    
+                    //check if a user clears the location, if so location is now nil (editing bug fix)
+                    if newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                        onSetLocation(nil)
+                    }
                 }
             
             if !searchVM.suggestions.isEmpty {
