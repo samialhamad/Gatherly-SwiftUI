@@ -31,7 +31,7 @@ struct EventMembersPicker: View {
                 }
                 .listRowSeparator(.hidden)
             }
-            .navigationTitle("Select Members")
+            .navigationTitle("Invite Members")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
