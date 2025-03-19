@@ -54,25 +54,29 @@ struct EventDateTimeSection: View {
 struct EventMembersSection: View {
     let header: String
     let allUsers: [User]
-    let selectedMemberIDs: Binding<Set<Int>>
     let plannerID: Int?
+    
+    @Binding var selectedMemberIDs: Set<Int>
+    @State private var isPickerPresented = false
     
     var body: some View {
         Section(header: Text(header)) {
-            ForEach(filteredUsers, id: \.id) { user in
-                Toggle("\(user.firstName ?? "") \(user.lastName ?? "")",
-                       isOn: Binding(
-                        get: { selectedMemberIDs.wrappedValue.contains(user.id ?? -1) },
-                        set: { newValue in
-                            if newValue {
-                                selectedMemberIDs.wrappedValue.insert(user.id ?? -1)
-                            } else {
-                                selectedMemberIDs.wrappedValue.remove(user.id ?? -1)
-                            }
-                        }
-                       )
+            Button(action: {
+                isPickerPresented.toggle()
+            }) {
+                HStack {
+                    Text("Select Members")
+                        .foregroundColor(.primary)
+                    Spacer()
+                    Text("\(selectedMemberIDs.count) selected")
+                        .foregroundColor(.secondary)
+                }
+            }
+            .sheet(isPresented: $isPickerPresented) {
+                EventMembersPicker(
+                    allUsers: filteredUsers,
+                    selectedMemberIDs: $selectedMemberIDs
                 )
-                .tint(Color(Brand.Colors.primary))
             }
         }
     }
