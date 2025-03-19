@@ -136,7 +136,7 @@ private extension EventDetailView {
                                     .cornerRadius(8)
                                     .shadow(radius: 2)
                             }
-                            Image(systemName: "mappin.circle.fill")
+                            Image(systemName: "mappin")
                                 .font(.title)
                                 .foregroundColor(.red)
                         }
