@@ -90,17 +90,23 @@ struct EventLocationSection: View {
     
     var body: some View {
         Section(header: Text(header)) {
-            TextField("Enter location name", text: $locationName)
-                .autocapitalization(.words)
-                .disableAutocorrection(true)
-                .onChange(of: locationName) { newValue in
-                    searchVM.queryFragment = newValue
-                    
-                    //check if a user clears the location, if so location is now nil (editing bug fix)
-                    if newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-                        onSetLocation(nil)
+            HStack {
+                TextField("Enter location name", text: $locationName)
+                    .autocapitalization(.words)
+                    .disableAutocorrection(true)
+                    .onChange(of: locationName) { newValue in
+                        searchVM.queryFragment = newValue
+                        
+                        //check if a user clears the location, if so location is now nil (editing bug fix)
+                        if newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            onSetLocation(nil)
+                        }
                     }
+                
+                ClearButton(text: $locationName) {
+                    onSetLocation(nil)
                 }
+            }
             
             if !searchVM.suggestions.isEmpty {
                 List(searchVM.suggestions, id: \.self) { suggestion in
