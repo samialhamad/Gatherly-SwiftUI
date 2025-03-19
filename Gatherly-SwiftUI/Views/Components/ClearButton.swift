@@ -7,11 +7,9 @@
 
 import SwiftUI
 
-//No longer using, since UITextField.appearance().clearButtonMode = .whileEditing works in app init
-
 struct ClearButton: View {
     @Binding var text: String
-    let onClear: (() -> Void)?
+    var onClear: (() -> Void)? = nil
 
     var body: some View {
         if !text.isEmpty {
