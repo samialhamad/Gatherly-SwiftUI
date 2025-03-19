@@ -35,8 +35,8 @@ struct CreateEventView: View {
                 EventMembersSection(
                     header: "Invite Friends",
                     allUsers: allUsers,
-                    selectedMemberIDs: $viewModel.selectedMemberIDs,
-                    plannerID: currentPlannerID
+                    plannerID: currentPlannerID,
+                    selectedMemberIDs: $viewModel.selectedMemberIDs
                 )
                 EventLocationSection(
                     header: "Location",
