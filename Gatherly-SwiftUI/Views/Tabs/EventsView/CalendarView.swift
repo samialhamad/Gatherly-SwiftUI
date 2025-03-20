@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+struct Constants {
+    static let eventListViewSpacing: CGFloat = 10
+    static let headerViewSpacing: CGFloat = 4
+    static let zeroSpacing: CGFloat = 0
+}
+
 struct CalendarView: View {
     @Binding var events: [Event]
     let users: [User]
@@ -51,7 +57,7 @@ private extension CalendarView {
     var content: some View {
         if isCalendarView {
             ScrollView {
-                VStack(alignment: .leading, spacing: 0) {
+                VStack(alignment: .leading, spacing: Constants.zeroSpacing) {
                     headerView
                     calendarView
                     eventListView
@@ -72,7 +78,7 @@ private extension CalendarView {
     
     var headerView: some View {
         HStack {
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: Constants.headerViewSpacing) {
                 Text(navigationState.calendarSelectedDate, format: .dateTime.year().month().day())
                     .font(.title2)
                     .bold()
@@ -106,7 +112,7 @@ private extension CalendarView {
     var eventListView: some View {
         VStack {
             if !filteredEvents.isEmpty {
-                VStack(spacing: 10) {
+                VStack(spacing: Constants.eventListViewSpacing) {
                     ForEach(filteredEvents) { event in
                         EventRowLink(
                             events: $events,
