@@ -120,7 +120,6 @@ private extension CalendarView {
                             showDisclosure: true
                         )
                         .padding(.horizontal)
-                        Divider()
                     }
                 }
         } else {
