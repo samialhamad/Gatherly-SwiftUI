@@ -42,7 +42,7 @@ struct EventsGroupedListView: View {
             }
             .listStyle(InsetGroupedListStyle())
             .safeAreaInset(edge: .top) {
-                Color.clear.frame(height: 20)
+                Color.clear.frame(height: Constants.EventsGroupedListView.topFrameHeight)
             }
             .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
