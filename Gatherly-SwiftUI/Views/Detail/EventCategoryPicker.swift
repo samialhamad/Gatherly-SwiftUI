@@ -22,7 +22,6 @@ struct EventCategoryPicker: View {
                         }
                     }
                 }
-            }
         }
     }
 }
