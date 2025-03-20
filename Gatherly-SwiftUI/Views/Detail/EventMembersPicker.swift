@@ -32,7 +32,7 @@ struct EventMembersPicker: View {
                 .listRowSeparator(.hidden)
             }
             .safeAreaInset(edge: .top) {
-                Color.clear.frame(height: 20)
+                Color.clear.frame(height: Constants.EventMembersPicker.topPadding)
             }
             .navigationTitle("Invite Members")
             .toolbar {
