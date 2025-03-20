@@ -157,7 +157,7 @@ struct EventCategorySection: View {
             }) {
                 HStack {
                     Text(selectedCategories.isEmpty ? "Select Categories" : selectedCategories.map { $0.rawValue }.joined(separator: ", "))
-                        .foregroundColor(selectedCategories.isEmpty ? .gray : .primary)
+                        .foregroundColor(.primary)
                         .frame(maxWidth: .infinity, alignment: .leading)
                     Image(systemName: "chevron.right")
                         .foregroundColor(.gray)
