@@ -153,12 +153,12 @@ struct EventLocationSection: View {
 struct EventCategorySection: View {
     let header: String
     @Binding var selectedCategories: [Brand.EventCategory]
-    @State private var showCategoryPicker = false
+    @State private var isCategoryPickerPresented = false
     
     var body: some View {
         Section(header: Text(header)) {
             Button(action: {
-                showCategoryPicker.toggle()
+                isCategoryPickerPresented.toggle()
             }) {
                 HStack {
                     Text(selectedCategories.isEmpty ? "Select Categories" : selectedCategories.map { $0.rawValue }.joined(separator: ", "))
@@ -168,9 +168,9 @@ struct EventCategorySection: View {
                 .addDisclosureIcon()
                 .padding(.vertical, 8)
             }
-        }
-        .sheet(isPresented: $showCategoryPicker) {
-            EventCategoryPicker(selectedCategories: $selectedCategories)
+            .sheet(isPresented: $isCategoryPickerPresented) {
+                EventCategoryPicker(selectedCategories: $selectedCategories)
+            }
         }
     }
 }
