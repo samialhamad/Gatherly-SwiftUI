@@ -56,12 +56,12 @@ private struct CategoryList: View {
                     UnselectAllButton(selectedCategories: $selectedCategories)
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.top, 20)
+                .padding(.top, Constants.CategoryListView.topPadding)
             }
             .listRowBackground(Color.clear)
         }
         .safeAreaInset(edge: .top) {
-            Color.clear.frame(height: 20)
+            Color.clear.frame(height: Constants.CategoryListView.topPadding)
         }
     }
     
@@ -85,6 +85,6 @@ private struct UnselectAllButton: View {
                 .font(.headline)
                 .foregroundColor(.red)
         }
-        .padding(.bottom, 20)
+        .padding(.bottom, Constants.CategoryListView.bottomPadding)
     }
 }
