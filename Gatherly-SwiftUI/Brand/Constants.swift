@@ -19,4 +19,9 @@ struct Constants {
     struct EventsGroupedListView {
         static let topFrameHeight: CGFloat = 20
     }
+    
+    struct CategoryListView {
+        static let topPadding: CGFloat = 20
+        static let bottomPadding: CGFloat = 20
+    }
 }
