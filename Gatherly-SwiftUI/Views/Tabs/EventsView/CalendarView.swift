@@ -54,30 +54,7 @@ private extension CalendarView {
                 VStack(alignment: .leading, spacing: 0) {
                     headerView
                     calendarView
-                    
-                    if !filteredEvents.isEmpty {
-                        ForEach(filteredEvents) { event in
-                            EventRowLink(
-                                events: $events,
-                                event: event,
-                                users: users,
-                                onSave: { updatedEvent in
-                                    if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
-                                        events[index] = updatedEvent
-                                    }
-                                },
-                                showDisclosure: true
-                            )
-                            .padding(.horizontal)
-                            Divider()
-                        }
-                    } else {
-                        Text("Nothing planned for this day!")
-                            .font(.body)
-                            .foregroundColor(.gray)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding()
-                    }
+                    eventListView
                 }
             }
         }   else {
@@ -129,20 +106,25 @@ private extension CalendarView {
     var eventListView: some View {
         VStack {
             if !filteredEvents.isEmpty {
-                List(filteredEvents) { event in
-                    EventRowLink(
-                        events: $events,
-                        event: event,
-                        users: users,
-                        onSave: { updatedEvent in
-                            if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
-                                events[index] = updatedEvent
-                            }
-                        },
-                        showDisclosure: true
-                    )
+                ScrollView {
+                    LazyVStack {
+                        ForEach(filteredEvents) { event in
+                            EventRowLink(
+                                events: $events,
+                                event: event,
+                                users: users,
+                                onSave: { updatedEvent in
+                                    if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
+                                        events[index] = updatedEvent
+                                    }
+                                },
+                                showDisclosure: true
+                            )
+                            .padding(.horizontal)
+                            Divider()
+                        }
+                    }
                 }
-                .listStyle(PlainListStyle())
             } else {
                 Text("Nothing planned for this day!")
                     .font(.body)
