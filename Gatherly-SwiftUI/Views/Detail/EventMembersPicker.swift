@@ -31,6 +31,9 @@ struct EventMembersPicker: View {
                 }
                 .listRowSeparator(.hidden)
             }
+            .safeAreaInset(edge: .top) {
+                Color.clear.frame(height: 20)
+            }
             .navigationTitle("Invite Members")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
