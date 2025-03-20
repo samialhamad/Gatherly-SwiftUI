@@ -20,7 +20,7 @@ struct EventDetailView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: Constants.EventDetailView.bodyVStackSpacing) {
                 eventDescriptionView
                 eventDateView
                 eventTimeView
@@ -127,14 +127,14 @@ private extension EventDetailView {
                 // older Map initializer with annotationItems - is deprecated in iOS 17
                 Map(coordinateRegion: .constant(region), annotationItems: [annotation]) { location in
                     MapAnnotation(coordinate: location.coordinate) {
-                        VStack(spacing: 2) {
+                        VStack(spacing: Constants.EventDetailView.eventMapPreviewVStackSpacing) {
                             if let name = location.name, !name.isEmpty {
                                 Text(name)
                                     .font(.caption)
-                                    .padding(4)
+                                    .padding(Constants.EventDetailView.eventMapPreviewTextPadding)
                                     .background(Color.white)
-                                    .cornerRadius(8)
-                                    .shadow(radius: 2)
+                                    .cornerRadius(Constants.EventDetailView.eventMapPreviewCornerRadius)
+                                    .shadow(radius: Constants.EventDetailView.eventMapPreviewShadow)
                             }
                             Image(systemName: "mappin")
                                 .font(.title)
@@ -142,8 +142,8 @@ private extension EventDetailView {
                         }
                     }
                 }
-                .frame(height: 200)
-                .cornerRadius(8)
+                .frame(height: Constants.EventDetailView.eventMapPreviewFrame)
+                .cornerRadius(Constants.EventDetailView.eventMapPreviewCornerRadius)
             } else {
                 Text("No Location Selected")
                     .font(.subheadline)
