@@ -74,6 +74,8 @@ struct EventMembersSection: View {
                     Spacer()
                     Text("\(selectedMemberIDs.count) selected")
                         .foregroundColor(.secondary)
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.gray)
                 }
             }
             .sheet(isPresented: $isPickerPresented) {
