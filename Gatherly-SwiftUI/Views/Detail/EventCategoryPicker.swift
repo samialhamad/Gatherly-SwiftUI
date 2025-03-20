@@ -15,7 +15,6 @@ struct EventCategoryPicker: View {
         NavigationStack {
             VStack {
                 CategoryList(selectedCategories: $selectedCategories)
-                UnselectAllButton(selectedCategories: $selectedCategories)
             }
             
             .navigationTitle("Select Categories")
@@ -36,22 +35,33 @@ private struct CategoryList: View {
     @Binding var selectedCategories: [Brand.EventCategory]
     
     var body: some View {
-        List(Brand.EventCategory.allCases, id: \.self) { category in
-            Button(action: {
-                toggleCategorySelection(category)
-            }) {
-                HStack {
-                    Text(category.rawValue)
-                        .foregroundColor(.primary)
-                    Spacer()
-                    if selectedCategories.contains(category) {
-                        Image(systemName: "checkmark")
-                            .foregroundColor(Color(Brand.Colors.primary))
+        List {
+            ForEach(Brand.EventCategory.allCases, id: \.self) { category in
+                Button(action: {
+                    toggleCategorySelection(category)
+                }) {
+                    HStack {
+                        Text(category.rawValue)
+                            .foregroundColor(.primary)
+                        Spacer()
+                        if selectedCategories.contains(category) {
+                            Image(systemName: "checkmark")
+                                .foregroundColor(Color(Brand.Colors.primary))
+                        }
                     }
+                    .contentShape(Rectangle())
                 }
-                .contentShape(Rectangle())
+                .listRowSeparator(.hidden)
             }
-            .listRowSeparator(.hidden)
+            
+            Section {
+                VStack {
+                    UnselectAllButton(selectedCategories: $selectedCategories)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.top, 20)
+            }
+            .listRowBackground(Color.clear)
         }
     }
     
@@ -74,8 +84,6 @@ private struct UnselectAllButton: View {
             Text("Unselect All")
                 .font(.headline)
                 .foregroundColor(.red)
-                .padding()
-                .clipShape(RoundedRectangle(cornerRadius: 10))
         }
         .padding(.bottom, 20)
     }
