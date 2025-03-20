@@ -74,9 +74,8 @@ struct EventMembersSection: View {
                     Spacer()
                     Text("\(selectedMemberIDs.count) selected")
                         .foregroundColor(.secondary)
-                    Image(systemName: "chevron.right")
-                        .foregroundColor(.gray)
                 }
+                .addDisclosureIcon()
             }
             .sheet(isPresented: $isPickerPresented) {
                 EventMembersPicker(
@@ -165,9 +164,8 @@ struct EventCategorySection: View {
                     Text(selectedCategories.isEmpty ? "Select Categories" : selectedCategories.map { $0.rawValue }.joined(separator: ", "))
                         .foregroundColor(.primary)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                    Image(systemName: "chevron.right")
-                        .foregroundColor(.gray)
                 }
+                .addDisclosureIcon()
                 .padding(.vertical, 8)
             }
         }
