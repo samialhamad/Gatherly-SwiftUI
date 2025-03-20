@@ -61,12 +61,12 @@ struct EventMembersSection: View {
     let plannerID: Int?
     
     @Binding var selectedMemberIDs: Set<Int>
-    @State private var isPickerPresented = false
+    @State private var isMembersPickerPresented = false
     
     var body: some View {
         Section(header: Text(header)) {
             Button(action: {
-                isPickerPresented.toggle()
+                isMembersPickerPresented.toggle()
             }) {
                 HStack {
                     Text("Invite Members")
@@ -77,7 +77,7 @@ struct EventMembersSection: View {
                 }
                 .addDisclosureIcon()
             }
-            .sheet(isPresented: $isPickerPresented) {
+            .sheet(isPresented: $isMembersPickerPresented) {
                 EventMembersPicker(
                     allUsers: filteredUsers,
                     selectedMemberIDs: $selectedMemberIDs
