@@ -11,6 +11,7 @@ struct EventDetailsSection: View {
     let header: String
     @Binding var title: String
     @Binding var description: String
+    @FocusState private var isDescriptionFocused: Bool
     
     var body: some View {
         Section(header: Text(header)) {
@@ -20,8 +21,11 @@ struct EventDetailsSection: View {
                 TextField("Description", text: $description, axis: .vertical)
                     .lineLimit(3, reservesSpace: true)
                     .tint(.primary)
+                    .focused($isDescriptionFocused)
                 
-                ClearButton(text: $description)
+                if isDescriptionFocused {
+                    ClearButton(text: $description)
+                }
             }
             
         }
