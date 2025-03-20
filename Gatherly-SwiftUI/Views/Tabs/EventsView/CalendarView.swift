@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-struct Constants {
-    static let eventListViewSpacing: CGFloat = 10
-    static let headerViewSpacing: CGFloat = 4
-    static let zeroSpacing: CGFloat = 0
-}
-
 struct CalendarView: View {
     @Binding var events: [Event]
     let users: [User]
@@ -57,7 +51,7 @@ private extension CalendarView {
     var content: some View {
         if isCalendarView {
             ScrollView {
-                VStack(alignment: .leading, spacing: Constants.zeroSpacing) {
+                VStack(alignment: .leading, spacing: Constants.CalendarView.zeroSpacing) {
                     headerView
                     calendarView
                     eventListView
@@ -78,7 +72,7 @@ private extension CalendarView {
     
     var headerView: some View {
         HStack {
-            VStack(alignment: .leading, spacing: Constants.headerViewSpacing) {
+            VStack(alignment: .leading, spacing: Constants.CalendarView.headerViewSpacing) {
                 Text(navigationState.calendarSelectedDate, format: .dateTime.year().month().day())
                     .font(.title2)
                     .bold()
@@ -112,7 +106,7 @@ private extension CalendarView {
     var eventListView: some View {
         VStack {
             if !filteredEvents.isEmpty {
-                VStack(spacing: Constants.eventListViewSpacing) {
+                VStack(spacing: Constants.CalendarView.eventListViewSpacing) {
                     ForEach(filteredEvents) { event in
                         EventRowLink(
                             events: $events,
@@ -128,21 +122,21 @@ private extension CalendarView {
                         .padding(.horizontal)
                     }
                 }
-        } else {
-            Text("Nothing planned for this day!")
-                .font(.body)
-                .foregroundColor(.gray)
-                .padding()
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            } else {
+                Text("Nothing planned for this day!")
+                    .font(.body)
+                    .foregroundColor(.gray)
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            }
         }
     }
-}
-
-// MARK: - Computed Vars
-
-var filteredEvents: [Event] {
-    events.filterEvents(by: navigationState.calendarSelectedDate)
-}
+    
+    // MARK: - Computed Vars
+    
+    var filteredEvents: [Event] {
+        events.filterEvents(by: navigationState.calendarSelectedDate)
+    }
 }
 
 #Preview {
