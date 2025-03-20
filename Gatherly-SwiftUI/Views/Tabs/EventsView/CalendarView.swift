@@ -106,40 +106,38 @@ private extension CalendarView {
     var eventListView: some View {
         VStack {
             if !filteredEvents.isEmpty {
-                ScrollView {
-                    LazyVStack {
-                        ForEach(filteredEvents) { event in
-                            EventRowLink(
-                                events: $events,
-                                event: event,
-                                users: users,
-                                onSave: { updatedEvent in
-                                    if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
-                                        events[index] = updatedEvent
-                                    }
-                                },
-                                showDisclosure: true
-                            )
-                            .padding(.horizontal)
-                            Divider()
-                        }
+                VStack(spacing: 10) {
+                    ForEach(filteredEvents) { event in
+                        EventRowLink(
+                            events: $events,
+                            event: event,
+                            users: users,
+                            onSave: { updatedEvent in
+                                if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
+                                    events[index] = updatedEvent
+                                }
+                            },
+                            showDisclosure: true
+                        )
+                        .padding(.horizontal)
+                        Divider()
                     }
                 }
-            } else {
-                Text("Nothing planned for this day!")
-                    .font(.body)
-                    .foregroundColor(.gray)
-                    .padding()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            }
+        } else {
+            Text("Nothing planned for this day!")
+                .font(.body)
+                .foregroundColor(.gray)
+                .padding()
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
     }
-    
-    // MARK: - Computed Vars
-    
-    var filteredEvents: [Event] {
-        events.filterEvents(by: navigationState.calendarSelectedDate)
-    }
+}
+
+// MARK: - Computed Vars
+
+var filteredEvents: [Event] {
+    events.filterEvents(by: navigationState.calendarSelectedDate)
+}
 }
 
 #Preview {
