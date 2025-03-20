@@ -19,4 +19,8 @@ extension View {
     func centerText() -> some View {
         self.modifier(CenteredTextModifier())
     }
+    
+    func addDisclosureIcon(color: Color = .gray) -> some View {
+            self.modifier(DisclosureIconModifier())
+    }
 }
