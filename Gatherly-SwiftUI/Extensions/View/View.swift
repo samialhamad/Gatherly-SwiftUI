@@ -21,6 +21,6 @@ extension View {
     }
     
     func addDisclosureIcon(color: Color = .gray) -> some View {
-            self.modifier(DisclosureIconModifier())
+        self.modifier(DisclosureIconModifier())
     }
 }
