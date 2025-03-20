@@ -13,15 +13,13 @@ struct EventCategoryPicker: View {
     
     var body: some View {
         NavigationStack {
-            VStack {
-                CategoryList(selectedCategories: $selectedCategories)
-            }
-            
-            .navigationTitle("Select Categories")
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Done") {
-                        dismiss()
+            CategoryList(selectedCategories: $selectedCategories)
+                .navigationTitle("Select Categories")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button("Done") {
+                            dismiss()
+                        }
                     }
                 }
             }
