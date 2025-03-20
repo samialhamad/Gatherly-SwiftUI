@@ -63,6 +63,9 @@ private struct CategoryList: View {
             }
             .listRowBackground(Color.clear)
         }
+        .safeAreaInset(edge: .top) {
+            Color.clear.frame(height: 20)
+        }
     }
     
     private func toggleCategorySelection(_ category: Brand.EventCategory) {
