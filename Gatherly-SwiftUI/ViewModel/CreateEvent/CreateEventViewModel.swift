@@ -18,8 +18,14 @@ class CreateEventViewModel: ObservableObject {
     @Published var selectedMemberIDs: Set<Int> = []
     @Published var locationName: String = ""
     @Published var location: Location? = nil
+    @Published var selectedBannerImage: UIImage?
     
     func createEvent(with plannerID: Int) -> Event {
+        var bannerImageName: String? = nil
+        if let image = selectedBannerImage {
+            bannerImageName = ImageUtility.saveImageToDocuments(image: image)
+        }
+        
         return EventEditor.saveEvent(
             title: title,
             description: description,
@@ -29,7 +35,8 @@ class CreateEventViewModel: ObservableObject {
             selectedMemberIDs: selectedMemberIDs,
             plannerID: plannerID,
             location: location,
-            categories: selectedCategories
+            categories: selectedCategories,
+            bannerImageName: bannerImageName
         )
     }
     
@@ -42,8 +49,9 @@ class CreateEventViewModel: ObservableObject {
         selectedMemberIDs.removeAll()
         location = nil
         selectedCategories = []
+        selectedBannerImage = nil
     }
-        
+    
     var isFormEmpty: Bool {
         EventEditor.isFormEmpty(title: title, description: description)
     }

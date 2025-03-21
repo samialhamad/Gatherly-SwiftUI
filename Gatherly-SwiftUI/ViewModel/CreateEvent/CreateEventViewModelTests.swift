@@ -25,6 +25,9 @@ final class CreateEventViewModelTests: XCTestCase {
         viewModel.selectedMemberIDs = Set([2, 3])
         viewModel.selectedCategories = [.food, .sports]
         
+        let testImage = UIImage(systemName: "photo")!
+        viewModel.selectedBannerImage = testImage
+        
         let plannerID = 1
         let event = viewModel.createEvent(with: plannerID)
         
@@ -39,6 +42,8 @@ final class CreateEventViewModelTests: XCTestCase {
         XCTAssertEqual(event.plannerID, plannerID)
         XCTAssertEqual(Set(event.memberIDs ?? []), Set([2, 3]))
         XCTAssertEqual(event.categories, [.food, .sports])
+        XCTAssertNotNil(event.bannerImageName)
+
     }
     
     func testClearFieldsResetsViewModel() {
@@ -52,12 +57,16 @@ final class CreateEventViewModelTests: XCTestCase {
         viewModel.endTime = Date(timeIntervalSince1970: 1000)
         viewModel.selectedCategories = [.travel, .networking]
         
+        let testImage = UIImage(systemName: "photo")!
+        viewModel.selectedBannerImage = testImage
+        
         viewModel.clearFields()
         
         XCTAssertEqual(viewModel.title, "")
         XCTAssertEqual(viewModel.description, "")
         XCTAssertTrue(viewModel.selectedMemberIDs.isEmpty)
         XCTAssertTrue(viewModel.selectedCategories.isEmpty)
+        XCTAssertNil(viewModel.selectedBannerImage)
         
         //a small 2 second window to address this unit test failing as a result of time issues.
         let now = Date()
