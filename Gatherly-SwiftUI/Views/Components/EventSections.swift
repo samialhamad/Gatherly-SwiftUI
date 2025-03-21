@@ -166,7 +166,7 @@ struct EventCategorySection: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .addDisclosureIcon()
-                .padding(.vertical, 8)
+                .padding(.vertical, Constants.EventCategorySection.verticalPadding)
             }
             .sheet(isPresented: $isCategoryPickerPresented) {
                 EventCategoryPicker(selectedCategories: $selectedCategories)
