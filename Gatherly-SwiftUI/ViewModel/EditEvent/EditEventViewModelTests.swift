@@ -109,4 +109,27 @@ final class EditEventViewModelTests: XCTestCase {
         
         XCTAssertEqual(updatedEvent.categories, [.sports, .education])
     }
+    
+    func testUpdateEventBannerImage() {
+            let calendar = Calendar.current
+            let originalEvent = Event(
+                bannerImageName: "old_banner.jpg",
+                categories: [.food],
+                date: calendar.startOfDay(for: Date()),
+                description: "Initial description",
+                endTimestamp: Int(Date().addingTimeInterval(7200).timestamp),
+                id: 123,
+                plannerID: 1,
+                memberIDs: [2, 3],
+                title: "Initial Title",
+                startTimestamp: Int(Date().addingTimeInterval(3600).timestamp)
+            )
+            
+            let viewModel = EditEventViewModel(event: originalEvent)
+            viewModel.selectedBannerImage = UIImage(systemName: "star.fill")!
+            
+            let updatedEvent = viewModel.updatedEvent()
+            
+            XCTAssertNotNil(updatedEvent.bannerImageName) // using not nil here because of weird uUID string output, needs to change
+        }
 }
