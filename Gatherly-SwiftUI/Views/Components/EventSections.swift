@@ -6,6 +6,47 @@
 //
 
 import SwiftUI
+import PhotosUI
+
+struct EventBannerImageSection: View {
+    @Binding var selectedImage: UIImage?
+    @State private var selectedPhotoItem: PhotosPickerItem? = nil
+    
+    var body: some View {
+        Section(header: Text("Banner Image")) {
+            VStack(alignment: .leading, spacing: 8) {
+                if let image = selectedImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: 150)
+                        .clipped()
+                        .cornerRadius(10)
+                    
+                    Button("Remove Image", role: .destructive) {
+                        selectedImage = nil
+                    }
+                    .padding(.top, 5)
+                } else {
+                    Text("No image selected")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                }
+                
+                PhotosPicker("Select Image", selection: $selectedPhotoItem, matching: .images)
+                    .onChange(of: selectedPhotoItem) { newItem in
+                        Task {
+                            if let data = try? await newItem?.loadTransferable(type: Data.self),
+                               let uiImage = UIImage(data: data) {
+                                selectedImage = uiImage
+                            }
+                        }
+                    }
+            }
+            .padding(.vertical, 4)
+        }
+    }
+}
 
 struct EventDetailsSection: View {
     let header: String
