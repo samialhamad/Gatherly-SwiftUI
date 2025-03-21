@@ -28,12 +28,14 @@ final class EventEditorTests: XCTestCase {
             selectedMemberIDs: Set([2, 3]),
             plannerID: 1,
             categories: [.entertainment],
+            bannerImageName: "test_banner.jpg",
             generateEventID: { 101 }  // Fixed id for testing sake
         )
         
         XCTAssertEqual(createdEvent.title, "New Event")
         XCTAssertEqual(createdEvent.description, "Description")
         XCTAssertEqual(createdEvent.date, calendar.startOfDay(for: fixedDate))
+        XCTAssertEqual(createdEvent.bannerImageName, "test_banner.jpg")
         
         let expectedStart = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 10, minute: 0, second: 0))!
         let expectedEnd = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 12, minute: 0, second: 0))!
@@ -51,6 +53,7 @@ final class EventEditorTests: XCTestCase {
     func testUpdateEvent() {
         let baseDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
         let originalEvent = Event(
+            bannerImageName: "old_banner.jpg",
             categories: [.entertainment],
             date: calendar.startOfDay(for: baseDate),
             description: "Old Description",
@@ -75,7 +78,8 @@ final class EventEditorTests: XCTestCase {
             endTime: newEndTime,
             selectedMemberIDs: Set([2, 3]),
             plannerID: 1,
-            categories: [.food, .other]
+            categories: [.food, .other],
+            bannerImageName: "new_banner.jpg"
         )
         
         XCTAssertEqual(updatedEvent.title, "Updated Title")
@@ -92,6 +96,7 @@ final class EventEditorTests: XCTestCase {
         XCTAssertEqual(updatedEvent.plannerID, 1)
         XCTAssertEqual(updatedEvent.id, 123)
         XCTAssertEqual(updatedEvent.categories, [.food, .other])
+        XCTAssertEqual(updatedEvent.bannerImageName, "new_banner.jpg")
     }
     
     //MARK: - Delete Event

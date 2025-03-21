@@ -23,6 +23,7 @@ struct EventEditor {
         plannerID: Int,
         location: Location? = nil,
         categories: [Brand.EventCategory] = [],
+        bannerImageName: String? = nil,
         generateEventID: () -> Int = { Int.random(in: 1000...9999) } //for now, random int generation for the id
     ) -> Event {
         let calendar = Calendar.current
@@ -47,6 +48,7 @@ struct EventEditor {
         event.memberIDs = Array(selectedMemberIDs).sorted()
         event.location = location
         event.categories = categories
+        event.bannerImageName = bannerImageName
         
         return event
     }
