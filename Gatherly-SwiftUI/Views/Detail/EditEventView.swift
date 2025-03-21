@@ -48,6 +48,9 @@ struct EditEventView: View {
                     header: "Categories",
                     selectedCategories: $viewModel.selectedCategories
                 )
+                EventBannerImageSection(
+                    selectedImage: $viewModel.selectedBannerImage
+                )
                 saveAndDeleteSection
             }
             .navigationTitle("Edit Event")

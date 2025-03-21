@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import PhotosUI
 
 struct CreateEventView: View {
     let allUsers: [User]
@@ -48,6 +49,9 @@ struct CreateEventView: View {
                 EventCategorySection(
                     header: "Categories",
                     selectedCategories: $viewModel.selectedCategories
+                )
+                EventBannerImageSection(
+                    selectedImage: $viewModel.selectedBannerImage
                 )
                 createButtonSection
             }
