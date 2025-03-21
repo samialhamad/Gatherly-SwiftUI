@@ -15,7 +15,7 @@ struct Constants {
     }
 
     struct CategoryListView {
-        static let topPadding: CGFloat = 20
+        static let topPadding: CGFloat = 10
         static let bottomPadding: CGFloat = 20
     }
     
