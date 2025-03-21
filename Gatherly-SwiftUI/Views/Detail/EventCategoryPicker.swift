@@ -33,6 +33,7 @@ private struct CategoryList: View {
     
     var body: some View {
         List {
+            Section {
             ForEach(Brand.EventCategory.allCases, id: \.self) { category in
                 Button(action: {
                     toggleCategorySelection(category)
@@ -51,14 +52,9 @@ private struct CategoryList: View {
                 .listRowSeparator(.hidden)
             }
             
-            Section {
-                VStack {
-                    UnselectAllButton(selectedCategories: $selectedCategories)
-                }
+            UnselectAllButton(selectedCategories: $selectedCategories)
                 .frame(maxWidth: .infinity)
-                .padding(.top, Constants.CategoryListView.topPadding)
             }
-            .listRowBackground(Color.clear)
         }
         .safeAreaInset(edge: .top) {
             Color.clear.frame(height: Constants.CategoryListView.topPadding)
@@ -85,6 +81,5 @@ private struct UnselectAllButton: View {
                 .font(.headline)
                 .foregroundColor(Color(Brand.Colors.primary))
         }
-        .padding(.bottom, Constants.CategoryListView.bottomPadding)
     }
 }
