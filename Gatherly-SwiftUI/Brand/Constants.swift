@@ -45,4 +45,8 @@ struct Constants {
     struct EventMembersPicker {
         static let topPadding: CGFloat = 20
     }
+    
+    struct EventRow {
+        static let topPadding: CGFloat = 5
+    }
 }
