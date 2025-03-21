@@ -21,6 +21,10 @@ struct Constants {
         static let bottomPadding: CGFloat = 20
     }
     
+    struct EventCategorySection {
+        static let verticalPadding: CGFloat = 8
+    }
+    
     struct EventDetailView {
         static let bodyVStackSpacing: CGFloat = 16
         static let eventMapPreviewFrame: CGFloat = 200
