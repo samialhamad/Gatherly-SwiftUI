@@ -40,7 +40,7 @@ struct EventRow: View {
                     .foregroundColor(Color(Brand.Colors.primary))
             }
         }
-        .padding(.vertical, 5)
+        .padding(.vertical, Constants.EventRow.topPadding)
     }
     
     func formattedTime(_ timestamp: Int) -> String {
