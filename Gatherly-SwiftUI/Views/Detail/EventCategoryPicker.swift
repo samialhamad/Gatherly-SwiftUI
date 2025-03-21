@@ -83,7 +83,7 @@ private struct UnselectAllButton: View {
         }) {
             Text("Unselect All")
                 .font(.headline)
-                .foregroundColor(.red)
+                .foregroundColor(Color(Brand.Colors.primary))
         }
         .padding(.bottom, Constants.CategoryListView.bottomPadding)
     }
