@@ -21,6 +21,7 @@ struct EventDetailView: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Constants.EventDetailView.bodyVStackSpacing) {
+                eventBannerImageView
                 eventDescriptionView
                 eventDateView
                 eventTimeView
@@ -75,6 +76,24 @@ struct EventDetailView: View {
 // MARK: - Subviews
 
 private extension EventDetailView {
+    
+    var eventBannerImageView: some View {
+        Group {
+            if let imageName = event.bannerImageName,
+               let imageURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(imageName),
+               let uiImage = UIImage(contentsOfFile: imageURL.path) {
+                Image(uiImage: uiImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(height: 200)
+                    .clipped()
+                    .cornerRadius(12)
+                    .padding(.bottom, 8)
+            } else {
+                EmptyView()
+            }
+        }
+    }
     
     //No longer being used, but keeping around for future just in case
     var eventTitleView: some View {
