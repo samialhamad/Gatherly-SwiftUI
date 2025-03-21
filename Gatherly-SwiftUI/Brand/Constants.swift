@@ -34,6 +34,10 @@ struct Constants {
         static let topFrameHeight: CGFloat = 20
     }
     
+    struct EventLocationSection {
+        static let frameMaxHeight: CGFloat = 150
+    }
+    
     struct EventMembersPicker {
         static let topPadding: CGFloat = 20
     }
