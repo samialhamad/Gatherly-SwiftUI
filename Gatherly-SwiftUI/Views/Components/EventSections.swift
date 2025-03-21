@@ -144,7 +144,7 @@ struct EventLocationSection: View {
                         }
                     }
                 }
-                .frame(maxHeight: 150)
+                .frame(maxHeight: Constants.EventLocationSection.frameMaxHeight)
             }
         }
     }
