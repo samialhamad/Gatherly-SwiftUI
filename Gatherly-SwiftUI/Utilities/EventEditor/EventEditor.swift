@@ -67,7 +67,6 @@ struct EventEditor {
     //MARK: - isFormEmpty
     
     static func isFormEmpty(title: String, description: String) -> Bool {
-        title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ||
-        description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 }
