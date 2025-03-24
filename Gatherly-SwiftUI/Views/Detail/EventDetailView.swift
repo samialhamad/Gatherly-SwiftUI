@@ -174,20 +174,17 @@ private extension EventDetailView {
     }
     
     var eventPlannerAndMembersView: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            if !members.isEmpty || planner != nil {
-                Text("Attendees")
+        Group {
+            if let planner = planner {
+                Text("Planner: \(planner.firstName ?? "") \(planner.lastName ?? "")")
                     .font(.headline)
             }
             
-            ForEach(members, id: \.id) { user in
-                HStack {
+            if !members.isEmpty {
+                Text("Attendees")
+                    .font(.headline)
+                ForEach(members, id: \.id) { user in
                     Text("\(user.firstName ?? "") \(user.lastName ?? "")")
-                    
-                    if let planner = planner, user.id == planner.id {
-                        Image(systemName: "star.fill")
-                            .foregroundColor(.yellow)
-                    }
                 }
             }
         }
