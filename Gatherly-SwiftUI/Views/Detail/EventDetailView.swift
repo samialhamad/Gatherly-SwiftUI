@@ -223,20 +223,20 @@ private extension EventDetailView {
         guard let memberIDs = event.memberIDs else {
             return []
         }
-        
-        var allMembers = Set(users.filter { user in
-            if let userID = user.id {
-                return memberIDs.contains(userID)
+        // Filter out the planner's id from the memberIDs, so they dont show up in the attendee's section
+        let filteredMemberIDs = memberIDs.filter { id in
+            if let plannerID = event.plannerID, id == plannerID {
+                return false
             }
-            return false
-        })
-        
-        // Add the planner to the members list
-        if let plannerID = event.plannerID, let planner = users.first(where: { $0.id == plannerID }) {
-            allMembers.insert(planner)
+            return true
         }
         
-        return Array(allMembers).sorted { ($0.firstName ?? "") < ($1.firstName ?? "") }
+        return users.filter { user in
+            if let userID = user.id {
+                return filteredMemberIDs.contains(userID)
+            }
+            return false
+        }
     }
 }
 
