@@ -33,17 +33,20 @@ struct ContentView: View {
             }
             .tag(1)
             
-            Text("Friends")
-                .tabItem {
-                    Image(systemName: "person.3.fill")
-                }
-                .tag(2)
+            NavigationStack {
+                FriendsView()
+                    .environmentObject(navigationState)
+            }
+            .tabItem {
+                Image(systemName: "person.3.fill")
+            }
+            .tag(2)
             
             Text("Profile")
-                .tabItem {
-                    Image(systemName: "person")
-                }
-                .tag(3)
+            .tabItem {
+                Image(systemName: "person")
+            }
+            .tag(3)
         }
     }
 }
