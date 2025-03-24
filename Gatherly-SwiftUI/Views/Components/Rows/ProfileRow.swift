@@ -15,7 +15,7 @@ struct ProfileRow: View {
             //avatar placeholder - user initial
             Circle()
                 .fill(Color(Brand.Colors.primary))
-                .frame(width: 40, height: 40)
+                .frame(width: Constants.ProfileRow.avatarCircleWidth, height: Constants.ProfileRow.avatarCircleHeight)
                 .overlay(
                     Text(user.firstName?.prefix(1) ?? "")
                         .font(.headline)
@@ -27,7 +27,7 @@ struct ProfileRow: View {
             }
             Spacer()
         }
-        .padding(.vertical, 4)
+        .padding(.vertical, Constants.ProfileRow.hstackPadding)
     }
 }
 
