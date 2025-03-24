@@ -1,0 +1,39 @@
+//
+//  Brand+EventCategoryIcon.swift
+//  Gatherly-SwiftUI
+//
+//  Created by Sami Alhamad on 3/24/25.
+//
+
+import SwiftUI
+
+extension Brand.EventCategory {
+    var iconName: String {
+        switch self {
+        case .food:
+            return "fork.knife"
+        case .entertainment:
+            return "music.note"
+        case .travel:
+            return "airplane"
+        case .sports:
+            return "sportscourt"
+        case .education:
+            return "book"
+        case .networking:
+            return "person.2.fill"
+        case .other:
+            return "questionmark.circle"
+        }
+    }
+    
+    var icon: some View {
+        Image(systemName: iconName)
+            .resizable()
+            .scaledToFit()
+            .frame(width: 20, height: 20)
+            .padding(6)
+            .background(Circle().fill(Color(Brand.Colors.primary)))
+            .foregroundColor(.white)
+    }
+}
