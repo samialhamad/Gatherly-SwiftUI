@@ -47,7 +47,7 @@ struct FriendsListView: View {
                             proxy.scrollTo(letter, anchor: .top)
                         }
                     }
-                    .padding(.trailing, 4),
+                    .padding(.trailing, Constants.FriendsListView.overlayTrailingPadding),
                     alignment: .trailing
                 )
             }
