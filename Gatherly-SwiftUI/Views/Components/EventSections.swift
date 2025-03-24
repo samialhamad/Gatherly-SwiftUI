@@ -38,6 +38,7 @@ struct EventBannerImageSection: View {
                                 }
                             }
                         }
+                        .foregroundColor(Color(Brand.Colors.primary))
                 }
             }
             .padding(.vertical, 4)
