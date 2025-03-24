@@ -51,4 +51,10 @@ struct Constants {
     struct FriendsListView {
         static let overlayTrailingPadding: CGFloat = 4
     }
+    
+    struct ProfileRow {
+        static let avatarCircleHeight: CGFloat = 40
+        static let avatarCircleWidth: CGFloat = 40
+        static let hstackPadding: CGFloat = 4
+    }
 }
