@@ -22,9 +22,9 @@ struct EventDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: Constants.EventDetailView.bodyVStackSpacing) {
                 eventBannerImageView
-                eventDescriptionView
                 eventDateView
                 eventTimeView
+                eventDescriptionView
                 Divider()
                 eventMapPreview
                 Divider()
