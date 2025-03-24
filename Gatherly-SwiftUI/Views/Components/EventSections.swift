@@ -28,17 +28,17 @@ struct EventBannerImageSection: View {
                     }
                     .foregroundColor(Color(Brand.Colors.primary))
                     .padding(.top, 5)
-                }
-                
-                PhotosPicker("Select Image", selection: $selectedPhotoItem, matching: .images)
-                    .onChange(of: selectedPhotoItem) { newItem in
-                        Task {
-                            if let data = try? await newItem?.loadTransferable(type: Data.self),
-                               let uiImage = UIImage(data: data) {
-                                selectedImage = uiImage
+                } else {
+                    PhotosPicker("Select Image", selection: $selectedPhotoItem, matching: .images)
+                        .onChange(of: selectedPhotoItem) { newItem in
+                            Task {
+                                if let data = try? await newItem?.loadTransferable(type: Data.self),
+                                   let uiImage = UIImage(data: data) {
+                                    selectedImage = uiImage
+                                }
                             }
                         }
-                    }
+                }
             }
             .padding(.vertical, 4)
         }
