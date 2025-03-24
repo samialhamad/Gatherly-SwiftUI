@@ -14,7 +14,7 @@ struct ProfileRow: View {
         HStack {
             //avatar placeholder - user initial
             Circle()
-                .fill(Color.blue.opacity(0.3))
+                .fill(Color(Brand.Colors.primary))
                 .frame(width: 40, height: 40)
                 .overlay(
                     Text(user.firstName?.prefix(1) ?? "")
@@ -24,11 +24,6 @@ struct ProfileRow: View {
             VStack(alignment: .leading) {
                 Text("\(user.firstName ?? "") \(user.lastName ?? "")")
                     .font(.body)
-                if let email = user.email {
-                    Text(email)
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                }
             }
             Spacer()
         }
