@@ -47,4 +47,8 @@ struct Constants {
     struct EventRow {
         static let topPadding: CGFloat = 5
     }
+    
+    struct FriendsListView {
+        static let overlayTrailingPadding: CGFloat = 4
+    }
 }
