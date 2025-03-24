@@ -171,13 +171,14 @@ private extension EventDetailView {
             if let planner = planner {
                 Text("Planner: \(planner.firstName ?? "") \(planner.lastName ?? "")")
                     .font(.headline)
+                ProfileRow(user: planner)
             }
             
             if !members.isEmpty {
                 Text("Attendees")
                     .font(.headline)
                 ForEach(members, id: \.id) { user in
-                    Text("\(user.firstName ?? "") \(user.lastName ?? "")")
+                    ProfileRow(user: user)
                 }
             }
         }
