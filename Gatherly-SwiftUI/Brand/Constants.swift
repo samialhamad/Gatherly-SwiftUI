@@ -25,6 +25,12 @@ struct Constants {
         static let bottomPadding: CGFloat = 20
     }
     
+    struct EventCategoryIcon {
+        static let iconFrameWidth: CGFloat = 20
+        static let iconFrameHeight: CGFloat = 20
+        static let iconPadding: CGFloat = 6
+    }
+    
     struct EventCategorySection {
         static let verticalPadding: CGFloat = 8
     }

@@ -31,8 +31,8 @@ extension Brand.EventCategory {
         Image(systemName: iconName)
             .resizable()
             .scaledToFit()
-            .frame(width: 20, height: 20)
-            .padding(6)
+            .frame(width: Constants.EventCategoryIcon.iconFrameWidth, height: Constants.EventCategoryIcon.iconFrameHeight)
+            .padding(Constants.EventCategoryIcon.iconPadding)
             .background(Circle().fill(Color(Brand.Colors.primary)))
             .foregroundColor(.white)
     }
