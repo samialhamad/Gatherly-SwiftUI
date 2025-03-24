@@ -15,7 +15,7 @@ struct SampleData {
             email: "sami@example.com",
             eventIDs: nil,
             firstName: "Sami",
-            friendIDs: nil,
+            friendIDs: [2, 3, 4, 5, 6, 7],
             id: 1,
             isEmailEnabled: true,
             lastName: "Alhamad",
