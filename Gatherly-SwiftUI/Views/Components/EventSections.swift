@@ -27,10 +27,6 @@ struct EventBannerImageSection: View {
                         selectedImage = nil
                     }
                     .padding(.top, 5)
-                } else {
-                    Text("No image selected")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
                 }
                 
                 PhotosPicker("Select Image", selection: $selectedPhotoItem, matching: .images)
