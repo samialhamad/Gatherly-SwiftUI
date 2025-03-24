@@ -23,9 +23,10 @@ struct EventBannerImageSection: View {
                         .clipped()
                         .cornerRadius(10)
                     
-                    Button("Remove Image", role: .destructive) {
+                    Button("Remove Image") {
                         selectedImage = nil
                     }
+                    .foregroundColor(Color(Brand.Colors.primary))
                     .padding(.top, 5)
                 }
                 
