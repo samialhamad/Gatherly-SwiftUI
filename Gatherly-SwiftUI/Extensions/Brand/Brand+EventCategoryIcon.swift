@@ -17,7 +17,7 @@ extension Brand.EventCategory {
         case .travel:
             return "airplane"
         case .sports:
-            return "sportscourt"
+            return "basketball.fill"
         case .education:
             return "book"
         case .networking:
