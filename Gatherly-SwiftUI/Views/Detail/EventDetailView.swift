@@ -25,11 +25,8 @@ struct EventDetailView: View {
                 eventDateView
                 eventTimeView
                 eventDescriptionView
-                Divider()
                 eventMapPreview
-                Divider()
                 eventPlannerAndMembersView
-                Divider()
                 eventCategoriesView
                 Spacer()
             }
@@ -164,11 +161,7 @@ private extension EventDetailView {
                 .frame(height: Constants.EventDetailView.eventMapPreviewFrame)
                 .cornerRadius(Constants.EventDetailView.eventMapPreviewCornerRadius)
             } else {
-                Text("No Location Selected")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
-                    .centerText()
-                    .padding()
+                EmptyView()
             }
         }
     }
@@ -193,9 +186,7 @@ private extension EventDetailView {
     var eventCategoriesView: some View {
         Group {
             if event.categories.isEmpty {
-                Text("No categories assigned.")
-                    .font(.subheadline)
-                    .foregroundColor(.secondary)
+                EmptyView()
             } else {
                 Text("\(event.categories.map { $0.rawValue }.joined(separator: ", "))")
                     .font(.subheadline)
