@@ -15,7 +15,7 @@ struct SampleData {
             email: "sami@example.com",
             eventIDs: nil,
             firstName: "Sami",
-            friendIDs: [2, 3, 4, 5, 6, 7],
+            friendIDs: [2, 3, 4, 5, 6, 7, 8, 9],
             id: 1,
             isEmailEnabled: true,
             lastName: "Alhamad",
@@ -91,6 +91,30 @@ struct SampleData {
             id: 7,
             isEmailEnabled: true,
             lastName: "Simon",
+            phone: "9876543210"
+        ),
+        User(
+            createdTimestamp: Int(Date().timestamp),
+            deviceToken: "fxc96",
+            email: "bob@example.com",
+            eventIDs: nil,
+            firstName: "Ali",
+            friendIDs: nil,
+            id: 8,
+            isEmailEnabled: true,
+            lastName: "Hamed",
+            phone: "9876543210"
+        ),
+        User(
+            createdTimestamp: Int(Date().timestamp),
+            deviceToken: "fxc96",
+            email: "bob@example.com",
+            eventIDs: nil,
+            firstName: "Zebra",
+            friendIDs: nil,
+            id: 9,
+            isEmailEnabled: true,
+            lastName: "Zebrus",
             phone: "9876543210"
         )
     ]
