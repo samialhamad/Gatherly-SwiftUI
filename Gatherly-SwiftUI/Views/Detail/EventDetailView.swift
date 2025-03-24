@@ -187,7 +187,7 @@ private extension EventDetailView {
     var eventCategoriesView: some View {
         Group {
             if !event.categories.isEmpty {
-                HStack(alignment: .center, spacing: 8) {
+                HStack(alignment: .center, spacing: Constants.EventDetailView.eventCategoriesViewSpacing) {
                     Text("Categories:")
                         .font(.subheadline)
                         .fontWeight(.semibold)

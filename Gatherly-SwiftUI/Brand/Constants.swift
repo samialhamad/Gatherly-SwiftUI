@@ -30,6 +30,7 @@ struct Constants {
     
     struct EventDetailView {
         static let bodyVStackSpacing: CGFloat = 16
+        static let eventCategoriesViewSpacing: CGFloat = 8
         static let eventMapPreviewFrame: CGFloat = 200
         static let eventMapPreviewVStackSpacing: CGFloat = 2
         static let eventMapPreviewTextPadding: CGFloat = 4
