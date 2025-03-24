@@ -22,8 +22,8 @@ struct AlphabetIndexView: View {
                     }
             }
         }
-        .background(Color(.systemBackground).opacity(0.7))
-        .cornerRadius(8)
+        .background(Color(.systemBackground).opacity(Constants.AlphabetIndexView.backgroundOpacity))
+        .cornerRadius(Constants.AlphabetIndexView.vstackCornerRadius)
     }
 }
 
