@@ -55,7 +55,7 @@ struct EventDetailsSection: View {
         Section(header: Text(header)) {
             TextField("Title", text: $title)
             
-            HStack {
+            HStack(alignment: .top) {
                 TextField("Description", text: $description, axis: .vertical)
                     .lineLimit(3, reservesSpace: true)
                     .tint(Color(Brand.Colors.primary))
@@ -65,7 +65,6 @@ struct EventDetailsSection: View {
                     ClearButton(text: $description)
                 }
             }
-            
         }
     }
 }
