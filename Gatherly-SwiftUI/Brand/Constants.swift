@@ -11,6 +11,7 @@ struct Constants {
     struct AlphabetIndexView {
         static let backgroundOpacity: Double = 0.7
         static let vstackCornerRadius: CGFloat = 8
+        static let textPadding: CGFloat = 2
     }
     
     struct CalendarView {

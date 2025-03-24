@@ -16,7 +16,7 @@ struct AlphabetIndexView: View {
             ForEach(letters, id: \.self) { letter in
                 Text(letter)
                     .font(.caption)
-                    .padding(2)
+                    .padding(Constants.AlphabetIndexView.textPadding)
                     .onTapGesture {
                         onLetterTap(letter)
                     }
