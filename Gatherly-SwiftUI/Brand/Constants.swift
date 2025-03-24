@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct Constants {
+    struct AlphabetIndexView {
+        static let backgroundOpacity: Double = 0.7
+        static let vstackCornerRadius: CGFloat = 8
+    }
+    
     struct CalendarView {
         static let eventListViewSpacing: CGFloat = 10
         static let headerViewSpacing: CGFloat = 4
