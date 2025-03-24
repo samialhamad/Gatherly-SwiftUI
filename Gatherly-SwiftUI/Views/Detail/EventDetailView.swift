@@ -185,12 +185,18 @@ private extension EventDetailView {
     
     var eventCategoriesView: some View {
         Group {
-            if event.categories.isEmpty {
-                EmptyView()
+            if !event.categories.isEmpty {
+                HStack(alignment: .top, spacing: 4) {
+                    Text("Categories:")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                    
+                    Text(event.categories.map { $0.rawValue }.joined(separator: ", "))
+                        .font(.subheadline)
+                        .foregroundColor(.primary)
+                }
             } else {
-                Text("\(event.categories.map { $0.rawValue }.joined(separator: ", "))")
-                    .font(.subheadline)
-                    .foregroundColor(.primary)
+                EmptyView()
             }
         }
     }
