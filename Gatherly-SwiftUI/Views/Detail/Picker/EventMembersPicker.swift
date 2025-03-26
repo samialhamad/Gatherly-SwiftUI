@@ -24,7 +24,7 @@ struct EventMembersPicker: View {
                         Spacer()
                         if selectedMemberIDs.contains(user.id ?? -1) {
                             Image(systemName: "checkmark")
-                                .foregroundColor(Color(Brand.Colors.primary))
+                                .foregroundColor(Color(Colors.primary))
                         }
                     }
                     .contentShape(Rectangle())

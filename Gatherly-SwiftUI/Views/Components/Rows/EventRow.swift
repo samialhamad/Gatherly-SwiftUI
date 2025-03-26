@@ -15,12 +15,12 @@ struct EventRow: View {
         HStack {
             Image(systemName: "calendar.circle")
                 .font(.largeTitle)
-                .foregroundColor(Color(Brand.Colors.primary))
+                .foregroundColor(Color(Colors.primary))
             
             VStack(alignment: .leading) {
                 Text(event.title ?? "Untitled Event")
                     .font(.headline)
-                    .foregroundColor(Color(Brand.Colors.primary))
+                    .foregroundColor(Color(Colors.primary))
                 
                 Text(event.description ?? "No description")
                     .font(.subheadline)
@@ -37,7 +37,7 @@ struct EventRow: View {
             
             if showDisclosure {
                 Image(systemName: "chevron.right")
-                    .foregroundColor(Color(Brand.Colors.primary))
+                    .foregroundColor(Color(Colors.primary))
             }
         }
         .padding(.vertical, Constants.EventRow.topPadding)

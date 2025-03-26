@@ -12,7 +12,7 @@ struct DisclosureIconModifier: ViewModifier {
         HStack {
             content
             Image(systemName: "chevron.right")
-                .foregroundColor(Color(Brand.Colors.primary))
+                .foregroundColor(Color(Colors.primary))
         }
     }
 }

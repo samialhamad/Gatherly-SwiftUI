@@ -44,7 +44,7 @@ private struct CategoryList: View {
                         Spacer()
                         if selectedCategories.contains(category) {
                             Image(systemName: "checkmark")
-                                .foregroundColor(Color(Brand.Colors.primary))
+                                .foregroundColor(Color(Colors.primary))
                         }
                     }
                     .contentShape(Rectangle())
@@ -79,7 +79,7 @@ private struct UnselectAllButton: View {
         }) {
             Text("Unselect All")
                 .font(.headline)
-                .foregroundColor(Color(Brand.Colors.primary))
+                .foregroundColor(Color(Colors.primary))
         }
     }
 }

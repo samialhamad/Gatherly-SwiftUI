@@ -12,17 +12,17 @@ extension UINavigationBar {
     static func applyGatherlyStyle() {
         let navigationBarAppearance = UINavigationBarAppearance()
         navigationBarAppearance.configureWithOpaqueBackground()
-        navigationBarAppearance.backgroundColor = Brand.Colors.primary
+        navigationBarAppearance.backgroundColor = Colors.primary
         
         navigationBarAppearance.titleTextAttributes = [
-            .foregroundColor: Brand.Colors.secondary
+            .foregroundColor: Colors.secondary
         ]
         navigationBarAppearance.largeTitleTextAttributes = [
-            .foregroundColor: Brand.Colors.secondary
+            .foregroundColor: Colors.secondary
         ]
         
         let barButtonAttributes: [NSAttributedString.Key: Any] = [
-            .foregroundColor: Brand.Colors.secondary
+            .foregroundColor: Colors.secondary
         ]
         
         let backButtonAppearance = UIBarButtonItemAppearance(style: .plain)
@@ -38,8 +38,8 @@ extension UINavigationBar {
         navigationBarAppearance.buttonAppearance = buttonAppearance
         navigationBarAppearance.doneButtonAppearance = doneButtonAppearance
         
-        UIBarButtonItem.appearance().tintColor = Brand.Colors.secondary
-        UINavigationBar.appearance().tintColor = Brand.Colors.secondary
+        UIBarButtonItem.appearance().tintColor = Colors.secondary
+        UINavigationBar.appearance().tintColor = Colors.secondary
         UINavigationBar.appearance().standardAppearance = navigationBarAppearance
         UINavigationBar.appearance().scrollEdgeAppearance = navigationBarAppearance
         UINavigationBar.appearance().compactAppearance = navigationBarAppearance

@@ -82,7 +82,7 @@ private extension EditEventView {
                 let updatedEvent = viewModel.updatedEvent()
                 onSave(updatedEvent)
             }
-            .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Brand.Colors.primary))
+            .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.primary))
             .disabled(viewModel.isFormEmpty)
             
             Button("Delete") {

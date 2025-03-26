@@ -26,7 +26,7 @@ struct EventBannerImageSection: View {
                     Button("Remove Image") {
                         selectedImage = nil
                     }
-                    .foregroundColor(Color(Brand.Colors.primary))
+                    .foregroundColor(Color(Colors.primary))
                     .padding(.top, 5)
                 } else {
                     PhotosPicker("Select Image", selection: $selectedPhotoItem, matching: .images)
@@ -38,7 +38,7 @@ struct EventBannerImageSection: View {
                                 }
                             }
                         }
-                        .foregroundColor(Color(Brand.Colors.primary))
+                        .foregroundColor(Color(Colors.primary))
                 }
             }
             .padding(.vertical, 4)
@@ -59,7 +59,7 @@ struct EventDetailsSection: View {
             HStack(alignment: .top) {
                 TextField("Description", text: $description, axis: .vertical)
                     .lineLimit(3, reservesSpace: true)
-                    .tint(Color(Brand.Colors.primary))
+                    .tint(Color(Colors.primary))
                     .focused($isDescriptionFocused)
                 
                 if isDescriptionFocused {
@@ -82,13 +82,13 @@ struct EventDateTimeSection: View {
     var body: some View {
         Section(header: Text(header)) {
             DatePicker("Event Date", selection: eventDate, in: Date()..., displayedComponents: .date)
-                .tint(Color(Brand.Colors.primary))
+                .tint(Color(Colors.primary))
             
             DatePicker("Start Time", selection: startTime, in: startTimeRange, displayedComponents: .hourAndMinute)
-                .tint(Color(Brand.Colors.primary))
+                .tint(Color(Colors.primary))
             
             DatePicker("End Time", selection: endTime, in: endTimeRange, displayedComponents: .hourAndMinute)
-                .tint(Color(Brand.Colors.primary))
+                .tint(Color(Colors.primary))
         }
     }
 }

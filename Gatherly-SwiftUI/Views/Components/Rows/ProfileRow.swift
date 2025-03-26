@@ -14,7 +14,7 @@ struct ProfileRow: View {
         HStack {
             //avatar placeholder - user initial
             Circle()
-                .fill(Color(Brand.Colors.primary))
+                .fill(Color(Colors.primary))
                 .frame(width: Constants.ProfileRow.avatarCircleWidth, height: Constants.ProfileRow.avatarCircleHeight)
                 .overlay(
                     Text(user.firstName?.prefix(1) ?? "")

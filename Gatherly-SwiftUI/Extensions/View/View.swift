@@ -9,7 +9,7 @@ import SwiftUI
 
 extension View {
     func applyGatherlyToolbarStyle() -> some View {
-        self.toolbarColor(Color(Brand.Colors.secondary))
+        self.toolbarColor(Color(Colors.secondary))
     }
     
     private func toolbarColor(_ color: Color) -> some View {

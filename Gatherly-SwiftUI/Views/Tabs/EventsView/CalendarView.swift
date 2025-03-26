@@ -89,7 +89,7 @@ private extension CalendarView {
                 } label: {
                     Image(systemName: "calendar.badge.clock.rtl")
                         .font(.title2)
-                        .foregroundColor(Color(Brand.Colors.primary))
+                        .foregroundColor(Color(Colors.primary))
                 }
             }
         }
@@ -99,7 +99,7 @@ private extension CalendarView {
     var calendarView: some View {
         DatePicker("", selection: $navigationState.calendarSelectedDate, displayedComponents: .date)
             .datePickerStyle(.graphical)
-            .tint(Color(Brand.Colors.primary))
+            .tint(Color(Colors.primary))
             .padding()
     }
     

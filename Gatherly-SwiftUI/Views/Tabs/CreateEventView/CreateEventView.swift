@@ -75,7 +75,7 @@ private extension CreateEventView {
             }) {
                 Text("Create")
                     .font(.headline)
-                    .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Brand.Colors.primary))
+                    .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.primary))
             }
             .disabled(viewModel.isFormEmpty)
         }
