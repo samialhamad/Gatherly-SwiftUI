@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EventCategoryPicker: View {
-    @Binding var selectedCategories: [Brand.EventCategory]
+    @Binding var selectedCategories: [EventCategory]
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -29,12 +29,12 @@ struct EventCategoryPicker: View {
 // MARK: - Subviews
 
 private struct CategoryList: View {
-    @Binding var selectedCategories: [Brand.EventCategory]
+    @Binding var selectedCategories: [EventCategory]
     
     var body: some View {
         List {
             Section {
-            ForEach(Brand.EventCategory.allCases, id: \.self) { category in
+            ForEach(EventCategory.allCases, id: \.self) { category in
                 Button(action: {
                     toggleCategorySelection(category)
                 }) {
@@ -61,7 +61,7 @@ private struct CategoryList: View {
         }
     }
     
-    private func toggleCategorySelection(_ category: Brand.EventCategory) {
+    private func toggleCategorySelection(_ category: EventCategory) {
         if selectedCategories.contains(category) {
             selectedCategories.removeAll { $0 == category }
         } else {
@@ -71,7 +71,7 @@ private struct CategoryList: View {
 }
 
 private struct UnselectAllButton: View {
-    @Binding var selectedCategories: [Brand.EventCategory]
+    @Binding var selectedCategories: [EventCategory]
     
     var body: some View {
         Button(action: {

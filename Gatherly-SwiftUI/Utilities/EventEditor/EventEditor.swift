@@ -22,7 +22,7 @@ struct EventEditor {
         selectedMemberIDs: Set<Int>,
         plannerID: Int,
         location: Location? = nil,
-        categories: [Brand.EventCategory] = [],
+        categories: [EventCategory] = [],
         bannerImageName: String? = nil,
         generateEventID: () -> Int = { Int.random(in: 1000...9999) } //for now, random int generation for the id
     ) -> Event {

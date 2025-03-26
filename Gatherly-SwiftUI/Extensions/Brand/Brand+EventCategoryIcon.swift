@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-extension Brand.EventCategory {
+extension EventCategory {
     var iconName: String {
         switch self {
         case .food:
@@ -33,7 +33,7 @@ extension Brand.EventCategory {
             .scaledToFit()
             .frame(width: Constants.EventCategoryIcon.iconFrameWidth, height: Constants.EventCategoryIcon.iconFrameHeight)
             .padding(Constants.EventCategoryIcon.iconPadding)
-            .background(Circle().fill(Color(Brand.Colors.primary)))
+            .background(Circle().fill(Color(Colors.primary)))
             .foregroundColor(.white)
     }
 }

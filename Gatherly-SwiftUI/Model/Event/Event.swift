@@ -9,7 +9,7 @@ import Foundation
 
 struct Event: Equatable, Hashable, Identifiable {
     var bannerImageName: String? //for now image name / file path
-    var categories: [Brand.EventCategory] = []
+    var categories: [EventCategory] = []
     var date: Date?
     var description: String?
     var endTimestamp: Int?

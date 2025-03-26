@@ -17,7 +17,7 @@ class EditEventViewModel: ObservableObject {
     @Published var selectedMemberIDs: Set<Int>
     @Published var location: Location?
     @Published var locationName: String
-    @Published var selectedCategories: [Brand.EventCategory]
+    @Published var selectedCategories: [EventCategory]
     @Published var selectedBannerImage: UIImage?
     
     private let original: Event

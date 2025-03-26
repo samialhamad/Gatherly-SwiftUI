@@ -190,7 +190,7 @@ struct EventLocationSection: View {
 
 struct EventCategorySection: View {
     let header: String
-    @Binding var selectedCategories: [Brand.EventCategory]
+    @Binding var selectedCategories: [EventCategory]
     @State private var isCategoryPickerPresented = false
     
     var body: some View {
