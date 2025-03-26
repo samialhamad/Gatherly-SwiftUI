@@ -10,6 +10,7 @@ import SwiftUI
 struct FriendsView: View {
     private let tabTitles = ["Friends", "Groups"]
     
+    @State private var isShowingAddFriend = false
     @State private var selectedTab = 0
     
     var body: some View {
@@ -33,6 +34,18 @@ struct FriendsView: View {
                 .tabViewStyle(.page(indexDisplayMode: .never))
             }
             .navigationTitle("Friends")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        isShowingAddFriend.toggle()
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                }
+            }
+            .sheet(isPresented: $isShowingAddFriend) {
+                AddFriendView()
+            }
         }
     }
 }
