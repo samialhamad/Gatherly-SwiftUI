@@ -19,7 +19,7 @@ struct FriendsListView: View {
 
     var groupedFriends: [String: [User]] {
         Dictionary(grouping: friends) { user in
-            let firstLetter = user.firstName?.first.map { String($0).uppercased() } ?? "#"
+            let firstLetter = user.firstName?.first.map { String($0).uppercased() } ?? ""
             return firstLetter
         }
     }
