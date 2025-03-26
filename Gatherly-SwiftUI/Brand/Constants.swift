@@ -66,8 +66,7 @@ struct Constants {
     }
     
     struct ProfileRow {
-        static let avatarCircleHeight: CGFloat = 40
-        static let avatarCircleWidth: CGFloat = 40
+        static let avatarCircleSize: CGFloat = 40
         static let hstackPadding: CGFloat = 4
     }
 }
