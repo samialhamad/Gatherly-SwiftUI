@@ -15,6 +15,22 @@ struct AvatarView: View {
     let borderColor: Color?
     let borderWidth: CGFloat?
     
+    init(
+        user: User,
+        size: CGFloat,
+        font: Font,
+        backgroundColor: Color,
+        borderColor: Color? = nil,
+        borderWidth: CGFloat? = nil
+    ) {
+        self.user = user
+        self.size = size
+        self.font = font
+        self.backgroundColor = backgroundColor
+        self.borderColor = borderColor
+        self.borderWidth = borderWidth
+    }
+    
     private var initials: String {
         let firstInitial = user.firstName?.first.map(String.init) ?? ""
         let lastInitial = user.lastName?.first.map(String.init) ?? ""
