@@ -186,6 +186,7 @@ private extension EventDetailView {
                 }
             }
         }
+        .foregroundColor(.primary)
     }
     
     var eventCategoriesView: some View {
