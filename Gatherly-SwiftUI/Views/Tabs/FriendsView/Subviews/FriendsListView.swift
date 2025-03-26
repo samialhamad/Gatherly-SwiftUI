@@ -35,7 +35,9 @@ struct FriendsListView: View {
                     ForEach(sortedSectionKeys, id: \.self) { key in
                         Section(header: Text(key).id(key)) {
                             ForEach(groupedFriends[key]?.sorted { ($0.firstName ?? "") < ($1.firstName ?? "") } ?? [], id: \.id) { friend in
-                                ProfileRow(user: friend)
+                                NavigationLink(destination: ProfileDetailView(user: friend)) {
+                                    ProfileRow(user: friend)
+                                }
                             }
                         }
                     }
