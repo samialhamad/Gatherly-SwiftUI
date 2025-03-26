@@ -8,9 +8,10 @@
 import SwiftUI
 
 struct FriendsView: View {
+    private let tabTitles = ["Friends", "Groups"]
+    
     @State private var selectedTab = 0
-    private let tabTitles = ["Friends", "Groups", "Add"]
-
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -22,14 +23,12 @@ struct FriendsView: View {
                 }
                 .pickerStyle(.segmented)
                 .padding()
-
+                
                 TabView(selection: $selectedTab) {
                     FriendsListView()
                         .tag(0)
                     GroupsView()
                         .tag(1)
-                    AddFriendView()
-                        .tag(2)
                 }
                 .tabViewStyle(.page(indexDisplayMode: .never))
             }
