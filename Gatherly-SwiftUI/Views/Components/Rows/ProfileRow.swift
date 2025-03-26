@@ -10,6 +10,12 @@ import SwiftUI
 struct ProfileRow: View {
     let user: User
 
+    var initials: String {
+        let firstInitial = user.firstName?.first.map(String.init) ?? ""
+        let lastInitial = user.lastName?.first.map(String.init) ?? ""
+        return firstInitial + lastInitial
+    }
+    
     var body: some View {
         HStack {
             //avatar placeholder - user initial
@@ -17,7 +23,7 @@ struct ProfileRow: View {
                 .fill(Color(Colors.primary))
                 .frame(width: Constants.ProfileRow.avatarCircleWidth, height: Constants.ProfileRow.avatarCircleHeight)
                 .overlay(
-                    Text(user.firstName?.prefix(1) ?? "")
+                    Text(initials)
                         .font(.headline)
                         .foregroundColor(.white)
                 )
