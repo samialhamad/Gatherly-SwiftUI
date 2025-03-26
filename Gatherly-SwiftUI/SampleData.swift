@@ -279,8 +279,8 @@ struct SampleData {
     ]
 }
 
-private func randomCategories() -> [Brand.EventCategory] {
-    let allCategories = Brand.EventCategory.allCases
+private func randomCategories() -> [EventCategory] {
+    let allCategories = EventCategory.allCases
     let randomCount = Int.random(in: 0...3) // Each event gets 1-3 random categories
     return Array(allCategories.shuffled().prefix(randomCount))
 }
