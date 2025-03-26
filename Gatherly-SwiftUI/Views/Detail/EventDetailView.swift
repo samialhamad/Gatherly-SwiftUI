@@ -169,16 +169,20 @@ private extension EventDetailView {
     var eventPlannerAndMembersView: some View {
         Group {
             if let planner = planner {
-                Text("Planner: \(planner.firstName ?? "") \(planner.lastName ?? "")")
+                Text("Planner")
                     .font(.headline)
-                ProfileRow(user: planner)
+                NavigationLink(destination: ProfileDetailView(user: planner)) {
+                    ProfileRow(user: planner)
+                }
             }
             
             if !members.isEmpty {
                 Text("Attendees")
                     .font(.headline)
                 ForEach(members, id: \.id) { user in
-                    ProfileRow(user: user)
+                    NavigationLink(destination: ProfileDetailView(user: user)) {
+                        ProfileRow(user: user)
+                    }
                 }
             }
         }
@@ -218,7 +222,7 @@ private extension EventDetailView {
         guard let memberIDs = event.memberIDs else {
             return []
         }
-        // Filter out the planner's id from the memberIDs, so they dont show up in the attendee's section
+        
         let filteredMemberIDs = memberIDs.filter { id in
             if let plannerID = event.plannerID, id == plannerID {
                 return false
