@@ -12,6 +12,7 @@ struct FriendsView: View {
     
     @State private var isShowingAddFriend = false
     @State private var selectedTab = 0
+    @State private var searchText = ""
     
     var body: some View {
         NavigationStack {
@@ -24,10 +25,11 @@ struct FriendsView: View {
                 }
                 .pickerStyle(.segmented)
                 .padding()
+                searchBarView(searchText: $searchText)
                 
-                TabView(selection: $selectedTab) {
-                    FriendsListView()
-                        .tag(0)
+                if selectedTab == 0 {
+                    FriendsListView(searchText: $searchText)
+                } else {
                     GroupsView()
                         .tag(1)
                 }
@@ -47,6 +49,19 @@ struct FriendsView: View {
                 AddFriendView()
             }
         }
+    }
+}
+
+struct searchBarView: View {
+    @Binding var searchText: String
+    
+    var body: some View {
+        HStack {
+            Image(systemName: "magnifyingglass")
+            TextField("Search", text: $searchText)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+        }
+        .padding()
     }
 }
 
