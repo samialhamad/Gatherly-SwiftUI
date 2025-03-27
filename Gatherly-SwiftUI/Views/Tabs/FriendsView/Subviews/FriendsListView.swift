@@ -11,7 +11,7 @@ struct FriendsListView: View {
     private let currentUserID = 1
     private let allUsers = SampleData.sampleUsers
     
-    @State private var searchText = ""
+    @Binding var searchText: String
     
     var friends: [User] {
         guard let currentUser = allUsers.first(where: { $0.id == currentUserID }),
@@ -56,7 +56,6 @@ struct FriendsListView: View {
                         }
                     }
                 }
-                .searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .automatic))
                 .listStyle(.plain)
                 .overlay(
                     Group {
