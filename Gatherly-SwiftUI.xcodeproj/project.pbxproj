@@ -40,10 +40,11 @@
 				Model/User/UserTests.swift,
 				Utilities/EventEditor/EventEditorTests.swift,
 				Utilities/ImageUtility/ImageUtilityTests.swift,
-				ViewModel/CalendarView/CalendarViewModelTests.swift,
-				ViewModel/CreateEvent/CreateEventViewModelTests.swift,
-				ViewModel/EditEvent/EditEventViewModelTests.swift,
-				ViewModel/EventsGroupedList/EventsGroupedListViewModelTests.swift,
+				ViewModel/CalendarViewModel/CalendarViewModelTests.swift,
+				ViewModel/CreateEventViewModel/CreateEventViewModelTests.swift,
+				ViewModel/EditEventViewModel/EditEventViewModelTests.swift,
+				ViewModel/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
+				ViewModel/FriendsListViewModel/FriendsListViewModelTests.swift,
 			);
 			target = F11CDC2F2D77958B007BC1F1 /* Gatherly-SwiftUITests */;
 		};
@@ -57,10 +58,11 @@
 				Model/User/UserTests.swift,
 				Utilities/EventEditor/EventEditorTests.swift,
 				Utilities/ImageUtility/ImageUtilityTests.swift,
-				ViewModel/CalendarView/CalendarViewModelTests.swift,
-				ViewModel/CreateEvent/CreateEventViewModelTests.swift,
-				ViewModel/EditEvent/EditEventViewModelTests.swift,
-				ViewModel/EventsGroupedList/EventsGroupedListViewModelTests.swift,
+				ViewModel/CalendarViewModel/CalendarViewModelTests.swift,
+				ViewModel/CreateEventViewModel/CreateEventViewModelTests.swift,
+				ViewModel/EditEventViewModel/EditEventViewModelTests.swift,
+				ViewModel/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
+				ViewModel/FriendsListViewModel/FriendsListViewModelTests.swift,
 			);
 			target = F11CDC1F2D77958A007BC1F1 /* Gatherly-SwiftUI */;
 		};
