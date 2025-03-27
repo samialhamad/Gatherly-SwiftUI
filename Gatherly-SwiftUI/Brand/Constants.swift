@@ -60,11 +60,15 @@ struct Constants {
     struct EventRow {
         static let topPadding: CGFloat = 5
     }
-    
+        
     struct FriendsListView {
         static let overlayTrailingPadding: CGFloat = 4
     }
     
+    struct FriendsView {
+        static let pickerViewVerticalPadding: CGFloat = 8
+    }
+
     struct ProfileRow {
         static let avatarCircleSize: CGFloat = 40
         static let hstackPadding: CGFloat = 4

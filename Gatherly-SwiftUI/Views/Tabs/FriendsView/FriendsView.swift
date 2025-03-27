@@ -58,7 +58,7 @@ struct pickerView: View {
             }
             .pickerStyle(.segmented)
             .padding(.horizontal)
-            .padding(.vertical, 8)
+            .padding(.vertical, Constants.FriendsView.pickerViewVerticalPadding)
             .background(Color(Colors.primary))
     }
 }
