@@ -69,6 +69,7 @@ struct searchBarView: View {
     var body: some View {
         HStack {
             Image(systemName: "magnifyingglass")
+                .foregroundColor(Color(Colors.primary))
             TextField("Search", text: $searchText)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
         }
