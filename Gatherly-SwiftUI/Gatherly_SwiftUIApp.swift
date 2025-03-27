@@ -14,6 +14,7 @@ struct Gatherly_SwiftUIApp: App {
     init() {
         UINavigationBar.applyGatherlyStyle()
         UITabBar.applyGatherlyStyle()
+        UISegmentedControl.applyGatherlyStyle()  
         UITextField.appearance().tintColor = Colors.primary
         UITextField.appearance().clearButtonMode = .whileEditing
     }
