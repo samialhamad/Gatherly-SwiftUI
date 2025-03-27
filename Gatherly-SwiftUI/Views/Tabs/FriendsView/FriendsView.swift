@@ -17,23 +17,14 @@ struct FriendsView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                Picker("SubTabs", selection: $selectedTab) {
-                    ForEach(0..<tabTitles.count, id: \.self) { index in
-                        Text(tabTitles[index])
-                            .tag(index)
-                    }
-                }
-                .pickerStyle(.segmented)
-                .padding()
+                pickerView(selectedTab: $selectedTab, tabTitles: tabTitles)
                 searchBarView(searchText: $searchText)
                 
                 if selectedTab == 0 {
                     FriendsListView(searchText: $searchText)
                 } else {
                     GroupsView()
-                        .tag(1)
                 }
-                .tabViewStyle(.page(indexDisplayMode: .never))
             }
             .navigationTitle("Friends")
             .toolbar {
@@ -49,6 +40,26 @@ struct FriendsView: View {
                 AddFriendView()
             }
         }
+    }
+}
+
+//MARK: - Subviews
+
+struct pickerView: View {
+    @Binding var selectedTab: Int
+    let tabTitles: [String]
+    
+    var body: some View {
+            Picker("", selection: $selectedTab) {
+                ForEach(tabTitles.indices, id: \.self) { index in
+                    Text(tabTitles[index])
+                        .tag(index)
+                }
+            }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+            .padding(.vertical, 8)
+            .background(Color(Colors.primary))
     }
 }
 
