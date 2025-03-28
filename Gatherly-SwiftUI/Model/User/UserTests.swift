@@ -27,6 +27,21 @@ final class UserTests: XCTestCase {
     }
 
     //MARK: - Computed Vars
+    
+    func testUserHasEventsTrue() {
+        let user0 = User(eventIDs: [1], firstName: "Sami", id: 0)
+        XCTAssertTrue(user0.hasEvents)
+    }
+    
+    func testUserHasEventsFalse() {
+        let user0 = User(eventIDs: [], firstName: "Sami", id: 0)
+        XCTAssertFalse(user0.hasEvents)
+    }
+    
+    func testUserHasEventsNil() {
+        let user0 = User(firstName: "Sami", id: 0)
+        XCTAssertFalse(user0.hasEvents)
+    }
 
     func testUserHasFriendsTrue() {
         let user0 = User(firstName: "Sami", friendIDs: [1], id: 0)
@@ -43,19 +58,13 @@ final class UserTests: XCTestCase {
         XCTAssertFalse(user0.hasFriends)
     }
     
-    func testUserHasEventsTrue() {
-        let user0 = User(eventIDs: [1], firstName: "Sami", id: 0)
-        XCTAssertTrue(user0.hasEvents)
+    func testUserHasGroupsTrue() {
+        let user = User(firstName: "Sami", groupIDs: [1, 2], id: 0)
+        XCTAssertTrue(user.hasGroups)
     }
     
-    func testUserHasEventsFalse() {
-        let user0 = User(eventIDs: [], firstName: "Sami", id: 0)
-        XCTAssertFalse(user0.hasEvents)
+    func testUserHasGroupsFalse() {
+        let user = User(firstName: "Sami", groupIDs: [], id: 0)
+        XCTAssertFalse(user.hasGroups)
     }
-    
-    func testUserHasEventsNil() {
-        let user0 = User(firstName: "Sami", id: 0)
-        XCTAssertFalse(user0.hasEvents)
-    }
-    
 }
