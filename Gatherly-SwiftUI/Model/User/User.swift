@@ -14,18 +14,23 @@ struct User: Equatable, Hashable {
     var eventIDs: [Int]?
     var firstName: String?
     var friendIDs: [Int]?
+    var groupIDs: [Int]?
     var id: Int?
     var isEmailEnabled: Bool?
     var lastName: String?
     var phone: String?
-            
+    
     //MARK: - Computed Vars
+    
+    var hasEvents: Bool {
+        return !(eventIDs?.isEmpty ?? true)
+    }
     
     var hasFriends: Bool {
         return !(friendIDs?.isEmpty ?? true)
     }
     
-    var hasEvents: Bool {
-        return !(eventIDs?.isEmpty ?? true)
+    var hasGroups: Bool {
+        return !(groupIDs?.isEmpty ?? true)
     }
 }
