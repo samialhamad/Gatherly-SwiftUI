@@ -1,0 +1,26 @@
+//
+//  UserGroup.swift
+//  Gatherly-SwiftUI
+//
+//  Created by Sami Alhamad on 3/27/25.
+//
+
+import Foundation
+
+struct UserGroup: Identifiable, Equatable {
+    var id: Int
+    var name: String
+    var memberIDs: [Int]
+    var leaderID: Int
+    var messages: [Message]?
+    
+    // MARK: - Computed Vars
+    
+    var hasMessages: Bool {
+        return !(messages?.isEmpty ?? true)
+    }
+    
+    var hasMembers: Bool {
+        return !memberIDs.isEmpty
+    }
+}
