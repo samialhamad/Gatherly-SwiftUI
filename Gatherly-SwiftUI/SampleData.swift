@@ -16,6 +16,7 @@ struct SampleData {
             eventIDs: nil,
             firstName: "Sami",
             friendIDs: [2, 3, 4, 5, 6, 7, 8, 9],
+            groupIDs: [1, 2],
             id: 1,
             isEmailEnabled: true,
             lastName: "Alhamad",
@@ -275,6 +276,27 @@ struct SampleData {
             memberIDs: [2, 3],
             title: "Event in One Month",
             startTimestamp: Int(Date().addingTimeInterval(30 * 86400).timestamp)
+        )
+    ]
+    
+    static let sampleGroups: [UserGroup] = [
+        UserGroup(
+            id: 1,
+            name: "Group Sami Leads",
+            memberIDs: [1, 2, 3],
+            leaderID: 1,
+            messages: [
+                Message(id: 1, userID: 1, message: "Welcome to the group!", read: true)
+            ]
+        ),
+        UserGroup(
+            id: 2,
+            name: "Group I'm a Member in",
+            memberIDs: [1, 4, 5],
+            leaderID: 4,
+            messages: [
+                Message(id: 2, userID: 4, message: "Let's plan an event!", read: false)
+            ]
         )
     ]
 }
