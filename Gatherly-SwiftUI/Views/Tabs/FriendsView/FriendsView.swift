@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FriendsView: View {
+    let currentUser: User = SampleData.sampleUsers[0] // replace with actual logic
     private let tabTitles = ["Friends", "Groups"]
     
     @State private var isShowingAddFriend = false
@@ -37,7 +38,7 @@ struct FriendsView: View {
                 }
             }
             .sheet(isPresented: $isShowingAddFriend) {
-                AddFriendView()
+                AddFriendView(viewModel: AddFriendViewModel(currentUser: currentUser, allUsers: SampleData.sampleUsers))
             }
         }
     }
