@@ -14,6 +14,14 @@ struct Constants {
         static let textPadding: CGFloat = 2
     }
     
+    struct AvatarHeaderView {
+        static let avatarBorderWidth: CGFloat = 4
+        static let bottomPadding: CGFloat = 50
+        static let offset: CGFloat = 50
+        static let rectangleFrameHeight: CGFloat = 200
+        static let size: CGFloat = 100
+    }
+    
     struct CalendarView {
         static let eventListViewSpacing: CGFloat = 10
         static let headerViewSpacing: CGFloat = 4
