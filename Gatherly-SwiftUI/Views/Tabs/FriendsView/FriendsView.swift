@@ -77,14 +77,6 @@ struct searchBarView: View {
     }
 }
 
-struct AddFriendView: View {
-    var body: some View {
-        Text("Add Friends")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.systemGroupedBackground))
-    }
-}
-
 #Preview {
     FriendsView()
         .environmentObject(NavigationState())
