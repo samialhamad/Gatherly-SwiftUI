@@ -19,7 +19,7 @@ struct FriendsView: View {
         NavigationStack {
             VStack(spacing: 0) {
                 pickerView(selectedTab: $selectedTab, tabTitles: tabTitles)
-                searchBarView(searchText: $searchText)
+                SearchBarView(searchText: $searchText)
                 
                 if selectedTab == 0 {
                     FriendsListView(searchText: $searchText)
@@ -61,20 +61,6 @@ struct pickerView: View {
             .padding(.horizontal)
             .padding(.vertical, Constants.FriendsView.pickerViewVerticalPadding)
             .background(Color(Colors.primary))
-    }
-}
-
-struct searchBarView: View {
-    @Binding var searchText: String
-    
-    var body: some View {
-        HStack {
-            Image(systemName: "magnifyingglass")
-                .foregroundColor(Color(Colors.primary))
-            TextField("Search", text: $searchText)
-                .textFieldStyle(RoundedBorderTextFieldStyle())
-        }
-        .padding()
     }
 }
 
