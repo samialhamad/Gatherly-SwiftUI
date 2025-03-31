@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct AvatarView: View {
-    let user: User
+    let user: User?
+    let group: UserGroup?
     let size: CGFloat
     let font: Font
     let backgroundColor: Color
@@ -16,7 +17,8 @@ struct AvatarView: View {
     let borderWidth: CGFloat?
     
     init(
-        user: User,
+        user: User? = nil,
+        group: UserGroup? = nil,
         size: CGFloat,
         font: Font,
         backgroundColor: Color,
@@ -24,6 +26,7 @@ struct AvatarView: View {
         borderWidth: CGFloat? = nil
     ) {
         self.user = user
+        self.group = group
         self.size = size
         self.font = font
         self.backgroundColor = backgroundColor
@@ -32,9 +35,15 @@ struct AvatarView: View {
     }
     
     private var initials: String {
-        let firstInitial = user.firstName?.first.map(String.init) ?? ""
-        let lastInitial = user.lastName?.first.map(String.init) ?? ""
-        return firstInitial + lastInitial
+        if let user = user {
+            let firstInitial = user.firstName?.first.map(String.init) ?? ""
+            let lastInitial = user.lastName?.first.map(String.init) ?? ""
+            return firstInitial + lastInitial
+        } else if let group = group {
+            return group.name.first.map { String($0).uppercased() } ?? "?"
+        } else {
+            return ""
+        }
     }
     
     var body: some View {
