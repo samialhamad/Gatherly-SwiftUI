@@ -26,7 +26,7 @@ struct FriendsView: View {
                     GroupsView()
                 }
             }
-            .navigationTitle("Friends")
+            .navigationTitle(tabTitles[selectedTab])
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
