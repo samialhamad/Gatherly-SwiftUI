@@ -23,4 +23,11 @@ extension View {
     func addDisclosureIcon(color: Color = .gray) -> some View {
         self.modifier(DisclosureIconModifier())
     }
+    
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(
+            #selector(UIResponder.resignFirstResponder),
+            to: nil, from: nil, for: nil
+        )
+    }
 }
