@@ -12,6 +12,8 @@ struct FriendsView: View {
     private let tabTitles = ["Friends", "Groups"]
     
     @State private var isShowingAddFriend = false
+    @State private var isShowingCreateGroup = false
+    
     @State private var selectedTab = 0
     @State private var searchText = ""
     
@@ -31,14 +33,24 @@ struct FriendsView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        isShowingAddFriend.toggle()
+                        if selectedTab == 0 {
+                            isShowingAddFriend = true
+                        } else {
+                            isShowingCreateGroup = true
+                        }
                     } label: {
                         Image(systemName: "plus")
                     }
                 }
             }
             .sheet(isPresented: $isShowingAddFriend) {
-                AddFriendView(viewModel: AddFriendViewModel(currentUser: currentUser, allUsers: SampleData.sampleUsers))
+                AddFriendView(viewModel: AddFriendViewModel(
+                    currentUser: currentUser,
+                    allUsers: SampleData.sampleUsers
+                ))
+            }
+            .sheet(isPresented: $isShowingCreateGroup) {
+                CreateGroupView(currentUser: currentUser)
             }
         }
     }
@@ -51,16 +63,16 @@ struct pickerView: View {
     let tabTitles: [String]
     
     var body: some View {
-            Picker("", selection: $selectedTab) {
-                ForEach(tabTitles.indices, id: \.self) { index in
-                    Text(tabTitles[index])
-                        .tag(index)
-                }
+        Picker("", selection: $selectedTab) {
+            ForEach(tabTitles.indices, id: \.self) { index in
+                Text(tabTitles[index])
+                    .tag(index)
             }
-            .pickerStyle(.segmented)
-            .padding(.horizontal)
-            .padding(.vertical, Constants.FriendsView.pickerViewVerticalPadding)
-            .background(Color(Colors.primary))
+        }
+        .pickerStyle(.segmented)
+        .padding(.horizontal)
+        .padding(.vertical, Constants.FriendsView.pickerViewVerticalPadding)
+        .background(Color(Colors.primary))
     }
 }
 
