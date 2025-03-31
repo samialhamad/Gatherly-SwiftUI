@@ -68,6 +68,11 @@ struct Constants {
     struct FriendsView {
         static let pickerViewVerticalPadding: CGFloat = 8
     }
+    
+    struct GroupRow {
+        static let avatarCircleSize: CGFloat = 40
+        static let hstackPadding: CGFloat = 4
+    }
 
     struct ProfileRow {
         static let avatarCircleSize: CGFloat = 40
