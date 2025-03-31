@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import SwiftUI
 
 class FriendsListViewModel: ObservableObject {
     private let currentUserID: Int
