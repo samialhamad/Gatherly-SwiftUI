@@ -7,7 +7,7 @@
 
 import Foundation
 
-class GroupsViewModel: ObservableObject {
+class GroupsListViewModel: ObservableObject {
     private var currentUser: User = SampleData.sampleUsers.first { $0.id == 1 }! // replace in future, right now hard coded to user id 1
     
     @Published var searchText: String = ""
