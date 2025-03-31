@@ -31,3 +31,15 @@ struct GroupDetailView: View {
         .navigationTitle(group.name)
     }
 }
+
+#Preview {
+    GroupDetailView(group: UserGroup(
+        id: 1,
+        name: "Study Buddies",
+        memberIDs: [1, 2, 3],
+        leaderID: 1,
+        messages: [
+            Message(id: 1, userID: 1, message: "Hey team!", read: true)
+        ]
+    ))
+}
