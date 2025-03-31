@@ -11,14 +11,23 @@ struct GroupDetailView: View {
     let group: UserGroup
     
     var body: some View {
-        VStack(spacing: 20) {
-            Text(group.name)
-                .font(.largeTitle)
-                .bold()
-            Text("Leader ID: \(group.leaderID)")
-            Text("Members: \(group.memberIDs.count)")
+        ScrollView {
+            VStack {
+                AvatarHeaderView(group: group)
+                
+                VStack(spacing: 8) {
+                    Text("Leader ID: \(group.leaderID)")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                    
+                    Text("\(group.memberIDs.count) members")
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                }
+                
+                Spacer()
+            }
         }
-        .navigationTitle("Group Info")
-        .padding()
+        .navigationTitle(group.name)
     }
 }

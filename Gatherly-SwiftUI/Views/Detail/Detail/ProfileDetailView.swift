@@ -13,22 +13,7 @@ struct ProfileDetailView: View {
     var body: some View {
         ScrollView {
             VStack {
-                ZStack(alignment: .bottom) {
-                    Rectangle()
-                        .fill(Color(Colors.primary))
-                        .frame(height: 200)
-                    
-                    AvatarView(
-                        user: user,
-                        size: 100,
-                        font: .largeTitle,
-                        backgroundColor: Color(Colors.primary),
-                        borderColor: .white,
-                        borderWidth: 4
-                    )
-                    .offset(y: 50)
-                }
-                .padding(.bottom, 50)
+                AvatarHeaderView(user: user)
                 
                 VStack(alignment: .center, spacing: 8) {
                     Text("\(user.firstName ?? "") \(user.lastName ?? "")")
