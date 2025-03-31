@@ -23,7 +23,7 @@ struct FriendsView: View {
                 if selectedTab == 0 {
                     FriendsListView(searchText: $searchText)
                 } else {
-                    GroupsView()
+                    GroupsListView(searchText: $searchText)
                 }
             }
             .navigationTitle(tabTitles[selectedTab])
@@ -74,14 +74,6 @@ struct searchBarView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
         }
         .padding()
-    }
-}
-
-struct GroupsView: View {
-    var body: some View {
-        Text("Groups")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Color(.systemGroupedBackground))
     }
 }
 
