@@ -9,6 +9,8 @@ import SwiftUI
 
 struct SearchBarView: View {
     @Binding var searchText: String
+    @FocusState private var isFocused: Bool
+    
     var placeholder: String = "Search"
     
     var body: some View {
@@ -19,7 +21,11 @@ struct SearchBarView: View {
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .autocorrectionDisabled(true)
                 .textInputAutocapitalization(.never)
+                .focused($isFocused)
         }
         .padding()
+        .onTapGesture {
+            isFocused = true
+        }
     }
 }

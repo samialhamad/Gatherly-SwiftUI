@@ -23,6 +23,7 @@ struct AddFriendView: View {
                             Spacer()
                             Button("Add") {
                                 viewModel.sendFriendRequest(to: user)
+                                hideKeyboard()
                             }
                             .buttonStyle(.borderedProminent)
                         }
@@ -39,6 +40,9 @@ struct AddFriendView: View {
                         dismiss()
                     }
                 }
+            }
+            .onTapGesture {
+                hideKeyboard()
             }
         }
     }

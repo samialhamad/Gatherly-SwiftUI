@@ -29,6 +29,9 @@ struct FriendsView: View {
                     GroupsListView(searchText: $searchText)
                 }
             }
+            .onTapGesture {
+                hideKeyboard()
+            }
             .navigationTitle(tabTitles[selectedTab])
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
