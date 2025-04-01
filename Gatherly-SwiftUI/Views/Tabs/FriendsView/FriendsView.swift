@@ -29,9 +29,6 @@ struct FriendsView: View {
                     GroupsListView(searchText: $searchText)
                 }
             }
-            .onTapGesture {
-                hideKeyboard()
-            }
             .navigationTitle(tabTitles[selectedTab])
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -54,6 +51,9 @@ struct FriendsView: View {
             }
             .sheet(isPresented: $isShowingCreateGroup) {
                 CreateGroupView(currentUser: currentUser)
+            }
+            .onTapGesture {
+                hideKeyboard()
             }
         }
     }
