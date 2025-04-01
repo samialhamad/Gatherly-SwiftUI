@@ -33,6 +33,11 @@ struct Constants {
         static let bottomPadding: CGFloat = 20
     }
     
+    struct CreateGroupView {
+        static let groupImageHeight: CGFloat = 100
+        static let groupBannerImageHeight: CGFloat = 150
+    }
+    
     struct EventCategoryIcon {
         static let iconFrameWidth: CGFloat = 20
         static let iconFrameHeight: CGFloat = 20
