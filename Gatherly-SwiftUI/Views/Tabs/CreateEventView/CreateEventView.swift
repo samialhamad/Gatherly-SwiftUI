@@ -52,7 +52,7 @@ struct CreateEventView: View {
                 )
                 ImagePickerSection(
                     title: "Banner Image",
-                    imageHeight: 150,
+                    imageHeight: Constants.CreateEventView.bannerImageHeight,
                     selectedImage: $viewModel.selectedBannerImage
                 )
                 createButtonSection
