@@ -94,6 +94,10 @@ struct Constants {
         static let avatarCircleSize: CGFloat = 40
         static let hstackPadding: CGFloat = 4
     }
+    
+    struct ProfileDetailView {
+        static let vstackSpacing: CGFloat = 8
+    }
 
     struct ProfileRow {
         static let avatarCircleSize: CGFloat = 40

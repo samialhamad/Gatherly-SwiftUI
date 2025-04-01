@@ -15,7 +15,7 @@ struct ProfileDetailView: View {
             VStack {
                 AvatarHeaderView(user: user)
                 
-                VStack(alignment: .center, spacing: 8) {
+                VStack(alignment: .center, spacing: Constants.ProfileDetailView.vstackSpacing) {
                     Text("\(user.firstName ?? "") \(user.lastName ?? "")")
                         .font(.title)
                         .fontWeight(.bold)
