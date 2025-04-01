@@ -1,5 +1,5 @@
 //
-//  EventFormSections.swift
+//  EventSections.swift
 //  Gatherly-SwiftUI
 //
 //  Created by Sami Alhamad on 3/6/25.
@@ -8,18 +8,21 @@
 import SwiftUI
 import PhotosUI
 
-struct EventBannerImageSection: View {
+struct ImagePickerSection: View {
+    let title: String
+    var imageHeight: CGFloat = 150
+
     @Binding var selectedImage: UIImage?
     @State private var selectedPhotoItem: PhotosPickerItem? = nil
     
     var body: some View {
-        Section(header: Text("Banner Image")) {
+        Section(header: Text(title)) {
             VStack(alignment: .leading, spacing: 8) {
                 if let image = selectedImage {
                     Image(uiImage: image)
                         .resizable()
                         .scaledToFill()
-                        .frame(height: 150)
+                        .frame(height: imageHeight)
                         .clipped()
                         .cornerRadius(10)
                     
