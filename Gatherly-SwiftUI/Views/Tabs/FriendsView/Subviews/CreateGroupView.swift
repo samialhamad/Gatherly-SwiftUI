@@ -28,13 +28,13 @@ struct CreateGroupView: View {
                 
                 ImagePickerSection(
                     title: "Group Image",
-                    imageHeight: 100,
+                    imageHeight: Constants.CreateGroupView.groupImageHeight,
                     selectedImage: $viewModel.groupImage
                 )
                 
                 ImagePickerSection(
                     title: "Banner Image",
-                    imageHeight: 150,
+                    imageHeight: Constants.CreateGroupView.groupBannerImageHeight,
                     selectedImage: $viewModel.bannerImage
                 )
                 
