@@ -54,6 +54,13 @@ struct CreateGroupView: View {
                 }
             }
             .navigationTitle("New Group")
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        dismiss()
+                    }
+                }
+            }
             .onChange(of: groupPhoto) { newItem in
                 Task {
                     if let data = try? await newItem?.loadTransferable(type: Data.self),
