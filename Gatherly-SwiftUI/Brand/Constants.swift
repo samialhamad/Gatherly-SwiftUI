@@ -42,6 +42,10 @@ struct Constants {
         static let groupBannerImageHeight: CGFloat = 150
     }
     
+    struct EditEventView {
+        static let bannerImageHeight: CGFloat = 150
+    }
+    
     struct EventCategoryIcon {
         static let iconFrameWidth: CGFloat = 20
         static let iconFrameHeight: CGFloat = 20
