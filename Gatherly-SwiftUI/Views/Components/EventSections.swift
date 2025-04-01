@@ -107,7 +107,7 @@ struct EventMembersSection: View {
                 isMembersPickerPresented.toggle()
             }) {
                 HStack {
-                    Text("Invite Members")
+                    Text("Invite Friends")
                         .foregroundColor(.primary)
                     Spacer()
                     Text("\(selectedMemberIDs.count) selected")

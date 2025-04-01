@@ -34,7 +34,7 @@ struct EventMembersPicker: View {
             .safeAreaInset(edge: .top) {
                 Color.clear.frame(height: Constants.EventMembersPicker.topPadding)
             }
-            .navigationTitle("Invite Members")
+            .navigationTitle("Invite Friends")
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Done") {
