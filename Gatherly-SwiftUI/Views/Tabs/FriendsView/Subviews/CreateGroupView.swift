@@ -27,12 +27,14 @@ struct CreateGroupView: View {
                 ImagePicker(
                     title: "Group Image",
                     imageHeight: Constants.CreateGroupView.groupImageHeight,
+                    maskShape: .circle,
                     selectedImage: $viewModel.groupImage
                 )
                 
                 ImagePicker(
                     title: "Banner Image",
                     imageHeight: Constants.CreateGroupView.groupBannerImageHeight,
+                    maskShape: .rectangle,
                     selectedImage: $viewModel.bannerImage
                 )
                 

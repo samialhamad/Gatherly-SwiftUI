@@ -51,6 +51,7 @@ struct EditEventView: View {
                 ImagePicker(
                     title: "Banner Image",
                     imageHeight: Constants.EditEventView.bannerImageHeight,
+                    maskShape: .rectangle,
                     selectedImage: $viewModel.selectedBannerImage
                 )
                 saveAndDeleteSection
