@@ -9,7 +9,7 @@ import SwiftUI
 
 struct GroupsListView: View {
     let currentUser: User = SampleData.sampleUsers[0]
-
+    
     @Binding var groups: [UserGroup]
     @Binding var searchText: String
     
@@ -29,18 +29,18 @@ struct GroupsListView: View {
 
 private extension GroupsListView {
     var filteredGroups: [UserGroup] {
-            let userGroups = groups.filter { group in
-                let isLeader = (group.leaderID == currentUser.id)
-                let isMember = currentUser.groupIDs?.contains(group.id) ?? false
-                return isLeader || isMember
-            }
-            
-            if searchText.isEmpty {
-                return userGroups
-            } else {
-                return userGroups.filter {
-                    $0.name.lowercased().contains(searchText.lowercased())
-                }
+        let userGroups = groups.filter { group in
+            let isLeader = (group.leaderID == currentUser.id)
+            let isMember = currentUser.groupIDs?.contains(group.id) ?? false
+            return isLeader || isMember
+        }
+        
+        if searchText.isEmpty {
+            return userGroups
+        } else {
+            return userGroups.filter {
+                $0.name.lowercased().contains(searchText.lowercased())
             }
         }
+    }
 }
