@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @StateObject var navigationState = NavigationState()
     @State private var events: [Event] = SampleData.sampleEvents
+    @State private var groups: [UserGroup] = SampleData.sampleGroups
     @State private var users: [User] = SampleData.sampleUsers
     
     var body: some View {
@@ -34,7 +35,7 @@ struct ContentView: View {
             .tag(1)
             
             NavigationStack {
-                FriendsView()
+                FriendsView(currentUser: users[0], users: users, groups: $groups)
                     .environmentObject(navigationState)
             }
             .tabItem {
