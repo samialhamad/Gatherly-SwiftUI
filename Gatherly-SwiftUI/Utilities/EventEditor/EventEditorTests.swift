@@ -140,12 +140,12 @@ final class EventEditorTests: XCTestCase {
     //MARK: - isFormEmpty
     
     func testIsFormEmptyTitleAndDescriptionEmpty() {
-        let result = EventEditor.isFormEmpty(title: "", description: "")
+        let result = EventEditor.isFormEmpty(title: "")
         XCTAssertTrue(result)
     }
     
     func testIsFormEmptyTitleEmpty() {
-        let result = EventEditor.isFormEmpty(title: "   ", description: "description")
+        let result = EventEditor.isFormEmpty(title: "   ")
         XCTAssertTrue(result)
     }
     
@@ -156,7 +156,7 @@ final class EventEditorTests: XCTestCase {
 //    }
     
     func testIsFormEmptyValidTitleAndDescription() {
-        let result = EventEditor.isFormEmpty(title: "Title", description: "description")
+        let result = EventEditor.isFormEmpty(title: "Title")
         XCTAssertFalse(result)
     }
 }

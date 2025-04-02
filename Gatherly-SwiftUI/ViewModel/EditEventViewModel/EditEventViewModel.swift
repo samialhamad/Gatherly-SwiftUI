@@ -74,7 +74,7 @@ class EditEventViewModel: ObservableObject {
     }
     
     var isFormEmpty: Bool {
-        EventEditor.isFormEmpty(title: title, description: description)
+        EventEditor.isFormEmpty(title: title)
     }
     
     var startTimeRange: ClosedRange<Date> {
