@@ -11,10 +11,6 @@ import PhotosUI
 struct CreateGroupView: View {
     let currentUser: User
     @StateObject private var viewModel = CreateGroupViewModel()
-    
-    @State private var groupPhoto: PhotosPickerItem?
-    @State private var bannerPhoto: PhotosPickerItem?
-    
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -44,14 +40,7 @@ struct CreateGroupView: View {
                     plannerID: currentUser.id,
                     selectedMemberIDs: $viewModel.selectedMemberIDs
                 )
-                
-                Section {
-                    Button("Create Group") {
-                        createGroup()
-                        dismiss()
-                    }
-                    .disabled(viewModel.groupName.trimmingCharacters(in: .whitespaces).isEmpty)
-                }
+                createButtonSection
             }
             .navigationTitle("New Group")
             .toolbar {
@@ -61,27 +50,14 @@ struct CreateGroupView: View {
                     }
                 }
             }
-            .onChange(of: groupPhoto) { newItem in
-                Task {
-                    if let data = try? await newItem?.loadTransferable(type: Data.self),
-                       let uiImage = UIImage(data: data) {
-                        viewModel.groupImage = uiImage
-                    }
-                }
-            }
-            .onChange(of: bannerPhoto) { newItem in
-                Task {
-                    if let data = try? await newItem?.loadTransferable(type: Data.self),
-                       let uiImage = UIImage(data: data) {
-                        viewModel.bannerImage = uiImage
-                    }
-                }
-            }
         }
     }
+}
+
+private extension CreateGroupView {
     
     //MARK: - Computed Vars
-    
+
     private var allFriends: [User] {
         guard let friendIDs = currentUser.friendIDs else {
             return []
@@ -91,9 +67,20 @@ struct CreateGroupView: View {
         }
     }
     
-    //place holder
-    private func createGroup() {
-        print("✅ Group Created: \(viewModel.groupName)")
-        print("Members: \(viewModel.selectedMemberIDs)")
+    //MARK: - Subviews
+
+    var createButtonSection: some View {
+        Section {
+            Button(action: {
+                let newGroup = viewModel.createGroup(creatorID: 1)
+                groups.append(newGroup)
+            }) {
+                Text("Create")
+                    .font(.headline)
+                    .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.primary))
+            }
+            .disabled(viewModel.isFormEmpty)
+        }
     }
+    
 }
