@@ -38,8 +38,10 @@ private extension GroupsListView {
         if searchText.isEmpty {
             return userGroups
         } else {
+            let lowercasedQuery = searchText.lowercased()
+
             return userGroups.filter {
-                $0.name.lowercased().contains(searchText.lowercased())
+                $0.name.lowercased().contains(lowercasedQuery)
             }
         }
     }
