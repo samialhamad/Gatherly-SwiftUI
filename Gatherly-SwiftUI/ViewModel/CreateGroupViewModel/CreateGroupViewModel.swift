@@ -34,4 +34,8 @@ class CreateGroupViewModel: ObservableObject {
             creatorID: creatorID
         )
     }
+    
+    var isFormEmpty: Bool {
+        GroupEditor.isFormEmpty(name: groupName)
+    }
 }
