@@ -20,8 +20,6 @@ struct CreateGroupView: View {
             Form {
                 Section(header: Text("Group Name")) {
                     TextField("Enter group name", text: $viewModel.groupName)
-                        .autocorrectionDisabled(true)
-                        .textInputAutocapitalization(.words)
                 }
                 
                 ImagePicker(
