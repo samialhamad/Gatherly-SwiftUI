@@ -13,7 +13,9 @@ struct UserGroup: Identifiable, Equatable {
     var memberIDs: [Int]
     var leaderID: Int
     var messages: [Message]?
-    
+    var imageName: String? = nil
+    var bannerImageName: String? = nil
+
     // MARK: - Computed Vars
     
     var hasMessages: Bool {
