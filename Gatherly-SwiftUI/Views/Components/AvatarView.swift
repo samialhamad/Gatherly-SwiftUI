@@ -37,6 +37,19 @@ struct AvatarView: View {
         self.profileImage = profileImage
     }
     
+    var body: some View {
+        if profileImage != nil {
+            profileImageView
+        } else {
+            initialsView
+        }
+    }
+}
+
+private extension AvatarView {
+    
+    //MARK: - Computed vars
+    
     private var initials: String {
         if let user = user {
             let firstInitial = user.firstName?.first.map(String.init) ?? ""
@@ -49,29 +62,34 @@ struct AvatarView: View {
         }
     }
     
-    var body: some View {
-        if let image = profileImage {
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFill()
-                .frame(width: size, height: size)
-                .clipShape(Circle())
-        } else {
-            Circle()
-                .fill(backgroundColor)
-                .frame(width: size, height: size)
-                .overlay(
-                    Text(initials)
-                        .font(font)
-                        .foregroundColor(.white)
-                )
-                .overlay(
-                    Group {
-                        if let borderColor = borderColor, let borderWidth = borderWidth {
-                            Circle().stroke(borderColor, lineWidth: borderWidth)
-                        }
-                    }
-                )
+    //MARK: - Subviews
+    
+    private var profileImageView: some View {
+        Image(uiImage: profileImage!)
+            .resizable()
+            .scaledToFill()
+            .frame(width: size, height: size)
+            .clipShape(Circle())
+            .overlay(borderOverlay)
+    }
+    
+    private var initialsView: some View {
+        Circle()
+            .fill(backgroundColor)
+            .frame(width: size, height: size)
+            .overlay(
+                Text(initials)
+                    .font(font)
+                    .foregroundColor(.white)
+            )
+            .overlay(borderOverlay)
+    }
+    
+    private var borderOverlay: some View {
+        Group {
+            if let borderColor = borderColor, let borderWidth = borderWidth {
+                Circle().stroke(borderColor, lineWidth: borderWidth)
+            }
         }
     }
 }
