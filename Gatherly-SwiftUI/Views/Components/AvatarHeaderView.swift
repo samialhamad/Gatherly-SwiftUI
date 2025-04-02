@@ -33,16 +33,10 @@ struct AvatarHeaderView: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            if let bannerImage = bannerImage {
-                Image(uiImage: bannerImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(height: Constants.AvatarHeaderView.rectangleFrameHeight)
-                    .clipped()
+            if bannerImage != nil {
+                bannerImageView
             } else {
-                Rectangle()
-                    .fill(Color(Colors.primary))
-                    .frame(height: Constants.AvatarHeaderView.rectangleFrameHeight)
+                rectanglePlaceholderView
             }
             
             AvatarView(
@@ -58,5 +52,24 @@ struct AvatarHeaderView: View {
             .offset(y: Constants.AvatarHeaderView.offset)
         }
         .padding(.bottom, Constants.AvatarHeaderView.bottomPadding)
+    }
+}
+
+private extension AvatarHeaderView {
+    
+    //MARK: - Subviews
+    
+    private var bannerImageView: some View {
+        Image(uiImage: bannerImage!)
+            .resizable()
+            .scaledToFill()
+            .frame(height: Constants.AvatarHeaderView.rectangleFrameHeight)
+            .clipped()
+    }
+    
+    private var rectanglePlaceholderView: some View {
+        Rectangle()
+            .fill(Color(Colors.primary))
+            .frame(height: Constants.AvatarHeaderView.rectangleFrameHeight)
     }
 }
