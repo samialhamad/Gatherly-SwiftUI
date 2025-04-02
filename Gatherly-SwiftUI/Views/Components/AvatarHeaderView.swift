@@ -12,26 +12,39 @@ struct AvatarHeaderView: View {
     let group: UserGroup?
     let size: CGFloat
     let font: Font
-
+    let profileImage: UIImage?
+    let bannerImage: UIImage?
+    
     init(
         user: User? = nil,
         group: UserGroup? = nil,
         size: CGFloat = Constants.AvatarHeaderView.size,
-        font: Font = .largeTitle
+        font: Font = .largeTitle,
+        profileImage: UIImage? = nil,
+        bannerImage: UIImage? = nil
     ) {
         self.user = user
         self.group = group
         self.size = size
         self.font = font
+        self.profileImage = profileImage
+        self.bannerImage = bannerImage
     }
-
+    
     var body: some View {
         ZStack(alignment: .bottom) {
-            //placeholder rectangle, will need to deal with image banners later
-            Rectangle()
-                .fill(Color(Colors.primary))
-                .frame(height: Constants.AvatarHeaderView.rectangleFrameHeight)
-
+            if let bannerImage = bannerImage {
+                Image(uiImage: bannerImage)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(height: Constants.AvatarHeaderView.rectangleFrameHeight)
+                    .clipped()
+            } else {
+                Rectangle()
+                    .fill(Color(Colors.primary))
+                    .frame(height: Constants.AvatarHeaderView.rectangleFrameHeight)
+            }
+            
             AvatarView(
                 user: user,
                 group: group,
@@ -39,7 +52,8 @@ struct AvatarHeaderView: View {
                 font: font,
                 backgroundColor: Color(Colors.primary),
                 borderColor: .white,
-                borderWidth: Constants.AvatarHeaderView.avatarBorderWidth
+                borderWidth: Constants.AvatarHeaderView.avatarBorderWidth,
+                profileImage: profileImage
             )
             .offset(y: Constants.AvatarHeaderView.offset)
         }
