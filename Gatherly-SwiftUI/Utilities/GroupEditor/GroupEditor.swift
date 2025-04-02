@@ -44,5 +44,10 @@ struct GroupEditor {
     static func deleteGroup(from groups: [UserGroup], groupToDelete: UserGroup) -> [UserGroup] {
         groups.filter { $0.id != groupToDelete.id }
     }
+    
+    //MARK: - isFormEmpty
+    static func isFormEmpty(name: String) -> Bool {
+        name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
 }
 
