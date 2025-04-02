@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		F16B31A12D9DD41700C17188 /* SwiftyCrop in Frameworks */ = {isa = PBXBuildFile; productRef = F16B31A02D9DD41700C17188 /* SwiftyCrop */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		F11CDC312D77958B007BC1F1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -105,6 +109,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F16B31A12D9DD41700C17188 /* SwiftyCrop in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -165,6 +170,7 @@
 			);
 			name = "Gatherly-SwiftUI";
 			packageProductDependencies = (
+				F16B31A02D9DD41700C17188 /* SwiftyCrop */,
 			);
 			productName = "Gatherly-SwiftUI";
 			productReference = F11CDC202D77958A007BC1F1 /* Gatherly-SwiftUI.app */;
@@ -248,6 +254,9 @@
 			);
 			mainGroup = F11CDC172D77958A007BC1F1;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				F16B319F2D9DD41700C17188 /* XCRemoteSwiftPackageReference "SwiftyCrop" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F11CDC212D77958A007BC1F1 /* Products */;
 			projectDirPath = "";
@@ -613,6 +622,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F16B319F2D9DD41700C17188 /* XCRemoteSwiftPackageReference "SwiftyCrop" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/benedom/SwiftyCrop";
+			requirement = {
+				kind = exactVersion;
+				version = 1.0.8;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F16B31A02D9DD41700C17188 /* SwiftyCrop */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F16B319F2D9DD41700C17188 /* XCRemoteSwiftPackageReference "SwiftyCrop" */;
+			productName = SwiftyCrop;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F11CDC182D77958A007BC1F1 /* Project object */;
 }

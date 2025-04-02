@@ -1,0 +1,15 @@
+{
+  "originHash" : "0b3ee28867b351bf339d165ccf9fe70752b4170327cf2f4678bbf33b6e30286e",
+  "pins" : [
+    {
+      "identity" : "swiftycrop",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/benedom/SwiftyCrop",
+      "state" : {
+        "revision" : "ef27522c4850ccc899b0f4f745bfcc3aee892dfc",
+        "version" : "1.0.8"
+      }
+    }
+  ],
+  "version" : 3
+}
