@@ -10,6 +10,8 @@ import PhotosUI
 
 struct CreateGroupView: View {
     let currentUser: User
+    
+    @Binding var groups: [UserGroup]
     @StateObject private var viewModel = CreateGroupViewModel()
     @Environment(\.dismiss) private var dismiss
     
@@ -74,6 +76,7 @@ private extension CreateGroupView {
             Button(action: {
                 let newGroup = viewModel.createGroup(creatorID: 1)
                 groups.append(newGroup)
+                dismiss()
             }) {
                 Text("Create")
                     .font(.headline)
@@ -82,5 +85,4 @@ private extension CreateGroupView {
             .disabled(viewModel.isFormEmpty)
         }
     }
-    
 }

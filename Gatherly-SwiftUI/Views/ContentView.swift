@@ -35,7 +35,7 @@ struct ContentView: View {
             .tag(1)
             
             NavigationStack {
-                FriendsView(currentUser: users[0], users: users, groups: $groups)
+                FriendsView(groups: $groups)
                     .environmentObject(navigationState)
             }
             .tabItem {

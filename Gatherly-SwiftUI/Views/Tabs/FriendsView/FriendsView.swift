@@ -11,9 +11,9 @@ struct FriendsView: View {
     let currentUser: User = SampleData.sampleUsers[0] // replace with actual logic
     private let tabTitles = ["Friends", "Groups"]
     
+    @Binding var groups: [UserGroup]
     @State private var isShowingAddFriend = false
     @State private var isShowingCreateGroup = false
-    
     @State private var selectedTab = 0
     @State private var searchText = ""
     
@@ -26,7 +26,7 @@ struct FriendsView: View {
                 if selectedTab == 0 {
                     FriendsListView(searchText: $searchText)
                 } else {
-                    GroupsListView(searchText: $searchText)
+                    GroupsListView(groups: $groups, searchText: $searchText)
                 }
             }
             .navigationTitle(tabTitles[selectedTab])
@@ -50,7 +50,7 @@ struct FriendsView: View {
                 ))
             }
             .sheet(isPresented: $isShowingCreateGroup) {
-                CreateGroupView(currentUser: currentUser)
+                CreateGroupView(currentUser: currentUser, groups: $groups)
             }
             .onTapGesture {
                 hideKeyboard()
@@ -79,7 +79,7 @@ struct pickerView: View {
     }
 }
 
-#Preview {
-    FriendsView()
-        .environmentObject(NavigationState())
-}
+//#Preview {
+//    FriendsView()
+//        .environmentObject(NavigationState())
+//}
