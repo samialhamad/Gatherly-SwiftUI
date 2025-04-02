@@ -22,36 +22,59 @@ struct ImagePicker: View {
     var body: some View {
         Section(header: Text(title)) {
             VStack(alignment: .leading, spacing: 8) {
-                if let image = selectedImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(height: imageHeight)
-                        .clipped()
-                        .cornerRadius(10)
-                    
-                    Button("Remove Image") {
-                        selectedImage = nil
-                    }
-                    .foregroundColor(Color(Colors.primary))
-                    .padding(.top, 5)
+                if selectedImage != nil {
+                    selectedImagePreview
                 } else {
-                    PhotosPicker("Select Image", selection: $selectedPhotoItem, matching: .images)
-                        .onChange(of: selectedPhotoItem) { newItem in
-                            Task {
-                                if let data = try? await newItem?.loadTransferable(type: Data.self),
-                                   let uiImage = UIImage(data: data) {
-                                    imageToCrop = uiImage
-                                    showCropper = true
-                                }
-                            }
-                        }
-                        .foregroundColor(Color(Colors.primary))
+                    photoPickerButton
                 }
             }
             .padding(.vertical, 4)
         }
         .fullScreenCover(isPresented: $showCropper) {
+            cropperView
+        }
+    }
+}
+
+private extension ImagePicker {
+    
+    //MARK: - Subviews
+    
+    var selectedImagePreview: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            if let image = selectedImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(height: imageHeight)
+                    .clipped()
+                    .cornerRadius(10)
+            }
+            
+            Button("Remove Image") {
+                selectedImage = nil
+            }
+            .foregroundColor(Color(Colors.primary))
+            .padding(.top, 5)
+        }
+    }
+    
+    var photoPickerButton: some View {
+        PhotosPicker("Select Image", selection: $selectedPhotoItem, matching: .images)
+            .onChange(of: selectedPhotoItem) { newItem in
+                Task {
+                    if let data = try? await newItem?.loadTransferable(type: Data.self),
+                       let uiImage = UIImage(data: data) {
+                        imageToCrop = uiImage
+                        showCropper = true
+                    }
+                }
+            }
+            .foregroundColor(Color(Colors.primary))
+    }
+    
+    var cropperView: some View {
+        Group {
             if let imageToCrop = imageToCrop {
                 SwiftyCropView(
                     imageToCrop: imageToCrop,
@@ -65,14 +88,16 @@ struct ImagePicker: View {
         }
     }
     
-    private func cropConfig(for shape: MaskShape) -> SwiftyCropConfiguration {
+    //MARK: - Functions
+    
+    func cropConfig(for shape: MaskShape) -> SwiftyCropConfiguration {
         SwiftyCropConfiguration(
             maxMagnificationScale: 4.0,
             maskRadius: 130,
             cropImageCircular: shape == .circle,
             rotateImage: false,
             zoomSensitivity: 4.0,
-            rectAspectRatio: 16 / 9 // for .rectangle only
+            rectAspectRatio: 16 / 9
         )
     }
 }
