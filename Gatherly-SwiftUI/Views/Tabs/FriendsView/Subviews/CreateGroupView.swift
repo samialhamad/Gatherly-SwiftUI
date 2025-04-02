@@ -24,13 +24,13 @@ struct CreateGroupView: View {
                         .textInputAutocapitalization(.words)
                 }
                 
-                ImagePickerSection(
+                ImagePicker(
                     title: "Group Image",
                     imageHeight: Constants.CreateGroupView.groupImageHeight,
                     selectedImage: $viewModel.groupImage
                 )
                 
-                ImagePickerSection(
+                ImagePicker(
                     title: "Banner Image",
                     imageHeight: Constants.CreateGroupView.groupBannerImageHeight,
                     selectedImage: $viewModel.bannerImage

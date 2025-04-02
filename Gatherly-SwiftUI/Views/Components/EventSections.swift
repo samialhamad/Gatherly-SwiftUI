@@ -6,48 +6,6 @@
 //
 
 import SwiftUI
-import PhotosUI
-
-struct ImagePickerSection: View {
-    let title: String
-    var imageHeight: CGFloat = 150
-
-    @Binding var selectedImage: UIImage?
-    @State private var selectedPhotoItem: PhotosPickerItem? = nil
-    
-    var body: some View {
-        Section(header: Text(title)) {
-            VStack(alignment: .leading, spacing: 8) {
-                if let image = selectedImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(height: imageHeight)
-                        .clipped()
-                        .cornerRadius(10)
-                    
-                    Button("Remove Image") {
-                        selectedImage = nil
-                    }
-                    .foregroundColor(Color(Colors.primary))
-                    .padding(.top, 5)
-                } else {
-                    PhotosPicker("Select Image", selection: $selectedPhotoItem, matching: .images)
-                        .onChange(of: selectedPhotoItem) { newItem in
-                            Task {
-                                if let data = try? await newItem?.loadTransferable(type: Data.self),
-                                   let uiImage = UIImage(data: data) {
-                                    selectedImage = uiImage
-                                }
-                            }
-                        }
-                        .foregroundColor(Color(Colors.primary))
-                }
-            }
-            .padding(.vertical, 4)
-        }
-    }
-}
 
 struct EventDetailsSection: View {
     let header: String

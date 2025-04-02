@@ -50,7 +50,7 @@ struct CreateEventView: View {
                     header: "Categories",
                     selectedCategories: $viewModel.selectedCategories
                 )
-                ImagePickerSection(
+                ImagePicker(
                     title: "Banner Image",
                     imageHeight: Constants.CreateEventView.bannerImageHeight,
                     selectedImage: $viewModel.selectedBannerImage
