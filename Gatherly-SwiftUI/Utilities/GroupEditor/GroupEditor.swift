@@ -50,4 +50,3 @@ struct GroupEditor {
         name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 }
-
