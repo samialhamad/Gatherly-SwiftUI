@@ -14,11 +14,14 @@ class FriendsListViewModel: ObservableObject {
     @Published var searchText: String = ""
     
     //needs to change in future
-    init(currentUserID: Int = 1, allUsers: [User] = SampleData.sampleUsers) {
+    init(
+        currentUserID: Int = 1,
+        allUsers: [User] = SampleData.sampleUsers
+    ) {
         self.currentUserID = currentUserID
         self.allUsers = allUsers
     }
-
+    
     var friends: [User] {
         guard let currentUser = allUsers.first(where: { $0.id == currentUserID }),
               let friendIDs = currentUser.friendIDs else {
@@ -27,7 +30,7 @@ class FriendsListViewModel: ObservableObject {
         
         return allUsers.filter { friendIDs.contains($0.id ?? 0) }
     }
-
+    
     var filteredFriends: [User] {
         if searchText.isEmpty {
             return friends
@@ -40,14 +43,14 @@ class FriendsListViewModel: ObservableObject {
             }
         }
     }
-
+    
     var groupedFriends: [String: [User]] {
         Dictionary(grouping: filteredFriends) { user in
             let firstLetter = user.firstName?.first.map { String($0).uppercased() } ?? ""
             return firstLetter
         }
     }
-
+    
     var sortedSectionKeys: [String] {
         groupedFriends.keys.sorted()
     }
