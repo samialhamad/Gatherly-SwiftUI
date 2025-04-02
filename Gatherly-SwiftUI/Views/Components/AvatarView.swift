@@ -15,6 +15,7 @@ struct AvatarView: View {
     let backgroundColor: Color
     let borderColor: Color?
     let borderWidth: CGFloat?
+    let profileImage: UIImage?
     
     init(
         user: User? = nil,
@@ -23,7 +24,8 @@ struct AvatarView: View {
         font: Font,
         backgroundColor: Color,
         borderColor: Color? = nil,
-        borderWidth: CGFloat? = nil
+        borderWidth: CGFloat? = nil,
+        profileImage: UIImage? = nil
     ) {
         self.user = user
         self.group = group
@@ -32,6 +34,7 @@ struct AvatarView: View {
         self.backgroundColor = backgroundColor
         self.borderColor = borderColor
         self.borderWidth = borderWidth
+        self.profileImage = profileImage
     }
     
     private var initials: String {
@@ -47,20 +50,28 @@ struct AvatarView: View {
     }
     
     var body: some View {
-        Circle()
-            .fill(backgroundColor)
-            .frame(width: size, height: size)
-            .overlay(
-                Text(initials)
-                    .font(font)
-                    .foregroundColor(.white)
-            )
-            .overlay(
-                Group {
-                    if let borderColor = borderColor, let borderWidth = borderWidth {
-                        Circle().stroke(borderColor, lineWidth: borderWidth)
+        if let image = profileImage {
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFill()
+                .frame(width: size, height: size)
+                .clipShape(Circle())
+        } else {
+            Circle()
+                .fill(backgroundColor)
+                .frame(width: size, height: size)
+                .overlay(
+                    Text(initials)
+                        .font(font)
+                        .foregroundColor(.white)
+                )
+                .overlay(
+                    Group {
+                        if let borderColor = borderColor, let borderWidth = borderWidth {
+                            Circle().stroke(borderColor, lineWidth: borderWidth)
+                        }
                     }
-                }
-            )
+                )
+        }
     }
 }
