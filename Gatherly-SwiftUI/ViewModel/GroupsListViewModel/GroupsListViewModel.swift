@@ -7,6 +7,9 @@
 
 import Foundation
 
+
+// NOT BEING USED AT MOMENT
+
 class GroupsListViewModel: ObservableObject {
     private var currentUserID: Int
     private let allUsers: [User]

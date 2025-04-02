@@ -9,7 +9,6 @@ import SwiftUI
 
 struct GroupsListView: View {
     @Binding var searchText: String
-    @StateObject private var viewModel = GroupsListViewModel()
     
     var body: some View {
         List {
