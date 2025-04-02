@@ -52,9 +52,6 @@ struct FriendsView: View {
             .sheet(isPresented: $isShowingCreateGroup) {
                 CreateGroupView(currentUser: currentUser, groups: $groups)
             }
-            .onTapGesture {
-                hideKeyboard()
-            }
         }
     }
 }
