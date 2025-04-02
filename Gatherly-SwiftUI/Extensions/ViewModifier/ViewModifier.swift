@@ -25,3 +25,14 @@ struct DisclosureIconModifier: ViewModifier {
     }
 }
 
+struct DismissKeyboardOnTap: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .gesture(
+                TapGesture()
+                    .onEnded { _ in
+                        UIApplication.shared.endEditing()
+                    }
+            )
+    }
+}
