@@ -148,13 +148,7 @@ final class EventEditorTests: XCTestCase {
         let result = EventEditor.isFormEmpty(title: "   ")
         XCTAssertTrue(result)
     }
-    
-    // no longer used, description isn't required
-//    func testIsFormEmptyDescriptionEmpty() {
-//        let result = EventEditor.isFormEmpty(title: " title ", description: "")
-//        XCTAssertTrue(result)
-//    }
-    
+
     func testIsFormEmptyValidTitleAndDescription() {
         let result = EventEditor.isFormEmpty(title: "Title")
         XCTAssertFalse(result)
