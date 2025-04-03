@@ -21,6 +21,7 @@ private struct KeyboardDismissableView<Content: View>: UIViewControllerRepresent
             action: #selector(Coordinator.dismissKeyboard)
         )
         tapGesture.cancelsTouchesInView = false
+        tapGesture.delegate = context.coordinator
         
         DispatchQueue.main.async {
             if let window = controller.view.window {
@@ -35,15 +36,37 @@ private struct KeyboardDismissableView<Content: View>: UIViewControllerRepresent
     
     func updateUIViewController(_ uiViewController: UIHostingController<Content>, context: Context) {
         uiViewController.rootView = content
+        
+        DispatchQueue.main.async {
+            if let window = uiViewController.view.window {
+                let hasGesture = window.gestureRecognizers?.contains {
+                    $0 is UITapGestureRecognizer && ($0.delegate === context.coordinator)
+                } ?? false
+                
+                if !hasGesture {
+                    let tapGesture = UITapGestureRecognizer(
+                        target: context.coordinator,
+                        action: #selector(Coordinator.dismissKeyboard)
+                    )
+                    tapGesture.cancelsTouchesInView = false
+                    tapGesture.delegate = context.coordinator
+                    window.addGestureRecognizer(tapGesture)
+                }
+            }
+        }
     }
     
     func makeCoordinator() -> Coordinator {
         Coordinator()
     }
     
-    class Coordinator: NSObject {
+    class Coordinator: NSObject, UIGestureRecognizerDelegate {
         @objc func dismissKeyboard() {
             UIApplication.shared.endEditing()
+        }
+
+        func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer) -> Bool {
+            return true
         }
     }
 }
