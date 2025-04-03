@@ -30,8 +30,4 @@ extension View {
             to: nil, from: nil, for: nil
         )
     }
-    
-    func dismissKeyboardOnTap() -> some View {
-        modifier(DismissKeyboardOnTap())
-    }
 }
