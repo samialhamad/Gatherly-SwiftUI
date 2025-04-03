@@ -53,6 +53,7 @@ struct FriendsView: View {
                 CreateGroupView(currentUser: currentUser, groups: $groups)
             }
         }
+        .keyboardDismissable()
     }
 }
 

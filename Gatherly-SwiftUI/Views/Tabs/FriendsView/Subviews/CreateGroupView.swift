@@ -53,6 +53,7 @@ struct CreateGroupView: View {
                 }
             }
         }
+        .keyboardDismissable()
     }
 }
 

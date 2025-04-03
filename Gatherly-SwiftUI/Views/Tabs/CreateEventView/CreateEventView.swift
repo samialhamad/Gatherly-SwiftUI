@@ -60,6 +60,7 @@ struct CreateEventView: View {
             }
             .navigationTitle("Create Event")
         }
+        .keyboardDismissable()
     }
 }
 

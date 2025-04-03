@@ -73,6 +73,7 @@ struct EditEventView: View {
                 Text("Are you sure you want to delete this event?")
             }
         }
+        .keyboardDismissable()
     }
 }
 
