@@ -21,7 +21,15 @@ private struct KeyboardDismissableView<Content: View>: UIViewControllerRepresent
             action: #selector(Coordinator.dismissKeyboard)
         )
         tapGesture.cancelsTouchesInView = false
-        controller.view.addGestureRecognizer(tapGesture)
+        
+        DispatchQueue.main.async {
+            if let window = controller.view.window {
+                if window.gestureRecognizers?.contains(where: { $0 === tapGesture }) == false {
+                    window.addGestureRecognizer(tapGesture)
+                }
+            }
+        }
+        
         return controller
     }
     
