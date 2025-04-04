@@ -13,7 +13,11 @@ struct GroupDetailView: View {
     var body: some View {
         ScrollView {
             VStack {
-                AvatarHeaderView(group: group, profileImage: profileImage, bannerImage: bannerImage)
+                AvatarHeaderView(
+                    group: group,
+                    profileImage: profileImage,
+                    bannerImage: bannerImage
+                )
                 
                 VStack(spacing: 8) {
                     Text("Leader ID: \(group.leaderID)")
