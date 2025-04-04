@@ -18,12 +18,12 @@ struct GroupEditor {
         memberIDs: Set<Int>,
         imageName: String? = nil,
         bannerImageName: String? = nil,
-        creatorID: Int,
+        leaderID: Int,
         generateGroupID: () -> Int = { Int.random(in: 10000...99999) }
     ) -> UserGroup {
         
         let groupID = originalGroup?.id ?? generateGroupID()
-        let leaderID = originalGroup?.leaderID ?? creatorID
+        let leaderID = originalGroup?.leaderID ?? leaderID
         
         var group = UserGroup(
             id: groupID,

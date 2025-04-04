@@ -75,7 +75,7 @@ private extension CreateGroupView {
     var createButtonSection: some View {
         Section {
             Button(action: {
-                let newGroup = viewModel.createGroup(creatorID: 1)
+                let newGroup = viewModel.createGroup(leaderID: 1)
                 groups.append(newGroup)
                 dismiss()
             }) {

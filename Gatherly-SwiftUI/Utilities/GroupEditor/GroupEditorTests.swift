@@ -18,7 +18,7 @@ final class GroupEditorTests: XCTestCase {
             memberIDs: [2, 3],
             imageName: "group_image.png",
             bannerImageName: "banner_image.png",
-            creatorID: 1,
+            leaderID: 1,
             generateGroupID: { 12345 }
         )
         
@@ -47,7 +47,7 @@ final class GroupEditorTests: XCTestCase {
             memberIDs: [1, 2, 3],
             imageName: "new_image.png",
             bannerImageName: "new_banner.png",
-            creatorID: 99  // should not override existing leaderID
+            leaderID: 99  // should not override existing leaderID
         )
         
         XCTAssertEqual(updatedGroup.id, original.id)

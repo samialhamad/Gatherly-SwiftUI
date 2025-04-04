@@ -20,11 +20,11 @@ final class CreateGroupViewModelTests: XCTestCase {
         viewModel.groupImage = testProfileImage
         viewModel.bannerImage = testBannerImage
         
-        let creatorID = 1
-        let group = viewModel.createGroup(creatorID: creatorID)
+        let leaderID = 1
+        let group = viewModel.createGroup(leaderID: leaderID)
         
         XCTAssertEqual(group.name, "Test Group")
-        XCTAssertEqual(group.leaderID, creatorID)
+        XCTAssertEqual(group.leaderID, leaderID)
         XCTAssertEqual(group.memberIDs, [2, 3])
         XCTAssertNotNil(group.imageName)
         XCTAssertNotNil(group.bannerImageName)

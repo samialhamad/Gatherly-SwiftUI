@@ -14,7 +14,7 @@ class CreateGroupViewModel: ObservableObject {
     @Published var groupImage: UIImage? = nil
     @Published var bannerImage: UIImage? = nil
     
-    func createGroup(creatorID: Int) -> UserGroup {
+    func createGroup(leaderID: Int) -> UserGroup {
         var groupImageName: String? = nil
         var bannerImageName: String? = nil
         
@@ -31,7 +31,7 @@ class CreateGroupViewModel: ObservableObject {
             memberIDs: selectedMemberIDs,
             imageName: groupImageName,
             bannerImageName: bannerImageName,
-            creatorID: creatorID
+            leaderID: leaderID
         )
     }
     
