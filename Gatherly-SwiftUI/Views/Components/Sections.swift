@@ -1,5 +1,5 @@
 //
-//  EventSections.swift
+//  Sections.swift
 //  Gatherly-SwiftUI
 //
 //  Created by Sami Alhamad on 3/6/25.
