@@ -9,6 +9,10 @@ import SwiftUI
 
 struct GroupDetailView: View {
     let group: UserGroup
+    let currentUser: User
+    
+    @Binding var groups: [UserGroup]
+    @State private var isShowingEditView = false
     
     var body: some View {
         ScrollView {
@@ -33,6 +37,35 @@ struct GroupDetailView: View {
             }
         }
         .navigationTitle(group.name)
+        .toolbar {
+            if group.leaderID == currentUser.id {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Edit") {
+                        isShowingEditView = true
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $isShowingEditView) {
+            EditGroupView(
+                viewModel: EditGroupViewModel(group: group),
+                allUsers: SampleData.sampleUsers, // or real user list if available
+                currentUser: currentUser,
+                onSave: { updatedGroup in
+                    if let index = groups.firstIndex(where: { $0.id == updatedGroup.id }) {
+                        groups[index] = updatedGroup
+                    }
+                    isShowingEditView = false
+                },
+                onCancel: {
+                    isShowingEditView = false
+                },
+                onDelete: { deletedGroup in
+                    groups = GroupEditor.deleteGroup(from: groups, groupToDelete: deletedGroup)
+                    isShowingEditView = false
+                }
+            )
+        }
     }
 }
 
