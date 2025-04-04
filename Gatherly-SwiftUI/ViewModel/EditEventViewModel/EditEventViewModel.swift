@@ -84,9 +84,7 @@ class EditEventViewModel: ObservableObject {
     var endTimeRange: ClosedRange<Date> {
         Date.endTimeRange(for: selectedDate, startTime: startTime)
     }
-}
-
-extension EditEventViewModel {
+    
     var plannerID: Int? {
         return originalEvent.plannerID
     }
