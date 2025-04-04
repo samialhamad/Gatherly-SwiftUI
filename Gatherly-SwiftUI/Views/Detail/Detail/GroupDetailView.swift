@@ -44,7 +44,7 @@ private extension GroupDetailView {
         
         return ImageUtility.loadImageFromDocuments(named: imageName)
     }
-
+    
     var bannerImage: UIImage? {
         guard let bannerName = group.bannerImageName else {
             return nil
@@ -54,14 +54,14 @@ private extension GroupDetailView {
     }
 }
 
-#Preview {
-    GroupDetailView(group: UserGroup(
-        id: 1,
-        name: "Study Buddies",
-        memberIDs: [1, 2, 3],
-        leaderID: 1,
-        messages: [
-            Message(id: 1, userID: 1, message: "Hey team!", read: true)
-        ]
-    ))
-}
+//#Preview {
+//    GroupDetailView(group: UserGroup(
+//        id: 1,
+//        name: "Study Buddies",
+//        memberIDs: [1, 2, 3],
+//        leaderID: 1,
+//        messages: [
+//            Message(id: 1, userID: 1, message: "Hey team!", read: true)
+//        ]
+//    ))
+//}
