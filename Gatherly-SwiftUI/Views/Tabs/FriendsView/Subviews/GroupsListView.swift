@@ -16,7 +16,11 @@ struct GroupsListView: View {
     var body: some View {
         List {
             ForEach(filteredGroups, id: \.id) { group in
-                NavigationLink(destination: GroupDetailView(group: group)) {
+                NavigationLink(destination: GroupDetailView(
+                    group: group,
+                    currentUser: currentUser,
+                    groups: $groups
+                )) {
                     GroupRow(group: group)
                 }
             }
@@ -39,7 +43,7 @@ private extension GroupsListView {
             return userGroups
         } else {
             let lowercasedQuery = searchText.lowercased()
-
+            
             return userGroups.filter {
                 $0.name.lowercased().contains(lowercasedQuery)
             }
