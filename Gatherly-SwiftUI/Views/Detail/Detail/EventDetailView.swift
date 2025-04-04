@@ -45,7 +45,6 @@ struct EventDetailView: View {
             }
         }
         .toolbarRole(.editor)
-        
         .sheet(isPresented: $isShowingEditView) {
             EditEventView(
                 viewModel: EditEventViewModel(event: event),
