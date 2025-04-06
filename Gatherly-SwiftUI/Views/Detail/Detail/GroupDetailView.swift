@@ -13,6 +13,7 @@ struct GroupDetailView: View {
     
     @Binding var groups: [UserGroup]
     @State private var isShowingEditView = false
+    @Environment(\.dismiss) private var dismiss
     
     var body: some View {
         ScrollView {
@@ -63,6 +64,7 @@ struct GroupDetailView: View {
                 onDelete: { deletedGroup in
                     groups = GroupEditor.deleteGroup(from: groups, groupToDelete: deletedGroup)
                     isShowingEditView = false
+                    dismiss()
                 }
             )
         }
