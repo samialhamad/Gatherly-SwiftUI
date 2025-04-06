@@ -43,12 +43,20 @@ private extension ImagePicker {
     var selectedImagePreview: some View {
         VStack(alignment: .leading, spacing: 8) {
             if let image = selectedImage {
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(height: imageHeight)
-                    .clipped()
-                    .cornerRadius(10)
+                if maskShape == .circle {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: imageHeight)
+                        .clipShape(Circle())
+                } else {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(height: imageHeight)
+                        .clipped()
+                        .cornerRadius(10)
+                }
             }
             
             Button("Remove Image") {
