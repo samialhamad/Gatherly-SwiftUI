@@ -102,6 +102,7 @@ struct EventLocationSection: View {
     let onSetLocation: (Location?) -> Void
     
     @State private var isSelectingSuggestion = false
+    @State private var selectedLocationAddress: String = ""
     @StateObject private var searchVM = LocationSearchViewModel()
     
     var body: some View {
@@ -125,17 +126,24 @@ struct EventLocationSection: View {
                     }
             }
             
+            if !selectedLocationAddress.isEmpty {
+                Text(selectedLocationAddress)
+                    .font(.caption)
+                    .foregroundColor(.gray)
+            }
+            
             if !searchVM.suggestions.isEmpty {
                 List(searchVM.suggestions, id: \.self) { suggestion in
                     Button(action: {
                         isSelectingSuggestion = true
                         searchVM.search(for: suggestion) { location in
                             onSetLocation(location)
-                            // Optionally update the text field with the chosen location name:
+                            
                             if let name = location?.name {
                                 locationName = name
                             }
-                            // Clear suggestions after selection.
+                            
+                            selectedLocationAddress = suggestion.subtitle
                             searchVM.suggestions = []
                         }
                     }) {
