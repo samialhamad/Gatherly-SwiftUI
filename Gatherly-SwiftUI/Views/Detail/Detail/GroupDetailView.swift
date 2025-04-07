@@ -24,7 +24,7 @@ struct GroupDetailView: View {
                     bannerImage: bannerImage
                 )
                 
-                VStack(spacing: 8) {
+                VStack(spacing: Constants.GroupDetailView.vstackSpacing) {
                     Text("Leader ID: \(group.leaderID)")
                         .font(.subheadline)
                         .foregroundColor(.gray)
