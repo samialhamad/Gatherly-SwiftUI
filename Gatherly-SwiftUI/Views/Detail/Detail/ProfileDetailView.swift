@@ -37,6 +37,9 @@ struct ProfileDetailView: View {
                 Spacer()
             }
         }
+                }
+            }
+        }
     }
 }
 
