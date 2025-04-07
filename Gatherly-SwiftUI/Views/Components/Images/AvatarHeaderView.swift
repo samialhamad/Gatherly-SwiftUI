@@ -59,6 +59,14 @@ private extension AvatarHeaderView {
     
     //MARK: - Subviews
     
+    private var bannerView: some View {
+        BannerView(
+            uiImage: bannerImage,
+            height: Constants.AvatarHeaderView.rectangleFrameHeight,
+            cornerRadius: 0,
+            paddingBottom: 0
+        )
+    }
     
     private var rectanglePlaceholderView: some View {
         Rectangle()

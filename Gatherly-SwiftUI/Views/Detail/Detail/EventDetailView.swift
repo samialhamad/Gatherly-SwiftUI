@@ -74,21 +74,7 @@ struct EventDetailView: View {
 private extension EventDetailView {
     
     var eventBannerImageView: some View {
-        Group {
-            if let imageName = event.bannerImageName,
-               let imageURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(imageName),
-               let uiImage = UIImage(contentsOfFile: imageURL.path) {
-                Image(uiImage: uiImage)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(height: 200)
-                    .clipped()
-                    .cornerRadius(12)
-                    .padding(.bottom, 8)
-            } else {
-                EmptyView()
-            }
-        }
+        BannerView(imageName: event.bannerImageName)
     }
     
     //No longer being used, but keeping around for future just in case
