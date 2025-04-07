@@ -34,7 +34,7 @@ struct AvatarHeaderView: View {
     var body: some View {
         ZStack(alignment: .bottom) {
             if bannerImage != nil {
-                bannerImageView
+                bannerView
             } else {
                 rectanglePlaceholderView
             }
@@ -59,13 +59,6 @@ private extension AvatarHeaderView {
     
     //MARK: - Subviews
     
-    private var bannerImageView: some View {
-        Image(uiImage: bannerImage!)
-            .resizable()
-            .scaledToFill()
-            .frame(height: Constants.AvatarHeaderView.rectangleFrameHeight)
-            .clipped()
-    }
     
     private var rectanglePlaceholderView: some View {
         Rectangle()
