@@ -14,6 +14,14 @@ struct AddFriendView: View {
     var body: some View {
         NavigationStack {
             VStack {
+                if !viewModel.didSyncContacts {
+                    Button("Sync Contacts") {
+                        viewModel.syncContacts()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .padding()
+                }
+                
                 SearchBarView(searchText: $viewModel.searchText, placeholder: "Search by name")
                 
                 if !viewModel.searchText.trimmingCharacters(in: .whitespaces).isEmpty {
