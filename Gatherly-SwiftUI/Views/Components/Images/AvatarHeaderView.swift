@@ -64,7 +64,7 @@ private extension AvatarHeaderView {
             uiImage: bannerImage,
             height: Constants.AvatarHeaderView.rectangleFrameHeight,
             cornerRadius: 0,
-            paddingBottom: 0
+            bottomPadding: 0
         )
     }
 }
