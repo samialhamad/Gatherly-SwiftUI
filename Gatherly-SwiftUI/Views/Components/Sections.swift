@@ -101,6 +101,7 @@ struct EventLocationSection: View {
     // When a location is selected, pass the Location back.
     let onSetLocation: (Location?) -> Void
     
+    @State private var isSelectingSuggestion = false
     @StateObject private var searchVM = LocationSearchViewModel()
     
     var body: some View {
@@ -110,6 +111,11 @@ struct EventLocationSection: View {
                     .autocapitalization(.words)
                     .disableAutocorrection(true)
                     .onChange(of: locationName) { newValue in
+                        guard !isSelectingSuggestion else {
+                            isSelectingSuggestion = false
+                            return
+                        }
+                        
                         searchVM.queryFragment = newValue
                         
                         //check if a user clears the location, if so location is now nil (editing bug fix)
@@ -122,6 +128,7 @@ struct EventLocationSection: View {
             if !searchVM.suggestions.isEmpty {
                 List(searchVM.suggestions, id: \.self) { suggestion in
                     Button(action: {
+                        isSelectingSuggestion = true
                         searchVM.search(for: suggestion) { location in
                             onSetLocation(location)
                             // Optionally update the text field with the chosen location name:
