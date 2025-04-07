@@ -105,6 +105,14 @@ struct Constants {
         static let hstackPadding: CGFloat = 4
     }
     
+    struct ImagePicker {
+        static let cornerRadius: CGFloat = 10
+        static let imageHight: CGFloat = 150
+        static let topPadding: CGFloat = 5
+        static let vstackSpacing: CGFloat = 8
+        static let vstackVerticalPadding: CGFloat = 4
+    }
+    
     struct ProfileDetailView {
         static let vstackSpacing: CGFloat = 8
     }

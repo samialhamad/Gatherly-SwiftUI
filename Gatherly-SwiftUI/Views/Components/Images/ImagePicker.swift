@@ -11,7 +11,7 @@ import SwiftyCrop
 
 struct ImagePicker: View {
     let title: String
-    var imageHeight: CGFloat = 150
+    var imageHeight: CGFloat = Constants.ImagePicker.imageHight
     var maskShape: MaskShape
     
     @Binding var selectedImage: UIImage?
@@ -21,14 +21,14 @@ struct ImagePicker: View {
     
     var body: some View {
         Section(header: Text(title)) {
-            VStack(alignment: .leading, spacing: 8) {
+            VStack(alignment: .leading, spacing: Constants.ImagePicker.vstackSpacing) {
                 if selectedImage != nil {
                     selectedImagePreview
                 } else {
                     photoPickerButton
                 }
             }
-            .padding(.vertical, 4)
+            .padding(.vertical, Constants.ImagePicker.vstackVerticalPadding)
             .fullScreenCover(isPresented: $showCropper) {
                 cropperView
             }
@@ -41,7 +41,7 @@ private extension ImagePicker {
     //MARK: - Subviews
     
     var selectedImagePreview: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: Constants.ImagePicker.vstackSpacing) {
             if let image = selectedImage {
                 if maskShape == .circle {
                     HStack {
@@ -59,7 +59,7 @@ private extension ImagePicker {
                         .scaledToFill()
                         .frame(height: imageHeight)
                         .clipped()
-                        .cornerRadius(10)
+                        .cornerRadius(Constants.ImagePicker.cornerRadius)
                 }
             }
             
@@ -67,7 +67,7 @@ private extension ImagePicker {
                 selectedImage = nil
             }
             .foregroundColor(Color(Colors.primary))
-            .padding(.top, 5)
+            .padding(.top, Constants.ImagePicker.topPadding)
         }
     }
     
