@@ -33,10 +33,20 @@ struct ProfileDetailView: View {
                     }
                 }
                 .padding()
-                
                 Spacer()
             }
         }
+        .navigationTitle("\(user.firstName ?? "") \(user.lastName ?? "")")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Menu {
+                    Button("Report") {
+                    }
+                    Button("Remove Friend", role: .destructive) {
+                    }
+                } label: {
+                    Image(systemName: "ellipsis")
                 }
             }
         }
