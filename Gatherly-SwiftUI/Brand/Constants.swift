@@ -22,6 +22,12 @@ struct Constants {
         static let size: CGFloat = 100
     }
     
+    struct BannerView {
+        static let cornerRadius: CGFloat = 12
+        static let height: CGFloat = 200
+        static let bottomPadding: CGFloat = 8
+    }
+    
     struct CalendarView {
         static let eventListViewSpacing: CGFloat = 10
         static let headerViewSpacing: CGFloat = 4

@@ -10,9 +10,9 @@ import SwiftUI
 struct BannerView: View {
     var uiImage: UIImage?
     var imageName: String?
-    var height: CGFloat = 200
-    var cornerRadius: CGFloat = 12
-    var paddingBottom: CGFloat = 8
+    var height: CGFloat = Constants.BannerView.height
+    var cornerRadius: CGFloat = Constants.BannerView.cornerRadius
+    var bottomPadding: CGFloat = Constants.BannerView.bottomPadding
 
     var body: some View {
         Group {
@@ -23,7 +23,7 @@ struct BannerView: View {
                     .frame(height: height)
                     .clipped()
                     .cornerRadius(cornerRadius)
-                    .padding(.bottom, paddingBottom)
+                    .padding(.bottom, bottomPadding)
             } else if let imageName = imageName,
                       let imageURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(imageName),
                       let loadedImage = UIImage(contentsOfFile: imageURL.path) {
@@ -33,7 +33,7 @@ struct BannerView: View {
                     .frame(height: height)
                     .clipped()
                     .cornerRadius(cornerRadius)
-                    .padding(.bottom, paddingBottom)
+                    .padding(.bottom, bottomPadding)
             } else {
                 EmptyView()
             }
