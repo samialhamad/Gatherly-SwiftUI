@@ -29,9 +29,9 @@ struct ImagePicker: View {
                 }
             }
             .padding(.vertical, 4)
-        }
-        .fullScreenCover(isPresented: $showCropper) {
-            cropperView
+            .fullScreenCover(isPresented: $showCropper) {
+                cropperView
+            }
         }
     }
 }
