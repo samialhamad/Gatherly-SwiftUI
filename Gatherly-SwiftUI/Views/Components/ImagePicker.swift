@@ -44,11 +44,15 @@ private extension ImagePicker {
         VStack(alignment: .leading, spacing: 8) {
             if let image = selectedImage {
                 if maskShape == .circle {
-                    Image(uiImage: image)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(height: imageHeight)
-                        .clipShape(Circle())
+                    HStack {
+                        Spacer()
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: imageHeight, height: imageHeight)
+                            .clipShape(Circle())
+                        Spacer()
+                    }
                 } else {
                     Image(uiImage: image)
                         .resizable()
