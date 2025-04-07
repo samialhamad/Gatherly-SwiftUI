@@ -36,7 +36,7 @@ struct AvatarHeaderView: View {
             if bannerImage != nil {
                 bannerView
             } else {
-                rectanglePlaceholderView
+                EmptyView()
             }
             
             AvatarView(
@@ -66,11 +66,5 @@ private extension AvatarHeaderView {
             cornerRadius: 0,
             paddingBottom: 0
         )
-    }
-    
-    private var rectanglePlaceholderView: some View {
-        Rectangle()
-            .fill(Color(Colors.primary))
-            .frame(height: Constants.AvatarHeaderView.rectangleFrameHeight)
     }
 }
