@@ -8,6 +8,7 @@
 import CoreLocation
 
 struct Location: Codable, Equatable, Hashable {
+    var address: String?
     var latitude: Double
     var longitude: Double
     var name: String?
