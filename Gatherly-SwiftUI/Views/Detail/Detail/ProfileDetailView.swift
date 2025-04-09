@@ -9,6 +9,7 @@ import SwiftUI
 
 struct ProfileDetailView: View {
     let user: User
+    let currentUser: User = SampleData.sampleUsers[0] // replace with actual logic
     
     var body: some View {
         ScrollView {
@@ -20,7 +21,7 @@ struct ProfileDetailView: View {
                         .font(.title)
                         .fontWeight(.bold)
                     
-                    if let phone = user.phone {
+                    if isFriend, let phone = user.phone {
                         Text(phone)
                             .font(.subheadline)
                             .foregroundColor(.gray)
@@ -37,13 +38,23 @@ struct ProfileDetailView: View {
                 Menu {
                     Button("Report") {
                     }
-                    Button("Remove Friend", role: .destructive) {
+                    
+                    if isFriend {
+                        Button("Remove Friend", role: .destructive) {
+                        }
                     }
                 } label: {
                     Image(systemName: "ellipsis")
                 }
             }
         }
+    }
+}
+
+private extension ProfileDetailView {
+    var isFriend: Bool {
+        guard let userID = user.id else { return false }
+        return currentUser.friendIDs?.contains(userID) == true
     }
 }
 
