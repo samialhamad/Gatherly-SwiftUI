@@ -86,6 +86,7 @@ struct Constants {
     
     struct EventRow {
         static let topPadding: CGFloat = 5
+        static let timeAndDisclosureSpacing: CGFloat = 8
     }
         
     struct FriendsListView {
