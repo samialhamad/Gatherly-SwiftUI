@@ -98,7 +98,6 @@ struct EventMembersSection: View {
 struct EventLocationSection: View {
     let header: String
     @Binding var locationName: String
-    // When a location is selected, pass the Location back.
     let onSetLocation: (Location?) -> Void
     
     @State private var isSelectingSuggestion = false
@@ -143,7 +142,7 @@ struct EventLocationSection: View {
                                 locationName = name
                             }
                             
-                            selectedLocationAddress = suggestion.subtitle
+                            selectedLocationAddress = location?.address ?? ""
                             searchVM.suggestions = []
                         }
                     }) {

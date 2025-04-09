@@ -125,7 +125,6 @@ private extension EventDetailView {
                 )
                 let annotation = LocationAnnotation(coordinate: coordinate, name: location.name)
                 
-                // older Map initializer with annotationItems - is deprecated in iOS 17
                 Map(coordinateRegion: .constant(region), annotationItems: [annotation]) { location in
                     MapAnnotation(coordinate: location.coordinate) {
                         VStack(spacing: Constants.EventDetailView.eventMapPreviewVStackSpacing) {
@@ -145,6 +144,13 @@ private extension EventDetailView {
                 }
                 .frame(height: Constants.EventDetailView.eventMapPreviewFrame)
                 .cornerRadius(Constants.EventDetailView.eventMapPreviewCornerRadius)
+                
+                if let address = location.address {
+                    Text(address)
+                        .font(.caption)
+                        .foregroundColor(.gray)
+                        .padding(.horizontal, 4)
+                }
             } else {
                 EmptyView()
             }
