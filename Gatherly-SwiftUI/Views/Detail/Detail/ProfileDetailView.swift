@@ -15,7 +15,7 @@ struct ProfileDetailView: View {
         ScrollView {
             VStack {
                 AvatarHeaderView(user: user)
-                userInfoSection
+                userInfoView
                 Spacer()
             }
         }
@@ -33,7 +33,7 @@ private extension ProfileDetailView {
     
     //MARK: - Subviews
     
-    var userInfoSection: some View {
+    var userInfoView: some View {
         VStack(alignment: .center, spacing: Constants.ProfileDetailView.vstackSpacing) {
             Text("\(user.firstName ?? "") \(user.lastName ?? "")")
                 .font(.title)
