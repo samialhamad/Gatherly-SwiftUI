@@ -16,6 +16,7 @@ struct FriendsView: View {
     @State private var isShowingCreateGroup = false
     @State private var selectedTab = 0
     @State private var searchText = ""
+    @StateObject private var viewModel = FriendsViewModel()
     
     var body: some View {
         NavigationStack {
@@ -46,12 +47,16 @@ struct FriendsView: View {
             .sheet(isPresented: $isShowingAddFriend) {
                 AddFriendView(viewModel: AddFriendViewModel(
                     currentUser: currentUser,
-                    allUsers: SampleData.sampleUsers
+                    allUsers: SampleData.sampleUsers,
+                    syncedContacts: viewModel.syncedContacts
                 ))
             }
             .sheet(isPresented: $isShowingCreateGroup) {
                 CreateGroupView(currentUser: currentUser, groups: $groups)
             }
+        }
+        .task {
+            viewModel.syncContactsIfNeeded()
         }
         .keyboardDismissable()
     }
