@@ -15,19 +15,7 @@ struct ProfileDetailView: View {
         ScrollView {
             VStack {
                 AvatarHeaderView(user: user)
-                
-                VStack(alignment: .center, spacing: Constants.ProfileDetailView.vstackSpacing) {
-                    Text("\(user.firstName ?? "") \(user.lastName ?? "")")
-                        .font(.title)
-                        .fontWeight(.bold)
-                    
-                    if isFriend, let phone = user.phone {
-                        Text(phone)
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                    }
-                }
-                .padding()
+                userInfoSection
                 Spacer()
             }
         }
@@ -35,23 +23,68 @@ struct ProfileDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Menu {
-                    Button("Report") {
-                    }
-                    
-                    if isFriend {
-                        Button("Remove Friend", role: .destructive) {
-                        }
-                    }
-                } label: {
-                    Image(systemName: "ellipsis")
-                }
+                menuButton
             }
         }
     }
 }
 
 private extension ProfileDetailView {
+    
+    //MARK: - Subviews
+    
+    var userInfoSection: some View {
+        VStack(alignment: .center, spacing: Constants.ProfileDetailView.vstackSpacing) {
+            Text("\(user.firstName ?? "") \(user.lastName ?? "")")
+                .font(.title)
+                .fontWeight(.bold)
+            
+            if isFriend, let phone = user.phone {
+                Text(phone)
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
+            
+            if !isFriend {
+                addFriendButton
+            }
+        }
+        .padding()
+    }
+    
+    var addFriendButton: some View {
+        Button(action: {
+            // handle friend request
+        }) {
+            Text("Add Friend")
+                .font(.headline)
+                .frame(maxWidth: .infinity)
+                .padding()
+                .background(Color(Colors.primary))
+                .foregroundColor(.white)
+                .cornerRadius(12)
+        }
+        .padding(.top, 8)
+        .padding(.horizontal, 32)
+    }
+    
+    var menuButton: some View {
+        Menu {
+            Button("Report") {
+                // handle report
+            }
+            if isFriend {
+                Button("Remove Friend", role: .destructive) {
+                    // handle remove
+                }
+            }
+        } label: {
+            Image(systemName: "ellipsis")
+        }
+    }
+    
+    //MARK: - Computed Vars
+    
     var isFriend: Bool {
         guard let userID = user.id else { return false }
         return currentUser.friendIDs?.contains(userID) == true
