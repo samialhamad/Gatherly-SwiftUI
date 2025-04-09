@@ -39,7 +39,7 @@ class AddFriendViewModel: ObservableObject {
     
     var filteredUsers: [User] {
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
-        let usersToSearch = didSyncContacts ? matchedContacts : allUsers
+        let usersToSearch = allUsers
         
         return usersToSearch.filter { user in
             guard let currentID = currentUser.id else { return false }
