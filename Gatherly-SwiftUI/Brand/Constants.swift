@@ -114,6 +114,9 @@ struct Constants {
     }
     
     struct ProfileDetailView {
+        static let friendButtonHorizontalPadding: CGFloat = 32
+        static let friendButtonRadius: CGFloat = 12
+        static let friendButtonTopPadding: CGFloat = 8
         static let vstackSpacing: CGFloat = 8
     }
 

@@ -62,10 +62,10 @@ private extension ProfileDetailView {
                 .padding()
                 .background(Color(Colors.primary))
                 .foregroundColor(.white)
-                .cornerRadius(12)
+                .cornerRadius(Constants.ProfileDetailView.friendButtonRadius)
         }
-        .padding(.top, 8)
-        .padding(.horizontal, 32)
+        .padding(.top, Constants.ProfileDetailView.friendButtonTopPadding)
+        .padding(.horizontal, Constants.ProfileDetailView.friendButtonHorizontalPadding)
     }
     
     var menuButton: some View {
