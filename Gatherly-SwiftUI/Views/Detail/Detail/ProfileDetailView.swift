@@ -20,12 +20,6 @@ struct ProfileDetailView: View {
                         .font(.title)
                         .fontWeight(.bold)
                     
-                    if let email = user.email {
-                        Text(email)
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
-                    }
-                    
                     if let phone = user.phone {
                         Text(phone)
                             .font(.subheadline)
