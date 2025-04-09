@@ -33,15 +33,7 @@ struct FriendsView: View {
             .navigationTitle(tabTitles[selectedTab])
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button {
-                        if selectedTab == 0 {
-                            isShowingAddFriend = true
-                        } else {
-                            isShowingCreateGroup = true
-                        }
-                    } label: {
-                        Image(systemName: "plus")
-                    }
+                    toolbarButton
                 }
             }
             .sheet(isPresented: $isShowingAddFriend) {
@@ -62,26 +54,40 @@ struct FriendsView: View {
     }
 }
 
-//MARK: - Subviews
-
-struct pickerView: View {
-    @Binding var selectedTab: Int
-    let tabTitles: [String]
+private extension FriendsView {
     
-    var body: some View {
-        Picker("", selection: $selectedTab) {
-            ForEach(tabTitles.indices, id: \.self) { index in
-                Text(tabTitles[index])
-                    .tag(index)
+    //MARK: - Subviews
+    
+    struct pickerView: View {
+        @Binding var selectedTab: Int
+        let tabTitles: [String]
+        
+        var body: some View {
+            Picker("", selection: $selectedTab) {
+                ForEach(tabTitles.indices, id: \.self) { index in
+                    Text(tabTitles[index])
+                        .tag(index)
+                }
             }
+            .pickerStyle(.segmented)
+            .padding(.horizontal)
+            .padding(.vertical, Constants.FriendsView.pickerViewVerticalPadding)
+            .background(Color(Colors.primary))
         }
-        .pickerStyle(.segmented)
-        .padding(.horizontal)
-        .padding(.vertical, Constants.FriendsView.pickerViewVerticalPadding)
-        .background(Color(Colors.primary))
+    }
+    
+    var toolbarButton: some View {
+        Button {
+            if selectedTab == 0 {
+                isShowingAddFriend = true
+            } else {
+                isShowingCreateGroup = true
+            }
+        } label: {
+            Image(systemName: "plus")
+        }
     }
 }
-
 //#Preview {
 //    FriendsView()
 //        .environmentObject(NavigationState())
