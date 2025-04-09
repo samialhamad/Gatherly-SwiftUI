@@ -11,7 +11,7 @@ import Combine
 
 class LocationSearchViewModel: NSObject, ObservableObject, MKLocalSearchCompleterDelegate {
     private var searchCompleter: MKLocalSearchCompleter
-
+    
     @Published var queryFragment: String = "" {
         didSet {
             searchCompleter.queryFragment = queryFragment
@@ -19,7 +19,7 @@ class LocationSearchViewModel: NSObject, ObservableObject, MKLocalSearchComplete
     }
     
     @Published var suggestions: [MKLocalSearchCompletion] = []
-        
+    
     override init() {
         searchCompleter = MKLocalSearchCompleter()
         super.init()
@@ -51,9 +51,11 @@ class LocationSearchViewModel: NSObject, ObservableObject, MKLocalSearchComplete
                 return
             }
             let coordinate = mapItem.placemark.coordinate
-            let location = Location(latitude: coordinate.latitude,
+            let location = Location(address: mapItem.placemark.title,
+                                    latitude: coordinate.latitude,
                                     longitude: coordinate.longitude,
                                     name: mapItem.name)
+            
             completionHandler(location)
         }
     }
