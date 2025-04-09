@@ -13,35 +13,55 @@ struct EventRow: View {
     
     var body: some View {
         HStack {
-            Image(systemName: "calendar.circle")
-                .font(.largeTitle)
+            iconView
+            eventInfoView
+            Spacer()
+            timeAndDisclosureView
+        }
+        .padding(.vertical, Constants.EventRow.topPadding)
+    }
+}
+
+private extension EventRow {
+    
+    //MARK: - Subviews
+    
+    var iconView: some View {
+        Image(systemName: "calendar.circle")
+            .font(.largeTitle)
+            .foregroundColor(Color(Colors.primary))
+    }
+    
+    var eventInfoView: some View {
+        VStack(alignment: .leading) {
+            Text(event.title ?? "Untitled Event")
+                .font(.headline)
                 .foregroundColor(Color(Colors.primary))
             
-            VStack(alignment: .leading) {
-                Text(event.title ?? "Untitled Event")
-                    .font(.headline)
-                    .foregroundColor(Color(Colors.primary))
-                
-                Text(event.description ?? "No description")
-                    .font(.subheadline)
-                    .foregroundColor(.gray)
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-            }
-            
-            Spacer()
-            
-            Text(event.startTimestamp != nil ? formattedTime(event.startTimestamp!) : "")
+            Text(event.description ?? "No description")
                 .font(.subheadline)
                 .foregroundColor(.gray)
+                .lineLimit(1)
+                .truncationMode(.tail)
+        }
+    }
+    
+    var timeAndDisclosureView: some View {
+        HStack(spacing: Constants.EventRow.timeAndDisclosureSpacing) {
+            if let start = event.startTimestamp {
+                Text(formattedTime(start))
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }
             
             if showDisclosure {
                 Image(systemName: "chevron.right")
                     .foregroundColor(Color(Colors.primary))
             }
         }
-        .padding(.vertical, Constants.EventRow.topPadding)
     }
+    
+    //MARK: - Funcs
     
     func formattedTime(_ timestamp: Int) -> String {
         let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
