@@ -18,13 +18,8 @@ struct AddFriendView: View {
                 
                 if !viewModel.searchText.trimmingCharacters(in: .whitespaces).isEmpty {
                     List(viewModel.filteredUsers, id: \.id) { user in
-                        HStack {
+                        NavigationLink(destination: ProfileDetailView(user: user)) {
                             ProfileRow(user: user)
-                            Spacer()
-                            Button("Add") {
-                                viewModel.sendFriendRequest(to: user)
-                            }
-                            .buttonStyle(.borderedProminent)
                         }
                     }
                     .listStyle(.plain)
