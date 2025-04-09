@@ -7,6 +7,12 @@
 
 import Contacts
 
+// Represents a single contact from the device's address book
+struct SyncedContact: Hashable, Equatable {
+    let fullName: String
+    let phoneNumber: String
+}
+
 class ContactSyncManager {
     static let shared = ContactSyncManager()
     private init() {}
