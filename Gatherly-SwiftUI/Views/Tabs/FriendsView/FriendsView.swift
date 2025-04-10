@@ -12,6 +12,7 @@ struct FriendsView: View {
     private let tabTitles = ["Friends", "Groups"]
     
     @Binding var groups: [UserGroup]
+    @Binding var users: [User]
     @State private var isShowingAddFriend = false
     @State private var isShowingCreateGroup = false
     @State private var selectedTab = 0
@@ -39,7 +40,7 @@ struct FriendsView: View {
             .sheet(isPresented: $isShowingAddFriend) {
                 AddFriendView(viewModel: AddFriendViewModel(
                     currentUser: currentUser,
-                    allUsers: SampleData.sampleUsers,
+                    allUsers: users,
                     syncedContacts: viewModel.syncedContacts
                 ))
             }
