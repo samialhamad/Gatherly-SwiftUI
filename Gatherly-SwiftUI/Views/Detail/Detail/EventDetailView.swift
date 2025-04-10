@@ -159,12 +159,7 @@ private extension EventDetailView {
                     .actionSheet(isPresented: $showMapOptions) {
                         ActionSheet(
                             title: Text("Open in Maps"),
-                            buttons: viewModel.mapOptions(
-                                for: location,
-                                showAppleMaps: { viewModel.openInAppleMaps(latitude: location.latitude, longitude: location.longitude, name: location.name) },
-                                showGoogleMaps: { viewModel.openInGoogleMaps(latitude: location.latitude, longitude: location.longitude) },
-                                showWaze: { viewModel.openInWaze(latitude: location.latitude, longitude: location.longitude) }
-                            )
+                            buttons: viewModel.mapOptions(for: location)
                         )
                     }
                 }
