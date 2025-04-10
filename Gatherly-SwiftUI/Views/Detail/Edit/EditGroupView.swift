@@ -14,46 +14,38 @@ struct EditGroupView: View {
     let onSave: (UserGroup) -> Void
     let onCancel: () -> Void
     let onDelete: (UserGroup) -> Void
-
+    
     @State private var showingDeleteAlert = false
-
+    
     var body: some View {
         NavigationStack {
             Form {
                 Section(header: Text("Group Name")) {
                     TextField("Enter group name", text: $viewModel.groupName)
                 }
-
                 ImagePicker(
                     title: "Group Image",
                     imageHeight: Constants.CreateGroupView.groupImageHeight,
                     maskShape: .circle,
                     selectedImage: $viewModel.groupImage
                 )
-
                 ImagePicker(
                     title: "Banner Image",
                     imageHeight: Constants.CreateGroupView.groupBannerImageHeight,
                     maskShape: .rectangle,
                     selectedImage: $viewModel.bannerImage
                 )
-
                 EventMembersSection(
                     header: "Friends",
                     allUsers: allUsers,
                     plannerID: viewModel.leaderID,
                     selectedMemberIDs: $viewModel.selectedMemberIDs
                 )
-
                 saveAndDeleteSection
             }
             .navigationTitle("Edit Group")
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        onCancel()
-                    }
-                }
+                cancelToolbarButton
             }
             .alert("Delete Group?", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
@@ -71,18 +63,15 @@ struct EditGroupView: View {
 
 private extension EditGroupView {
     
-    //MARK: - Computed vars
+    // MARK: - Subviews
     
-    private var allFriends: [User] {
-        guard let friendIDs = currentUser.friendIDs else {
-            return []
-        }
-        return SampleData.sampleUsers.filter { user in
-            friendIDs.contains(user.id ?? -1)
+    var cancelToolbarButton: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarLeading) {
+            Button("Cancel") {
+                onCancel()
+            }
         }
     }
-    
-    // MARK: - Subviews
     
     var saveAndDeleteSection: some View {
         Section {
@@ -92,11 +81,22 @@ private extension EditGroupView {
             }
             .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.primary))
             .disabled(viewModel.isFormEmpty)
-
+            
             Button("Delete") {
                 showingDeleteAlert = true
             }
             .foregroundColor(.red)
+        }
+    }
+    
+    //MARK: - Computed vars
+    
+    private var allFriends: [User] {
+        guard let friendIDs = currentUser.friendIDs else {
+            return []
+        }
+        return SampleData.sampleUsers.filter { user in
+            friendIDs.contains(user.id ?? -1)
         }
     }
 }
