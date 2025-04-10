@@ -58,11 +58,7 @@ struct EditEventView: View {
             }
             .navigationTitle("Edit Event")
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button("Cancel") {
-                        onCancel()
-                    }
-                }
+                cancelToolbarButton
             }
             .alert("Delete Event?", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
@@ -77,9 +73,18 @@ struct EditEventView: View {
     }
 }
 
-// MARK: - Subviews
-
 private extension EditEventView {
+    
+    // MARK: - Subviews
+
+    var cancelToolbarButton: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarLeading) {
+            Button("Cancel") {
+                onCancel()
+            }
+        }
+    }
+    
     var saveAndDeleteSection: some View {
         Section {
             Button("Save") {
