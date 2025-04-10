@@ -146,10 +146,14 @@ private extension EventDetailView {
                 .cornerRadius(Constants.EventDetailView.eventMapPreviewCornerRadius)
                 
                 if let address = location.address {
-                    Text(address)
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                        .padding(.horizontal, 4)
+                    Button(action: {
+                        openInMaps(latitude: location.latitude, longitude: location.longitude, name: location.name)
+                    }) {
+                        Text(address)
+                            .foregroundColor(Color(Colors.primary))
+                            .padding(.horizontal, Constants.EventDetailView.eventMapPreviewButtonPadding)
+                    }
+                    .buttonStyle(PlainButtonStyle())
                 }
             } else {
                 EmptyView()
@@ -199,9 +203,20 @@ private extension EventDetailView {
     }
 }
 
-// MARK: - Computed Vars
-
 private extension EventDetailView {
+    
+    // MARK: - Functions
+    
+    func openInMaps(latitude: Double, longitude: Double, name: String?) {
+        let encodedName = name?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        let urlString = "http://maps.apple.com/?q=\(encodedName)&ll=\(latitude),\(longitude)"
+        if let url = URL(string: urlString) {
+            UIApplication.shared.open(url)
+        }
+    }
+    
+    // MARK: - Computed Vars
+    
     var planner: User? {
         guard let plannerID = event.plannerID else {
             return nil
