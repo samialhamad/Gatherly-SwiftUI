@@ -52,9 +52,13 @@ struct ContentView: View {
         .task {
             ContactSyncManager.shared.fetchContacts { contacts in
                 let existingPhones = Set(users.compactMap { $0.phone?.filter(\.isWholeNumber) })
+                
                 let newUsers: [User] = contacts.enumerated().compactMap { index, contact in
                     let cleaned = contact.phoneNumber.filter(\.isWholeNumber)
-                    guard !existingPhones.contains(cleaned) else { return nil }
+                    guard !existingPhones.contains(cleaned) else {
+                        return nil
+                    }
+                    
                     return User(from: contact, id: 1000 + index) // unique test IDs
                 }
                 
