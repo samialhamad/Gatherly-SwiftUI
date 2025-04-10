@@ -11,6 +11,8 @@ struct ProfileDetailView: View {
     let user: User
     let currentUser: User = SampleData.sampleUsers[0] // replace with actual logic
     
+    @State private var showingActionSheet = false
+    
     var body: some View {
         ScrollView {
             VStack {
@@ -22,9 +24,18 @@ struct ProfileDetailView: View {
         .navigationTitle("\(user.firstName ?? "") \(user.lastName ?? "")")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                menuButton
+            actionSheetButton
+        }
+        .confirmationDialog("Options", isPresented: $showingActionSheet, titleVisibility: .visible) {
+            Button("Report", role: .destructive) {
+                // handle report
             }
+            if isFriend {
+                Button("Remove Friend", role: .destructive) {
+                    // handle remove friend
+                }
+            }
+            Button("Cancel", role: .cancel) {}
         }
     }
 }
@@ -68,17 +79,10 @@ private extension ProfileDetailView {
         .padding(.horizontal, Constants.ProfileDetailView.friendButtonHorizontalPadding)
     }
     
-    var menuButton: some View {
-        Menu {
-            Button("Report") {
-                // handle report
-            }
-            if isFriend {
-                Button("Remove Friend", role: .destructive) {
-                    // handle remove
-                }
-            }
-        } label: {
+    var actionSheetButton: some View {
+        Button(action: {
+            showingActionSheet = true
+        }) {
             Image(systemName: "ellipsis")
         }
     }
