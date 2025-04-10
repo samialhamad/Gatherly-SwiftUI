@@ -17,6 +17,8 @@ struct EventDetailView: View {
     @EnvironmentObject var navigationState: NavigationState
     @Environment(\.dismiss) var dismiss
     @State private var isShowingEditView = false
+    @State private var showMapOptions = false
+    @StateObject private var viewModel = EventDetailViewModel()
     
     var body: some View {
         ScrollView {
@@ -147,13 +149,24 @@ private extension EventDetailView {
                 
                 if let address = location.address {
                     Button(action: {
-                        openInMaps(latitude: location.latitude, longitude: location.longitude, name: location.name)
+                        showMapOptions = true
                     }) {
                         Text(address)
                             .foregroundColor(Color(Colors.primary))
                             .padding(.horizontal, Constants.EventDetailView.eventMapPreviewButtonPadding)
                     }
                     .buttonStyle(PlainButtonStyle())
+                    .actionSheet(isPresented: $showMapOptions) {
+                        ActionSheet(
+                            title: Text("Open in Maps"),
+                            buttons: viewModel.mapOptions(
+                                for: location,
+                                showAppleMaps: { viewModel.openInAppleMaps(latitude: location.latitude, longitude: location.longitude, name: location.name) },
+                                showGoogleMaps: { viewModel.openInGoogleMaps(latitude: location.latitude, longitude: location.longitude) },
+                                showWaze: { viewModel.openInWaze(latitude: location.latitude, longitude: location.longitude) }
+                            )
+                        )
+                    }
                 }
             } else {
                 EmptyView()
@@ -204,16 +217,6 @@ private extension EventDetailView {
 }
 
 private extension EventDetailView {
-    
-    // MARK: - Functions
-    
-    func openInMaps(latitude: Double, longitude: Double, name: String?) {
-        let encodedName = name?.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        let urlString = "http://maps.apple.com/?q=\(encodedName)&ll=\(latitude),\(longitude)"
-        if let url = URL(string: urlString) {
-            UIApplication.shared.open(url)
-        }
-    }
     
     // MARK: - Computed Vars
     
