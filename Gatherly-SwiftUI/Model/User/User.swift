@@ -34,3 +34,20 @@ struct User: Equatable, Hashable {
         return !(groupIDs?.isEmpty ?? true)
     }
 }
+
+extension User {
+    init(from syncedContact: SyncedContact, id: Int) {
+        self.init(
+            createdTimestamp: Int(Date().timeIntervalSince1970),
+            deviceToken: nil,
+            email: nil,
+            eventIDs: [],
+            firstName: syncedContact.fullName.components(separatedBy: " ").first,
+            friendIDs: [],
+            id: id,
+            isEmailEnabled: false,
+            lastName: syncedContact.fullName.components(separatedBy: " ").dropFirst().joined(separator: " "),
+            phone: syncedContact.phoneNumber
+        )
+    }
+}
