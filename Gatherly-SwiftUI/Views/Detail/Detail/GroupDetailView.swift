@@ -18,25 +18,18 @@ struct GroupDetailView: View {
     
     var body: some View {
         ScrollView {
-            VStack {
+            VStack(spacing: Constants.GroupDetailView.vstackSpacing) {
                 AvatarHeaderView(
                     group: group,
                     profileImage: profileImage,
                     bannerImage: bannerImage
                 )
                 
-                VStack(spacing: Constants.GroupDetailView.vstackSpacing) {
-                    Text("Leader ID: \(group.leaderID)")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                    
-                    Text("\(group.memberIDs.count) members")
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                }
+                groupLeaderAndMembersView
                 
                 Spacer()
             }
+            .padding(.top)
         }
         .navigationTitle(group.name)
         .toolbar {
@@ -78,20 +71,31 @@ private extension GroupDetailView {
     
     // MARK: - Subviews
     
-    var profileImage: UIImage? {
-        guard let imageName = group.imageName else {
-            return nil
+    var groupLeaderAndMembersView: some View {
+        Group {
+            if let leader = SampleData.sampleUsers.first(where: { $0.id == group.leaderID }) {
+                Text("Leader")
+                    .font(.headline)
+                
+                NavigationLink(destination: ProfileDetailView(user: leader)) {
+                    ProfileRow(user: leader)
+                }
+            }
+            
+            if !memberUsers.isEmpty {
+                Text("Members")
+                    .font(.headline)
+                
+                ForEach(memberUsers, id: \.id) { user in
+                    NavigationLink(destination: ProfileDetailView(user: user)) {
+                        ProfileRow(user: user)
+                    }
+                }
+            }
         }
-        
-        return ImageUtility.loadImageFromDocuments(named: imageName)
-    }
-    
-    var bannerImage: UIImage? {
-        guard let bannerName = group.bannerImageName else {
-            return nil
-        }
-        
-        return ImageUtility.loadImageFromDocuments(named: bannerName)
+        .foregroundColor(.primary)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.horizontal)
     }
     
     var toolbarButton: some View {
@@ -116,6 +120,26 @@ private extension GroupDetailView {
     
     var isLeader: Bool {
         group.leaderID == currentUser.id
+    }
+    
+    var profileImage: UIImage? {
+        guard let imageName = group.imageName else {
+            return nil
+        }
+        
+        return ImageUtility.loadImageFromDocuments(named: imageName)
+    }
+    
+    var bannerImage: UIImage? {
+        guard let bannerName = group.bannerImageName else {
+            return nil
+        }
+        
+        return ImageUtility.loadImageFromDocuments(named: bannerName)
+    }
+    
+    var memberUsers: [User] {
+        SampleData.sampleUsers.filter { group.memberIDs.contains($0.id ?? -1) }
     }
     
     // MARK: - Functions
