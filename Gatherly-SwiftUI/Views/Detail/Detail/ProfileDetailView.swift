@@ -11,7 +11,7 @@ struct ProfileDetailView: View {
     let user: User
     let currentUser: User = SampleData.sampleUsers[0] // replace with actual logic
     
-    @State private var showingActionSheet = false
+    @State private var isShowingActionSheet = false
     
     var body: some View {
         ScrollView {
@@ -26,7 +26,7 @@ struct ProfileDetailView: View {
         .toolbar {
             actionSheetButton
         }
-        .confirmationDialog("Options", isPresented: $showingActionSheet, titleVisibility: .visible) {
+        .confirmationDialog("Options", isPresented: $isShowingActionSheet, titleVisibility: .visible) {
             Button("Report", role: .destructive) {
                 // handle report
             }
@@ -81,7 +81,7 @@ private extension ProfileDetailView {
     
     var actionSheetButton: some View {
         Button(action: {
-            showingActionSheet = true
+            isShowingActionSheet = true
         }) {
             Image(systemName: "ellipsis")
         }
