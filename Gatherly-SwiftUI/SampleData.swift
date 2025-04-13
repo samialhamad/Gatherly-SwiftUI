@@ -307,7 +307,7 @@ struct SampleData {
         UserGroup(
             id: 1,
             name: "Group Sami Leads",
-            memberIDs: [1, 2, 3],
+            memberIDs: [2, 3],
             leaderID: 1,
             messages: [
                 Message(id: 1, userID: 1, message: "Welcome to the group!", read: true)
@@ -316,7 +316,7 @@ struct SampleData {
         UserGroup(
             id: 2,
             name: "Group I'm a Member in",
-            memberIDs: [1, 4, 5],
+            memberIDs: [1, 5],
             leaderID: 4,
             messages: [
                 Message(id: 2, userID: 4, message: "Let's plan an event!", read: false)
