@@ -13,6 +13,7 @@ struct GroupDetailView: View {
     
     @Binding var groups: [UserGroup]
     @State private var isShowingEditView = false
+    @State private var isShowingActionSheet = false
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -39,13 +40,15 @@ struct GroupDetailView: View {
         }
         .navigationTitle(group.name)
         .toolbar {
-            if group.leaderID == currentUser.id {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Edit") {
-                        isShowingEditView = true
-                    }
-                }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                toolbarButton
             }
+        }
+        .confirmationDialog("Options", isPresented: $isShowingActionSheet, titleVisibility: .visible) {
+            Button("Leave Group", role: .destructive) {
+                leaveGroup()
+            }
+            Button("Cancel", role: .cancel) {}
         }
         .sheet(isPresented: $isShowingEditView) {
             EditGroupView(
@@ -72,6 +75,9 @@ struct GroupDetailView: View {
 }
 
 private extension GroupDetailView {
+    
+    // MARK: - Subviews
+    
     var profileImage: UIImage? {
         guard let imageName = group.imageName else {
             return nil
@@ -86,6 +92,43 @@ private extension GroupDetailView {
         }
         
         return ImageUtility.loadImageFromDocuments(named: bannerName)
+    }
+    
+    var toolbarButton: some View {
+        if isLeader {
+            return AnyView(
+                Button("Edit") {
+                    isShowingEditView = true
+                }
+            )
+        } else {
+            return AnyView(
+                Button(action: {
+                    isShowingActionSheet = true
+                }) {
+                    Image(systemName: "ellipsis")
+                }
+            )
+        }
+    }
+    
+    // MARK: - Computed Vars
+    
+    var isLeader: Bool {
+        group.leaderID == currentUser.id
+    }
+    
+    // MARK: - Functions
+    
+    //placeholder, implement in view model
+    func leaveGroup() {
+        guard let currentID = currentUser.id else { return }
+        var updatedGroup = group
+        updatedGroup.memberIDs.removeAll { $0 == currentID }
+        if let index = groups.firstIndex(where: { $0.id == group.id }) {
+            groups[index] = updatedGroup
+        }
+        dismiss()
     }
 }
 
