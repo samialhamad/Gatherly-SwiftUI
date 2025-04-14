@@ -8,6 +8,11 @@
 import SwiftUI
 
 struct Constants {
+    struct ActivityIndicator {
+        static let scaleEffect: CGFloat = 1.5
+        static let vstackSpacing: CGFloat = 16
+    }
+    
     struct AlphabetIndexView {
         static let backgroundOpacity: Double = 0.7
         static let vstackCornerRadius: CGFloat = 8
