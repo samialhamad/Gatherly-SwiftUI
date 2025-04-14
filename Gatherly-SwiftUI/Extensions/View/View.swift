@@ -20,10 +20,6 @@ extension View {
         }
     }
     
-    func removeActivityIndicator() -> some View {
-        self // just exists for symmetry
-    }
-    
     // MARK: - Toolbar
     
     func applyGatherlyToolbarStyle() -> some View {
