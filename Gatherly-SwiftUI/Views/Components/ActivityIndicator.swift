@@ -23,7 +23,7 @@ struct ActivityIndicator: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(Colors.secondary))
+        .background(.white)
         .edgesIgnoringSafeArea(.all)
     }
 }
