@@ -39,6 +39,11 @@ struct Constants {
         static let bottomPadding: CGFloat = 20
     }
     
+    struct ContentView {
+        static let calendarViewLoadingString: String = "Getting your events!"
+        static let friendsViewLoadingString: String = "Finding your friends!"
+    }
+    
     struct CreateEventView {
         static let bannerImageHeight: CGFloat = 150
     }
