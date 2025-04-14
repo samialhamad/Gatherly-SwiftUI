@@ -12,13 +12,11 @@ struct ActivityIndicator: View {
     
     var body: some View {
         VStack(spacing: Constants.ActivityIndicator.vstackSpacing) {
-            ProgressView()
-                .progressViewStyle(CircularProgressViewStyle(tint: Color(Colors.primary)))
-                .scaleEffect(Constants.ActivityIndicator.scaleEffect)
+            DotsLoader()
             
             if let message = message {
                 Text(message)
-                    .font(.body)
+                    .font(.headline)
                     .foregroundColor(Color(Colors.primary))
             }
         }
