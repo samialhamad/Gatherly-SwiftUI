@@ -6,17 +6,16 @@
 //
 
 import SwiftUI
+import Combine
 
 struct ContentView: View {
     @StateObject var navigationState = NavigationState()
-    @State private var events: [Event] = SampleData.sampleEvents
-    @State private var groups: [UserGroup] = SampleData.sampleGroups
-    @State private var users: [User] = SampleData.sampleUsers
+    @StateObject private var viewModel = ContentViewModel()
     
     var body: some View {
         TabView(selection: $navigationState.selectedTab) {
             NavigationStack {
-                CalendarView(events: $events, users: users)
+                CalendarView(events: $viewModel.events, users: viewModel.users)
                     .environmentObject(navigationState)
             }
             .tabItem {
@@ -25,7 +24,7 @@ struct ContentView: View {
             .tag(0)
             
             NavigationStack {
-                CreateEventView(allUsers: users, events: $events)
+                CreateEventView(allUsers: viewModel.users, events: $viewModel.events)
                     .environmentObject(navigationState)
                     .navigationTitle("Create Event")
             }
@@ -35,7 +34,7 @@ struct ContentView: View {
             .tag(1)
             
             NavigationStack {
-                FriendsView(groups: $groups, users: $users)
+                FriendsView(groups: $viewModel.groups, users: $viewModel.users)
                     .environmentObject(navigationState)
             }
             .tabItem {
@@ -50,20 +49,7 @@ struct ContentView: View {
                 .tag(3)
         }
         .task {
-            ContactSyncManager.shared.fetchContacts { contacts in
-                let existingPhones = Set(users.compactMap { $0.phone?.filter(\.isWholeNumber) })
-                
-                let newUsers: [User] = contacts.enumerated().compactMap { index, contact in
-                    let cleaned = contact.phoneNumber.filter(\.isWholeNumber)
-                    guard !existingPhones.contains(cleaned) else {
-                        return nil
-                    }
-                    
-                    return User(from: contact, id: 1000 + index) // unique test IDs
-                }
-                
-                users.append(contentsOf: newUsers)
-            }
+            viewModel.loadAllData()
         }
     }
 }
