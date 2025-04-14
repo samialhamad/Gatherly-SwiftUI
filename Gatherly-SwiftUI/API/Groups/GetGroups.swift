@@ -11,7 +11,7 @@ import Combine
 extension GatherlyAPI {
     static func getGroups() -> AnyPublisher<[UserGroup], Never> {
         Just(SampleData.sampleGroups)
-            .delay(for: .seconds(1), scheduler: DispatchQueue.main)
+            .delay(for: .seconds(5), scheduler: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 }
