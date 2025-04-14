@@ -11,11 +11,11 @@ extension View {
     
     // MARK: - Activity Indicator
     
-    func addActivityIndicator(isPresented: Bool) -> some View {
+    func addActivityIndicator(isPresented: Bool, message: String? = nil) -> some View {
         ZStack {
             self
             if isPresented {
-                ActivityIndicator()
+                ActivityIndicator(message: message)
             }
         }
     }
