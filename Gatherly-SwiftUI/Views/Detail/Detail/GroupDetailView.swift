@@ -29,7 +29,6 @@ struct GroupDetailView: View {
                 
                 Spacer()
             }
-            .padding(.top)
         }
         .navigationTitle(group.name)
         .toolbar {
