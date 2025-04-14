@@ -8,6 +8,24 @@
 import SwiftUI
 
 extension View {
+    
+    // MARK: - Activity Indicator
+    
+    func addActivityIndicator(isPresented: Bool) -> some View {
+        ZStack {
+            self
+            if isPresented {
+                ActivityIndicator()
+            }
+        }
+    }
+    
+    func removeActivityIndicator() -> some View {
+        self // just exists for symmetry
+    }
+    
+    // MARK: - Toolbar
+    
     func applyGatherlyToolbarStyle() -> some View {
         self.toolbarColor(Color(Colors.secondary))
     }
@@ -16,13 +34,19 @@ extension View {
         self.tint(color)
     }
     
+    // MARK: - Text
+    
     func centerText() -> some View {
         self.modifier(CenteredTextModifier())
     }
     
+    // MARK: - Disclosure Icon
+    
     func addDisclosureIcon(color: Color = .gray) -> some View {
         self.modifier(DisclosureIconModifier())
     }
+    
+    // MARK: - Keyboard
     
     func hideKeyboard() {
         UIApplication.shared.sendAction(
