@@ -21,6 +21,7 @@ struct Constants {
     
     struct AvatarHeaderView {
         static let avatarBorderWidth: CGFloat = 4
+        static let bannerImageTopPadding: CGFloat = 32
         static let bottomPadding: CGFloat = 50
         static let offset: CGFloat = 50
         static let rectangleFrameHeight: CGFloat = 200
