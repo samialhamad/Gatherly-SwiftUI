@@ -19,6 +19,30 @@ final class ContentViewModel: ObservableObject {
     
     func loadAllData() {
         isLoading = true
+        pendingRequests = 0 // no API for now
+
+        self.users = UserDefaultsManager.loadUsers()
+        self.events = UserDefaultsManager.loadEvents()
+        self.groups = UserDefaultsManager.loadGroups()
+
+        // fallback to sample data on first launch
+        if users.isEmpty {
+            self.users = SampleData.sampleUsers
+        }
+        if events.isEmpty {
+            self.events = SampleData.sampleEvents
+        }
+        if groups.isEmpty {
+            self.groups = SampleData.sampleGroups
+        }
+
+        isLoading = false
+    }
+
+    func saveAllData() {
+        UserDefaultsManager.saveUsers(users)
+        UserDefaultsManager.saveEvents(events)
+        UserDefaultsManager.saveGroups(groups)
     }
     
     private func markRequestFinished() {
