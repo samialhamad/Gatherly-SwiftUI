@@ -38,7 +38,7 @@ class ContactSyncManager {
                     try store.enumerateContacts(with: request) { contact, _ in
                         let fullName = "\(contact.givenName) \(contact.familyName)".trimmingCharacters(in: .whitespaces)
                         
-                        for number in contact.phoneNumbers {
+                        if let number = contact.phoneNumbers.first {
                             let raw = number.value.stringValue
                             let digits = raw.filter(\.isWholeNumber)
                             
