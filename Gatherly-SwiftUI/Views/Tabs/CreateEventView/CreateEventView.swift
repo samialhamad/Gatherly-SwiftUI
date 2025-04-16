@@ -72,6 +72,7 @@ private extension CreateEventView {
             Button(action: {
                 let newEvent = viewModel.createEvent(with: currentPlannerID)
                 events.append(newEvent)
+                UserDefaultsManager.saveEvents(events)
                 viewModel.clearFields()
                 navigationState.calendarSelectedDate = newEvent.date ?? Date()
                 navigationState.navigateToEvent = newEvent
