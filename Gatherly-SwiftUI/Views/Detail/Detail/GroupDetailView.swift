@@ -50,6 +50,7 @@ struct GroupDetailView: View {
                 onSave: { updatedGroup in
                     if let index = groups.firstIndex(where: { $0.id == updatedGroup.id }) {
                         groups[index] = updatedGroup
+                        UserDefaultsManager.saveGroups(groups)
                     }
                     isShowingEditView = false
                 },
@@ -58,6 +59,7 @@ struct GroupDetailView: View {
                 },
                 onDelete: { deletedGroup in
                     groups = GroupEditor.deleteGroup(from: groups, groupToDelete: deletedGroup)
+                    UserDefaultsManager.saveGroups(groups)
                     isShowingEditView = false
                     dismiss()
                 }

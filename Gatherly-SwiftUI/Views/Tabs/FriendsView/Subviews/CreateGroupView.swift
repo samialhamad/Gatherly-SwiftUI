@@ -77,6 +77,7 @@ private extension CreateGroupView {
             Button(action: {
                 let newGroup = viewModel.createGroup(leaderID: 1)
                 groups.append(newGroup)
+                UserDefaultsManager.saveGroups(groups)
                 dismiss()
             }) {
                 Text("Create")
