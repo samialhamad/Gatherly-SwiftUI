@@ -32,13 +32,12 @@ struct AvatarHeaderView: View {
     }
     
     var body: some View {
-        ZStack(alignment: .bottom) {
+        VStack(spacing: 0) {
             if bannerImage != nil {
                 bannerView
-            } else {
-                EmptyView()
+                    .frame(height: Constants.AvatarHeaderView.rectangleFrameHeight)
             }
-            
+
             AvatarView(
                 user: user,
                 group: group,
@@ -49,7 +48,7 @@ struct AvatarHeaderView: View {
                 borderWidth: Constants.AvatarHeaderView.avatarBorderWidth,
                 profileImage: profileImage
             )
-            .offset(y: Constants.AvatarHeaderView.offset)
+            .padding(.top, bannerImage == nil ? Constants.AvatarHeaderView.bannerImageTopPadding : -size / 2)
         }
         .padding(.bottom, Constants.AvatarHeaderView.bottomPadding)
     }
