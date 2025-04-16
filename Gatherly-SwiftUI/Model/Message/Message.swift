@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Message: Equatable, Hashable {
+struct Message: Codable, Equatable, Hashable {
     var id: Int?
     var eventID: Int?
     var timestamp: Int?

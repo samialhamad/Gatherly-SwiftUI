@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UserGroup: Identifiable, Equatable {
+struct UserGroup: Codable, Identifiable, Equatable {
     var id: Int
     var name: String
     var memberIDs: [Int]

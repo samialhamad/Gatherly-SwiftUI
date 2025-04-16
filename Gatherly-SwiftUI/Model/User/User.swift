@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct User: Equatable, Hashable {
+struct User: Codable, Equatable, Hashable {
     var createdTimestamp: Int?
     var deviceToken: String?
     var email: String?
