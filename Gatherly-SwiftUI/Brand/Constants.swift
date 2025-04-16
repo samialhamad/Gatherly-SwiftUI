@@ -111,7 +111,7 @@ struct Constants {
     
     struct GroupDetailView {
         static let topPadding: CGFloat = 10
-        static let vstackSpacing: CGFloat = 8
+        static let vstackSpacing: CGFloat = 4
     }
     
     struct GroupRow {
