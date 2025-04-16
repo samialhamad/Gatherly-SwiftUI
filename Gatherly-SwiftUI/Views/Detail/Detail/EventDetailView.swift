@@ -52,7 +52,10 @@ struct EventDetailView: View {
                 viewModel: EditEventViewModel(event: event),
                 allUsers: users,
                 onSave: { updatedEvent in
-                    onSave? (updatedEvent)
+                    if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
+                        events[index] = updatedEvent
+                        UserDefaultsManager.saveEvents(events)
+                    }
                     isShowingEditView = false
                 },
                 onCancel: {
@@ -61,6 +64,7 @@ struct EventDetailView: View {
                 onDelete: { eventToDelete in
                     let (updatedEvents, newSelectedDate) = EventEditor.deleteEvent(from: events, eventToDelete: eventToDelete)
                     events = updatedEvents
+                    UserDefaultsManager.saveEvents(events)
                     navigationState.calendarSelectedDate = newSelectedDate
                     navigationState.navigateToEvent = nil
                     isShowingEditView = false
