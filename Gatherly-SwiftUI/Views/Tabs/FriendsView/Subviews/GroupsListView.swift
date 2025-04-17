@@ -8,9 +8,9 @@
 import SwiftUI
 
 struct GroupsListView: View {
-    let currentUser: User = SampleData.sampleUsers[0]
-    
     let currentUser: User
+    let users: [User]
+
     @Binding var groups: [UserGroup]
     @Binding var searchText: String
     
@@ -20,6 +20,7 @@ struct GroupsListView: View {
                 NavigationLink(destination: GroupDetailView(
                     group: group,
                     currentUser: currentUser,
+                    users: users,
                     groups: $groups
                 )) {
                     GroupRow(group: group)

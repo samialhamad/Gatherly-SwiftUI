@@ -10,6 +10,7 @@ import PhotosUI
 
 struct CreateGroupView: View {
     let currentUser: User
+    let users: [User]
     
     @Binding var groups: [UserGroup]
     @StateObject private var viewModel = CreateGroupViewModel()
@@ -65,7 +66,8 @@ private extension CreateGroupView {
         guard let friendIDs = currentUser.friendIDs else {
             return []
         }
-        return SampleData.sampleUsers.filter { user in
+        
+        return users.filter { user in
             friendIDs.contains(user.id ?? -1)
         }
     }
