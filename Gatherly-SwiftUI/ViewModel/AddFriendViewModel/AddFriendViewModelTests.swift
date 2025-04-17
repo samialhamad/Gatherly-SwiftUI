@@ -19,22 +19,18 @@ final class AddFriendViewModelTests: XCTestCase {
     ]
     
     func testFilteredUsers_EmptySearchText() {
-        let currentUser = User(friendIDs: [], id: 1)
-        
-        let viewModel = AddFriendViewModel(currentUser: currentUser, allUsers: sampleUsers)
-        
+        let viewModel = AddFriendViewModel(currentUserID: 1, allUsers: sampleUsers)
         viewModel.searchText = ""
+        
         let result = viewModel.filteredUsers
         
         XCTAssertTrue(result.isEmpty)
     }
     
     func testFilteredUsers_MatchingFirstName() {
-        let currentUser = User(friendIDs: [], id: 1)
-        let viewModel = AddFriendViewModel(currentUser: currentUser, allUsers: sampleUsers)
-        
-        
+        let viewModel = AddFriendViewModel(currentUserID: 1, allUsers: sampleUsers)
         viewModel.searchText = "bob"
+        
         let result = viewModel.filteredUsers
         
         XCTAssertEqual(result.count, 1)
@@ -42,10 +38,9 @@ final class AddFriendViewModelTests: XCTestCase {
     }
     
     func testFilteredUsers_MatchingLastName() {
-        let currentUser = User(friendIDs: [], id: 1)
-        let viewModel = AddFriendViewModel(currentUser: currentUser, allUsers: sampleUsers)
-        
+        let viewModel = AddFriendViewModel(currentUserID: 1, allUsers: sampleUsers)
         viewModel.searchText = "smith"
+        
         let result = viewModel.filteredUsers
         
         // Should match "Alice Smith" and "David Smith", but alice is currentUser so excluded
@@ -54,30 +49,27 @@ final class AddFriendViewModelTests: XCTestCase {
     }
     
     func testFilteredUsers_ExcludesCurrentUser() {
-        let currentUser = User(firstName: "Charlie", friendIDs: [], id: 3)
-        let viewModel = AddFriendViewModel(currentUser: currentUser, allUsers: sampleUsers)
-        
+        let viewModel = AddFriendViewModel(currentUserID: 1, allUsers: sampleUsers)
         viewModel.searchText = "charlie"
+        
         let result = viewModel.filteredUsers
         
         XCTAssertTrue(result.isEmpty)
     }
     
     func testFilteredUsers_ExcludesAlreadyFriends() {
-        let currentUser = User(friendIDs: [2], id: 1)
-        let viewModel = AddFriendViewModel(currentUser: currentUser, allUsers: sampleUsers)
-        
+        let viewModel = AddFriendViewModel(currentUserID: 1, allUsers: sampleUsers)
         viewModel.searchText = "bob"
+        
         let result = viewModel.filteredUsers
         
         XCTAssertTrue(result.isEmpty)
     }
     
     func testFilteredUsers_TrimsWhitespaceAndIsCaseInsensitive() {
-        let currentUser = User(friendIDs: [], id: 1)
-        let viewModel = AddFriendViewModel(currentUser: currentUser, allUsers: sampleUsers)
-        
+        let viewModel = AddFriendViewModel(currentUserID: 1, allUsers: sampleUsers)
         viewModel.searchText = "  DAVIS  "
+        
         let result = viewModel.filteredUsers
         
         XCTAssertEqual(result.count, 1)
