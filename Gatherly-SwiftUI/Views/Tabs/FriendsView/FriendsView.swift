@@ -109,7 +109,11 @@ private extension FriendsView {
     }
 }
 
-//#Preview {
-//    FriendsView()
-//        .environmentObject(NavigationState())
-//}
+#Preview {
+    FriendsView(
+        currentUser: SampleData.sampleUsers.first!,
+        groups: .constant(SampleData.sampleGroups),
+        users: .constant(SampleData.sampleUsers)
+    )
+    .environmentObject(NavigationState())
+}
