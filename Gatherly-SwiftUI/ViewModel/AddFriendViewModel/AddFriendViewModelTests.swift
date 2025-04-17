@@ -11,7 +11,7 @@ import XCTest
 final class AddFriendViewModelTests: XCTestCase {
     
     let sampleUsers: [User] = [
-        User(firstName: "Alice", id: 1, lastName: "Smith"),
+        User(firstName: "Alice", friendIDs: [2, 3], id: 1, lastName: "Smith"),
         User(firstName: "Bob", id: 2, lastName: "Johnson"),
         User(firstName: "Charlie", id: 3, lastName: "Brown"),
         User(firstName: "David", id: 4, lastName: "Smith"),
@@ -29,12 +29,12 @@ final class AddFriendViewModelTests: XCTestCase {
     
     func testFilteredUsers_MatchingFirstName() {
         let viewModel = AddFriendViewModel(currentUserID: 1, allUsers: sampleUsers)
-        viewModel.searchText = "bob"
+        viewModel.searchText = "eve"
         
         let result = viewModel.filteredUsers
         
         XCTAssertEqual(result.count, 1)
-        XCTAssertEqual(result.first?.firstName, "Bob")
+        XCTAssertEqual(result.first?.firstName, "Eve")
     }
     
     func testFilteredUsers_MatchingLastName() {
