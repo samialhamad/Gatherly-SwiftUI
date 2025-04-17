@@ -21,28 +21,14 @@ final class ContentViewModel: ObservableObject {
     private var pendingRequests = 0
     
     func loadAllData() {
-        isLoading = true
-        pendingRequests = 0 // no API for now
-
         self.users = UserDefaultsManager.loadUsers()
         self.events = UserDefaultsManager.loadEvents()
         self.groups = UserDefaultsManager.loadGroups()
-
-        // fallback to sample data on first launch
-        if users.isEmpty {
-            self.users = SampleData.sampleUsers
-        }
-        if events.isEmpty {
-            self.events = SampleData.sampleEvents
-        }
-        if groups.isEmpty {
-            self.groups = SampleData.sampleGroups
-        }
-        
         self.currentUser = users.first(where: { $0.id == 1 })
-        isLoading = false
+        
+        performMockAPILoad()
     }
-
+    
     func saveAllData() {
         UserDefaultsManager.saveUsers(users)
         UserDefaultsManager.saveEvents(events)
@@ -53,35 +39,35 @@ final class ContentViewModel: ObservableObject {
         guard !didSyncContacts else {
             return
         }
-
+        
         ContactSyncManager.shared.fetchContacts { contacts in
             var existingPhones = Set(self.users.compactMap { $0.phone?.filter(\.isWholeNumber) })
             var newUsers: [User] = []
             var newFriendIDs: [Int] = []
             var nextAvailableID = (self.users.map { $0.id ?? 0 }.max() ?? 999) + 1
-
+            
             for contact in contacts {
                 let cleaned = contact.phoneNumber.filter(\.isWholeNumber)
                 guard !existingPhones.contains(cleaned) else {
                     continue
                 }
-
+                
                 let newUser = User(from: contact, id: nextAvailableID)
                 newUsers.append(newUser)
                 newFriendIDs.append(nextAvailableID)
                 existingPhones.insert(cleaned)
                 nextAvailableID += 1
             }
-
+            
             self.users.append(contentsOf: newUsers)
-                        
+            
             if let currentIndex = self.users.firstIndex(where: { $0.id == currentUserID }) {
                 var currentUser = self.users[currentIndex]
                 var friendIDs = currentUser.friendIDs ?? []
-
+                
                 let uniqueNewFriendIDs = newFriendIDs.filter { !friendIDs.contains($0) }
                 friendIDs.append(contentsOf: uniqueNewFriendIDs)
-
+                
                 currentUser.friendIDs = Array(Set(friendIDs))
                 self.users[currentIndex] = currentUser
             } else {
@@ -99,7 +85,7 @@ final class ContentViewModel: ObservableObject {
                 )
                 self.users.insert(newCurrentUser, at: 0)
             }
-
+            
             UserDefaultsManager.saveUsers(self.users)
             self.didSyncContacts = true
         }
@@ -111,4 +97,38 @@ final class ContentViewModel: ObservableObject {
             isLoading = false
         }
     }
+    
+    private func performMockAPILoad() {
+        pendingRequests = 3
+        isLoading = true
+        
+        GatherlyAPI.getUsers()
+            .sink { [weak self] fetchedUsers in
+                guard let self = self else { return }
+                self.users = fetchedUsers
+                self.currentUser = fetchedUsers.first(where: { $0.id == 1 })
+                UserDefaultsManager.saveUsers(fetchedUsers)
+                self.markRequestFinished()
+            }
+            .store(in: &cancellables)
+        
+        GatherlyAPI.getEvents()
+            .sink { [weak self] fetchedEvents in
+                guard let self = self else { return }
+                self.events = fetchedEvents
+                UserDefaultsManager.saveEvents(fetchedEvents)
+                self.markRequestFinished()
+            }
+            .store(in: &cancellables)
+        
+        GatherlyAPI.getGroups()
+            .sink { [weak self] fetchedGroups in
+                guard let self = self else { return }
+                self.groups = fetchedGroups
+                UserDefaultsManager.saveGroups(fetchedGroups)
+                self.markRequestFinished()
+            }
+            .store(in: &cancellables)
+    }
+    
 }
