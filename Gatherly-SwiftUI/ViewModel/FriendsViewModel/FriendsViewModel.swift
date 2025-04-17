@@ -9,6 +9,7 @@ import Foundation
 import Contacts
 
 class FriendsViewModel: ObservableObject {
+    // No longer being used, contacts synced and added as friends via ContentViewModel & ContentView
     @Published var syncedContacts: [SyncedContact] = []
     @Published var didSyncContacts = false
 
