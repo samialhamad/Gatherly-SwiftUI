@@ -158,14 +158,11 @@ private extension GroupDetailView {
     }
 }
 
-//#Preview {
-//    GroupDetailView(group: UserGroup(
-//        id: 1,
-//        name: "Study Buddies",
-//        memberIDs: [1, 2, 3],
-//        leaderID: 1,
-//        messages: [
-//            Message(id: 1, userID: 1, message: "Hey team!", read: true)
-//        ]
-//    ))
-//}
+#Preview {
+    GroupDetailView(
+        group: SampleData.sampleGroups.first!,
+        currentUser: SampleData.sampleUsers.first!,
+        users: SampleData.sampleUsers,
+        groups: .constant(SampleData.sampleGroups)
+    )
+}
