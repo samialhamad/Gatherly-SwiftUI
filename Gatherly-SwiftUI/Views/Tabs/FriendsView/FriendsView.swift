@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct FriendsView: View {
-    let currentUser: User = SampleData.sampleUsers[0] // replace with actual logic
     private let tabTitles = ["Friends", "Groups"]
     
     @Binding var groups: [UserGroup]
@@ -17,7 +16,10 @@ struct FriendsView: View {
     @State private var isShowingCreateGroup = false
     @State private var selectedTab = 0
     @State private var searchText = ""
-    @StateObject private var viewModel = FriendsViewModel()
+    
+    var currentUser: User? {
+        users.first(where: { $0.id == 1 })
+    }
     
     var body: some View {
         NavigationStack {
@@ -26,7 +28,13 @@ struct FriendsView: View {
                 SearchBarView(searchText: $searchText)
                 
                 if selectedTab == 0 {
-                    FriendsListView(searchText: $searchText)
+                    if let currentUser = currentUser {
+                        FriendsListView(
+                            searchText: $searchText,
+                            currentUserID: currentUser.id ?? 1,
+                            users: users
+                        )
+                    }
                 } else {
                     GroupsListView(groups: $groups, searchText: $searchText)
                 }
@@ -38,18 +46,18 @@ struct FriendsView: View {
                 }
             }
             .sheet(isPresented: $isShowingAddFriend) {
-                AddFriendView(viewModel: AddFriendViewModel(
-                    currentUser: currentUser,
-                    allUsers: users,
-                    syncedContacts: viewModel.syncedContacts
-                ))
+                if let currentUser = currentUser {
+                    AddFriendView(viewModel: AddFriendViewModel(
+                        currentUserID: currentUser.id ?? 1,
+                        allUsers: users
+                    ))
+                }
             }
             .sheet(isPresented: $isShowingCreateGroup) {
-                CreateGroupView(currentUser: currentUser, groups: $groups)
+                if let currentUser = currentUser {
+                    CreateGroupView(currentUser: currentUser, groups: $groups)
+                }
             }
-        }
-        .task {
-            viewModel.syncContactsIfNeeded()
         }
         .keyboardDismissable()
     }
