@@ -12,7 +12,17 @@ struct FriendsListView: View {
     let users: [User]
     
     @Binding var searchText: String
-    @StateObject private var viewModel = FriendsListViewModel()
+    @StateObject private var viewModel: FriendsListViewModel
+    
+    init(searchText: Binding<String>, currentUserID: Int, users: [User]) {
+        _searchText = searchText
+        self.currentUserID = currentUserID
+        self.users = users
+        _viewModel = StateObject(wrappedValue: FriendsListViewModel(
+            currentUserID: currentUserID,
+            allUsers: users
+        ))
+    }
     
     var body: some View {
         ZStack(alignment: .trailing) {
