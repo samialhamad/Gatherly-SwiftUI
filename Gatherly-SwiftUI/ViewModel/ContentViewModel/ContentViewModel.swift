@@ -36,59 +36,67 @@ final class ContentViewModel: ObservableObject {
     }
     
     func syncContacts(currentUserID: Int = 1) {
-        guard !didSyncContacts else {
-            return
-        }
+        guard !didSyncContacts else { return }
         
         ContactSyncManager.shared.fetchContacts { contacts in
-            var existingPhones = Set(self.users.compactMap { $0.phone?.filter(\.isWholeNumber) })
-            var newUsers: [User] = []
-            var newFriendIDs: [Int] = []
-            var nextAvailableID = (self.users.map { $0.id ?? 0 }.max() ?? 999) + 1
-            
-            for contact in contacts {
-                let cleaned = contact.phoneNumber.filter(\.isWholeNumber)
-                guard !existingPhones.contains(cleaned) else {
-                    continue
-                }
-                
-                let newUser = User(from: contact, id: nextAvailableID)
-                newUsers.append(newUser)
-                newFriendIDs.append(nextAvailableID)
-                existingPhones.insert(cleaned)
-                nextAvailableID += 1
-            }
-            
-            self.users.append(contentsOf: newUsers)
-            
-            if let currentIndex = self.users.firstIndex(where: { $0.id == currentUserID }) {
-                var currentUser = self.users[currentIndex]
-                var friendIDs = currentUser.friendIDs ?? []
-                
-                let uniqueNewFriendIDs = newFriendIDs.filter { !friendIDs.contains($0) }
-                friendIDs.append(contentsOf: uniqueNewFriendIDs)
-                
-                currentUser.friendIDs = Array(Set(friendIDs))
-                self.users[currentIndex] = currentUser
-            } else {
-                let newCurrentUser = User(
-                    createdTimestamp: Int(Date().timestamp),
-                    deviceToken: nil,
-                    email: nil,
-                    eventIDs: [],
-                    firstName: "You",
-                    friendIDs: newFriendIDs,
-                    id: currentUserID,
-                    isEmailEnabled: false,
-                    lastName: "",
-                    phone: nil
-                )
-                self.users.insert(newCurrentUser, at: 0)
-            }
-            
-            UserDefaultsManager.saveUsers(self.users)
-            self.didSyncContacts = true
+            let (newUsers, newFriendIDs) = self.generateUsersFromContacts(contacts)
+            self.appendUsersAndUpdateFriends(newUsers: newUsers, newFriendIDs: newFriendIDs, currentUserID: currentUserID)
         }
+    }
+    
+    // MARK: - Helper Functions
+    
+    private func appendUsersAndUpdateFriends(newUsers: [User], newFriendIDs: [Int], currentUserID: Int) {
+        self.users.append(contentsOf: newUsers)
+        
+        if let currentIndex = self.users.firstIndex(where: { $0.id == currentUserID }) {
+            var currentUser = self.users[currentIndex]
+            var friendIDs = currentUser.friendIDs ?? []
+            
+            let uniqueNewFriendIDs = newFriendIDs.filter { !friendIDs.contains($0) }
+            friendIDs.append(contentsOf: uniqueNewFriendIDs)
+            
+            currentUser.friendIDs = Array(Set(friendIDs))
+            self.users[currentIndex] = currentUser
+        } else {
+            let newCurrentUser = User(
+                createdTimestamp: Int(Date().timestamp),
+                deviceToken: nil,
+                email: nil,
+                eventIDs: [],
+                firstName: "You",
+                friendIDs: newFriendIDs,
+                id: currentUserID,
+                isEmailEnabled: false,
+                lastName: "",
+                phone: nil
+            )
+            self.users.insert(newCurrentUser, at: 0)
+        }
+        
+        UserDefaultsManager.saveUsers(self.users)
+        self.didSyncContacts = true
+    }
+    
+    
+    private func generateUsersFromContacts(_ contacts: [SyncedContact]) -> ([User], [Int]) {
+        var existingPhones = Set(self.users.compactMap { $0.phone?.filter(\.isWholeNumber) })
+        var newUsers: [User] = []
+        var newFriendIDs: [Int] = []
+        var nextAvailableID = (self.users.map { $0.id ?? 0 }.max() ?? 999) + 1
+        
+        for contact in contacts {
+            let cleaned = contact.phoneNumber.filter(\.isWholeNumber)
+            guard !existingPhones.contains(cleaned) else { continue }
+            
+            let newUser = User(from: contact, id: nextAvailableID)
+            newUsers.append(newUser)
+            newFriendIDs.append(nextAvailableID)
+            existingPhones.insert(cleaned)
+            nextAvailableID += 1
+        }
+        
+        return (newUsers, newFriendIDs)
     }
     
     private func markRequestFinished() {
@@ -130,5 +138,4 @@ final class ContentViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-    
 }
