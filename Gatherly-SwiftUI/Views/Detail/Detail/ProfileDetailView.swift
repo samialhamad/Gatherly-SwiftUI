@@ -95,10 +95,11 @@ private extension ProfileDetailView {
     }
 }
 
-struct ProfileDetailView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            ProfileDetailView(user: SampleData.sampleUsers.first!)
-        }
+#Preview {
+    NavigationStack {
+        ProfileDetailView(
+            user: SampleData.sampleUsers.first!,
+            currentUser: SampleData.sampleUsers.first!
+        )
     }
 }
