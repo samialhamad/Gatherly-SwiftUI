@@ -54,6 +54,7 @@ struct ContentView: View {
         }
         .task {
             viewModel.loadAllData()
+            viewModel.syncContacts()
         }
     }
 }
