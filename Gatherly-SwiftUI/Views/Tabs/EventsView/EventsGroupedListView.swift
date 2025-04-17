@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct EventsGroupedListView: View {
+    let currentUser: User?
     @Binding var events: [Event]
     let users: [User]
     let onEventSave: (Event) -> Void
@@ -26,6 +27,7 @@ struct EventsGroupedListView: View {
                     Section {
                         ForEach(eventsForDate) { event in
                             EventRowLink(
+                                currentUser: currentUser,
                                 events: $events,
                                 event: event,
                                 users: users,
@@ -67,6 +69,7 @@ struct EventsGroupedListView: View {
 
 #Preview {
     EventsGroupedListView(
+        currentUser: SampleData.sampleUsers.first,
         events: .constant(SampleData.sampleEvents),
         users: SampleData.sampleUsers,
         onEventSave: { updatedEvent in

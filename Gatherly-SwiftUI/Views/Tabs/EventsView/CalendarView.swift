@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct CalendarView: View {
+    let currentUser: User?
     @Binding var events: [Event]
     let users: [User]
     
@@ -34,7 +35,7 @@ struct CalendarView: View {
                     }
                 )) {
                     if let event = navigationState.navigateToEvent {
-                        EventDetailView(events: $events, event: event, users: users)
+                        EventDetailView(currentUser: currentUser, events: $events, event: event, users: users)
                     } else {
                         EmptyView()
                     }
@@ -59,6 +60,7 @@ private extension CalendarView {
             }
         }   else {
             EventsGroupedListView(
+                currentUser: currentUser,
                 events: $events,
                 users: users,
                 onEventSave: { updatedEvent in
@@ -109,6 +111,7 @@ private extension CalendarView {
                 VStack(spacing: Constants.CalendarView.eventListViewSpacing) {
                     ForEach(filteredEvents) { event in
                         EventRowLink(
+                            currentUser: currentUser,
                             events: $events,
                             event: event,
                             users: users,
@@ -141,6 +144,7 @@ private extension CalendarView {
 
 #Preview {
     CalendarView(
+        currentUser: SampleData.sampleUsers.first,
         events: .constant(SampleData.sampleEvents),
         users: SampleData.sampleUsers
     )

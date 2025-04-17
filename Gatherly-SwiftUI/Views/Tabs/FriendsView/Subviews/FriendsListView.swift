@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct FriendsListView: View {
+    let currentUserID: Int
+    let users: [User]
+    
     @Binding var searchText: String
     @StateObject private var viewModel = FriendsListViewModel()
     
@@ -18,7 +21,10 @@ struct FriendsListView: View {
                     ForEach(viewModel.sortedSectionKeys, id: \.self) { key in
                         Section(header: Text(key).id(key)) {
                             ForEach(viewModel.groupedFriends[key]?.sorted { ($0.firstName ?? "") < ($1.firstName ?? "") } ?? [], id: \.id) { friend in
-                                NavigationLink(destination: ProfileDetailView(user: friend)) {
+                                NavigationLink(destination: ProfileDetailView(
+                                    user: friend,
+                                    currentUser: users.first(where: { $0.id == currentUserID }) ?? friend
+                                )) {
                                     ProfileRow(user: friend)
                                 }
                             }

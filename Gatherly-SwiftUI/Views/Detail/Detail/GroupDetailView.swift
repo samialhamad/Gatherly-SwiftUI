@@ -10,6 +10,7 @@ import SwiftUI
 struct GroupDetailView: View {
     let group: UserGroup
     let currentUser: User
+    let users: [User]
     
     @Binding var groups: [UserGroup]
     @State private var isShowingEditView = false
@@ -74,11 +75,11 @@ private extension GroupDetailView {
     
     var groupLeaderAndMembersView: some View {
         Group {
-            if let leader = SampleData.sampleUsers.first(where: { $0.id == group.leaderID }) {
+            if let leader = users.first(where: { $0.id == group.leaderID }) {
                 Text("Leader")
                     .font(.headline)
                 
-                NavigationLink(destination: ProfileDetailView(user: leader)) {
+                NavigationLink(destination: ProfileDetailView(user: leader, currentUser: currentUser)) {
                     ProfileRow(user: leader)
                 }
             }
@@ -88,7 +89,7 @@ private extension GroupDetailView {
                     .font(.headline)
                 
                 ForEach(memberUsers, id: \.id) { user in
-                    NavigationLink(destination: ProfileDetailView(user: user)) {
+                    NavigationLink(destination: ProfileDetailView(user: user, currentUser: currentUser)) {
                         ProfileRow(user: user)
                     }
                 }
@@ -140,7 +141,7 @@ private extension GroupDetailView {
     }
     
     var memberUsers: [User] {
-        SampleData.sampleUsers.filter { group.memberIDs.contains($0.id ?? -1) }
+        users.filter { group.memberIDs.contains($0.id ?? -1) }
     }
     
     // MARK: - Functions

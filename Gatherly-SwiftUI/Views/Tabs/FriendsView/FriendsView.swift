@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct FriendsView: View {
+    let currentUser: User?
     private let tabTitles = ["Friends", "Groups"]
     
     @Binding var groups: [UserGroup]
@@ -16,10 +17,6 @@ struct FriendsView: View {
     @State private var isShowingCreateGroup = false
     @State private var selectedTab = 0
     @State private var searchText = ""
-    
-    var currentUser: User? {
-        users.first(where: { $0.id == 1 })
-    }
     
     var body: some View {
         NavigationStack {
@@ -36,7 +33,14 @@ struct FriendsView: View {
                         )
                     }
                 } else {
-                    GroupsListView(groups: $groups, searchText: $searchText)
+                    if let currentUser = currentUser {
+                        GroupsListView(
+                            currentUser: currentUser,
+                            users: users,
+                            groups: $groups,
+                            searchText: $searchText
+                        )
+                    }
                 }
             }
             .navigationTitle(tabTitles[selectedTab])
@@ -47,15 +51,22 @@ struct FriendsView: View {
             }
             .sheet(isPresented: $isShowingAddFriend) {
                 if let currentUser = currentUser {
-                    AddFriendView(viewModel: AddFriendViewModel(
-                        currentUserID: currentUser.id ?? 1,
-                        allUsers: users
-                    ))
+                    AddFriendView(
+                        currentUser: currentUser,
+                        viewModel: AddFriendViewModel(
+                            currentUserID: currentUser.id ?? 1,
+                            allUsers: users
+                        )
+                    )
                 }
             }
             .sheet(isPresented: $isShowingCreateGroup) {
                 if let currentUser = currentUser {
-                    CreateGroupView(currentUser: currentUser, groups: $groups)
+                    CreateGroupView(
+                        currentUser: currentUser,
+                        users: users,
+                        groups: $groups
+                    )
                 }
             }
         }
@@ -97,6 +108,7 @@ private extension FriendsView {
         }
     }
 }
+
 //#Preview {
 //    FriendsView()
 //        .environmentObject(NavigationState())

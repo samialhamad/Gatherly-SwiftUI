@@ -5,10 +5,12 @@
 //  Created by Sami Alhamad on 4/14/25.
 //
 
-import Foundation
 import Combine
+import Foundation
+import SwiftUI
 
 final class ContentViewModel: ObservableObject {
+    @Published var currentUser: User? = nil
     @Published var users: [User] = []
     @Published var events: [Event] = []
     @Published var groups: [UserGroup] = []
@@ -35,7 +37,8 @@ final class ContentViewModel: ObservableObject {
         if groups.isEmpty {
             self.groups = SampleData.sampleGroups
         }
-
+        
+        self.currentUser = users.first(where: { $0.id == 1 })
         isLoading = false
     }
 

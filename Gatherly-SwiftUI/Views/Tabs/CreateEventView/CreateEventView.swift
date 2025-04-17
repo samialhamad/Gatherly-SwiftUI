@@ -10,13 +10,16 @@ import PhotosUI
 
 struct CreateEventView: View {
     let allUsers: [User]
-    let currentPlannerID: Int = 1
+    let currentUser: User?
     
     @StateObject private var viewModel = CreateEventViewModel()
     @Binding var events: [Event]
     @State private var navigateToEvent: Event? = nil
-    
     @EnvironmentObject var navigationState: NavigationState
+    
+    var currentPlannerID: Int {
+        currentUser?.id ?? -1
+    }
     
     var body: some View {
         NavigationStack {
@@ -91,6 +94,7 @@ private extension CreateEventView {
     NavigationStack {
         CreateEventView(
             allUsers: SampleData.sampleUsers,
+            currentUser: SampleData.sampleUsers.first,
             events: .constant(SampleData.sampleEvents)
         )
     }

@@ -15,10 +15,14 @@ struct ContentView: View {
     var body: some View {
         TabView(selection: $navigationState.selectedTab) {
             NavigationStack {
-                CalendarView(events: $viewModel.events, users: viewModel.users)
-                    .environmentObject(navigationState)
-                    .addActivityIndicator(isPresented: viewModel.isLoading && navigationState.selectedTab == 0,
-                                          message: Constants.ContentView.calendarViewLoadingString)
+                CalendarView(
+                    currentUser: viewModel.currentUser,
+                    events: $viewModel.events,
+                    users: viewModel.users
+                )
+                .environmentObject(navigationState)
+                .addActivityIndicator(isPresented: viewModel.isLoading && navigationState.selectedTab == 0,
+                                      message: Constants.ContentView.calendarViewLoadingString)
             }
             .tabItem {
                 Image(systemName: "calendar")
@@ -26,9 +30,13 @@ struct ContentView: View {
             .tag(0)
             
             NavigationStack {
-                CreateEventView(allUsers: viewModel.users, events: $viewModel.events)
-                    .environmentObject(navigationState)
-                    .navigationTitle("Create Event")
+                CreateEventView(
+                    allUsers: viewModel.users,
+                    currentUser: viewModel.currentUser,
+                    events: $viewModel.events
+                )
+                .environmentObject(navigationState)
+                .navigationTitle("Create Event")
             }
             .tabItem {
                 Image(systemName: "plus.app.fill")
@@ -36,10 +44,14 @@ struct ContentView: View {
             .tag(1)
             
             NavigationStack {
-                FriendsView(groups: $viewModel.groups, users: $viewModel.users)
-                    .environmentObject(navigationState)
-                    .addActivityIndicator(isPresented: viewModel.isLoading && navigationState.selectedTab == 2,
-                                          message: Constants.ContentView.friendsViewLoadingString)
+                FriendsView(
+                    currentUser: viewModel.currentUser,
+                    groups: $viewModel.groups,
+                    users: $viewModel.users
+                )
+                .environmentObject(navigationState)
+                .addActivityIndicator(isPresented: viewModel.isLoading && navigationState.selectedTab == 2,
+                                      message: Constants.ContentView.friendsViewLoadingString)
             }
             .tabItem {
                 Image(systemName: "person.3.fill")

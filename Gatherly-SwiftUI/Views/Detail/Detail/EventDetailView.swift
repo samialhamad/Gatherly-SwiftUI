@@ -9,6 +9,7 @@ import SwiftUI
 import MapKit
 
 struct EventDetailView: View {
+    let currentUser: User?
     @Binding var events: [Event]
     let event: Event
     let users: [User]
@@ -175,19 +176,19 @@ private extension EventDetailView {
     
     var eventPlannerAndMembersView: some View {
         Group {
-            if let planner = planner {
+            if let planner = planner, let currentUser = currentUser {
                 Text("Planner")
                     .font(.headline)
-                NavigationLink(destination: ProfileDetailView(user: planner)) {
+                NavigationLink(destination: ProfileDetailView(user: planner, currentUser: currentUser)) {
                     ProfileRow(user: planner)
                 }
             }
             
-            if !members.isEmpty {
+            if let currentUser = currentUser, !members.isEmpty {
                 Text("Attendees")
                     .font(.headline)
                 ForEach(members, id: \.id) { user in
-                    NavigationLink(destination: ProfileDetailView(user: user)) {
+                    NavigationLink(destination: ProfileDetailView(user: user, currentUser: currentUser)) {
                         ProfileRow(user: user)
                     }
                 }
@@ -250,6 +251,7 @@ private extension EventDetailView {
 
 #Preview {
     EventDetailView(
+        currentUser: SampleData.sampleUsers.first,
         events: .constant(SampleData.sampleEvents),
         event: SampleData.sampleEvents[1],
         users: SampleData.sampleUsers

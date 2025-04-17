@@ -9,8 +9,8 @@ import SwiftUI
 
 struct ProfileDetailView: View {
     let user: User
-    let currentUser: User = SampleData.sampleUsers[0] // replace with actual logic
-    
+    let currentUser: User
+
     @State private var isShowingActionSheet = false
     
     var body: some View {
