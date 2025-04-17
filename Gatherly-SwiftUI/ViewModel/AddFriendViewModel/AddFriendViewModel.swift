@@ -10,31 +10,18 @@ import SwiftUI
 import Contacts
 
 class AddFriendViewModel: ObservableObject {
+    let currentUserID: Int
+    let allUsers: [User]
+
     @Published var searchText: String = ""
-    @Published var allUsers: [User]
-    @Published var currentUser: User
-    @Published var matchedContacts: [User] = []
-    @Published var didSyncContacts = false
-    @Published var syncedContacts: [SyncedContact] = []
     
-    init(currentUser: User, allUsers: [User], syncedContacts: [SyncedContact]) {
-        self.currentUser = currentUser
-        self.allUsers = allUsers
-        self.syncedContacts = syncedContacts
-        self.didSyncContacts = !syncedContacts.isEmpty
-        
-        // update once backend implemented
-        let contactPhones = Set(syncedContacts.map { $0.phoneNumber })
-        self.matchedContacts = allUsers.filter { user in
-            guard let phone = user.phone else { return false }
-            let cleaned = phone.filter(\.isWholeNumber)
-            return contactPhones.contains(cleaned)
-        }
+    var currentUser: User? {
+        allUsers.first(where: { $0.id == currentUserID })
     }
     
-    func contactName(for user: User) -> String? {
-        guard let phone = user.phone?.filter(\.isWholeNumber) else { return nil }
-        return syncedContacts.first(where: { $0.phoneNumber == phone })?.fullName
+    init(currentUserID: Int, allUsers: [User]) {
+        self.currentUserID = currentUserID
+        self.allUsers = allUsers
     }
     
     var filteredUsers: [User] {
@@ -42,9 +29,11 @@ class AddFriendViewModel: ObservableObject {
         let usersToSearch = allUsers
         
         return usersToSearch.filter { user in
-            guard let currentID = currentUser.id else { return false }
-            
-            let isNotSelf = user.id != currentID
+            guard let currentUser = currentUser else {
+                return false
+            }
+
+            let isNotSelf = user.id != currentUser.id
             let isNotAlreadyFriend = !(currentUser.friendIDs ?? []).contains(user.id ?? -1)
             
             let firstNameMatches = user.firstName?.lowercased().contains(query) ?? false
