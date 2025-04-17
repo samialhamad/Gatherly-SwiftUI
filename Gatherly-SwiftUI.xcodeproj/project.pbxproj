@@ -39,6 +39,7 @@
 			membershipExceptions = (
 				Extensions/Array/ArrayTests.swift,
 				Extensions/Date/DateTests.swift,
+				Extensions/UserDefaults/UserDefaultsTests.swift,
 				Model/Event/EventTests.swift,
 				Model/Message/MessageTests.swift,
 				Model/User/UserTests.swift,
@@ -63,6 +64,7 @@
 			membershipExceptions = (
 				Extensions/Array/ArrayTests.swift,
 				Extensions/Date/DateTests.swift,
+				Extensions/UserDefaults/UserDefaultsTests.swift,
 				Info.plist,
 				Model/Event/EventTests.swift,
 				Model/Message/MessageTests.swift,
