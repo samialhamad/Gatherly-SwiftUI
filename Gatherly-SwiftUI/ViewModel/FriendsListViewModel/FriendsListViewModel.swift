@@ -13,10 +13,9 @@ class FriendsListViewModel: ObservableObject {
     
     @Published var searchText: String = ""
     
-    //needs to change in future
     init(
-        currentUserID: Int = 1,
-        allUsers: [User] = SampleData.sampleUsers
+        currentUserID: Int,
+        allUsers: [User]
     ) {
         self.currentUserID = currentUserID
         self.allUsers = allUsers
