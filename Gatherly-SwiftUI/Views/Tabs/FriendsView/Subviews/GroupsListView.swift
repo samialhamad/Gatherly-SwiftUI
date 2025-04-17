@@ -10,6 +10,7 @@ import SwiftUI
 struct GroupsListView: View {
     let currentUser: User = SampleData.sampleUsers[0]
     
+    let currentUser: User
     @Binding var groups: [UserGroup]
     @Binding var searchText: String
     

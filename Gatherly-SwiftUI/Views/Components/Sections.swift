@@ -189,6 +189,7 @@ struct EventCategorySection: View {
 }
 
 struct EventRowLink: View {
+    let currentUser: User?
     @Binding var events: [Event]
     let event: Event
     let users: [User]
@@ -198,6 +199,7 @@ struct EventRowLink: View {
     var body: some View {
         NavigationLink {
             EventDetailView(
+                currentUser: currentUser,
                 events: $events,
                 event: event,
                 users: users,
