@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import RxSwift
 import SwiftUI
 
 final class ContentViewModel: ObservableObject {
@@ -18,6 +19,7 @@ final class ContentViewModel: ObservableObject {
     @Published var isLoading = true
     
     private var cancellables = Set<AnyCancellable>()
+    private var disposeBag = DisposeBag()
     private var pendingRequests = 0
     
     func loadAllData() {
@@ -130,12 +132,13 @@ final class ContentViewModel: ObservableObject {
             .store(in: &cancellables)
         
         GatherlyAPI.getGroups()
-            .sink { [weak self] fetchedGroups in
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { [weak self] fetchedGroups in
                 guard let self = self else { return }
                 self.groups = fetchedGroups
                 UserDefaultsManager.saveGroups(fetchedGroups)
                 self.markRequestFinished()
-            }
-            .store(in: &cancellables)
+            })
+            .disposed(by: disposeBag)
     }
 }

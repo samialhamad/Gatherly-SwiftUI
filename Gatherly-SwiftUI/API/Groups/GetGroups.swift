@@ -6,12 +6,11 @@
 //
 
 import Foundation
-import Combine
+import RxSwift
 
 extension GatherlyAPI {
-    static func getGroups() -> AnyPublisher<[UserGroup], Never> {
-        Just(SampleData.sampleGroups)
-            .delay(for: .seconds(2), scheduler: DispatchQueue.main)
-            .eraseToAnyPublisher()
+    static func getGroups() -> Observable<[UserGroup]> {
+        Observable.just(SampleData.sampleGroups)
+            .delay(.seconds(5), scheduler: MainScheduler.instance)
     }
 }
