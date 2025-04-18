@@ -109,36 +109,51 @@ final class ContentViewModel: ObservableObject {
     }
     
     private func performMockAPILoad() {
-        pendingRequests = 3
+        pendingRequests = 0
         isLoading = true
-        
-        GatherlyAPI.getUsers()
-            .sink { [weak self] fetchedUsers in
-                guard let self = self else { return }
-                self.users = fetchedUsers
-                self.currentUser = fetchedUsers.first(where: { $0.id == 1 })
-                UserDefaultsManager.saveUsers(fetchedUsers)
-                self.markRequestFinished()
-            }
-            .store(in: &cancellables)
-        
-        GatherlyAPI.getEvents()
-            .sink { [weak self] fetchedEvents in
-                guard let self = self else { return }
-                self.events = fetchedEvents
-                UserDefaultsManager.saveEvents(fetchedEvents)
-                self.markRequestFinished()
-            }
-            .store(in: &cancellables)
-        
-        GatherlyAPI.getGroups()
-            .observe(on: MainScheduler.instance)
-            .subscribe(onNext: { [weak self] fetchedGroups in
-                guard let self = self else { return }
-                self.groups = fetchedGroups
-                UserDefaultsManager.saveGroups(fetchedGroups)
-                self.markRequestFinished()
-            })
-            .disposed(by: disposeBag)
+
+        if users.isEmpty {
+            pendingRequests += 1
+            GatherlyAPI.getUsers()
+                .sink { [weak self] fetchedUsers in
+                    guard let self = self else { return }
+                    self.users = fetchedUsers
+                    self.currentUser = fetchedUsers.first(where: { $0.id == 1 })
+                    UserDefaultsManager.saveUsers(fetchedUsers)
+                    self.markRequestFinished()
+                }
+                .store(in: &cancellables)
+        }
+
+        if events.isEmpty {
+            pendingRequests += 1
+            GatherlyAPI.getEvents()
+                .sink { [weak self] fetchedEvents in
+                    guard let self = self else { return }
+                    self.events = fetchedEvents
+                    UserDefaultsManager.saveEvents(fetchedEvents)
+                    self.markRequestFinished()
+                }
+                .store(in: &cancellables)
+        }
+
+        if groups.isEmpty {
+            pendingRequests += 1
+            GatherlyAPI.getGroups()
+                .observe(on: MainScheduler.instance)
+                .subscribe(onNext: { [weak self] fetchedGroups in
+                    guard let self = self else { return }
+                    self.groups = fetchedGroups
+                    UserDefaultsManager.saveGroups(fetchedGroups)
+                    self.markRequestFinished()
+                })
+                .disposed(by: disposeBag)
+        }
+
+        // If everything was already loaded from UserDefaults
+        if pendingRequests == 0 {
+            isLoading = false
+        }
     }
+
 }
