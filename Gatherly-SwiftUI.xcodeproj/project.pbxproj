@@ -7,17 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F11B0F5D2DB1B2940043D370 /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = F11B0F5C2DB1B2940043D370 /* RxBlocking */; };
-		F11B0F5F2DB1B2940043D370 /* RxBlocking-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = F11B0F5E2DB1B2940043D370 /* RxBlocking-Dynamic */; };
-		F11B0F612DB1B2940043D370 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = F11B0F602DB1B2940043D370 /* RxCocoa */; };
-		F11B0F632DB1B2940043D370 /* RxCocoa-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = F11B0F622DB1B2940043D370 /* RxCocoa-Dynamic */; };
-		F11B0F652DB1B2940043D370 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = F11B0F642DB1B2940043D370 /* RxRelay */; };
-		F11B0F672DB1B2940043D370 /* RxRelay-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = F11B0F662DB1B2940043D370 /* RxRelay-Dynamic */; };
-		F11B0F692DB1B2940043D370 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F11B0F682DB1B2940043D370 /* RxSwift */; };
-		F11B0F6B2DB1B2940043D370 /* RxSwift-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = F11B0F6A2DB1B2940043D370 /* RxSwift-Dynamic */; };
-		F11B0F6D2DB1B2940043D370 /* RxTest in Frameworks */ = {isa = PBXBuildFile; productRef = F11B0F6C2DB1B2940043D370 /* RxTest */; };
-		F11B0F6F2DB1B2940043D370 /* RxTest-Dynamic in Frameworks */ = {isa = PBXBuildFile; productRef = F11B0F6E2DB1B2940043D370 /* RxTest-Dynamic */; };
 		F16B31A12D9DD41700C17188 /* SwiftyCrop in Frameworks */ = {isa = PBXBuildFile; productRef = F16B31A02D9DD41700C17188 /* SwiftyCrop */; };
+		F1BF19442DB1D40B005F18F7 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F1BF19432DB1D40B005F18F7 /* RxSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -126,17 +117,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F11B0F6D2DB1B2940043D370 /* RxTest in Frameworks */,
-				F11B0F652DB1B2940043D370 /* RxRelay in Frameworks */,
-				F11B0F6B2DB1B2940043D370 /* RxSwift-Dynamic in Frameworks */,
-				F11B0F5F2DB1B2940043D370 /* RxBlocking-Dynamic in Frameworks */,
-				F11B0F632DB1B2940043D370 /* RxCocoa-Dynamic in Frameworks */,
+				F1BF19442DB1D40B005F18F7 /* RxSwift in Frameworks */,
 				F16B31A12D9DD41700C17188 /* SwiftyCrop in Frameworks */,
-				F11B0F612DB1B2940043D370 /* RxCocoa in Frameworks */,
-				F11B0F672DB1B2940043D370 /* RxRelay-Dynamic in Frameworks */,
-				F11B0F692DB1B2940043D370 /* RxSwift in Frameworks */,
-				F11B0F6F2DB1B2940043D370 /* RxTest-Dynamic in Frameworks */,
-				F11B0F5D2DB1B2940043D370 /* RxBlocking in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -198,16 +180,7 @@
 			name = "Gatherly-SwiftUI";
 			packageProductDependencies = (
 				F16B31A02D9DD41700C17188 /* SwiftyCrop */,
-				F11B0F5C2DB1B2940043D370 /* RxBlocking */,
-				F11B0F5E2DB1B2940043D370 /* RxBlocking-Dynamic */,
-				F11B0F602DB1B2940043D370 /* RxCocoa */,
-				F11B0F622DB1B2940043D370 /* RxCocoa-Dynamic */,
-				F11B0F642DB1B2940043D370 /* RxRelay */,
-				F11B0F662DB1B2940043D370 /* RxRelay-Dynamic */,
-				F11B0F682DB1B2940043D370 /* RxSwift */,
-				F11B0F6A2DB1B2940043D370 /* RxSwift-Dynamic */,
-				F11B0F6C2DB1B2940043D370 /* RxTest */,
-				F11B0F6E2DB1B2940043D370 /* RxTest-Dynamic */,
+				F1BF19432DB1D40B005F18F7 /* RxSwift */,
 			);
 			productName = "Gatherly-SwiftUI";
 			productReference = F11CDC202D77958A007BC1F1 /* Gatherly-SwiftUI.app */;
@@ -293,7 +266,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				F16B319F2D9DD41700C17188 /* XCRemoteSwiftPackageReference "SwiftyCrop" */,
-				F11B0F5B2DB1B2940043D370 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				F1BF19422DB1D40B005F18F7 /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F11CDC212D77958A007BC1F1 /* Products */;
@@ -664,14 +637,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		F11B0F5B2DB1B2940043D370 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ReactiveX/RxSwift";
-			requirement = {
-				kind = exactVersion;
-				version = 6.9.0;
-			};
-		};
 		F16B319F2D9DD41700C17188 /* XCRemoteSwiftPackageReference "SwiftyCrop" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/benedom/SwiftyCrop";
@@ -680,63 +645,26 @@
 				version = 1.0.8;
 			};
 		};
+		F1BF19422DB1D40B005F18F7 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift";
+			requirement = {
+				kind = exactVersion;
+				version = 6.9.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		F11B0F5C2DB1B2940043D370 /* RxBlocking */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F11B0F5B2DB1B2940043D370 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxBlocking;
-		};
-		F11B0F5E2DB1B2940043D370 /* RxBlocking-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F11B0F5B2DB1B2940043D370 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxBlocking-Dynamic";
-		};
-		F11B0F602DB1B2940043D370 /* RxCocoa */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F11B0F5B2DB1B2940043D370 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxCocoa;
-		};
-		F11B0F622DB1B2940043D370 /* RxCocoa-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F11B0F5B2DB1B2940043D370 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxCocoa-Dynamic";
-		};
-		F11B0F642DB1B2940043D370 /* RxRelay */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F11B0F5B2DB1B2940043D370 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxRelay;
-		};
-		F11B0F662DB1B2940043D370 /* RxRelay-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F11B0F5B2DB1B2940043D370 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxRelay-Dynamic";
-		};
-		F11B0F682DB1B2940043D370 /* RxSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F11B0F5B2DB1B2940043D370 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxSwift;
-		};
-		F11B0F6A2DB1B2940043D370 /* RxSwift-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F11B0F5B2DB1B2940043D370 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxSwift-Dynamic";
-		};
-		F11B0F6C2DB1B2940043D370 /* RxTest */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F11B0F5B2DB1B2940043D370 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = RxTest;
-		};
-		F11B0F6E2DB1B2940043D370 /* RxTest-Dynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = F11B0F5B2DB1B2940043D370 /* XCRemoteSwiftPackageReference "RxSwift" */;
-			productName = "RxTest-Dynamic";
-		};
 		F16B31A02D9DD41700C17188 /* SwiftyCrop */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = F16B319F2D9DD41700C17188 /* XCRemoteSwiftPackageReference "SwiftyCrop" */;
 			productName = SwiftyCrop;
+		};
+		F1BF19432DB1D40B005F18F7 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1BF19422DB1D40B005F18F7 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
