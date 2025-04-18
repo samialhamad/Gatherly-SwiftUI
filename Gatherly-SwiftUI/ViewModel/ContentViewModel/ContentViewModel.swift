@@ -48,7 +48,7 @@ final class ContentViewModel: ObservableObject {
     
     // MARK: - Helper Functions
     
-    private func appendUsersAndUpdateFriends(newUsers: [User], newFriendIDs: [Int], currentUserID: Int) {
+    func appendUsersAndUpdateFriends(newUsers: [User], newFriendIDs: [Int], currentUserID: Int) {
         self.users.append(contentsOf: newUsers)
         
         if let currentIndex = self.users.firstIndex(where: { $0.id == currentUserID }) {
@@ -81,7 +81,7 @@ final class ContentViewModel: ObservableObject {
     }
     
     
-    private func generateUsersFromContacts(_ contacts: [SyncedContact]) -> ([User], [Int]) {
+    func generateUsersFromContacts(_ contacts: [SyncedContact]) -> ([User], [Int]) {
         var existingPhones = Set(self.users.compactMap { $0.phone?.filter(\.isWholeNumber) })
         var newUsers: [User] = []
         var newFriendIDs: [Int] = []
@@ -101,17 +101,17 @@ final class ContentViewModel: ObservableObject {
         return (newUsers, newFriendIDs)
     }
     
-    private func markRequestFinished() {
+    func markRequestFinished() {
         pendingRequests -= 1
         if pendingRequests == 0 {
             isLoading = false
         }
     }
     
-    private func performMockAPILoad() {
+    func performMockAPILoad() {
         pendingRequests = 0
         isLoading = true
-
+        
         if users.isEmpty {
             pendingRequests += 1
             GatherlyAPI.getUsers()
@@ -124,7 +124,7 @@ final class ContentViewModel: ObservableObject {
                 }
                 .store(in: &cancellables)
         }
-
+        
         if events.isEmpty {
             pendingRequests += 1
             GatherlyAPI.getEvents()
@@ -136,7 +136,7 @@ final class ContentViewModel: ObservableObject {
                 }
                 .store(in: &cancellables)
         }
-
+        
         if groups.isEmpty {
             pendingRequests += 1
             GatherlyAPI.getGroups()
@@ -149,11 +149,10 @@ final class ContentViewModel: ObservableObject {
                 })
                 .disposed(by: disposeBag)
         }
-
+        
         // If everything was already loaded from UserDefaults
         if pendingRequests == 0 {
             isLoading = false
         }
     }
-
 }
