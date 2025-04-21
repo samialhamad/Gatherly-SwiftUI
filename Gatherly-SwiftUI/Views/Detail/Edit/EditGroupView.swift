@@ -11,6 +11,7 @@ struct EditGroupView: View {
     @StateObject var viewModel: EditGroupViewModel
     let allUsers: [User]
     let currentUser: User
+    let groups: [UserGroup]
     let onSave: (UserGroup) -> Void
     let onCancel: () -> Void
     let onDelete: (UserGroup) -> Void
@@ -76,7 +77,7 @@ private extension EditGroupView {
     var saveAndDeleteSection: some View {
         Section {
             Button("Save") {
-                let updatedGroup = viewModel.updatedGroup()
+                let updatedGroup = viewModel.updatedGroup(existingGroups: groups)
                 onSave(updatedGroup)
             }
             .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.primary))
