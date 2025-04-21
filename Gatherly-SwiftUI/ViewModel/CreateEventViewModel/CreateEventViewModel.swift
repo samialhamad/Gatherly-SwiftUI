@@ -20,7 +20,7 @@ class CreateEventViewModel: ObservableObject {
     @Published var location: Location? = nil
     @Published var selectedBannerImage: UIImage?
     
-    func createEvent(with plannerID: Int) -> Event {
+    func createEvent(with plannerID: Int, existingEvents: [Event]) -> Event {
         var bannerImageName: String? = nil
         if let image = selectedBannerImage {
             bannerImageName = ImageUtility.saveImageToDocuments(image: image)
@@ -36,7 +36,8 @@ class CreateEventViewModel: ObservableObject {
             plannerID: plannerID,
             location: location,
             categories: selectedCategories,
-            bannerImageName: bannerImageName
+            bannerImageName: bannerImageName,
+            existingEvents: existingEvents
         )
     }
     
