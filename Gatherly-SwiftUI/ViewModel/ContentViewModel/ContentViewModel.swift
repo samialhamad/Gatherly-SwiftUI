@@ -11,6 +11,7 @@ import RxSwift
 import SwiftUI
 
 final class ContentViewModel: ObservableObject {
+    @AppStorage("didSeedSampleData") private var didSeedSampleData = false
     @AppStorage("didSyncContacts") private var didSyncContacts = false
     @Published var currentUser: User? = nil
     @Published var users: [User] = []
@@ -23,18 +24,22 @@ final class ContentViewModel: ObservableObject {
     private var pendingRequests = 0
     
     func loadAllData() {
-        self.users = UserDefaultsManager.loadUsers()
-        self.events = UserDefaultsManager.loadEvents()
-        self.groups = UserDefaultsManager.loadGroups()
-        self.currentUser = users.first(where: { $0.id == 1 })
-        
-        let needsMockLoad = users.isEmpty || events.isEmpty || groups.isEmpty
-        
-        if needsMockLoad {
-            performMockAPILoad()
+        if !didSeedSampleData {
+            self.users = SampleData.sampleUsers
+            self.events = SampleData.sampleEvents
+            self.groups = SampleData.sampleGroups
+            self.currentUser = users.first(where: { $0.id == 1 })
+            
+            saveAllData()
+            didSeedSampleData = true
         } else {
-            isLoading = false
+            self.users = UserDefaultsManager.loadUsers()
+            self.events = UserDefaultsManager.loadEvents()
+            self.groups = UserDefaultsManager.loadGroups()
+            self.currentUser = users.first(where: { $0.id == 1 })
         }
+        
+        isLoading = false
     }
     
     func saveAllData() {
