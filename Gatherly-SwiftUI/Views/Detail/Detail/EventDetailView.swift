@@ -52,6 +52,7 @@ struct EventDetailView: View {
             EditEventView(
                 viewModel: EditEventViewModel(event: event),
                 allUsers: users,
+                events: events,
                 onSave: { updatedEvent in
                     if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
                         events[index] = updatedEvent
