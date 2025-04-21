@@ -10,6 +10,7 @@ import SwiftUI
 struct EditEventView: View {
     @StateObject var viewModel: EditEventViewModel
     let allUsers: [User]
+    let events: [Event]
     let onSave: (Event) -> Void
     let onCancel: () -> Void
     let onDelete: (Event) -> Void
@@ -88,7 +89,7 @@ private extension EditEventView {
     var saveAndDeleteSection: some View {
         Section {
             Button("Save") {
-                let updatedEvent = viewModel.updatedEvent()
+                let updatedEvent = viewModel.updatedEvent(existingEvents: events)
                 onSave(updatedEvent)
             }
             .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.primary))
@@ -107,6 +108,7 @@ private extension EditEventView {
         EditEventView(
             viewModel: EditEventViewModel(event: SampleData.sampleEvents.first!),
             allUsers: SampleData.sampleUsers,
+            events: SampleData.sampleEvents,
             onSave: { updatedEvent in
                 print("Event updated: \(updatedEvent)")
             },
