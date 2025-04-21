@@ -48,6 +48,7 @@ struct Constants {
     struct ContentView {
         static let calendarViewLoadingString: String = "Getting your events!"
         static let friendsViewLoadingString: String = "Finding your friends!"
+        static let profileViewLoadingString: String = "Trying to find you!"
     }
     
     struct CreateEventView {
