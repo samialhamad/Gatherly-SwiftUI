@@ -100,3 +100,23 @@ private extension EditGroupView {
         }
     }
 }
+
+#Preview {
+    NavigationStack {
+        EditGroupView(
+            viewModel: EditGroupViewModel(group: SampleData.sampleGroups.first!),
+            allUsers: SampleData.sampleUsers,
+            currentUser: SampleData.sampleUsers.first!,
+            groups: SampleData.sampleGroups,
+            onSave: { updatedGroup in
+                print("Group updated: \(updatedGroup)")
+            },
+            onCancel: {
+                print("Edit cancelled")
+            },
+            onDelete: { group in
+                print("Delete group: \(group)")
+            }
+        )
+    }
+}
