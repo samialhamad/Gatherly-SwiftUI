@@ -28,7 +28,7 @@ final class EditGroupViewModelTests: XCTestCase {
         
         viewModel.groupName = "Updated Group Name"
         
-        let updatedGroup = viewModel.updatedGroup()
+        let updatedGroup = viewModel.updatedGroup(existingGroups: [originalGroup])
         
         XCTAssertEqual(updatedGroup.name, "Updated Group Name")
     }
@@ -39,7 +39,7 @@ final class EditGroupViewModelTests: XCTestCase {
         
         viewModel.selectedMemberIDs = Set([1, 2, 3])
         
-        let updatedGroup = viewModel.updatedGroup()
+        let updatedGroup = viewModel.updatedGroup(existingGroups: [originalGroup])
         
         XCTAssertEqual(Set(updatedGroup.memberIDs), Set([1, 2, 3]))
     }
@@ -49,7 +49,7 @@ final class EditGroupViewModelTests: XCTestCase {
         let viewModel = EditGroupViewModel(group: originalGroup)
         
         viewModel.groupImage = UIImage(systemName: "person.circle.fill")!
-        let updatedGroup = viewModel.updatedGroup()
+        let updatedGroup = viewModel.updatedGroup(existingGroups: [originalGroup])
         
         XCTAssertNotNil(updatedGroup.imageName)
     }
@@ -59,7 +59,7 @@ final class EditGroupViewModelTests: XCTestCase {
         let viewModel = EditGroupViewModel(group: originalGroup)
         
         viewModel.bannerImage = UIImage(systemName: "star.fill")!
-        let updatedGroup = viewModel.updatedGroup()
+        let updatedGroup = viewModel.updatedGroup(existingGroups: [originalGroup])
         
         XCTAssertNotNil(updatedGroup.bannerImageName)
     }
@@ -109,7 +109,7 @@ final class EditGroupViewModelTests: XCTestCase {
         let viewModel = EditGroupViewModel(group: group)
         
         XCTAssertEqual(viewModel.leaderID, group.leaderID)
-        let updatedGroup = viewModel.updatedGroup()
+        let updatedGroup = viewModel.updatedGroup(existingGroups: [group])
         XCTAssertEqual(updatedGroup.leaderID, group.leaderID)
     }
 }

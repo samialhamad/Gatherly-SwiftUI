@@ -29,7 +29,7 @@ class EditGroupViewModel: ObservableObject {
         self.bannerImage = group.bannerImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) }
     }
     
-    func updatedGroup() -> UserGroup {
+    func updatedGroup(existingGroups: [UserGroup]) -> UserGroup {
         var updatedImageName = original.imageName
         var updatedBannerName = original.bannerImageName
         
@@ -47,7 +47,8 @@ class EditGroupViewModel: ObservableObject {
             memberIDs: selectedMemberIDs,
             imageName: updatedImageName,
             bannerImageName: updatedBannerName,
-            leaderID: original.leaderID
+            leaderID: original.leaderID,
+            existingGroups: existingGroups
         )
     }
     
