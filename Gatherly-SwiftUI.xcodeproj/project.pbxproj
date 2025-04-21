@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		F16B31A12D9DD41700C17188 /* SwiftyCrop in Frameworks */ = {isa = PBXBuildFile; productRef = F16B31A02D9DD41700C17188 /* SwiftyCrop */; };
 		F1BF19442DB1D40B005F18F7 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F1BF19432DB1D40B005F18F7 /* RxSwift */; };
+		F1BF19552DB6F40B005F18F7 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = F1BF19542DB6F40B005F18F7 /* ComposableArchitecture */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -121,6 +122,7 @@
 			files = (
 				F1BF19442DB1D40B005F18F7 /* RxSwift in Frameworks */,
 				F16B31A12D9DD41700C17188 /* SwiftyCrop in Frameworks */,
+				F1BF19552DB6F40B005F18F7 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -183,6 +185,7 @@
 			packageProductDependencies = (
 				F16B31A02D9DD41700C17188 /* SwiftyCrop */,
 				F1BF19432DB1D40B005F18F7 /* RxSwift */,
+				F1BF19542DB6F40B005F18F7 /* ComposableArchitecture */,
 			);
 			productName = "Gatherly-SwiftUI";
 			productReference = F11CDC202D77958A007BC1F1 /* Gatherly-SwiftUI.app */;
@@ -269,6 +272,7 @@
 			packageReferences = (
 				F16B319F2D9DD41700C17188 /* XCRemoteSwiftPackageReference "SwiftyCrop" */,
 				F1BF19422DB1D40B005F18F7 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				F1BF19532DB6F40B005F18F7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F11CDC212D77958A007BC1F1 /* Products */;
@@ -655,6 +659,14 @@
 				version = 6.9.0;
 			};
 		};
+		F1BF19532DB6F40B005F18F7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = exactVersion;
+				version = 1.19.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -667,6 +679,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F1BF19422DB1D40B005F18F7 /* XCRemoteSwiftPackageReference "RxSwift" */;
 			productName = RxSwift;
+		};
+		F1BF19542DB6F40B005F18F7 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1BF19532DB6F40B005F18F7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
