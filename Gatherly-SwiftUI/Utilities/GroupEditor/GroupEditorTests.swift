@@ -13,17 +13,22 @@ final class GroupEditorTests: XCTestCase {
     // MARK: - Create Group
     
     func testCreateGroup() {
+        let existingGroups = [
+            UserGroup(id: 1, name: "Group 1", memberIDs: [], leaderID: 1),
+            UserGroup(id: 2, name: "Group 2", memberIDs: [], leaderID: 2)
+        ]
+        
         let createdGroup = GroupEditor.saveGroup(
             name: "New Group",
             memberIDs: [2, 3],
             imageName: "group_image.png",
             bannerImageName: "banner_image.png",
             leaderID: 1,
-            generateGroupID: { 12345 }
+            existingGroups: existingGroups
         )
         
         XCTAssertEqual(createdGroup.name, "New Group")
-        XCTAssertEqual(createdGroup.id, 12345)
+        XCTAssertEqual(createdGroup.id, 3)
         XCTAssertEqual(createdGroup.leaderID, 1)
         XCTAssertEqual(createdGroup.imageName, "group_image.png")
         XCTAssertEqual(createdGroup.bannerImageName, "banner_image.png")
@@ -47,7 +52,8 @@ final class GroupEditorTests: XCTestCase {
             memberIDs: [1, 2, 3],
             imageName: "new_image.png",
             bannerImageName: "new_banner.png",
-            leaderID: 99  // should not override existing leaderID
+            leaderID: 99,
+            existingGroups: []
         )
         
         XCTAssertEqual(updatedGroup.id, original.id)

@@ -19,10 +19,10 @@ struct GroupEditor {
         imageName: String? = nil,
         bannerImageName: String? = nil,
         leaderID: Int,
-        generateGroupID: () -> Int = { Int.random(in: 10000...99999) }
+        existingGroups: [UserGroup]
     ) -> UserGroup {
         
-        let groupID = originalGroup?.id ?? generateGroupID()
+        let groupID = originalGroup?.id ?? generateNextGroupID(from: existingGroups)
         let leaderID = originalGroup?.leaderID ?? leaderID
         
         var group = UserGroup(
@@ -43,6 +43,12 @@ struct GroupEditor {
     
     static func deleteGroup(from groups: [UserGroup], groupToDelete: UserGroup) -> [UserGroup] {
         groups.filter { $0.id != groupToDelete.id }
+    }
+    
+    // MARK: - Generate ID
+    
+    private static func generateNextGroupID(from groups: [UserGroup]) -> Int {
+        (groups.map { $0.id }.max() ?? 0) + 1
     }
     
     //MARK: - isFormEmpty
