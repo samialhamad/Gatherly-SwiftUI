@@ -26,18 +26,20 @@ final class EditEventViewModelTests: XCTestCase {
     }
     
     func testUpdatedEventTitle() {
-        let viewModel = EditEventViewModel(event: makeSampleEvent())
+        let event = makeSampleEvent()
+        let viewModel = EditEventViewModel(event: event)
         viewModel.title = "Updated Title"
         
-        let updatedEvent = viewModel.updatedEvent()
+        let updatedEvent = viewModel.updatedEvent(existingEvents: [event])
         XCTAssertEqual(updatedEvent.title, "Updated Title")
     }
     
     func testUpdatedEventDescription() {
-        let viewModel = EditEventViewModel(event: makeSampleEvent())
+        let event = makeSampleEvent()
+        let viewModel = EditEventViewModel(event: event)
         viewModel.description = "Updated description"
         
-        let updatedEvent = viewModel.updatedEvent()
+        let updatedEvent = viewModel.updatedEvent(existingEvents: [event])
         XCTAssertEqual(updatedEvent.description, "Updated description")
     }
     
@@ -45,12 +47,13 @@ final class EditEventViewModelTests: XCTestCase {
         let calendar = Calendar.current
         let fixedDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
         
-        let viewModel = EditEventViewModel(event: makeSampleEvent())
+        let event = makeSampleEvent()
+        let viewModel = EditEventViewModel(event: event)
         viewModel.selectedDate = fixedDate
         viewModel.startTime = calendar.date(from: DateComponents(hour: 10, minute: 0))!
         viewModel.endTime = calendar.date(from: DateComponents(hour: 12, minute: 0))!
         
-        let updatedEvent = viewModel.updatedEvent()
+        let updatedEvent = viewModel.updatedEvent(existingEvents: [event])
         
         let expectedStart = calendar.date(bySettingHour: 10, minute: 0, second: 0, of: fixedDate)!
         let expectedEnd = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: fixedDate)!
@@ -61,10 +64,11 @@ final class EditEventViewModelTests: XCTestCase {
     }
     
     func testUpdatedEventMembers() {
-        let viewModel = EditEventViewModel(event: makeSampleEvent())
+        let event = makeSampleEvent()
+        let viewModel = EditEventViewModel(event: event)
         viewModel.selectedMemberIDs = Set([2, 3, 4])
         
-        let updatedEvent = viewModel.updatedEvent()
+        let updatedEvent = viewModel.updatedEvent(existingEvents: [event])
         XCTAssertEqual(Set(updatedEvent.memberIDs ?? []), Set([2, 3, 4]))
     }
     
@@ -75,7 +79,7 @@ final class EditEventViewModelTests: XCTestCase {
         let viewModel = EditEventViewModel(event: event)
         viewModel.selectedCategories = [.sports, .education]
         
-        let updatedEvent = viewModel.updatedEvent()
+        let updatedEvent = viewModel.updatedEvent(existingEvents: [event])
         XCTAssertEqual(updatedEvent.categories, [.sports, .education])
     }
     
@@ -87,7 +91,7 @@ final class EditEventViewModelTests: XCTestCase {
         let viewModel = EditEventViewModel(event: event)
         viewModel.selectedBannerImage = UIImage(systemName: "star.fill")!
         
-        let updatedEvent = viewModel.updatedEvent()
+        let updatedEvent = viewModel.updatedEvent(existingEvents: [event])
         XCTAssertNotNil(updatedEvent.bannerImageName)
     }
 }
