@@ -77,7 +77,7 @@ private extension CreateGroupView {
     var createButtonSection: some View {
         Section {
             Button(action: {
-                let newGroup = viewModel.createGroup(leaderID: 1)
+                let newGroup = viewModel.createGroup(leaderID: currentUser.id ?? 1, existingGroups: groups)
                 groups.append(newGroup)
                 UserDefaultsManager.saveGroups(groups)
                 dismiss()
