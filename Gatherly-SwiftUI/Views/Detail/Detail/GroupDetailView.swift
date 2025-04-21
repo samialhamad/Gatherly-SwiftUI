@@ -46,8 +46,9 @@ struct GroupDetailView: View {
         .sheet(isPresented: $isShowingEditView) {
             EditGroupView(
                 viewModel: EditGroupViewModel(group: group),
-                allUsers: SampleData.sampleUsers, // or real user list if available
+                allUsers: SampleData.sampleUsers,
                 currentUser: currentUser,
+                groups: groups,
                 onSave: { updatedGroup in
                     if let index = groups.firstIndex(where: { $0.id == updatedGroup.id }) {
                         groups[index] = updatedGroup
