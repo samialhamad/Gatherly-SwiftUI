@@ -15,7 +15,7 @@ struct SampleData {
             email: "sami@example.com",
             eventIDs: nil,
             firstName: "Sami",
-            friendIDs: [2, 3, 4, 5, 6, 7, 8, 9],
+            friendIDs: [2, 3, 4],
             groupIDs: [1, 2],
             id: 1,
             isEmailEnabled: true,
@@ -48,72 +48,12 @@ struct SampleData {
         ),
         User(
             createdTimestamp: Int(Date().timestamp),
-            deviceToken: "def456",
-            email: "bob@example.com",
-            eventIDs: nil,
-            firstName: "Logan",
-            friendIDs: nil,
-            id: 4,
-            isEmailEnabled: true,
-            lastName: "Harrison",
-            phone: "9876543210"
-        ),
-        User(
-            createdTimestamp: Int(Date().timestamp),
-            deviceToken: "def456",
-            email: "bob@example.com",
-            eventIDs: nil,
-            firstName: "Avinav",
-            friendIDs: nil,
-            id: 5,
-            isEmailEnabled: true,
-            lastName: "Baral",
-            phone: "9876543210"
-        ),
-        User(
-            createdTimestamp: Int(Date().timestamp),
-            deviceToken: "def456",
-            email: "bob@example.com",
-            eventIDs: nil,
-            firstName: "Jaiveer",
-            friendIDs: nil,
-            id: 6,
-            isEmailEnabled: true,
-            lastName: "Dhaliwhal",
-            phone: "9876543210"
-        ),
-        User(
-            createdTimestamp: Int(Date().timestamp),
-            deviceToken: "fxc96",
-            email: "bob@example.com",
-            eventIDs: nil,
-            firstName: "Matt",
-            friendIDs: nil,
-            id: 7,
-            isEmailEnabled: true,
-            lastName: "Simon",
-            phone: "9876543210"
-        ),
-        User(
-            createdTimestamp: Int(Date().timestamp),
-            deviceToken: "fxc96",
-            email: "bob@example.com",
-            eventIDs: nil,
-            firstName: "Ali",
-            friendIDs: nil,
-            id: 8,
-            isEmailEnabled: true,
-            lastName: "Hamed",
-            phone: "9876543210"
-        ),
-        User(
-            createdTimestamp: Int(Date().timestamp),
             deviceToken: "fxc96",
             email: "bob@example.com",
             eventIDs: nil,
             firstName: "Zebra",
             friendIDs: nil,
-            id: 9,
+            id: 4,
             isEmailEnabled: true,
             lastName: "Zebrus",
             phone: "9876543210"
@@ -125,7 +65,7 @@ struct SampleData {
             eventIDs: nil,
             firstName: "LeBron",
             friendIDs: nil,
-            id: 10,
+            id: 5,
             isEmailEnabled: true,
             lastName: "James",
             phone: "122872722"
@@ -137,7 +77,7 @@ struct SampleData {
             eventIDs: nil,
             firstName: "Michael",
             friendIDs: nil,
-            id: 11,
+            id: 6,
             isEmailEnabled: true,
             lastName: "Jordan",
             phone: "9876543210"
@@ -145,18 +85,6 @@ struct SampleData {
     ]
     
     static let sampleEvents: [Event] = [
-        Event(
-            categories: randomCategories(),
-            date: Calendar.current.date(byAdding: .day, value: -30, to: Date()),
-            description: "Event from the past",
-            endTimestamp: Int(Date().addingTimeInterval((-30 * 86400) + 7200).timestamp),
-            id: 0,
-            plannerID: 1,
-            location: Location(latitude: 37.7749, longitude: -122.4194, name: "San Francisco"),
-            memberIDs: [2],
-            title: "Event from whenever in the past",
-            startTimestamp: Int(Date().addingTimeInterval(-30 * 86400).timestamp)
-        ),
         Event(
             categories: randomCategories(),
             date: Calendar.current.date(byAdding: .day, value: -1, to: Date()),
@@ -207,99 +135,15 @@ struct SampleData {
         ),
         Event(
             categories: randomCategories(),
-            date: Date(),
-            description: "Event 4 for today, in an hour",
-            endTimestamp: Int(Date().addingTimeInterval(7200).timestamp),
-            id: 5,
-            plannerID: 1,
-            location: Location(latitude: 51.5074, longitude: -0.1278, name: "London"),
-            memberIDs: [2, 3],
-            title: "Event 4 Today",
-            startTimestamp: Int(Date().addingTimeInterval(3600).timestamp)
-        ),
-        Event(
-            categories: randomCategories(),
-            date: Date(),
-            description: "Event 5 for today, in an hour",
-            endTimestamp: Int(Date().addingTimeInterval(7200).timestamp),
-            id: 6,
-            plannerID: 1,
-            location: Location(latitude: 51.5074, longitude: -0.1278, name: "London"),
-            memberIDs: [2, 3],
-            title: "Event 5 Today",
-            startTimestamp: Int(Date().addingTimeInterval(3600).timestamp)
-        ),
-        Event(
-            categories: randomCategories(),
-            date: Date(),
-            description: "Event 6 for today, in an hour",
-            endTimestamp: Int(Date().addingTimeInterval(7200).timestamp),
-            id: 7,
-            plannerID: 1,
-            location: Location(latitude: 51.5074, longitude: -0.1278, name: "London"),
-            memberIDs: [2, 3],
-            title: "Event 6 Today",
-            startTimestamp: Int(Date().addingTimeInterval(3600).timestamp)
-        ),
-        Event(
-            categories: randomCategories(),
-            date: Date(),
-            description: "Event 7 for today, in an hour",
-            endTimestamp: Int(Date().addingTimeInterval(7200).timestamp),
-            id: 8,
-            plannerID: 1,
-            location: Location(latitude: 51.5074, longitude: -0.1278, name: "London"),
-            memberIDs: [2, 3],
-            title: "Event 7 Today",
-            startTimestamp: Int(Date().addingTimeInterval(3600).timestamp)
-        ),
-        Event(
-            categories: randomCategories(),
-            date: Date(),
-            description: "Event 8 for today, in an hour",
-            endTimestamp: Int(Date().addingTimeInterval(7200).timestamp),
-            id: 9,
-            plannerID: 1,
-            location: Location(latitude: 51.5074, longitude: -0.1278, name: "London"),
-            memberIDs: [2, 3],
-            title: "Event 8 Today",
-            startTimestamp: Int(Date().addingTimeInterval(3600).timestamp)
-        ),
-        Event(
-            categories: randomCategories(),
             date: Calendar.current.date(byAdding: .day, value: 1, to: Date()),
             description: "Event planned for tomorrow, hope to see you there!",
             endTimestamp: Int(Date().addingTimeInterval(90000).timestamp),
-            id: 10,
+            id: 5,
             plannerID: 2,
             location: Location(latitude: 48.8566, longitude: 2.3522, name: "Paris"),
             memberIDs: [1, 3],
             title: "Event Tomorrow",
             startTimestamp: Int(Date().addingTimeInterval(86400).timestamp)
-        ),
-        Event(
-            categories: randomCategories(),
-            date: Calendar.current.date(byAdding: .day, value: 7, to: Date()),
-            description: "Event planned for next week, hope to see you there!",
-            endTimestamp: Int(Date().addingTimeInterval((7 * 86400) + 3600).timestamp),
-            id: 11,
-            plannerID: 3,
-            location: Location(latitude: 35.6895, longitude: 139.6917, name: "Tokyo"),
-            memberIDs: [1, 2],
-            title: "Event in One Week",
-            startTimestamp: Int(Date().addingTimeInterval(7 * 86400).timestamp)
-        ),
-        Event(
-            categories: randomCategories(),
-            date: Calendar.current.date(byAdding: .day, value: 30, to: Date()),
-            description: "Event planned for a month from today, hope to see you there!",
-            endTimestamp: Int(Date().addingTimeInterval((30 * 86400) + 7200).timestamp),
-            id: 12,
-            plannerID: 1,
-            location: Location(latitude: 52.5200, longitude: 13.4050, name: "Berlin"),
-            memberIDs: [2, 3],
-            title: "Event in One Month",
-            startTimestamp: Int(Date().addingTimeInterval(30 * 86400).timestamp)
         )
     ]
     
