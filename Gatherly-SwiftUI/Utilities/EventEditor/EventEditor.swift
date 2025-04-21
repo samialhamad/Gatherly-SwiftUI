@@ -24,7 +24,7 @@ struct EventEditor {
         location: Location? = nil,
         categories: [EventCategory] = [],
         bannerImageName: String? = nil,
-        generateEventID: () -> Int = { Int.random(in: 1000...9999) } //for now, random int generation for the id
+        existingEvents: [Event]
     ) -> Event {
         let calendar = Calendar.current
         let mergedStart = Date.merge(date: selectedDate, time: startTime)
@@ -37,7 +37,7 @@ struct EventEditor {
             event.id = originalEvent.id
         } else {
             event.plannerID = plannerID
-            event.id = generateEventID()
+            event.id = generateNextEventID(from: existingEvents)
         }
         
         event.title = title
@@ -62,6 +62,12 @@ struct EventEditor {
         }
         let newSelectedDate = eventToDelete.date ?? Date()
         return (updatedEvents, newSelectedDate)
+    }
+    
+    // MARK: - Generate ID
+    
+    private static func generateNextEventID(from events: [Event]) -> Int {
+        (events.map { $0.id ?? 0 }.max() ?? 0) + 1
     }
     
     //MARK: - isFormEmpty

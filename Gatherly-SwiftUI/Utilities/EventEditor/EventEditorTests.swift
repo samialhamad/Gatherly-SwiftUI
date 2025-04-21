@@ -19,6 +19,10 @@ final class EventEditorTests: XCTestCase {
         let startTime = calendar.date(from: DateComponents(hour: 10, minute: 0, second: 0))!
         let endTime = calendar.date(from: DateComponents(hour: 12, minute: 0, second: 0))!
         
+        let existingEvents = [
+            Event(id: 5), Event(id: 7), Event(id: 8)
+        ]
+        
         let createdEvent = EventEditor.saveEvent(
             title: "New Event",
             description: "Description",
@@ -29,13 +33,14 @@ final class EventEditorTests: XCTestCase {
             plannerID: 1,
             categories: [.entertainment],
             bannerImageName: "test_banner.jpg",
-            generateEventID: { 101 }  // Fixed id for testing sake
+            existingEvents: existingEvents
         )
         
         XCTAssertEqual(createdEvent.title, "New Event")
         XCTAssertEqual(createdEvent.description, "Description")
         XCTAssertEqual(createdEvent.date, calendar.startOfDay(for: fixedDate))
         XCTAssertEqual(createdEvent.bannerImageName, "test_banner.jpg")
+        XCTAssertEqual(createdEvent.id, 9)
         
         let expectedStart = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 10, minute: 0, second: 0))!
         let expectedEnd = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 12, minute: 0, second: 0))!
@@ -45,7 +50,6 @@ final class EventEditorTests: XCTestCase {
         XCTAssertEqual(createdEvent.plannerID, 1)
         XCTAssertEqual(Set(createdEvent.memberIDs ?? []), Set([2, 3]))
         XCTAssertEqual(createdEvent.categories, [.entertainment])
-        XCTAssertEqual(createdEvent.id, 101)
     }
     
     //MARK: - Update Event
@@ -79,7 +83,8 @@ final class EventEditorTests: XCTestCase {
             selectedMemberIDs: Set([2, 3]),
             plannerID: 1,
             categories: [.food, .other],
-            bannerImageName: "new_banner.jpg"
+            bannerImageName: "new_banner.jpg",
+            existingEvents: []
         )
         
         XCTAssertEqual(updatedEvent.title, "Updated Title")
@@ -148,7 +153,7 @@ final class EventEditorTests: XCTestCase {
         let result = EventEditor.isFormEmpty(title: "   ")
         XCTAssertTrue(result)
     }
-
+    
     func testIsFormEmptyValidTitleAndDescription() {
         let result = EventEditor.isFormEmpty(title: "Title")
         XCTAssertFalse(result)
