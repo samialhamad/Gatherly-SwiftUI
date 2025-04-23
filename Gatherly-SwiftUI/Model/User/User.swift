@@ -8,6 +8,7 @@
 import Foundation
 
 struct User: Codable, Equatable, Hashable {
+    var bannerImageName: String?
     var createdTimestamp: Int?
     var deviceToken: String?
     var email: String?
@@ -16,6 +17,7 @@ struct User: Codable, Equatable, Hashable {
     var friendIDs: [Int]?
     var groupIDs: [Int]?
     var id: Int?
+    var imageName: String?
     var isEmailEnabled: Bool?
     var lastName: String?
     var phone: String?
