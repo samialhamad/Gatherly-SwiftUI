@@ -12,10 +12,10 @@ final class UserEditorTests: XCTestCase {
     
     func makeSampleUser(id: Int = 1) -> User {
         User(
+            avatarImageName: nil,
             bannerImageName: nil,
             firstName: "Old",
             id: id,
-            imageName: nil,
             lastName: "Name"
         )
     }
@@ -50,7 +50,7 @@ final class UserEditorTests: XCTestCase {
         )
         
         let updatedUser = updated.first
-        XCTAssertEqual(updatedUser?.imageName, "avatar123.png")
+        XCTAssertEqual(updatedUser?.avatarImageName, "avatar123.png")
         XCTAssertEqual(updatedUser?.bannerImageName, "banner123.png")
     }
     

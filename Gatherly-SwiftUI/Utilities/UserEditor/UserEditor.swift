@@ -23,7 +23,7 @@ struct UserEditor {
         
         updatedUser.firstName = firstName
         updatedUser.lastName = lastName
-        updatedUser.imageName = avatarImageName
+        updatedUser.avatarImageName = avatarImageName
         updatedUser.bannerImageName = bannerImageName
         
         if let index = updatedUsers.firstIndex(where: { $0.id == originalUser.id }) {
