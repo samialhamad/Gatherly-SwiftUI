@@ -59,16 +59,19 @@ struct ContentView: View {
             .tag(2)
             
             NavigationStack {
-                ProfileView(currentUser: viewModel.currentUser)
-                    .environmentObject(navigationState)
-                    .addActivityIndicator(isPresented: viewModel.isLoading && navigationState.selectedTab == 3,
-                                          message: Constants.ContentView.profileViewLoadingString)
+                ProfileView(
+                    currentUser: viewModel.currentUser,
+                    users: $viewModel.users
+                )
+                .environmentObject(navigationState)
+                .addActivityIndicator(isPresented: viewModel.isLoading && navigationState.selectedTab == 3,
+                                      message: Constants.ContentView.profileViewLoadingString)
             }
             .tabItem {
                 Image(systemName: "person")
             }
             .tag(3)
-
+            
         }
         .task {
             viewModel.loadAllData()
