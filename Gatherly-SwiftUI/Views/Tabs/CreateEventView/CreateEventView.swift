@@ -9,16 +9,16 @@ import SwiftUI
 import PhotosUI
 
 struct CreateEventView: View {
-    let allUsers: [User]
-    let currentUser: User?
-    
-    @StateObject private var viewModel = CreateEventViewModel()
+    @ObservedObject var currentUser: User
     @Binding var events: [Event]
     @State private var navigateToEvent: Event? = nil
     @EnvironmentObject var navigationState: NavigationState
+    @StateObject private var viewModel = CreateEventViewModel()
+    
+    let allUsers: [User]
     
     var currentPlannerID: Int {
-        currentUser?.id ?? -1
+        currentUser.id ?? -1
     }
     
     var body: some View {
@@ -91,11 +91,14 @@ private extension CreateEventView {
 }
 
 #Preview {
-    NavigationStack {
-        CreateEventView(
-            allUsers: SampleData.sampleUsers,
-            currentUser: SampleData.sampleUsers.first,
-            events: .constant(SampleData.sampleEvents)
-        )
+    if let sampleUser = SampleData.sampleUsers.first {
+        NavigationStack {
+            CreateEventView(
+                currentUser: sampleUser,
+                events: .constant(SampleData.sampleEvents),
+                allUsers: SampleData.sampleUsers
+            )
+            .environmentObject(NavigationState())
+        }
     }
 }
