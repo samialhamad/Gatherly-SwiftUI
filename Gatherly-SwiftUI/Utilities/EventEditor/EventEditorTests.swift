@@ -19,10 +19,6 @@ final class EventEditorTests: XCTestCase {
         let startTime = calendar.date(from: DateComponents(hour: 10, minute: 0, second: 0))!
         let endTime = calendar.date(from: DateComponents(hour: 12, minute: 0, second: 0))!
         
-        let existingEvents = [
-            Event(id: 5), Event(id: 7), Event(id: 8)
-        ]
-        
         let createdEvent = EventEditor.saveEvent(
             title: "New Event",
             description: "Description",
@@ -32,16 +28,16 @@ final class EventEditorTests: XCTestCase {
             selectedMemberIDs: Set([2, 3]),
             plannerID: 1,
             categories: [.entertainment],
-            bannerImageName: "test_banner.jpg",
-            existingEvents: existingEvents
+            bannerImageName: "test_banner.jpg"
         )
         
         XCTAssertEqual(createdEvent.title, "New Event")
         XCTAssertEqual(createdEvent.description, "Description")
         XCTAssertEqual(createdEvent.date, calendar.startOfDay(for: fixedDate))
         XCTAssertEqual(createdEvent.bannerImageName, "test_banner.jpg")
-        XCTAssertEqual(createdEvent.id, 9)
-        
+        XCTAssertGreaterThan(createdEvent.id ?? 0, 0)
+        XCTAssertLessThanOrEqual(createdEvent.id ?? 0, Int(Date().timestamp))
+
         let expectedStart = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 10, minute: 0, second: 0))!
         let expectedEnd = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 12, minute: 0, second: 0))!
         
@@ -83,8 +79,7 @@ final class EventEditorTests: XCTestCase {
             selectedMemberIDs: Set([2, 3]),
             plannerID: 1,
             categories: [.food, .other],
-            bannerImageName: "new_banner.jpg",
-            existingEvents: []
+            bannerImageName: "new_banner.jpg"
         )
         
         XCTAssertEqual(updatedEvent.title, "Updated Title")

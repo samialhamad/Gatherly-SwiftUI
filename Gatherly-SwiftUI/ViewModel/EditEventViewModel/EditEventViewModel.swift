@@ -44,7 +44,7 @@ class EditEventViewModel: ObservableObject {
         }
     }
     
-    func updatedEvent(existingEvents: [Event]) -> Event {
+    func updatedEvent() -> Event {
         var bannerImageName: String? = originalEvent.bannerImageName // original default, for now
         
         if let newImage = selectedBannerImage {
@@ -62,8 +62,7 @@ class EditEventViewModel: ObservableObject {
             plannerID: originalEvent.plannerID ?? 0,
             location: location,
             categories: selectedCategories,
-            bannerImageName: bannerImageName,
-            existingEvents: existingEvents
+            bannerImageName: bannerImageName
         )
     }
     

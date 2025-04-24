@@ -18,11 +18,10 @@ struct GroupEditor {
         memberIDs: Set<Int>,
         imageName: String? = nil,
         bannerImageName: String? = nil,
-        leaderID: Int,
-        existingGroups: [UserGroup]
+        leaderID: Int
     ) -> UserGroup {
         
-        let groupID = originalGroup?.id ?? generateNextGroupID(from: existingGroups)
+        let groupID = originalGroup?.id ?? generateNextGroupID()
         let leaderID = originalGroup?.leaderID ?? leaderID
         
         var group = UserGroup(
@@ -47,8 +46,8 @@ struct GroupEditor {
     
     // MARK: - Generate ID
     
-    private static func generateNextGroupID(from groups: [UserGroup]) -> Int {
-        (groups.map { $0.id }.max() ?? 0) + 1
+    private static func generateNextGroupID() -> Int {
+        Int(Date().timestamp)
     }
     
     //MARK: - isFormEmpty

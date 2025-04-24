@@ -23,12 +23,12 @@ final class GroupEditorTests: XCTestCase {
             memberIDs: [2, 3],
             imageName: "group_image.png",
             bannerImageName: "banner_image.png",
-            leaderID: 1,
-            existingGroups: existingGroups
+            leaderID: 1
         )
         
         XCTAssertEqual(createdGroup.name, "New Group")
-        XCTAssertEqual(createdGroup.id, 3)
+        XCTAssertGreaterThan(createdGroup.id, 0)
+        XCTAssertLessThanOrEqual(createdGroup.id, Int(Date().timestamp))
         XCTAssertEqual(createdGroup.leaderID, 1)
         XCTAssertEqual(createdGroup.imageName, "group_image.png")
         XCTAssertEqual(createdGroup.bannerImageName, "banner_image.png")
@@ -52,8 +52,7 @@ final class GroupEditorTests: XCTestCase {
             memberIDs: [1, 2, 3],
             imageName: "new_image.png",
             bannerImageName: "new_banner.png",
-            leaderID: 99,
-            existingGroups: []
+            leaderID: 99
         )
         
         XCTAssertEqual(updatedGroup.id, original.id)

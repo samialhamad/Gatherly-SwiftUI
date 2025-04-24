@@ -89,7 +89,7 @@ private extension EditEventView {
     var saveAndDeleteSection: some View {
         Section {
             Button("Save") {
-                let updatedEvent = viewModel.updatedEvent(existingEvents: events)
+                let updatedEvent = viewModel.updatedEvent()
                 onSave(updatedEvent)
             }
             .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.primary))

@@ -73,7 +73,7 @@ private extension CreateEventView {
     var createButtonSection: some View {
         Section {
             Button(action: {
-                let newEvent = viewModel.createEvent(with: currentPlannerID, existingEvents: events)
+                let newEvent = viewModel.createEvent(with: currentPlannerID)
                 events.append(newEvent)
                 UserDefaultsManager.saveEvents(events)
                 viewModel.clearFields()

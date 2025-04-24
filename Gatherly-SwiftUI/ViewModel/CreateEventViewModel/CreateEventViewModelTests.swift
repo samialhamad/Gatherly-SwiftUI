@@ -29,19 +29,15 @@ final class CreateEventViewModelTests: XCTestCase {
         viewModel.selectedBannerImage = testImage
         
         let plannerID = 1
-        let existingEvents = [
-            Event(id: 1, plannerID: plannerID, title: "Old Event"),
-            Event(id: 2, plannerID: plannerID, title: "Old Event 2")
-        ]
-        
-        let event = viewModel.createEvent(with: plannerID, existingEvents: existingEvents)
+        let event = viewModel.createEvent(with: plannerID)
         
         let expectedStartDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 10, minute: 0))!
         let expectedEndDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 12, minute: 0))!
         
         XCTAssertEqual(event.title, "Test Event")
         XCTAssertEqual(event.description, "Test description")
-        XCTAssertEqual(event.id, 3)
+        XCTAssertGreaterThan(event.id ?? 0, 0)
+        XCTAssertLessThanOrEqual(event.id ?? 0, Int(Date().timestamp))
         XCTAssertEqual(event.date, calendar.startOfDay(for: fixedDate))
         XCTAssertEqual(event.startTimestamp, Int(expectedStartDate.timestamp))
         XCTAssertEqual(event.endTimestamp, Int(expectedEndDate.timestamp))
@@ -81,4 +77,3 @@ final class CreateEventViewModelTests: XCTestCase {
         XCTAssertLessThan(abs(viewModel.endTime.timeIntervalSince(now.addingTimeInterval(3600))), tolerance)
     }
 }
-

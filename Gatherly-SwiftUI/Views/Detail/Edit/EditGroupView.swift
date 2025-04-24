@@ -77,7 +77,7 @@ private extension EditGroupView {
     var saveAndDeleteSection: some View {
         Section {
             Button("Save") {
-                let updatedGroup = viewModel.updatedGroup(existingGroups: groups)
+                let updatedGroup = viewModel.updatedGroup()
                 onSave(updatedGroup)
             }
             .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.primary))

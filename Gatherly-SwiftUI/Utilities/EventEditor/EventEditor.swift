@@ -23,8 +23,7 @@ struct EventEditor {
         plannerID: Int,
         location: Location? = nil,
         categories: [EventCategory] = [],
-        bannerImageName: String? = nil,
-        existingEvents: [Event]
+        bannerImageName: String? = nil
     ) -> Event {
         let calendar = Calendar.current
         let mergedStart = Date.merge(date: selectedDate, time: startTime)
@@ -37,7 +36,7 @@ struct EventEditor {
             event.id = originalEvent.id
         } else {
             event.plannerID = plannerID
-            event.id = generateNextEventID(from: existingEvents)
+            event.id = generateNextEventID()
         }
         
         event.title = title
@@ -66,8 +65,8 @@ struct EventEditor {
     
     // MARK: - Generate ID
     
-    private static func generateNextEventID(from events: [Event]) -> Int {
-        (events.map { $0.id ?? 0 }.max() ?? 0) + 1
+    private static func generateNextEventID() -> Int {
+        Int(Date().timestamp)
     }
     
     //MARK: - isFormEmpty
