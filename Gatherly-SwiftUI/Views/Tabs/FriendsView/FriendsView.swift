@@ -33,9 +33,9 @@ struct FriendsView: View {
                 } else {
                         GroupsListView(
                             currentUser: currentUser,
-                            users: users,
                             groups: $groups,
-                            searchText: $searchText
+                            searchText: $searchText,
+                            users: users
                         )
                 }
             }
