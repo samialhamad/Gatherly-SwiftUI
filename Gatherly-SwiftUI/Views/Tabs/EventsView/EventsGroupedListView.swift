@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct EventsGroupedListView: View {
-    let currentUser: User?
+    @ObservedObject var currentUser: User
     @Binding var events: [Event]
+    @StateObject private var viewModel = EventsGroupedListViewModel()
+    
     let users: [User]
     let onEventSave: (Event) -> Void
-    @StateObject private var viewModel = EventsGroupedListViewModel()
     
     var body: some View {
         let groupedEvents = events.groupEventsByDay
@@ -68,12 +69,14 @@ struct EventsGroupedListView: View {
 }
 
 #Preview {
-    EventsGroupedListView(
-        currentUser: SampleData.sampleUsers.first,
-        events: .constant(SampleData.sampleEvents),
-        users: SampleData.sampleUsers,
-        onEventSave: { updatedEvent in
-            print("Updated event: \(updatedEvent)")
-        }
-    )
+    if let sampleUser = SampleData.sampleUsers.first {
+        EventsGroupedListView(
+            currentUser: sampleUser,
+            events: .constant(SampleData.sampleEvents),
+            users: SampleData.sampleUsers,
+            onEventSave: { updatedEvent in
+                print("Updated event: \(updatedEvent)")
+            }
+        )
+    }
 }
