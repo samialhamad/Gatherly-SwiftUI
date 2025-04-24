@@ -26,6 +26,11 @@ struct EditProfileFeature: Reducer {
         case setBannerImageName(String?)
         case saveChanges
         case cancel
+        case delegate(DelegateAction)
+        
+        enum DelegateAction: Equatable {
+            case didSave(User)
+        }
     }
 
     func reduce(into state: inout State, action: Action) -> Effect<Action> {
@@ -69,6 +74,9 @@ struct EditProfileFeature: Reducer {
 
         case .cancel:
             state.isPresented = false
+            return .none
+            
+        case .delegate:
             return .none
         }
     }
