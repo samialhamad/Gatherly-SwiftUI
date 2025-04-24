@@ -189,7 +189,7 @@ struct EventCategorySection: View {
 }
 
 struct EventRowLink: View {
-    let currentUser: User?
+    @ObservedObject var currentUser: User
     @Binding var events: [Event]
     let event: Event
     let users: [User]
