@@ -53,8 +53,6 @@ struct ProfileView: View {
         )
     }
     
-    // MARK: - Functions
-
     @ViewBuilder
     private func profileRow(title: String, icon: String, isDestructive: Bool = false) -> some View {
         Button {
