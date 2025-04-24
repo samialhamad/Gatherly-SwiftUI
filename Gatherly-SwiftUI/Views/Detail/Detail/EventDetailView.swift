@@ -9,17 +9,17 @@ import SwiftUI
 import MapKit
 
 struct EventDetailView: View {
-    let currentUser: User?
+    @ObservedObject var currentUser: User
     @Binding var events: [Event]
+    @Environment(\.dismiss) var dismiss
+    @State private var isShowingEditView = false
+    @EnvironmentObject var navigationState: NavigationState
+    @State private var showMapOptions = false
+    @StateObject private var viewModel = EventDetailViewModel()
+    
     let event: Event
     let users: [User]
     var onSave: ((Event) -> Void)? = nil
-    
-    @EnvironmentObject var navigationState: NavigationState
-    @Environment(\.dismiss) var dismiss
-    @State private var isShowingEditView = false
-    @State private var showMapOptions = false
-    @StateObject private var viewModel = EventDetailViewModel()
     
     var body: some View {
         ScrollView {
@@ -177,7 +177,7 @@ private extension EventDetailView {
     
     var eventPlannerAndMembersView: some View {
         Group {
-            if let planner = planner, let currentUser = currentUser {
+            if let planner = planner {
                 Text("Planner")
                     .font(.headline)
                 NavigationLink(destination: ProfileDetailView(user: planner, currentUser: currentUser)) {
@@ -185,7 +185,7 @@ private extension EventDetailView {
                 }
             }
             
-            if let currentUser = currentUser, !members.isEmpty {
+            if !members.isEmpty {
                 Text("Attendees")
                     .font(.headline)
                 ForEach(members, id: \.id) { user in
@@ -251,11 +251,13 @@ private extension EventDetailView {
 }
 
 #Preview {
-    EventDetailView(
-        currentUser: SampleData.sampleUsers.first,
-        events: .constant(SampleData.sampleEvents),
-        event: SampleData.sampleEvents[1],
-        users: SampleData.sampleUsers
-    )
-    .environmentObject(NavigationState())
+    if let sampleUser = SampleData.sampleUsers.first {
+        EventDetailView(
+            currentUser: sampleUser,
+            events: .constant(SampleData.sampleEvents),
+            event: SampleData.sampleEvents[1],
+            users: SampleData.sampleUsers
+        )
+        .environmentObject(NavigationState())
+    }
 }
