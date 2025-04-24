@@ -52,3 +52,14 @@ private extension GroupsListView {
         }
     }
 }
+
+#Preview {
+    if let sampleUser = SampleData.sampleUsers.first {
+        GroupsListView(
+            currentUser: sampleUser,
+            groups: .constant(SampleData.sampleGroups),
+            searchText: .constant(""),
+            users: SampleData.sampleUsers
+        )
+    } 
+}
