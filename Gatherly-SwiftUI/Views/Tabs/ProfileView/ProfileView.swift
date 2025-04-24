@@ -9,9 +9,10 @@ import ComposableArchitecture
 import SwiftUI
 
 struct ProfileView: View {
-    let currentUser: User?
-    
-    @State var store: Store<EditProfileFeature.State, EditProfileFeature.Action>? = nil
+    @ObservedObject var currentUser: User
+    @State private var editProfileStore: Store<EditProfileFeature.State, EditProfileFeature.Action>? = nil
+    @State private var isShowingEditSheet = false
+    @Binding var users: [User]
 
     var body: some View {
         NavigationStack {
@@ -21,19 +22,20 @@ struct ProfileView: View {
 
                     VStack(spacing: Constants.ProfileView.profileVStackSpacing) {
                         Button {
-                            if let user = currentUser {
-                                store = Store<EditProfileFeature.State, EditProfileFeature.Action>(
+                                editProfileStore = Store(
                                     initialState: EditProfileFeature.State(
-                                        firstName: user.firstName ?? "",
-                                        lastName: user.lastName ?? "",
-                                        avatarImage: nil,
-                                        bannerImage: nil
+                                        allUsers: users,
+                                        currentUser: currentUser,
+                                        firstName: currentUser.firstName ?? "",
+                                        lastName: currentUser.lastName ?? "",
+                                        avatarImageName: currentUser.avatarImageName,
+                                        bannerImageName: currentUser.bannerImageName
                                     ),
                                     reducer: {
                                         EditProfileFeature()
                                     }
                                 )
-                            }
+                                isShowingEditSheet = true
                         } label: {
                             profileRowContent(title: "Profile", icon: "person.fill")
                         }
@@ -44,7 +46,7 @@ struct ProfileView: View {
                     }
                 }
             }
-            .navigationTitle("\(currentUser?.firstName ?? "") \(currentUser?.lastName ?? "")")
+            .navigationTitle("\(currentUser.firstName ?? "") \(currentUser.lastName ?? "")")
             .navigationBarTitleDisplayMode(.large)
         }
         .sheet(
@@ -89,8 +91,10 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(
-        currentUser: .constant(SampleData.sampleUsers.first),
-        users: .constant(SampleData.sampleUsers)
-    )
+    if let sampleUser = SampleData.sampleUsers.first {
+        ProfileView(
+            currentUser: sampleUser,
+            users: .constant(SampleData.sampleUsers)
+        )
+    }
 }
