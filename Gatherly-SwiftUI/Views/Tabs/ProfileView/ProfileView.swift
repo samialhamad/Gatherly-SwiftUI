@@ -91,5 +91,8 @@ struct ProfileView: View {
 }
 
 #Preview {
-    ProfileView(currentUser: SampleData.sampleUsers.first)
+    ProfileView(
+        currentUser: .constant(SampleData.sampleUsers.first),
+        users: .constant(SampleData.sampleUsers)
+    )
 }
