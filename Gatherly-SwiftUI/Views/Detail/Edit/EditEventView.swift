@@ -55,11 +55,12 @@ struct EditEventView: View {
                     maskShape: .rectangle,
                     selectedImage: $viewModel.selectedBannerImage
                 )
-                saveAndDeleteSection
+                deleteSection
             }
             .navigationTitle("Edit Event")
             .toolbar {
                 cancelToolbarButton
+                saveToolbarButton
             }
             .alert("Delete Event?", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
@@ -86,19 +87,23 @@ private extension EditEventView {
         }
     }
     
-    var saveAndDeleteSection: some View {
+    var deleteSection: some View {
         Section {
-            Button("Save") {
-                let updatedEvent = viewModel.updatedEvent()
-                onSave(updatedEvent)
-            }
-            .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.primary))
-            .disabled(viewModel.isFormEmpty)
-            
             Button("Delete") {
                 showingDeleteAlert = true
             }
             .foregroundColor(.red)
+        }
+    }
+    
+    var saveToolbarButton: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarTrailing) {
+            Button("Save") {
+                let updatedEvent = viewModel.updatedEvent()
+                onSave(updatedEvent)
+            }
+            .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.secondary))
+            .disabled(viewModel.isFormEmpty)
         }
     }
 }
