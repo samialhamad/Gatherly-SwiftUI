@@ -18,17 +18,8 @@ struct EditProfileView: View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             NavigationStack {
                 Form {
-                    Section(header: Text("Name")) {
-                        TextField("First Name", text: viewStore.binding(
-                            get: \.firstName,
-                            send: EditProfileFeature.Action.setFirstName
-                        ))
-                        TextField("Last Name", text: viewStore.binding(
-                            get: \.lastName,
-                            send: EditProfileFeature.Action.setLastName
-                        ))
-                    }
-                    
+                    nameSection(viewStore)
+                    imagePickersSection(viewStore)
                     deleteButton
                 }
                 .navigationTitle("Edit Profile")
@@ -51,6 +42,47 @@ struct EditProfileView: View {
 }
 
 private extension EditProfileView {
+    
+    // MARK: - Form Views
+    
+    private func nameSection(_ viewStore: ViewStore<EditProfileFeature.State, EditProfileFeature.Action>) -> some View {
+        Section(header: Text("Name")) {
+            TextField("First Name", text: viewStore.binding(
+                get: \.firstName,
+                send: EditProfileFeature.Action.setFirstName
+            ))
+            TextField("Last Name", text: viewStore.binding(
+                get: \.lastName,
+                send: EditProfileFeature.Action.setLastName
+            ))
+        }
+    }
+    
+    private func imagePickersSection(_ viewStore: ViewStore<EditProfileFeature.State, EditProfileFeature.Action>) -> some View {
+        Group {
+            ImagePicker(
+                title: "Avatar Image",
+                imageHeight: Constants.CreateGroupView.groupImageHeight,
+                maskShape: .circle,
+                selectedImage: viewStore.binding(
+                    get: \.avatarImage,
+                    send: EditProfileFeature.Action.setAvatarImage
+                )
+            )
+            
+            ImagePicker(
+                title: "Banner Image",
+                imageHeight: Constants.CreateGroupView.groupBannerImageHeight,
+                maskShape: .rectangle,
+                selectedImage: viewStore.binding(
+                    get: \.bannerImage,
+                    send: EditProfileFeature.Action.setBannerImage
+                )
+            )
+        }
+    }
+    
+    // MARK: - Buttons
     
     func cancelToolbarButton(_ viewStore: ViewStore<EditProfileFeature.State, EditProfileFeature.Action>) -> some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
