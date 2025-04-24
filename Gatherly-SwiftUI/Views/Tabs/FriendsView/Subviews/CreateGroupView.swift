@@ -90,3 +90,13 @@ private extension CreateGroupView {
         }
     }
 }
+
+#Preview {
+    if let sampleUser = SampleData.sampleUsers.first {
+        CreateGroupView(
+            currentUser: sampleUser,
+            groups: .constant(SampleData.sampleGroups),
+            users: SampleData.sampleUsers
+        )
+    } 
+}
