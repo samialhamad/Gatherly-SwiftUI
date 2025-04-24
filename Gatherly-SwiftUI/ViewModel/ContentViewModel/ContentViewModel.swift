@@ -28,6 +28,9 @@ final class ContentViewModel: ObservableObject {
             self.users = SampleData.sampleUsers
             self.events = SampleData.sampleEvents
             self.groups = SampleData.sampleGroups
+            
+            applySampleDataForSami()
+
             self.currentUser = users.first(where: { $0.id == 1 })
             
             saveAllData()
@@ -91,6 +94,23 @@ final class ContentViewModel: ObservableObject {
         self.didSyncContacts = true
     }
     
+    private func applySampleDataForSami() {
+        guard let samiIndex = users.firstIndex(where: { $0.id == 1 }) else { return }
+
+        let sami = users[samiIndex]
+
+        sami.eventIDs = events
+            .filter { $0.plannerID == 1 || ($0.memberIDs?.contains(1) ?? false) }
+            .compactMap { $0.id }
+
+        sami.groupIDs = groups
+            .filter { $0.leaderID == 1 || ($0.memberIDs.contains(1)) }
+            .compactMap { $0.id }
+
+        sami.friendIDs = [2, 3, 4]
+
+        users[samiIndex] = sami
+    }
     
     func generateUsersFromContacts(_ contacts: [SyncedContact]) -> ([User], [Int]) {
         var existingPhones = Set(self.users.compactMap { $0.phone?.filter(\.isWholeNumber) })
