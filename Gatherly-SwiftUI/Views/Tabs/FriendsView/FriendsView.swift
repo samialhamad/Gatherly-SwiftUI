@@ -57,8 +57,8 @@ struct FriendsView: View {
             .sheet(isPresented: $isShowingCreateGroup) {
                     CreateGroupView(
                         currentUser: currentUser,
-                        users: users,
-                        groups: $groups
+                        groups: $groups,
+                        users: users
                     )
             }
         }
