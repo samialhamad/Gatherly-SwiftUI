@@ -36,9 +36,9 @@ struct ContentView: View {
                 
                 NavigationStack {
                     CreateEventView(
-                        allUsers: viewModel.users,
                         currentUser: currentUser,
-                        events: $viewModel.events
+                        events: $viewModel.events,
+                        allUsers: viewModel.users
                     )
                     .environmentObject(navigationState)
                     .navigationTitle("Create Event")
