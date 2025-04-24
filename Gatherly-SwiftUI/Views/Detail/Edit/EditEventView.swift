@@ -55,7 +55,7 @@ struct EditEventView: View {
                     maskShape: .rectangle,
                     selectedImage: $viewModel.selectedBannerImage
                 )
-                deleteSection
+                deleteButton
             }
             .navigationTitle("Edit Event")
             .toolbar {
@@ -87,7 +87,7 @@ private extension EditEventView {
         }
     }
     
-    var deleteSection: some View {
+    var deleteButton: some View {
         Section {
             Button("Delete") {
                 showingDeleteAlert = true
