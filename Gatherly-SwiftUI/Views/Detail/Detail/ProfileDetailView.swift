@@ -8,11 +8,10 @@
 import SwiftUI
 
 struct ProfileDetailView: View {
-    let user: User
-    let currentUser: User
-
+    @ObservedObject var currentUser: User
     @State private var isShowingActionSheet = false
-    
+    @ObservedObject var user: User
+
     var body: some View {
         ScrollView {
             VStack {
@@ -96,10 +95,12 @@ private extension ProfileDetailView {
 }
 
 #Preview {
-    NavigationStack {
-        ProfileDetailView(
-            user: SampleData.sampleUsers.first!,
-            currentUser: SampleData.sampleUsers.first!
-        )
+    if let sampleUser = SampleData.sampleUsers.first {
+        NavigationStack {
+            ProfileDetailView(
+                currentUser: sampleUser,
+                user: sampleUser
+            )
+        }
     }
 }
