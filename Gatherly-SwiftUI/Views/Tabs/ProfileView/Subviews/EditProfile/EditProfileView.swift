@@ -9,6 +9,8 @@ import ComposableArchitecture
 import SwiftUI
 
 struct EditProfileView: View {
+    @State private var showingDeleteAlert = false
+    
     let store: Store<EditProfileFeature.State, EditProfileFeature.Action>
     let onComplete: (EditProfileFeature.Action) -> Void
     
@@ -27,29 +29,70 @@ struct EditProfileView: View {
                         ))
                     }
                     
-                    saveAndCancelSection(viewStore: viewStore)
+                    deleteButton
                 }
                 .navigationTitle("Edit Profile")
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button("Cancel") {
-                            viewStore.send(.cancel)
-                            onComplete(.cancel)
-                        }
+                    cancelToolbarButton(viewStore)
+                    saveToolbarButton(viewStore)
+                }
+                .alert("Delete Profile?", isPresented: $showingDeleteAlert) {
+                    Button("Delete", role: .destructive) {
+                        // Placeholder: no delete functionality yet
                     }
+                    Button("Cancel", role: .cancel) {}
+                } message: {
+                    Text("Are you sure you want to delete your profile?")
                 }
             }
             .keyboardDismissable()
         }
     }
+}
+
+private extension EditProfileView {
     
-    @ViewBuilder
-    private func saveAndCancelSection(viewStore: ViewStore<EditProfileFeature.State, EditProfileFeature.Action>) -> some View {
+    func cancelToolbarButton(_ viewStore: ViewStore<EditProfileFeature.State, EditProfileFeature.Action>) -> some ToolbarContent {
+        ToolbarItem(placement: .navigationBarLeading) {
+            Button("Cancel") {
+                viewStore.send(.cancel)
+                onComplete(.cancel)
+            }
+        }
+    }
+    
+    var deleteButton: some View {
         Section {
+            Button("Delete Profile") {
+                showingDeleteAlert = true
+            }
+            .foregroundColor(.red)
+        }
+    }
+    
+    func saveToolbarButton(_ viewStore: ViewStore<EditProfileFeature.State, EditProfileFeature.Action>) -> some ToolbarContent {
+        ToolbarItem(placement: .navigationBarTrailing) {
             Button("Save") {
                 viewStore.send(.saveChanges)
             }
-            .foregroundColor(Color(Colors.primary))
+            .foregroundColor(Color(Colors.secondary))
         }
     }
+}
+
+#Preview {
+    EditProfileView(
+        store: Store(
+            initialState: EditProfileFeature.State(
+                allUsers: SampleData.sampleUsers,
+                currentUser: SampleData.sampleUsers.first!,
+                firstName: "Sami",
+                lastName: "Alhamad",
+                avatarImageName: nil,
+                bannerImageName: nil
+            ),
+            reducer: { EditProfileFeature() }
+        ),
+        onComplete: { _ in }
+    )
 }
