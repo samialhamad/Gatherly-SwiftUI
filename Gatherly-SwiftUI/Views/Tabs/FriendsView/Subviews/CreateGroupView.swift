@@ -98,5 +98,5 @@ private extension CreateGroupView {
             groups: .constant(SampleData.sampleGroups),
             users: SampleData.sampleUsers
         )
-    } 
+    }
 }

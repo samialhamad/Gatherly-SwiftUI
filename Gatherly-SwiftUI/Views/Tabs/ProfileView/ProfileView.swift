@@ -19,7 +19,7 @@ struct ProfileView: View {
             ScrollView {
                 VStack(spacing: Constants.ProfileView.vstackSpacing) {
                     AvatarHeaderView(user: currentUser)
-
+                    
                     VStack(spacing: Constants.ProfileView.profileVStackSpacing) {
                         Button {
                                 editProfileStore = Store(
@@ -39,7 +39,7 @@ struct ProfileView: View {
                         } label: {
                             profileRowContent(title: "Profile", icon: "person.fill")
                         }
-
+                        
                         profileRow(title: "Availability", icon: "calendar.badge.clock")
                         profileRow(title: "Settings", icon: "gearshape.fill")
                         profileRow(title: "Logout", icon: "arrow.backward.circle.fill", isDestructive: true)
