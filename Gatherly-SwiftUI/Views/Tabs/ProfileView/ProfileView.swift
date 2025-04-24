@@ -18,7 +18,11 @@ struct ProfileView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: Constants.ProfileView.vstackSpacing) {
-                    AvatarHeaderView(user: currentUser)
+                    AvatarHeaderView(
+                        user: currentUser,
+                        profileImage: profileImage,
+                        bannerImage: bannerImage
+                    )
                     
                     VStack(spacing: Constants.ProfileView.profileVStackSpacing) {
                         Button {
@@ -29,7 +33,9 @@ struct ProfileView: View {
                                     firstName: currentUser.firstName ?? "",
                                     lastName: currentUser.lastName ?? "",
                                     avatarImageName: currentUser.avatarImageName,
-                                    bannerImageName: currentUser.bannerImageName
+                                    bannerImageName: currentUser.bannerImageName,
+                                    avatarImage: currentUser.avatarImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) },
+                                    bannerImage: currentUser.bannerImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) }
                                 ),
                                 reducer: {
                                     EditProfileFeature()
@@ -110,6 +116,21 @@ struct ProfileView: View {
                 .foregroundColor(Color(Colors.primary))
         }
         .padding()
+    }
+}
+
+private extension ProfileView {
+    
+    // MARK: - Computed Vars
+    
+    private var profileImage: UIImage? {
+        guard let imageName = currentUser.avatarImageName else { return nil }
+        return ImageUtility.loadImageFromDocuments(named: imageName)
+    }
+
+    private var bannerImage: UIImage? {
+        guard let imageName = currentUser.bannerImageName else { return nil }
+        return ImageUtility.loadImageFromDocuments(named: imageName)
     }
 }
 
