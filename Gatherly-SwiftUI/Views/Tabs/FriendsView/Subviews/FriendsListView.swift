@@ -32,8 +32,8 @@ struct FriendsListView: View {
                         Section(header: Text(key).id(key)) {
                             ForEach(viewModel.groupedFriends[key]?.sorted { ($0.firstName ?? "") < ($1.firstName ?? "") } ?? [], id: \.id) { friend in
                                 NavigationLink(destination: ProfileDetailView(
-                                    user: friend,
-                                    currentUser: users.first(where: { $0.id == currentUserID }) ?? friend
+                                    currentUser: users.first(where: { $0.id == currentUserID }) ?? friend,
+                                    user: friend
                                 )) {
                                     ProfileRow(user: friend)
                                 }

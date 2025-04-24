@@ -80,7 +80,7 @@ private extension GroupDetailView {
                 Text("Leader")
                     .font(.headline)
                 
-                NavigationLink(destination: ProfileDetailView(user: leader, currentUser: currentUser)) {
+                NavigationLink(destination: ProfileDetailView( currentUser: currentUser, user: leader)) {
                     ProfileRow(user: leader)
                 }
             }
@@ -90,7 +90,7 @@ private extension GroupDetailView {
                     .font(.headline)
                 
                 ForEach(memberUsers, id: \.id) { user in
-                    NavigationLink(destination: ProfileDetailView(user: user, currentUser: currentUser)) {
+                    NavigationLink(destination: ProfileDetailView( currentUser: currentUser, user: user)) {
                         ProfileRow(user: user)
                     }
                 }
