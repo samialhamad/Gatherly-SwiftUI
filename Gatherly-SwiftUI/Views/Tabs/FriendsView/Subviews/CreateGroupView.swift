@@ -9,12 +9,12 @@ import SwiftUI
 import PhotosUI
 
 struct CreateGroupView: View {
-    let currentUser: User
-    let users: [User]
-    
+    @ObservedObject var currentUser: User
+    @Environment(\.dismiss) private var dismiss
     @Binding var groups: [UserGroup]
     @StateObject private var viewModel = CreateGroupViewModel()
-    @Environment(\.dismiss) private var dismiss
+    
+    let users: [User]
     
     var body: some View {
         NavigationStack {
