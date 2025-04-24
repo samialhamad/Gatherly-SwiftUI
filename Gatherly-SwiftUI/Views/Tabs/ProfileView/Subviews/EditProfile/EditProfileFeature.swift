@@ -32,13 +32,13 @@ struct EditProfileFeature: Reducer {
             case didSave(User)
         }
     }
-
+    
     func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
         case .setFirstName(let name):
             state.firstName = name
             return .none
-
+            
         case .setLastName(let name):
             state.lastName = name
             return .none
@@ -50,7 +50,7 @@ struct EditProfileFeature: Reducer {
         case .setBannerImageName(let image):
             state.bannerImageName = image
             return .none
-
+            
         case .saveChanges:
             let updatedUsers = UserEditor.saveUser(
                 originalUser: state.currentUser,
@@ -71,7 +71,7 @@ struct EditProfileFeature: Reducer {
             state.isPresented = false
             
             return .none
-
+            
         case .cancel:
             state.isPresented = false
             return .none
