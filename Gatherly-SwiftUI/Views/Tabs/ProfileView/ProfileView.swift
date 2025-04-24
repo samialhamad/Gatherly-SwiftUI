@@ -49,10 +49,30 @@ struct ProfileView: View {
             .navigationTitle("\(currentUser.firstName ?? "") \(currentUser.lastName ?? "")")
             .navigationBarTitleDisplayMode(.large)
         }
-        .sheet(
-            item: $store,
-            content: { EditProfileView(store: $0) }
-        )
+        .sheet(isPresented: $isShowingEditSheet) {
+            if let store = editProfileStore {
+                EditProfileView(
+                    store: store,
+                    onComplete: { action in
+                        switch action {
+                        case let .delegate(.didSave(updatedUser)):
+                            if let index = users.firstIndex(where: { $0.id == updatedUser.id }) {
+                                users[index] = updatedUser
+                            }
+                            
+                        case .cancel:
+                            break
+                            
+                        default:
+                            break
+                        }
+                        
+                        isShowingEditSheet = false
+                        editProfileStore = nil
+                    }
+                )
+            }
+        }
     }
     
     @ViewBuilder
