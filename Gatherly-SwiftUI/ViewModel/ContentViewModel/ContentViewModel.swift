@@ -63,14 +63,13 @@ final class ContentViewModel: ObservableObject {
         self.users.append(contentsOf: newUsers)
         
         if let currentIndex = self.users.firstIndex(where: { $0.id == currentUserID }) {
-            var currentUser = self.users[currentIndex]
+            let currentUser = self.users[currentIndex]
             var friendIDs = currentUser.friendIDs ?? []
-            
+
             let uniqueNewFriendIDs = newFriendIDs.filter { !friendIDs.contains($0) }
             friendIDs.append(contentsOf: uniqueNewFriendIDs)
-            
+
             currentUser.friendIDs = Array(Set(friendIDs))
-            self.users[currentIndex] = currentUser
         } else {
             let newCurrentUser = User(
                 createdTimestamp: Int(Date().timestamp),
@@ -79,6 +78,7 @@ final class ContentViewModel: ObservableObject {
                 eventIDs: [],
                 firstName: "You",
                 friendIDs: newFriendIDs,
+                groupIDs: [],
                 id: currentUserID,
                 isEmailEnabled: false,
                 lastName: "",
