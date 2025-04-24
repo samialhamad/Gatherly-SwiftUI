@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct CalendarView: View {
-    let currentUser: User?
+    @ObservedObject var currentUser: User
     @Binding var events: [Event]
-    let users: [User]
-    
-    @StateObject private var viewModel = CalendarViewModel()
-    @EnvironmentObject var navigationState: NavigationState
     @State private var isCalendarView = true
+    @EnvironmentObject var navigationState: NavigationState
+    @StateObject private var viewModel = CalendarViewModel()
+    
+    let users: [User]
     
     var body: some View {
         NavigationStack {
@@ -143,10 +143,12 @@ private extension CalendarView {
 }
 
 #Preview {
-    CalendarView(
-        currentUser: SampleData.sampleUsers.first,
-        events: .constant(SampleData.sampleEvents),
-        users: SampleData.sampleUsers
-    )
-    .environmentObject(NavigationState())
+    if let sampleUser = SampleData.sampleUsers.first {
+        CalendarView(
+            currentUser: sampleUser,
+            events: .constant(SampleData.sampleEvents),
+            users: SampleData.sampleUsers
+        )
+        .environmentObject(NavigationState())
+    }
 }
