@@ -10,6 +10,7 @@ import SwiftUI
 
 struct EditProfileView: View {
     let store: Store<EditProfileFeature.State, EditProfileFeature.Action>
+    let onComplete: (EditProfileFeature.Action) -> Void
     
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
@@ -33,6 +34,7 @@ struct EditProfileView: View {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button("Cancel") {
                             viewStore.send(.cancel)
+                            onComplete(.cancel)
                         }
                     }
                 }
@@ -51,4 +53,3 @@ struct EditProfileView: View {
         }
     }
 }
-
