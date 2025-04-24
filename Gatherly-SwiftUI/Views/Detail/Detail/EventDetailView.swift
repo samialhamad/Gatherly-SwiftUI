@@ -180,7 +180,7 @@ private extension EventDetailView {
             if let planner = planner {
                 Text("Planner")
                     .font(.headline)
-                NavigationLink(destination: ProfileDetailView(user: planner, currentUser: currentUser)) {
+                NavigationLink(destination: ProfileDetailView(currentUser: currentUser, user: planner)) {
                     ProfileRow(user: planner)
                 }
             }
@@ -189,7 +189,7 @@ private extension EventDetailView {
                 Text("Attendees")
                     .font(.headline)
                 ForEach(members, id: \.id) { user in
-                    NavigationLink(destination: ProfileDetailView(user: user, currentUser: currentUser)) {
+                    NavigationLink(destination: ProfileDetailView(currentUser: currentUser, user: user)) {
                         ProfileRow(user: user)
                     }
                 }
