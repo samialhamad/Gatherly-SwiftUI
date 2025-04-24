@@ -42,11 +42,12 @@ struct EditGroupView: View {
                     plannerID: viewModel.leaderID,
                     selectedMemberIDs: $viewModel.selectedMemberIDs
                 )
-                saveAndDeleteSection
+                deleteButton
             }
             .navigationTitle("Edit Group")
             .toolbar {
                 cancelToolbarButton
+                saveToolbarButton
             }
             .alert("Delete Group?", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
@@ -74,19 +75,23 @@ private extension EditGroupView {
         }
     }
     
-    var saveAndDeleteSection: some View {
+    var deleteButton: some View {
         Section {
-            Button("Save") {
-                let updatedGroup = viewModel.updatedGroup()
-                onSave(updatedGroup)
-            }
-            .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.primary))
-            .disabled(viewModel.isFormEmpty)
-            
             Button("Delete") {
                 showingDeleteAlert = true
             }
             .foregroundColor(.red)
+        }
+    }
+    
+    var saveToolbarButton: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarTrailing) {
+            Button("Save") {
+                let updatedGroup = viewModel.updatedGroup()
+                onSave(updatedGroup)
+            }
+            .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.secondary))
+            .disabled(viewModel.isFormEmpty)
         }
     }
     
