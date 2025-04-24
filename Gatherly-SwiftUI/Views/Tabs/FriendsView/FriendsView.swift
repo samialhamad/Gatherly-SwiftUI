@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct FriendsView: View {
-    let currentUser: User?
-    private let tabTitles = ["Friends", "Groups"]
-    
+    @ObservedObject var currentUser: User
     @Binding var groups: [UserGroup]
-    @Binding var users: [User]
     @State private var isShowingAddFriend = false
     @State private var isShowingCreateGroup = false
-    @State private var selectedTab = 0
     @State private var searchText = ""
+    @State private var selectedTab = 0
+    @Binding var users: [User]
+    
+    private let tabTitles = ["Friends", "Groups"]
     
     var body: some View {
         NavigationStack {
@@ -25,22 +25,18 @@ struct FriendsView: View {
                 SearchBarView(searchText: $searchText)
                 
                 if selectedTab == 0 {
-                    if let currentUser = currentUser {
                         FriendsListView(
                             searchText: $searchText,
                             currentUserID: currentUser.id ?? 1,
                             users: users
                         )
-                    }
                 } else {
-                    if let currentUser = currentUser {
                         GroupsListView(
                             currentUser: currentUser,
                             users: users,
                             groups: $groups,
                             searchText: $searchText
                         )
-                    }
                 }
             }
             .navigationTitle(tabTitles[selectedTab])
@@ -50,7 +46,6 @@ struct FriendsView: View {
                 }
             }
             .sheet(isPresented: $isShowingAddFriend) {
-                if let currentUser = currentUser {
                     AddFriendView(
                         currentUser: currentUser,
                         viewModel: AddFriendViewModel(
@@ -58,16 +53,13 @@ struct FriendsView: View {
                             allUsers: users
                         )
                     )
-                }
             }
             .sheet(isPresented: $isShowingCreateGroup) {
-                if let currentUser = currentUser {
                     CreateGroupView(
                         currentUser: currentUser,
                         users: users,
                         groups: $groups
                     )
-                }
             }
         }
         .keyboardDismissable()
@@ -110,10 +102,12 @@ private extension FriendsView {
 }
 
 #Preview {
-    FriendsView(
-        currentUser: SampleData.sampleUsers.first!,
-        groups: .constant(SampleData.sampleGroups),
-        users: .constant(SampleData.sampleUsers)
-    )
-    .environmentObject(NavigationState())
+    if let sampleUser = SampleData.sampleUsers.first {
+        FriendsView(
+            currentUser: sampleUser,
+            groups: .constant(SampleData.sampleGroups),
+            users: .constant(SampleData.sampleUsers)
+        )
+        .environmentObject(NavigationState())
+    }
 }
