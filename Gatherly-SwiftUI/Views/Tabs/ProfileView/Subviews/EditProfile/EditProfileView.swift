@@ -74,6 +74,7 @@ private extension EditProfileView {
         ToolbarItem(placement: .navigationBarTrailing) {
             Button("Save") {
                 viewStore.send(.saveChanges)
+                onComplete(.delegate(.didSave(viewStore.currentUser)))
             }
             .foregroundColor(Color(Colors.secondary))
         }

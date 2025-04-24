@@ -60,16 +60,12 @@ struct EditProfileFeature: Reducer {
                 bannerImageName: state.bannerImageName,
                 existingUsers: state.allUsers
             )
-            
+
             if let updatedUser = updatedUsers.first(where: { $0.id == state.currentUser.id }) {
                 state.allUsers = updatedUsers
                 state.currentUser = updatedUser
-                return .run { send in
-                    await send(.delegate(.didSave(updatedUser)))
-                }
             }
-            state.isPresented = false
-            
+
             return .none
             
         case .cancel:

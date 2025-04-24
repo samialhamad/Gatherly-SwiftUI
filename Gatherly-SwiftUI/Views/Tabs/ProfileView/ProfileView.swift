@@ -13,7 +13,7 @@ struct ProfileView: View {
     @State private var editProfileStore: Store<EditProfileFeature.State, EditProfileFeature.Action>? = nil
     @State private var isShowingEditSheet = false
     @Binding var users: [User]
-
+    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -22,20 +22,20 @@ struct ProfileView: View {
                     
                     VStack(spacing: Constants.ProfileView.profileVStackSpacing) {
                         Button {
-                                editProfileStore = Store(
-                                    initialState: EditProfileFeature.State(
-                                        allUsers: users,
-                                        currentUser: currentUser,
-                                        firstName: currentUser.firstName ?? "",
-                                        lastName: currentUser.lastName ?? "",
-                                        avatarImageName: currentUser.avatarImageName,
-                                        bannerImageName: currentUser.bannerImageName
-                                    ),
-                                    reducer: {
-                                        EditProfileFeature()
-                                    }
-                                )
-                                isShowingEditSheet = true
+                            editProfileStore = Store(
+                                initialState: EditProfileFeature.State(
+                                    allUsers: users,
+                                    currentUser: currentUser,
+                                    firstName: currentUser.firstName ?? "",
+                                    lastName: currentUser.lastName ?? "",
+                                    avatarImageName: currentUser.avatarImageName,
+                                    bannerImageName: currentUser.bannerImageName
+                                ),
+                                reducer: {
+                                    EditProfileFeature()
+                                }
+                            )
+                            isShowingEditSheet = true
                         } label: {
                             profileRowContent(title: "Profile", icon: "person.fill")
                         }
@@ -55,13 +55,16 @@ struct ProfileView: View {
                     store: store,
                     onComplete: { action in
                         switch action {
-                        case let .delegate(.didSave(updatedUser)):
-                            if let index = users.firstIndex(where: { $0.id == updatedUser.id }) {
-                                users[index] = updatedUser
-                            }
-                            
                         case .cancel:
                             break
+                            
+                        case .delegate(let delegateAction):
+                            switch delegateAction {
+                            case let .didSave(updatedUser):
+                                if let index = users.firstIndex(where: { $0.id == updatedUser.id }) {
+                                    users[index] = updatedUser
+                                }
+                            }
                             
                         default:
                             break
