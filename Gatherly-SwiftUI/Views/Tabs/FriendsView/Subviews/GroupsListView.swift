@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct GroupsListView: View {
-    let currentUser: User
-    let users: [User]
-
+    @ObservedObject var currentUser: User
     @Binding var groups: [UserGroup]
     @Binding var searchText: String
+    
+    let users: [User]
     
     var body: some View {
         List {
