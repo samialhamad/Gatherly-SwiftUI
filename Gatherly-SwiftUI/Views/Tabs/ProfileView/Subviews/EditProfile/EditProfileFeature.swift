@@ -12,16 +12,16 @@ struct EditProfileFeature: Reducer {
     struct State: Equatable {
         var firstName: String
         var lastName: String
-        var avatarImage: UIImage?
-        var bannerImage: UIImage?
+        var avatarImageName: String?
+        var bannerImageName: String?
         var isPresented: Bool = false
     }
-
+    
     enum Action: Equatable {
         case setFirstName(String)
         case setLastName(String)
-        case setAvatarImage(UIImage?)
-        case setBannerImage(UIImage?)
+        case setAvatarImageName(String?)
+        case setBannerImageName(String?)
         case saveChanges
         case cancel
     }
@@ -35,13 +35,13 @@ struct EditProfileFeature: Reducer {
         case .setLastName(let name):
             state.lastName = name
             return .none
-
-        case .setAvatarImage(let image):
-            state.avatarImage = image
+            
+        case .setAvatarImageName(let image):
+            state.avatarImageName = image
             return .none
-
-        case .setBannerImage(let image):
-            state.bannerImage = image
+            
+        case .setBannerImageName(let image):
+            state.bannerImageName = image
             return .none
 
         case .saveChanges:
