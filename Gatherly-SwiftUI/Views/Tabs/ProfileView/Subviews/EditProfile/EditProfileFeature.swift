@@ -16,14 +16,16 @@ struct EditProfileFeature: Reducer {
         var lastName: String
         var avatarImageName: String?
         var bannerImageName: String?
+        var avatarImage: UIImage?
+        var bannerImage: UIImage?
         var isPresented: Bool = false
     }
     
     enum Action: Equatable {
         case setFirstName(String)
         case setLastName(String)
-        case setAvatarImageName(String?)
-        case setBannerImageName(String?)
+        case setAvatarImage(UIImage?)
+        case setBannerImage(UIImage?)
         case saveChanges
         case cancel
         case delegate(DelegateAction)
@@ -43,21 +45,24 @@ struct EditProfileFeature: Reducer {
             state.lastName = name
             return .none
             
-        case .setAvatarImageName(let image):
-            state.avatarImageName = image
+        case .setAvatarImage(let image):
+            state.avatarImage = image
             return .none
             
-        case .setBannerImageName(let image):
-            state.bannerImageName = image
+        case .setBannerImage(let image):
+            state.bannerImage = image
             return .none
             
         case .saveChanges:
+            let avatarImageName = state.avatarImage.flatMap { ImageUtility.saveImageToDocuments(image: $0) }
+            let bannerImageName = state.bannerImage.flatMap { ImageUtility.saveImageToDocuments(image: $0) }
+            
             let updatedUsers = UserEditor.saveUser(
                 originalUser: state.currentUser,
                 firstName: state.firstName,
                 lastName: state.lastName,
-                avatarImageName: state.avatarImageName,
-                bannerImageName: state.bannerImageName,
+                avatarImageName: avatarImageName,
+                bannerImageName: bannerImageName,
                 existingUsers: state.allUsers
             )
 
