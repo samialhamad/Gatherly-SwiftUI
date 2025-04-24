@@ -8,8 +8,7 @@
 import SwiftUI
 
 struct AddFriendView: View {
-    let currentUser: User
-    
+    @ObservedObject var currentUser: User
     @Environment(\.dismiss) private var dismiss
     @StateObject var viewModel: AddFriendViewModel
     
@@ -20,7 +19,7 @@ struct AddFriendView: View {
                 
                 if !viewModel.searchText.trimmingCharacters(in: .whitespaces).isEmpty {
                     List(viewModel.filteredUsers, id: \.id) { user in
-                        NavigationLink(destination: ProfileDetailView(user: user, currentUser: currentUser)) {
+                        NavigationLink(destination: ProfileDetailView(currentUser: currentUser, user: user)) {
                             ProfileRow(user: user)
                         }
                     }
