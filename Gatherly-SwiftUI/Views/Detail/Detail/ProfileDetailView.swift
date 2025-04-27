@@ -11,37 +11,30 @@ struct ProfileDetailView: View {
     @ObservedObject var currentUser: User
     @State private var isShowingActionSheet = false
     @ObservedObject var user: User
-    
+
     var body: some View {
-        if isViewingSelf {
-            ProfileView(
-                currentUser: currentUser,
-                users: .constant([currentUser])
-            )
-        } else {
-            ScrollView {
-                VStack {
-                    AvatarHeaderView(user: user)
-                    userInfoView
-                    Spacer()
+        ScrollView {
+            VStack {
+                AvatarHeaderView(user: user)
+                userInfoView
+                Spacer()
+            }
+        }
+        .navigationTitle("\(user.firstName ?? "") \(user.lastName ?? "")")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            actionSheetButton
+        }
+        .confirmationDialog("Options", isPresented: $isShowingActionSheet, titleVisibility: .visible) {
+            Button("Report", role: .destructive) {
+                // handle report
+            }
+            if isFriend {
+                Button("Remove Friend", role: .destructive) {
+                    // handle remove friend
                 }
             }
-            .navigationTitle("\(user.firstName ?? "") \(user.lastName ?? "")")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                actionSheetButton
-            }
-            .confirmationDialog("Options", isPresented: $isShowingActionSheet, titleVisibility: .visible) {
-                Button("Report", role: .destructive) {
-                    // handle report
-                }
-                if isFriend {
-                    Button("Remove Friend", role: .destructive) {
-                        // handle remove friend
-                    }
-                }
-                Button("Cancel", role: .cancel) {}
-            }
+            Button("Cancel", role: .cancel) {}
         }
     }
 }
@@ -98,10 +91,6 @@ private extension ProfileDetailView {
     var isFriend: Bool {
         guard let userID = user.id else { return false }
         return currentUser.friendIDs?.contains(userID) == true
-    }
-    
-    private var isViewingSelf: Bool {
-        currentUser.id == user.id
     }
 }
 
