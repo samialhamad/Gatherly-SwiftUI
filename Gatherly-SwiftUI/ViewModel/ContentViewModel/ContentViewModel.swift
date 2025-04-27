@@ -24,25 +24,24 @@ final class ContentViewModel: ObservableObject {
     private var pendingRequests = 0
     
     func loadAllData() {
-        if !didSeedSampleData {
+        self.users = UserDefaultsManager.loadUsers()
+        self.events = UserDefaultsManager.loadEvents()
+        self.groups = UserDefaultsManager.loadGroups()
+
+        if self.users.isEmpty {
             self.users = SampleData.sampleUsers
             self.events = SampleData.sampleEvents
             self.groups = SampleData.sampleGroups
-            
-            applySampleDataForSami()
 
-            self.currentUser = users.first(where: { $0.id == 1 })
-            
+            applySampleDataForSami()
             saveAllData()
-            didSeedSampleData = true
         } else {
-            self.users = UserDefaultsManager.loadUsers()
-            self.events = UserDefaultsManager.loadEvents()
-            self.groups = UserDefaultsManager.loadGroups()
-            self.currentUser = users.first(where: { $0.id == 1 })
+            print("Users loaded from UserDefaults: \(users.count)")
         }
-        
-        isLoading = false
+
+        self.currentUser = users.first(where: { $0.id == 1 })
+
+        self.isLoading = false
     }
     
     func saveAllData() {
@@ -95,7 +94,9 @@ final class ContentViewModel: ObservableObject {
     }
     
     private func applySampleDataForSami() {
-        guard let samiIndex = users.firstIndex(where: { $0.id == 1 }) else { return }
+        guard let samiIndex = users.firstIndex(where: { $0.id == 1 }) else {
+            return
+        }
 
         let sami = users[samiIndex]
 
