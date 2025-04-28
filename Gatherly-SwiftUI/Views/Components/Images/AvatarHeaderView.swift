@@ -12,32 +12,26 @@ struct AvatarHeaderView: View {
     let group: UserGroup?
     let size: CGFloat
     let font: Font
-    let profileImage: UIImage?
-    let bannerImage: UIImage?
     
     init(
         user: User? = nil,
         group: UserGroup? = nil,
         size: CGFloat = Constants.AvatarHeaderView.size,
-        font: Font = .largeTitle,
-        profileImage: UIImage? = nil,
-        bannerImage: UIImage? = nil
+        font: Font = .largeTitle
     ) {
         self.user = user
         self.group = group
         self.size = size
         self.font = font
-        self.profileImage = profileImage
-        self.bannerImage = bannerImage
     }
     
     var body: some View {
         VStack(spacing: 0) {
-            if bannerImage != nil {
-                bannerView
+            if let bannerImage = bannerImage {
+                bannerView(bannerImage: bannerImage)
                     .frame(height: Constants.AvatarHeaderView.rectangleFrameHeight)
             }
-
+            
             AvatarView(
                 user: user,
                 group: group,
@@ -56,9 +50,31 @@ struct AvatarHeaderView: View {
 
 private extension AvatarHeaderView {
     
-    //MARK: - Subviews
+    // MARK: - Computed Vars
     
-    private var bannerView: some View {
+    private var profileImage: UIImage? {
+        if let user = user, let imageName = user.avatarImageName {
+            return ImageUtility.loadImageFromDocuments(named: imageName)
+        }
+        if let group = group, let imageName = group.imageName {
+            return ImageUtility.loadImageFromDocuments(named: imageName)
+        }
+        return nil
+    }
+    
+    private var bannerImage: UIImage? {
+        if let user = user, let bannerName = user.bannerImageName {
+            return ImageUtility.loadImageFromDocuments(named: bannerName)
+        }
+        if let group = group, let bannerName = group.bannerImageName {
+            return ImageUtility.loadImageFromDocuments(named: bannerName)
+        }
+        return nil
+    }
+    
+    // MARK: - Subviews
+    
+    private func bannerView(bannerImage: UIImage) -> some View {
         BannerView(
             uiImage: bannerImage,
             height: Constants.AvatarHeaderView.rectangleFrameHeight,
