@@ -21,8 +21,12 @@ struct ProfileDetailView: View {
         } else {
             ScrollView {
                 VStack {
-                    AvatarHeaderView(user: user)
+                    AvatarHeaderView(
+                        user: user
+                    )
+                    
                     userInfoView
+                    
                     Spacer()
                 }
             }

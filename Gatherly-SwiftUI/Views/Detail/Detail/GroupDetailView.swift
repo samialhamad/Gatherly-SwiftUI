@@ -21,9 +21,7 @@ struct GroupDetailView: View {
         ScrollView {
             VStack(spacing: Constants.GroupDetailView.vstackSpacing) {
                 AvatarHeaderView(
-                    group: group,
-                    profileImage: profileImage,
-                    bannerImage: bannerImage
+                    group: group
                 )
                 
                 groupLeaderAndMembersView
@@ -124,22 +122,6 @@ private extension GroupDetailView {
     
     var isLeader: Bool {
         group.leaderID == currentUser.id
-    }
-    
-    var profileImage: UIImage? {
-        guard let imageName = group.imageName else {
-            return nil
-        }
-        
-        return ImageUtility.loadImageFromDocuments(named: imageName)
-    }
-    
-    var bannerImage: UIImage? {
-        guard let bannerName = group.bannerImageName else {
-            return nil
-        }
-        
-        return ImageUtility.loadImageFromDocuments(named: bannerName)
     }
     
     var memberUsers: [User] {

@@ -19,9 +19,7 @@ struct ProfileView: View {
             ScrollView {
                 VStack(spacing: Constants.ProfileView.vstackSpacing) {
                     AvatarHeaderView(
-                        user: currentUser,
-                        profileImage: profileImage,
-                        bannerImage: bannerImage
+                        user: currentUser
                     )
                     
                     VStack(spacing: Constants.ProfileView.profileVStackSpacing) {
@@ -82,6 +80,7 @@ struct ProfileView: View {
                 )
             }
         }
+        .refreshOnAppear()
     }
     
     @ViewBuilder
@@ -116,21 +115,6 @@ struct ProfileView: View {
                 .foregroundColor(Color(Colors.primary))
         }
         .padding()
-    }
-}
-
-private extension ProfileView {
-    
-    // MARK: - Computed Vars
-    
-    private var profileImage: UIImage? {
-        guard let imageName = currentUser.avatarImageName else { return nil }
-        return ImageUtility.loadImageFromDocuments(named: imageName)
-    }
-
-    private var bannerImage: UIImage? {
-        guard let imageName = currentUser.bannerImageName else { return nil }
-        return ImageUtility.loadImageFromDocuments(named: imageName)
     }
 }
 
