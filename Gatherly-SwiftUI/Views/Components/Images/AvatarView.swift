@@ -15,7 +15,6 @@ struct AvatarView: View {
     let backgroundColor: Color
     let borderColor: Color?
     let borderWidth: CGFloat?
-    let profileImage: UIImage?
     
     init(
         user: User? = nil,
@@ -24,8 +23,7 @@ struct AvatarView: View {
         font: Font,
         backgroundColor: Color,
         borderColor: Color? = nil,
-        borderWidth: CGFloat? = nil,
-        profileImage: UIImage? = nil
+        borderWidth: CGFloat? = nil
     ) {
         self.user = user
         self.group = group
@@ -34,12 +32,11 @@ struct AvatarView: View {
         self.backgroundColor = backgroundColor
         self.borderColor = borderColor
         self.borderWidth = borderWidth
-        self.profileImage = profileImage
     }
     
     var body: some View {
-        if profileImage != nil {
-            profileImageView
+        if let profileImage = profileImage {
+            profileImageView(profileImage)
         } else {
             initialsView
         }
@@ -62,9 +59,19 @@ private extension AvatarView {
         }
     }
     
+    private var profileImage: UIImage? {
+        if let user = user, let imageName = user.avatarImageName {
+            return ImageUtility.loadImageFromDocuments(named: imageName)
+        }
+        if let group = group, let imageName = group.imageName {
+            return ImageUtility.loadImageFromDocuments(named: imageName)
+        }
+        return nil
+    }
+    
     //MARK: - Subviews
     
-    private var profileImageView: some View {
+    private func profileImageView(_ image: UIImage) -> some View {
         Image(uiImage: profileImage!)
             .resizable()
             .scaledToFill()

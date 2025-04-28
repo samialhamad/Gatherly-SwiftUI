@@ -42,8 +42,7 @@ struct AvatarHeaderView: View {
                 font: font,
                 backgroundColor: Color(Colors.primary),
                 borderColor: .white,
-                borderWidth: Constants.AvatarHeaderView.avatarBorderWidth,
-                profileImage: profileImage
+                borderWidth: Constants.AvatarHeaderView.avatarBorderWidth
             )
             .padding(.top, bannerImage == nil ? Constants.AvatarHeaderView.bannerImageTopPadding : -size / 2)
         }
