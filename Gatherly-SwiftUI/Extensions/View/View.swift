@@ -50,4 +50,10 @@ extension View {
             to: nil, from: nil, for: nil
         )
     }
+    
+    // MARK: - Refresh
+
+    func refreshOnAppear() -> some View {
+        self.modifier(RefreshOnAppearModifier())
+    }
 }
