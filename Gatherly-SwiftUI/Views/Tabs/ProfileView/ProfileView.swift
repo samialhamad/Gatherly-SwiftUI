@@ -12,6 +12,7 @@ struct ProfileView: View {
     @ObservedObject var currentUser: User
     @State private var editProfileStore: Store<EditProfileFeature.State, EditProfileFeature.Action>? = nil
     @State private var isShowingEditSheet = false
+    @State private var refreshID = UUID()
     @Binding var users: [User]
     
     var body: some View {
@@ -19,7 +20,8 @@ struct ProfileView: View {
             ScrollView {
                 VStack(spacing: Constants.ProfileView.vstackSpacing) {
                     AvatarHeaderView(
-                        user: currentUser
+                        user: currentUser,
+                        refreshID: refreshID
                     )
                     
                     VStack(spacing: Constants.ProfileView.profileVStackSpacing) {
@@ -67,6 +69,7 @@ struct ProfileView: View {
                             case let .didSave(updatedUser):
                                 if let index = users.firstIndex(where: { $0.id == updatedUser.id }) {
                                     users[index] = updatedUser
+                                    refreshID = UUID()
                                 }
                             }
                             

@@ -12,17 +12,20 @@ struct AvatarHeaderView: View {
     let group: UserGroup?
     let size: CGFloat
     let font: Font
+    let refreshID: UUID
     
     init(
         user: User? = nil,
         group: UserGroup? = nil,
         size: CGFloat = Constants.AvatarHeaderView.size,
-        font: Font = .largeTitle
+        font: Font = .largeTitle,
+        refreshID: UUID = UUID()
     ) {
         self.user = user
         self.group = group
         self.size = size
         self.font = font
+        self.refreshID = refreshID
     }
     
     var body: some View {
@@ -44,6 +47,7 @@ struct AvatarHeaderView: View {
             )
             .padding(.top, bannerImage == nil ? Constants.AvatarHeaderView.bannerImageTopPadding : -size / 2)
         }
+        .id(refreshID)
         .padding(.bottom, Constants.AvatarHeaderView.bottomPadding)
     }
 }
