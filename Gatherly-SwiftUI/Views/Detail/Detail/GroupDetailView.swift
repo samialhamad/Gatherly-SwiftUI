@@ -67,6 +67,7 @@ struct GroupDetailView: View {
                 }
             )
         }
+        .refreshOnAppear()
     }
 }
 

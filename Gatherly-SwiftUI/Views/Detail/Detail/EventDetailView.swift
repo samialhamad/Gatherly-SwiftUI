@@ -36,6 +36,7 @@ struct EventDetailView: View {
             .padding()
             .frame(maxWidth: .infinity)
         }
+        .refreshOnAppear()
         .navigationTitle(event.title ?? "Untitled Event")
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
