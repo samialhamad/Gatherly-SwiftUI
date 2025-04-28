@@ -11,6 +11,7 @@ import RxSwift
 import SwiftUI
 
 final class ContentViewModel: ObservableObject {
+    @Published private(set) var didLoadData = false
     @AppStorage("didSeedSampleData") private var didSeedSampleData = false
     @AppStorage("didSyncContacts") private var didSyncContacts = false
     @Published var currentUser: User? = nil
@@ -24,24 +25,30 @@ final class ContentViewModel: ObservableObject {
     private var pendingRequests = 0
     
     func loadAllData() {
+        guard !didLoadData else {
+            print("Skipping loadAllData because data already loaded")
+            return
+        }
+        
         self.users = UserDefaultsManager.loadUsers()
         self.events = UserDefaultsManager.loadEvents()
         self.groups = UserDefaultsManager.loadGroups()
-
+        
         if self.users.isEmpty {
             self.users = SampleData.sampleUsers
             self.events = SampleData.sampleEvents
             self.groups = SampleData.sampleGroups
-
+            
             applySampleDataForSami()
             saveAllData()
         } else {
             print("Users loaded from UserDefaults: \(users.count)")
         }
-
+        
         self.currentUser = users.first(where: { $0.id == 1 })
-
+        
         self.isLoading = false
+        self.didLoadData = true
     }
     
     func saveAllData() {
@@ -67,10 +74,10 @@ final class ContentViewModel: ObservableObject {
         if let currentIndex = self.users.firstIndex(where: { $0.id == currentUserID }) {
             let currentUser = self.users[currentIndex]
             var friendIDs = currentUser.friendIDs ?? []
-
+            
             let uniqueNewFriendIDs = newFriendIDs.filter { !friendIDs.contains($0) }
             friendIDs.append(contentsOf: uniqueNewFriendIDs)
-
+            
             currentUser.friendIDs = Array(Set(friendIDs))
         } else {
             let newCurrentUser = User(
@@ -97,19 +104,19 @@ final class ContentViewModel: ObservableObject {
         guard let samiIndex = users.firstIndex(where: { $0.id == 1 }) else {
             return
         }
-
+        
         let sami = users[samiIndex]
-
+        
         sami.eventIDs = events
             .filter { $0.plannerID == 1 || ($0.memberIDs?.contains(1) ?? false) }
             .compactMap { $0.id }
-
+        
         sami.groupIDs = groups
             .filter { $0.leaderID == 1 || ($0.memberIDs.contains(1)) }
             .compactMap { $0.id }
-
+        
         sami.friendIDs = [2, 3, 4]
-
+        
         users[samiIndex] = sami
     }
     
