@@ -52,8 +52,12 @@ extension View {
     }
     
     // MARK: - Refresh
-
+    
     func refreshOnAppear() -> some View {
         self.modifier(RefreshOnAppearModifier())
+    }
+    
+    func refreshOnDismiss() -> some View {
+        self.modifier(RefreshOnDismissModifier())
     }
 }
