@@ -74,6 +74,7 @@ struct EventDetailView: View {
                     dismiss()
                 }
             )
+            .refreshOnDismiss()
         }
     }
 }
