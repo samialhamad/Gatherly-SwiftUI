@@ -10,7 +10,6 @@ import MapKit
 
 struct EventDetailView: View {
     @ObservedObject var currentUser: User
-    @Binding var event: Event
     @Binding var events: [Event]
     @Environment(\.dismiss) var dismiss
     @State private var isShowingEditView = false
@@ -18,6 +17,7 @@ struct EventDetailView: View {
     @State private var showMapOptions = false
     @StateObject private var viewModel = EventDetailViewModel()
     
+    let event: Event
     let users: [User]
     var onSave: ((Event) -> Void)? = nil
     
@@ -57,7 +57,6 @@ struct EventDetailView: View {
                 onSave: { updatedEvent in
                     if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
                         events[index] = updatedEvent
-                        event = updatedEvent
                         UserDefaultsManager.saveEvents(events)
                     }
                     isShowingEditView = false
@@ -256,8 +255,8 @@ private extension EventDetailView {
     if let sampleUser = SampleData.sampleUsers.first {
         EventDetailView(
             currentUser: sampleUser,
-            event: .constant(SampleData.sampleEvents[1]),
             events: .constant(SampleData.sampleEvents),
+            event: SampleData.sampleEvents[1],
             users: SampleData.sampleUsers
         )
         .environmentObject(NavigationState())

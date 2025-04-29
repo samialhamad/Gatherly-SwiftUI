@@ -34,14 +34,8 @@ struct CalendarView: View {
                         if !newValue { navigationState.navigateToEvent = nil }
                     }
                 )) {
-                    if let event = navigationState.navigateToEvent,
-                       let index = events.firstIndex(where: { $0.id == event.id }) {
-                        EventDetailView(
-                            currentUser: currentUser,
-                            event: $events[index],
-                            events: $events,
-                            users: users
-                        )
+                    if let event = navigationState.navigateToEvent {
+                        EventDetailView(currentUser: currentUser, events: $events, event: event, users: users)
                     } else {
                         EmptyView()
                     }

@@ -197,18 +197,16 @@ struct EventRowLink: View {
     var showDisclosure: Bool
     
     var body: some View {
-        if let index = events.firstIndex(where: { $0.id == event.id }) {
-            NavigationLink {
-                EventDetailView(
-                    currentUser: currentUser,
-                    event: $events[index],
-                    events: $events,
-                    users: users,
-                    onSave: onSave
-                )
-            } label: {
-                EventRow(event: event, showDisclosure: showDisclosure)
-            }
+        NavigationLink {
+            EventDetailView(
+                currentUser: currentUser,
+                events: $events,
+                event: event,
+                users: users,
+                onSave: onSave
+            )
+        } label: {
+            EventRow(event: event, showDisclosure: showDisclosure)
         }
     }
 }
