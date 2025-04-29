@@ -151,28 +151,34 @@ extension Date {
     public static func startTimeRange(for selectedDate: Date) -> ClosedRange<Date> {
         let now = Date()
         let calendar = Calendar.current
-        if calendar.isDate(selectedDate, inSameDayAs: now) {
-            let dayEnd = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: now)!
-            return now...dayEnd
+        let dayStart = calendar.startOfDay(for: selectedDate)
+        let dayEnd = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: selectedDate)!
+
+        if calendar.isDateInToday(selectedDate) {
+            let lowerBound = max(dayStart, now)
+            return lowerBound...dayEnd
         } else {
-            let dayStart = calendar.startOfDay(for: selectedDate)
-            let dayEnd = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: selectedDate)!
             return dayStart...dayEnd
         }
     }
     
     public static func endTimeRange(for selectedDate: Date, startTime: Date) -> ClosedRange<Date> {
-        let now = Date()
         let calendar = Calendar.current
-        if calendar.isDate(selectedDate, inSameDayAs: now) {
-            let dayEnd = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: now)!
-            let lowerBound = max(startTime, now)
-            return lowerBound...dayEnd
-        } else {
-            let dayStart = calendar.startOfDay(for: selectedDate)
-            let dayEnd = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: selectedDate)!
-            return dayStart...dayEnd
+        let now = Date()
+        
+        let dayEnd = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: selectedDate)!
+        
+        var lowerBound = startTime
+        
+        if calendar.isDateInToday(selectedDate) {
+            lowerBound = max(startTime, now)
         }
+        
+        if lowerBound > dayEnd {
+            lowerBound = dayEnd
+        }
+        
+        return lowerBound...dayEnd
     }
     
     //MARK: - Time String
