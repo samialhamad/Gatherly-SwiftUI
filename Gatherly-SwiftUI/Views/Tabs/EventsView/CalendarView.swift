@@ -22,11 +22,7 @@ struct CalendarView: View {
                 .navigationTitle("My Events")
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button(action: { isCalendarView.toggle() }) {
-                            Image(systemName: isCalendarView ? "list.bullet" : "calendar")
-                        }
-                    }
+                    calendarToolbarButton
                 }
                 .navigationDestination(isPresented: Binding(
                     get: { navigationState.navigateToEvent != nil },
@@ -48,9 +44,24 @@ struct CalendarView: View {
     }
 }
 
-// MARK: - Subviews
 
 private extension CalendarView {
+    
+    // MARK: - Computed Vars
+    
+    var filteredEvents: [Event] {
+        events.filterEvents(by: navigationState.calendarSelectedDate)
+    }
+    
+    // MARK: - Subviews
+    
+    var calendarToolbarButton: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarTrailing) {
+            Button(action: { isCalendarView.toggle() }) {
+                Image(systemName: isCalendarView ? "list.bullet" : "calendar")
+            }
+        }
+    }
     
     @ViewBuilder
     var content: some View {
@@ -137,12 +148,6 @@ private extension CalendarView {
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             }
         }
-    }
-    
-    // MARK: - Computed Vars
-    
-    var filteredEvents: [Event] {
-        events.filterEvents(by: navigationState.calendarSelectedDate)
     }
 }
 
