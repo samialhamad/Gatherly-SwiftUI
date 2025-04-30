@@ -44,14 +44,7 @@ struct EventDetailView: View {
         .navigationTitle(updatedEvent.title ?? "Untitled Event")
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
-            if updatedEvent.plannerID == currentUser.id {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Edit") {
-                        isShowingEditView = true
-                    }
-                    .disabled(updatedEvent.hasStarted || updatedEvent.hasEnded)
-                }
-            }
+            editButton
         }
         .toolbarRole(.editor)
         .sheet(isPresented: $isShowingEditView) {
@@ -60,9 +53,36 @@ struct EventDetailView: View {
     }
 }
 
-// MARK: - Subviews
-
 private extension EventDetailView {
+    
+    // MARK: - Computed Vars
+    
+    var members: [User] {
+        guard let memberIDs = updatedEvent.memberIDs else { return [] }
+        let filteredMemberIDs = memberIDs.filter { $0 != updatedEvent.plannerID }
+        return users.filter { user in
+            guard let userID = user.id else { return false }
+            return filteredMemberIDs.contains(userID)
+        }
+    }
+    
+    var planner: User? {
+        guard let plannerID = updatedEvent.plannerID else { return nil }
+        return users.first(where: { $0.id == plannerID })
+    }
+    
+    // MARK: - Subviews
+    
+    var editButton: some ToolbarContent {
+        ToolbarItem(placement: .navigationBarTrailing) {
+            if updatedEvent.plannerID == currentUser.id {
+                Button("Edit") {
+                    isShowingEditView = true
+                }
+                .disabled(updatedEvent.hasStarted || updatedEvent.hasEnded)
+            }
+        }
+    }
     
     var editEventSheet: some View {
         EditEventView(
@@ -96,19 +116,17 @@ private extension EventDetailView {
         BannerView(imageName: updatedEvent.bannerImageName)
     }
     
-    //No longer being used, but keeping around for future just in case
-    var eventTitleView: some View {
-        Text(updatedEvent.title ?? "Untitled Event")
-            .font(.title)
-            .bold()
-            .centerText()
-    }
-    
-    var eventDescriptionView: some View {
+    var eventCategoriesView: some View {
         Group {
-            if let description = updatedEvent.description {
-                Text(description)
-                    .font(.body)
+            if !updatedEvent.categories.isEmpty {
+                HStack(alignment: .center, spacing: Constants.EventDetailView.eventCategoriesViewSpacing) {
+                    Text("Categories:")
+                        .font(.subheadline)
+                        .fontWeight(.semibold)
+                    ForEach(updatedEvent.categories, id: \.self) { category in
+                        category.icon
+                    }
+                }
             }
         }
     }
@@ -122,14 +140,11 @@ private extension EventDetailView {
         }
     }
     
-    var eventTimeView: some View {
+    var eventDescriptionView: some View {
         Group {
-            if let startTimestamp = updatedEvent.startTimestamp, let endTimestamp = updatedEvent.endTimestamp {
-                let startDate = Date(timeIntervalSince1970: TimeInterval(startTimestamp))
-                let endDate = Date(timeIntervalSince1970: TimeInterval(endTimestamp))
-                
-                Text("Time: \(startDate.formatted(date: .omitted, time: .shortened)) - \(endDate.formatted(date: .omitted, time: .shortened))")
-                    .foregroundColor(.secondary)
+            if let description = updatedEvent.description {
+                Text(description)
+                    .font(.body)
             }
         }
     }
@@ -180,8 +195,6 @@ private extension EventDetailView {
                         )
                     }
                 }
-            } else {
-                EmptyView()
             }
         }
     }
@@ -195,7 +208,6 @@ private extension EventDetailView {
                     ProfileRow(user: planner)
                 }
             }
-            
             if !members.isEmpty {
                 Text("Attendees")
                     .font(.headline)
@@ -209,55 +221,25 @@ private extension EventDetailView {
         .foregroundColor(.primary)
     }
     
-    var eventCategoriesView: some View {
+    var eventTimeView: some View {
         Group {
-            if !updatedEvent.categories.isEmpty {
-                HStack(alignment: .center, spacing: Constants.EventDetailView.eventCategoriesViewSpacing) {
-                    Text("Categories:")
-                        .font(.subheadline)
-                        .fontWeight(.semibold)
-                    
-                    ForEach(updatedEvent.categories, id: \.self) { category in
-                        category.icon
-                    }
-                }
-            } else {
-                EmptyView()
+            if let startTimestamp = updatedEvent.startTimestamp,
+               let endTimestamp = updatedEvent.endTimestamp {
+                let startDate = Date(timeIntervalSince1970: TimeInterval(startTimestamp))
+                let endDate = Date(timeIntervalSince1970: TimeInterval(endTimestamp))
+                
+                Text("Time: \(startDate.formatted(date: .omitted, time: .shortened)) - \(endDate.formatted(date: .omitted, time: .shortened))")
+                    .foregroundColor(.secondary)
             }
         }
     }
-}
-
-private extension EventDetailView {
     
-    // MARK: - Computed Vars
-    
-    var planner: User? {
-        guard let plannerID = updatedEvent.plannerID else {
-            return nil
-        }
-        
-        return users.first(where: { $0.id == plannerID })
-    }
-    
-    var members: [User] {
-        guard let memberIDs = updatedEvent.memberIDs else {
-            return []
-        }
-        
-        let filteredMemberIDs = memberIDs.filter { id in
-            if let plannerID = updatedEvent.plannerID, id == plannerID {
-                return false
-            }
-            return true
-        }
-        
-        return users.filter { user in
-            if let userID = user.id {
-                return filteredMemberIDs.contains(userID)
-            }
-            return false
-        }
+    // Old, unused
+    var eventTitleView: some View {
+        Text(updatedEvent.title ?? "Untitled Event")
+            .font(.title)
+            .bold()
+            .centerText()
     }
 }
 
