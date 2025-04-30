@@ -16,17 +16,7 @@ struct AddFriendView: View {
         NavigationStack {
             VStack {
                 SearchBarView(searchText: $viewModel.searchText, placeholder: "Search by name")
-                
-                if !viewModel.searchText.trimmingCharacters(in: .whitespaces).isEmpty {
-                    List(viewModel.filteredUsers, id: \.id) { user in
-                        NavigationLink(destination: ProfileDetailView(currentUser: currentUser, user: user)) {
-                            ProfileRow(user: user)
-                        }
-                    }
-                    .listStyle(.plain)
-                } else {
-                    Spacer()
-                }
+                searchResultsView
             }
             .navigationTitle("Add Friend")
             .toolbar {
@@ -46,6 +36,21 @@ private extension AddFriendView {
             Button("Close") {
                 dismiss()
             }
+        }
+    }
+    
+    var searchResultsView: some View {
+        if !viewModel.searchText.trimmingCharacters(in: .whitespaces).isEmpty {
+            return AnyView(
+                List(viewModel.filteredUsers, id: \.id) { user in
+                    NavigationLink(destination: ProfileDetailView(currentUser: currentUser, user: user)) {
+                        ProfileRow(user: user)
+                    }
+                }
+                .listStyle(.plain)
+            )
+        } else {
+            return AnyView(Spacer())
         }
     }
 }
