@@ -27,40 +27,53 @@ struct FriendsListView: View {
     var body: some View {
         ZStack(alignment: .trailing) {
             ScrollViewReader { proxy in
-                List {
-                    ForEach(viewModel.sortedSectionKeys, id: \.self) { key in
-                        Section(header: Text(key).id(key)) {
-                            ForEach(viewModel.groupedFriends[key]?.sorted { ($0.firstName ?? "") < ($1.firstName ?? "") } ?? [], id: \.id) { friend in
-                                NavigationLink(destination: ProfileDetailView(
-                                    currentUser: users.first(where: { $0.id == currentUserID }) ?? friend,
-                                    user: friend
-                                )) {
-                                    ProfileRow(user: friend)
-                                }
-                            }
+                friendList(proxy: proxy)
+                    .overlay(alphabetOverlay(proxy: proxy), alignment: .trailing)
+            }
+        }
+    }
+}
+
+private extension FriendsListView {
+    
+    // MARK: - Subviews
+    
+    func friendList(proxy: ScrollViewProxy) -> some View {
+        List {
+            ForEach(viewModel.sortedSectionKeys, id: \.self) { key in
+                Section(header: Text(key).id(key)) {
+                    ForEach(
+                        viewModel.groupedFriends[key]?.sorted(by: { ($0.firstName ?? "") < ($1.firstName ?? "") }) ?? [],
+                        id: \.id
+                    ) { friend in
+                        NavigationLink(destination: ProfileDetailView(
+                            currentUser: users.first(where: { $0.id == currentUserID }) ?? friend,
+                            user: friend
+                        )) {
+                            ProfileRow(user: friend)
                         }
                     }
                 }
-                .listStyle(.plain)
-                .overlay(
-                    Group {
-                        if viewModel.searchText.isEmpty {
-                            AlphabetIndexView(letters: viewModel.sortedSectionKeys) { letter in
-                                withAnimation {
-                                    proxy.scrollTo(letter, anchor: .top)
-                                }
-                            }
-                            .padding(.trailing, Constants.FriendsListView.overlayTrailingPadding)
-                        }
-                    },
-                    alignment: .trailing
-                )
-                .onAppear {
-                    viewModel.searchText = searchText
+            }
+        }
+        .listStyle(.plain)
+        .onAppear {
+            viewModel.searchText = searchText
+        }
+        .onChange(of: searchText) { newValue in
+            viewModel.searchText = newValue
+        }
+    }
+    
+    func alphabetOverlay(proxy: ScrollViewProxy) -> some View {
+        Group {
+            if viewModel.searchText.isEmpty {
+                AlphabetIndexView(letters: viewModel.sortedSectionKeys) { letter in
+                    withAnimation {
+                        proxy.scrollTo(letter, anchor: .top)
+                    }
                 }
-                .onChange(of: searchText) { newValue in
-                    viewModel.searchText = newValue
-                }
+                .padding(.trailing, Constants.FriendsListView.overlayTrailingPadding)
             }
         }
     }
