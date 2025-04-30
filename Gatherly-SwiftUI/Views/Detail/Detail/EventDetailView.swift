@@ -21,6 +21,10 @@ struct EventDetailView: View {
     let users: [User]
     var onSave: ((Event) -> Void)? = nil
     
+    private var updatedEvent: Event {
+        events.first(where: { $0.id == event.id }) ?? event
+    }
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Constants.EventDetailView.bodyVStackSpacing) {
@@ -37,7 +41,7 @@ struct EventDetailView: View {
             .frame(maxWidth: .infinity)
         }
         .refreshOnAppear()
-        .navigationTitle(event.title ?? "Untitled Event")
+        .navigationTitle(updatedEvent.title ?? "Untitled Event")
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -45,13 +49,13 @@ struct EventDetailView: View {
                     isShowingEditView = true
                 }
                 
-                .disabled(event.hasStarted || event.hasEnded)
+                .disabled(updatedEvent.hasStarted || updatedEvent.hasEnded)
             }
         }
         .toolbarRole(.editor)
         .sheet(isPresented: $isShowingEditView) {
             EditEventView(
-                viewModel: EditEventViewModel(event: event),
+                viewModel: EditEventViewModel(event: updatedEvent),
                 allUsers: users,
                 events: events,
                 onSave: { updatedEvent in
@@ -89,7 +93,7 @@ private extension EventDetailView {
     
     //No longer being used, but keeping around for future just in case
     var eventTitleView: some View {
-        Text(event.title ?? "Untitled Event")
+        Text(updatedEvent.title ?? "Untitled Event")
             .font(.title)
             .bold()
             .centerText()
@@ -97,7 +101,7 @@ private extension EventDetailView {
     
     var eventDescriptionView: some View {
         Group {
-            if let description = event.description {
+            if let description = updatedEvent.description {
                 Text(description)
                     .font(.body)
             }
@@ -106,7 +110,7 @@ private extension EventDetailView {
     
     var eventDateView: some View {
         Group {
-            if let date = event.date {
+            if let date = updatedEvent.date {
                 Text("Date: \(date.formatted(date: .long, time: .omitted))")
                     .foregroundColor(.secondary)
             }
@@ -115,7 +119,7 @@ private extension EventDetailView {
     
     var eventTimeView: some View {
         Group {
-            if let startTimestamp = event.startTimestamp, let endTimestamp = event.endTimestamp {
+            if let startTimestamp = updatedEvent.startTimestamp, let endTimestamp = updatedEvent.endTimestamp {
                 let startDate = Date(timeIntervalSince1970: TimeInterval(startTimestamp))
                 let endDate = Date(timeIntervalSince1970: TimeInterval(endTimestamp))
                 
@@ -127,7 +131,7 @@ private extension EventDetailView {
     
     var eventMapPreview: some View {
         Group {
-            if let location = event.location {
+            if let location = updatedEvent.location {
                 let coordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
                 let region = MKCoordinateRegion(
                     center: coordinate,
@@ -202,13 +206,13 @@ private extension EventDetailView {
     
     var eventCategoriesView: some View {
         Group {
-            if !event.categories.isEmpty {
+            if !updatedEvent.categories.isEmpty {
                 HStack(alignment: .center, spacing: Constants.EventDetailView.eventCategoriesViewSpacing) {
                     Text("Categories:")
                         .font(.subheadline)
                         .fontWeight(.semibold)
                     
-                    ForEach(event.categories, id: \.self) { category in
+                    ForEach(updatedEvent.categories, id: \.self) { category in
                         category.icon
                     }
                 }
@@ -224,7 +228,7 @@ private extension EventDetailView {
     // MARK: - Computed Vars
     
     var planner: User? {
-        guard let plannerID = event.plannerID else {
+        guard let plannerID = updatedEvent.plannerID else {
             return nil
         }
         
@@ -232,12 +236,12 @@ private extension EventDetailView {
     }
     
     var members: [User] {
-        guard let memberIDs = event.memberIDs else {
+        guard let memberIDs = updatedEvent.memberIDs else {
             return []
         }
         
         let filteredMemberIDs = memberIDs.filter { id in
-            if let plannerID = event.plannerID, id == plannerID {
+            if let plannerID = updatedEvent.plannerID, id == plannerID {
                 return false
             }
             return true
