@@ -25,18 +25,18 @@ struct FriendsView: View {
                 SearchBarView(searchText: $searchText)
                 
                 if selectedTab == 0 {
-                        FriendsListView(
-                            searchText: $searchText,
-                            currentUserID: currentUser.id ?? 1,
-                            users: users
-                        )
+                    FriendsListView(
+                        searchText: $searchText,
+                        currentUserID: currentUser.id ?? 1,
+                        users: users
+                    )
                 } else {
-                        GroupsListView(
-                            currentUser: currentUser,
-                            groups: $groups,
-                            searchText: $searchText,
-                            users: users
-                        )
+                    GroupsListView(
+                        currentUser: currentUser,
+                        groups: $groups,
+                        searchText: $searchText,
+                        users: users
+                    )
                 }
             }
             .navigationTitle(tabTitles[selectedTab])
@@ -46,20 +46,10 @@ struct FriendsView: View {
                 }
             }
             .sheet(isPresented: $isShowingAddFriend) {
-                    AddFriendView(
-                        currentUser: currentUser,
-                        viewModel: AddFriendViewModel(
-                            currentUserID: currentUser.id ?? 1,
-                            allUsers: users
-                        )
-                    )
+                addFriendSheet
             }
             .sheet(isPresented: $isShowingCreateGroup) {
-                    CreateGroupView(
-                        currentUser: currentUser,
-                        groups: $groups,
-                        users: users
-                    )
+                createGroupSheet
             }
         }
         .keyboardDismissable()
@@ -69,6 +59,24 @@ struct FriendsView: View {
 private extension FriendsView {
     
     //MARK: - Subviews
+    
+    var addFriendSheet: some View {
+        AddFriendView(
+            currentUser: currentUser,
+            viewModel: AddFriendViewModel(
+                currentUserID: currentUser.id ?? 1,
+                allUsers: users
+            )
+        )
+    }
+    
+    var createGroupSheet: some View {
+        CreateGroupView(
+            currentUser: currentUser,
+            groups: $groups,
+            users: users
+        )
+    }
     
     struct pickerView: View {
         @Binding var selectedTab: Int
