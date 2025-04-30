@@ -16,24 +16,16 @@ struct GroupsListView: View {
     
     var body: some View {
         List {
-            ForEach(filteredGroups, id: \.id) { group in
-                NavigationLink(destination: GroupDetailView(
-                    group: group,
-                    currentUser: currentUser,
-                    users: users,
-                    groups: $groups
-                )) {
-                    GroupRow(group: group)
-                }
-            }
+            groupListContent
         }
         .listStyle(.plain)
     }
 }
 
-//MARK: - Computed var
-
 private extension GroupsListView {
+    
+    //MARK: - Computed var
+    
     var filteredGroups: [UserGroup] {
         let userGroups = groups.filter { group in
             let isLeader = (group.leaderID == currentUser.id)
@@ -51,6 +43,21 @@ private extension GroupsListView {
             }
         }
     }
+    
+    //MARK: - Subviews
+    
+    var groupListContent: some View {
+        ForEach(filteredGroups, id: \.id) { group in
+            NavigationLink(destination: GroupDetailView(
+                group: group,
+                currentUser: currentUser,
+                users: users,
+                groups: $groups
+            )) {
+                GroupRow(group: group)
+            }
+        }
+    }
 }
 
 #Preview {
@@ -61,5 +68,5 @@ private extension GroupsListView {
             searchText: .constant(""),
             users: SampleData.sampleUsers
         )
-    } 
+    }
 }
