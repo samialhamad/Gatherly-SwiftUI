@@ -18,13 +18,21 @@ struct ProfileRow: View {
                 font: .headline,
                 backgroundColor: Color(Colors.primary)
             )
-            VStack(alignment: .leading) {
-                Text("\(user.firstName ?? "") \(user.lastName ?? "")")
-                    .font(.body)
-            }
+            
+            nameView
+            
             Spacer()
         }
         .padding(.vertical, Constants.ProfileRow.hstackPadding)
+    }
+}
+
+private extension ProfileRow {
+    var nameView: some View {
+        VStack(alignment: .leading) {
+            Text("\(user.firstName ?? "") \(user.lastName ?? "")")
+                .font(.body)
+        }
     }
 }
 
