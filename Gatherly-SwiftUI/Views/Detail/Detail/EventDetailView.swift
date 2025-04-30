@@ -92,7 +92,7 @@ private extension EventDetailView {
     }
     
     var eventBannerImageView: some View {
-        BannerView(imageName: event.bannerImageName)
+        BannerView(imageName: updatedEvent.bannerImageName)
     }
     
     //No longer being used, but keeping around for future just in case
