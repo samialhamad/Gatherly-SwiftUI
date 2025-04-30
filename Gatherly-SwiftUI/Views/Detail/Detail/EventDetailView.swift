@@ -54,31 +54,7 @@ struct EventDetailView: View {
         }
         .toolbarRole(.editor)
         .sheet(isPresented: $isShowingEditView) {
-            EditEventView(
-                viewModel: EditEventViewModel(event: updatedEvent),
-                allUsers: users,
-                events: events,
-                onSave: { updatedEvent in
-                    if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
-                        events[index] = updatedEvent
-                        UserDefaultsManager.saveEvents(events)
-                    }
-                    isShowingEditView = false
-                },
-                onCancel: {
-                    isShowingEditView = false
-                },
-                onDelete: { eventToDelete in
-                    let (updatedEvents, newSelectedDate) = EventEditor.deleteEvent(from: events, eventToDelete: eventToDelete)
-                    events = updatedEvents
-                    UserDefaultsManager.saveEvents(events)
-                    navigationState.calendarSelectedDate = newSelectedDate
-                    navigationState.navigateToEvent = nil
-                    isShowingEditView = false
-                    dismiss()
-                }
-            )
-            .refreshOnDismiss()
+            editEventSheet
         }
     }
 }
@@ -86,6 +62,34 @@ struct EventDetailView: View {
 // MARK: - Subviews
 
 private extension EventDetailView {
+    
+    var editEventSheet: some View {
+        EditEventView(
+            viewModel: EditEventViewModel(event: updatedEvent),
+            allUsers: users,
+            events: events,
+            onSave: { updatedEvent in
+                if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
+                    events[index] = updatedEvent
+                    UserDefaultsManager.saveEvents(events)
+                }
+                isShowingEditView = false
+            },
+            onCancel: {
+                isShowingEditView = false
+            },
+            onDelete: { eventToDelete in
+                let (updatedEvents, newSelectedDate) = EventEditor.deleteEvent(from: events, eventToDelete: eventToDelete)
+                events = updatedEvents
+                UserDefaultsManager.saveEvents(events)
+                navigationState.calendarSelectedDate = newSelectedDate
+                navigationState.navigateToEvent = nil
+                isShowingEditView = false
+                dismiss()
+            }
+        )
+        .refreshOnDismiss()
+    }
     
     var eventBannerImageView: some View {
         BannerView(imageName: event.bannerImageName)
