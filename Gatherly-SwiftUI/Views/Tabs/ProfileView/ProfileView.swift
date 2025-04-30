@@ -132,7 +132,7 @@ private extension ProfileView {
             
             profileRow(title: "Availability", icon: "calendar.badge.clock")
             profileRow(title: "Settings", icon: "gearshape.fill")
-            profileRow(title: "Logout", icon: "arrow.backward.circle.fill", isDestructive: true)
+            profileRow(title: "Logout", icon: "arrow.backward.circle.fill")
         }
     }
 }
