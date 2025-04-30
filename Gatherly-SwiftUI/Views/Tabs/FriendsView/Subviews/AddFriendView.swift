@@ -30,13 +30,22 @@ struct AddFriendView: View {
             }
             .navigationTitle("Add Friend")
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Close") {
-                        dismiss()
-                    }
-                }
+                closeToolbarButton
             }
         }
         .keyboardDismissable()
+    }
+}
+
+private extension AddFriendView {
+    
+    // MARK: - Subviews
+    
+    var closeToolbarButton: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button("Close") {
+                dismiss()
+            }
+        }
     }
 }
