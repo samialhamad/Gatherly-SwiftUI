@@ -35,7 +35,11 @@ struct CalendarView: View {
                     }
                 )) {
                     if let event = navigationState.navigateToEvent {
-                        EventDetailView(currentUser: currentUser, events: $events, event: event, users: users)
+                        EventDetailView(
+                            currentUser: currentUser,
+                            events: $events,
+                            event: event,
+                            users: users)
                     } else {
                         EmptyView()
                     }
