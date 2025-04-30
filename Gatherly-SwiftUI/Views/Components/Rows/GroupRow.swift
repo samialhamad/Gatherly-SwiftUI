@@ -19,16 +19,22 @@ struct GroupRow: View {
                 backgroundColor: Color(Colors.primary)
             )
             
-            VStack(alignment: .leading) {
-                Text(group.name)
-                    .font(.body)
-                Text("\(group.memberIDs.count) members")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-            }
+            groupInfoView
             
             Spacer()
         }
         .padding(.vertical, Constants.ProfileRow.hstackPadding)
+    }
+}
+
+private extension GroupRow {
+    var groupInfoView: some View {
+        VStack(alignment: .leading) {
+            Text(group.name)
+                .font(.body)
+            Text("\(group.memberIDs.count) members")
+                .font(.caption)
+                .foregroundColor(.gray)
+        }
     }
 }
