@@ -44,12 +44,13 @@ struct EventDetailView: View {
         .navigationTitle(updatedEvent.title ?? "Untitled Event")
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Edit") {
-                    isShowingEditView = true
+            if updatedEvent.plannerID == currentUser.id {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Edit") {
+                        isShowingEditView = true
+                    }
+                    .disabled(updatedEvent.hasStarted || updatedEvent.hasEnded)
                 }
-                
-                .disabled(updatedEvent.hasStarted || updatedEvent.hasEnded)
             }
         }
         .toolbarRole(.editor)
