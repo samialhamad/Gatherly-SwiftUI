@@ -38,3 +38,8 @@ private extension GroupRow {
         }
     }
 }
+
+#Preview {
+    GroupRow(group: SampleData.sampleGroups.first!)
+        .padding()
+}
