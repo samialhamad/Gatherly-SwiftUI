@@ -47,11 +47,7 @@ struct CreateGroupView: View {
             }
             .navigationTitle("New Group")
             .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") {
-                        dismiss()
-                    }
-                }
+                cancelToolbarButton
             }
         }
         .keyboardDismissable()
@@ -61,7 +57,7 @@ struct CreateGroupView: View {
 private extension CreateGroupView {
     
     //MARK: - Computed Vars
-
+    
     private var allFriends: [User] {
         guard let friendIDs = currentUser.friendIDs else {
             return []
@@ -73,7 +69,15 @@ private extension CreateGroupView {
     }
     
     //MARK: - Subviews
-
+    
+    var cancelToolbarButton: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button("Cancel") {
+                dismiss()
+            }
+        }
+    }
+    
     var createButtonSection: some View {
         Section {
             Button(action: {
