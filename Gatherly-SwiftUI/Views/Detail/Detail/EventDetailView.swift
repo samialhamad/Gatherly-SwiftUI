@@ -27,17 +27,20 @@ struct EventDetailView: View {
     
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: Constants.EventDetailView.bodyVStackSpacing) {
+            VStack(spacing: 0) {
                 eventBannerImageView
-                eventDateView
-                eventTimeView
-                eventDescriptionView
-                eventMapPreview
-                eventPlannerAndMembersView
-                eventCategoriesView
-                Spacer()
+                
+                VStack(alignment: .leading, spacing: Constants.EventDetailView.bodyVStackSpacing) {
+                    eventDateView
+                    eventTimeView
+                    eventDescriptionView
+                    eventMapPreview
+                    eventPlannerAndMembersView
+                    eventCategoriesView
+                    Spacer()
+                }
+                .padding()
             }
-            .padding()
             .frame(maxWidth: .infinity)
         }
         .refreshOnAppear()
@@ -113,7 +116,12 @@ private extension EventDetailView {
     }
     
     var eventBannerImageView: some View {
-        BannerView(imageName: updatedEvent.bannerImageName)
+        BannerView(
+            imageName: updatedEvent.bannerImageName,
+            height: Constants.AvatarHeaderView.rectangleFrameHeight,
+            cornerRadius: 0,
+            bottomPadding: 0
+        )
     }
     
     var eventCategoriesView: some View {
