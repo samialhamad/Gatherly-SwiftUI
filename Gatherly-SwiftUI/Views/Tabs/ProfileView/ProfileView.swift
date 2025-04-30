@@ -23,56 +23,44 @@ struct ProfileView: View {
                         user: currentUser,
                         refreshID: refreshID
                     )
-                    
-                    VStack(spacing: Constants.ProfileView.profileVStackSpacing) {
-                        Button {
-                            editProfileStore = Store(
-                                initialState: EditProfileFeature.State(
-                                    allUsers: users,
-                                    currentUser: currentUser,
-                                    firstName: currentUser.firstName ?? "",
-                                    lastName: currentUser.lastName ?? "",
-                                    avatarImageName: currentUser.avatarImageName,
-                                    bannerImageName: currentUser.bannerImageName,
-                                    avatarImage: currentUser.avatarImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) },
-                                    bannerImage: currentUser.bannerImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) }
-                                ),
-                                reducer: {
-                                    EditProfileFeature()
-                                }
-                            )
-                            isShowingEditSheet = true
-                        } label: {
-                            profileRowContent(title: "Profile", icon: "person.fill")
-                        }
-                        
-                        profileRow(title: "Availability", icon: "calendar.badge.clock")
-                        profileRow(title: "Settings", icon: "gearshape.fill")
-                        profileRow(title: "Logout", icon: "arrow.backward.circle.fill", isDestructive: true)
-                    }
+                    profileRowsSection
                 }
             }
-            .navigationTitle("\(currentUser.firstName ?? "") \(currentUser.lastName ?? "")")
+            .navigationTitle(fullName)
             .navigationBarTitleDisplayMode(.large)
         }
         .sheet(isPresented: $isShowingEditSheet) {
-            if let store = editProfileStore {
+            editProfileSheet
+        }
+        .refreshOnAppear()
+    }
+}
+
+private extension ProfileView {
+    
+    // MARK: - Computed Vars
+    
+    var fullName: String {
+        "\(currentUser.firstName ?? "") \(currentUser.lastName ?? "")"
+    }
+    
+    // MARK: - Subviews
+    
+    var editProfileSheet: some View {
+        if let store = editProfileStore {
+            return AnyView(
                 EditProfileView(
                     store: store,
                     onComplete: { action in
                         switch action {
                         case .cancel:
                             break
-                            
                         case .delegate(let delegateAction):
-                            switch delegateAction {
-                            case let .didSave(updatedUser):
-                                if let index = users.firstIndex(where: { $0.id == updatedUser.id }) {
-                                    users[index] = updatedUser
-                                    refreshID = UUID()
-                                }
+                            if case let .didSave(updatedUser) = delegateAction,
+                               let index = users.firstIndex(where: { $0.id == updatedUser.id }) {
+                                users[index] = updatedUser
+                                refreshID = UUID()
                             }
-                            
                         default:
                             break
                         }
@@ -81,9 +69,25 @@ struct ProfileView: View {
                         editProfileStore = nil
                     }
                 )
-            }
+            )
+        } else {
+            return AnyView(EmptyView())
         }
-        .refreshOnAppear()
+    }
+    
+    @ViewBuilder
+    private func profileRowContent(title: String, icon: String, isDestructive: Bool = false) -> some View {
+        HStack {
+            Image(systemName: icon)
+                .foregroundColor(isDestructive ? .red : Color(Colors.primary))
+                .frame(width: Constants.ProfileView.profileRowIconFrameWidth)
+            Text(title)
+                .foregroundColor(isDestructive ? .red : Color(Colors.primary))
+            Spacer()
+            Image(systemName: "chevron.right")
+                .foregroundColor(Color(Colors.primary))
+        }
+        .padding()
     }
     
     @ViewBuilder
@@ -105,19 +109,31 @@ struct ProfileView: View {
         }
     }
     
-    @ViewBuilder
-    private func profileRowContent(title: String, icon: String, isDestructive: Bool = false) -> some View {
-        HStack {
-            Image(systemName: icon)
-                .foregroundColor(isDestructive ? .red : Color(Colors.primary))
-                .frame(width: Constants.ProfileView.profileRowIconFrameWidth)
-            Text(title)
-                .foregroundColor(isDestructive ? .red : Color(Colors.primary))
-            Spacer()
-            Image(systemName: "chevron.right")
-                .foregroundColor(Color(Colors.primary))
+    var profileRowsSection: some View {
+        VStack(spacing: Constants.ProfileView.profileVStackSpacing) {
+            Button {
+                editProfileStore = Store(
+                    initialState: EditProfileFeature.State(
+                        allUsers: users,
+                        currentUser: currentUser,
+                        firstName: currentUser.firstName ?? "",
+                        lastName: currentUser.lastName ?? "",
+                        avatarImageName: currentUser.avatarImageName,
+                        bannerImageName: currentUser.bannerImageName,
+                        avatarImage: currentUser.avatarImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) },
+                        bannerImage: currentUser.bannerImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) }
+                    ),
+                    reducer: { EditProfileFeature() }
+                )
+                isShowingEditSheet = true
+            } label: {
+                profileRowContent(title: "Profile", icon: "person.fill")
+            }
+            
+            profileRow(title: "Availability", icon: "calendar.badge.clock")
+            profileRow(title: "Settings", icon: "gearshape.fill")
+            profileRow(title: "Logout", icon: "arrow.backward.circle.fill", isDestructive: true)
         }
-        .padding()
     }
 }
 
