@@ -12,8 +12,6 @@ import SwiftUI
 
 final class ContentViewModel: ObservableObject {
     @Published private(set) var didLoadData = false
-    @AppStorage("didSeedSampleData") private var didSeedSampleData = false
-    @AppStorage("didSyncContacts") private var didSyncContacts = false
     @Published var currentUser: User? = nil
     @Published var users: [User] = []
     @Published var events: [Event] = []
@@ -25,30 +23,15 @@ final class ContentViewModel: ObservableObject {
     private var pendingRequests = 0
     
     func loadAllData() {
-        guard !didLoadData else {
-            print("Skipping loadAllData because data already loaded")
-            return
-        }
-        
-        self.users = UserDefaultsManager.loadUsers()
-        self.events = UserDefaultsManager.loadEvents()
-        self.groups = UserDefaultsManager.loadGroups()
-        
-        if self.users.isEmpty {
-            self.users = SampleData.sampleUsers
-            self.events = SampleData.sampleEvents
-            self.groups = SampleData.sampleGroups
-            
-            applySampleDataForSami()
-            saveAllData()
-        } else {
-            print("Users loaded from UserDefaults: \(users.count)")
-        }
+        self.users = SampleData.sampleUsers
+        self.events = SampleData.sampleEvents
+        self.groups = SampleData.sampleGroups
+
+        applySampleDataForSami()
+        saveAllData()
         
         self.currentUser = users.first(where: { $0.id == 1 })
-        
         self.isLoading = false
-        self.didLoadData = true
     }
     
     func saveAllData() {
@@ -58,8 +41,6 @@ final class ContentViewModel: ObservableObject {
     }
     
     func syncContacts(currentUserID: Int = 1) {
-        guard !didSyncContacts else { return }
-        
         ContactSyncManager.shared.fetchContacts { contacts in
             let (newUsers, newFriendIDs) = self.generateUsersFromContacts(contacts)
             self.appendUsersAndUpdateFriends(newUsers: newUsers, newFriendIDs: newFriendIDs, currentUserID: currentUserID)
@@ -97,7 +78,6 @@ final class ContentViewModel: ObservableObject {
         }
         
         UserDefaultsManager.saveUsers(self.users)
-        self.didSyncContacts = true
     }
     
     private func applySampleDataForSami() {
