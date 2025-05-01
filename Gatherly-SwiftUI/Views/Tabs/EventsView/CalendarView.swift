@@ -73,7 +73,7 @@ private extension CalendarView {
                     eventListView
                 }
             }
-        }   else {
+        } else {
             EventsGroupedListView(
                 currentUser: currentUser,
                 events: $events,
