@@ -9,14 +9,22 @@ import XCTest
 @testable import Gatherly_SwiftUI
 
 final class FriendsListViewModelTests: XCTestCase {
-
+    
+    func makeUser(id: Int, firstName: String, lastName: String, friendIDs: [Int]? = nil) -> User {
+        User(firstName: firstName, friendIDs: friendIDs, id: id, lastName: lastName)
+    }
+    
+    func sampleTestUsers() -> [User] {
+        [
+            makeUser(id: 1, firstName: "Current", lastName: "User", friendIDs: [2, 3]),
+            makeUser(id: 2, firstName: "Friend", lastName: "One"),
+            makeUser(id: 3, firstName: "Friend", lastName: "Two"),
+            makeUser(id: 4, firstName: "Non", lastName: "Friend")
+        ]
+    }
+    
     func testFriends() {
-        let currentUser = User(firstName: "Current", friendIDs: [2, 3], id: 1, lastName: "User")
-        let friend1 = User(firstName: "Friend", friendIDs: nil, id: 2, lastName: "One")
-        let friend2 = User(firstName: "Friend", friendIDs: nil, id: 3, lastName: "Two")
-        let nonFriend = User(firstName: "Non", friendIDs: nil, id: 4, lastName: "Friend")
-        let allUsers = [currentUser, friend1, friend2, nonFriend]
-
+        let allUsers = sampleTestUsers()
         let viewModel = FriendsListViewModel(currentUserID: 1, allUsers: allUsers)
         let friends = viewModel.friends
         
@@ -27,27 +35,23 @@ final class FriendsListViewModelTests: XCTestCase {
     }
     
     func testFilteredFriends() {
-        let currentUser = User(firstName: "Current", friendIDs: [2, 3], id: 1, lastName: "User")
-        let friend1 = User(firstName: "Friend", friendIDs: nil, id: 2, lastName: "One")
-        let friend2 = User(firstName: "Friend", friendIDs: nil, id: 3, lastName: "Two")
-        let nonFriend = User(firstName: "Non", friendIDs: nil, id: 4, lastName: "Friend")
-        let allUsers = [currentUser, friend1, friend2, nonFriend]
-
+        let allUsers = sampleTestUsers()
         let viewModel = FriendsListViewModel(currentUserID: 1, allUsers: allUsers)
         
         viewModel.searchText = "two"
         let filtered = viewModel.filteredFriends
-
+        
         XCTAssertEqual(filtered.count, 1)
         XCTAssertEqual(filtered.first?.lastName, "Two")
     }
-
+    
     func testGroupedFriends() {
-        let currentUser = User(firstName: "Current", friendIDs: [2, 3], id: 1, lastName: "User")
-        let friend1 = User(firstName: "Matt", friendIDs: nil, id: 2, lastName: "Simon")
-        let friend2 = User(firstName: "Logan", friendIDs: nil, id: 3, lastName: "Harrison")
-        let allUsers = [currentUser, friend1, friend2]
-
+        let allUsers = [
+            makeUser(id: 1, firstName: "Current", lastName: "User", friendIDs: [2, 3]),
+            makeUser(id: 2, firstName: "Matt", lastName: "Simon"),
+            makeUser(id: 3, firstName: "Logan", lastName: "Harrison")
+        ]
+        
         let viewModel = FriendsListViewModel(currentUserID: 1, allUsers: allUsers)
         
         viewModel.searchText = ""
@@ -61,13 +65,13 @@ final class FriendsListViewModelTests: XCTestCase {
     }
     
     func testSortedSectionKeys() {
-        let currentUser = User(firstName: "Current", friendIDs: [2, 3], id: 1, lastName: "User")
-        let friend1 = User(firstName: "Zack", friendIDs: nil, id: 2, lastName: "Andrews")
-        let friend2 = User(firstName: "Anna", friendIDs: nil, id: 3, lastName: "Bell")
-        let allUsers = [currentUser, friend1, friend2]
-
-        let viewModel = FriendsListViewModel(currentUserID: 1, allUsers: allUsers)
+        let allUsers = [
+            makeUser(id: 1, firstName: "Current", lastName: "User", friendIDs: [2, 3]),
+            makeUser(id: 2, firstName: "Zack", lastName: "Andrews"),
+            makeUser(id: 3, firstName: "Anna", lastName: "Bell")
+        ]
         
+        let viewModel = FriendsListViewModel(currentUserID: 1, allUsers: allUsers)
         let sectionKeys = viewModel.sortedSectionKeys
         
         XCTAssertEqual(sectionKeys, ["A", "Z"])
