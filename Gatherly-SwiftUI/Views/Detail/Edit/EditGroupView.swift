@@ -40,7 +40,7 @@ struct EditGroupView: View {
                     selectedMemberIDs: $viewModel.selectedMemberIDs,
                     header: "Friends",
                     plannerID: viewModel.leaderID,
-                    users: allUsers
+                    users: friends
                 )
                 deleteButton
             }
@@ -65,13 +65,14 @@ struct EditGroupView: View {
 
 private extension EditGroupView {
     
-    //MARK: - Computed vars
+    // MARK: - Computed Vars
     
-    private var allFriends: [User] {
+    private var friends: [User] {
         guard let friendIDs = currentUser.friendIDs else {
             return []
         }
-        return SampleData.sampleUsers.filter { user in
+        
+        return allUsers.filter { user in
             friendIDs.contains(user.id ?? -1)
         }
     }
