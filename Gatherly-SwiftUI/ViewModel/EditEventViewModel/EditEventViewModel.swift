@@ -9,16 +9,16 @@ import Foundation
 import SwiftUI
 
 class EditEventViewModel: ObservableObject {
-    @Published var title: String
     @Published var description: String
-    @Published var selectedDate: Date
-    @Published var startTime: Date
     @Published var endTime: Date
-    @Published var selectedMemberIDs: Set<Int>
     @Published var location: Location?
     @Published var locationName: String
-    @Published var selectedCategories: [EventCategory]
     @Published var selectedBannerImage: UIImage?
+    @Published var selectedCategories: [EventCategory]
+    @Published var selectedDate: Date
+    @Published var selectedMemberIDs: Set<Int>
+    @Published var startTime: Date
+    @Published var title: String
     
     private let original: Event
     
