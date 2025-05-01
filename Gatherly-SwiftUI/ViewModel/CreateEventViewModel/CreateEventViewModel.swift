@@ -9,16 +9,16 @@ import Foundation
 import SwiftUI
 
 class CreateEventViewModel: ObservableObject {
-    @Published var title: String = ""
     @Published var description: String = ""
-    @Published var selectedDate: Date = Date()
-    @Published var startTime: Date = Date()
     @Published var endTime: Date = Date().plus(calendarComponent: .hour, value: 1) ?? Date()
-    @Published var selectedCategories: [EventCategory] = []
-    @Published var selectedMemberIDs: Set<Int> = []
-    @Published var locationName: String = ""
     @Published var location: Location? = nil
+    @Published var locationName: String = ""
     @Published var selectedBannerImage: UIImage?
+    @Published var selectedCategories: [EventCategory] = []
+    @Published var selectedDate: Date = Date()
+    @Published var selectedMemberIDs: Set<Int> = []
+    @Published var startTime: Date = Date()
+    @Published var title: String = ""
     
     func createEvent(with plannerID: Int) -> Event {
         var bannerImageName: String? = nil
