@@ -13,10 +13,10 @@ struct GroupRow: View {
     var body: some View {
         HStack {
             AvatarView(
-                group: group,
-                size: Constants.GroupRow.avatarCircleSize,
+                backgroundColor: Color(Colors.primary),
                 font: .headline,
-                backgroundColor: Color(Colors.primary)
+                group: group,
+                size: Constants.GroupRow.avatarCircleSize
             )
             
             groupInfoView

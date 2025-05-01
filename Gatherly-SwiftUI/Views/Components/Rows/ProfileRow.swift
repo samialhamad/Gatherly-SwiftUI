@@ -13,10 +13,10 @@ struct ProfileRow: View {
     var body: some View {
         HStack {
             AvatarView(
-                user: user,
-                size: Constants.ProfileRow.avatarCircleSize,
+                backgroundColor: Color(Colors.primary),
                 font: .headline,
-                backgroundColor: Color(Colors.primary)
+                size: Constants.ProfileRow.avatarCircleSize,
+                user: user
             )
             
             nameView

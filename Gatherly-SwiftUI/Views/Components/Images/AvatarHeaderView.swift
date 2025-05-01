@@ -36,13 +36,13 @@ struct AvatarHeaderView: View {
             }
             
             AvatarView(
-                user: user,
-                group: group,
-                size: size,
-                font: font,
                 backgroundColor: Color(Colors.primary),
                 borderColor: .white,
-                borderWidth: Constants.AvatarHeaderView.avatarBorderWidth
+                borderWidth: Constants.AvatarHeaderView.avatarBorderWidth,
+                font: font,
+                group: group,
+                size: size,
+                user: user
             )
             .padding(.top, bannerImage == nil ? Constants.AvatarHeaderView.bannerImageTopPadding : -size / 2)
         }
