@@ -24,6 +24,15 @@ struct EventRow: View {
 
 private extension EventRow {
     
+    //MARK: - Functions
+    
+    func formattedTime(_ timestamp: Int) -> String {
+        let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
+    }
+    
     //MARK: - Subviews
     
     var iconView: some View {
@@ -59,15 +68,6 @@ private extension EventRow {
                     .foregroundColor(Color(Colors.primary))
             }
         }
-    }
-    
-    //MARK: - Funcs
-    
-    func formattedTime(_ timestamp: Int) -> String {
-        let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
     }
 }
 

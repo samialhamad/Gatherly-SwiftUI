@@ -71,6 +71,29 @@ struct GroupDetailView: View {
 
 private extension GroupDetailView {
     
+    // MARK: - Computed Vars
+    
+    var isLeader: Bool {
+        group.leaderID == currentUser.id
+    }
+    
+    var memberUsers: [User] {
+        users.filter { group.memberIDs.contains($0.id ?? -1) }
+    }
+    
+    // MARK: - Functions
+    
+    //placeholder, implement in view model
+    func leaveGroup() {
+        guard let currentID = currentUser.id else { return }
+        var updatedGroup = group
+        updatedGroup.memberIDs.removeAll { $0 == currentID }
+        if let index = groups.firstIndex(where: { $0.id == group.id }) {
+            groups[index] = updatedGroup
+        }
+        dismiss()
+    }
+    
     // MARK: - Subviews
     
     var groupLeaderAndMembersView: some View {
@@ -116,29 +139,6 @@ private extension GroupDetailView {
                 }
             )
         }
-    }
-    
-    // MARK: - Computed Vars
-    
-    var isLeader: Bool {
-        group.leaderID == currentUser.id
-    }
-    
-    var memberUsers: [User] {
-        users.filter { group.memberIDs.contains($0.id ?? -1) }
-    }
-    
-    // MARK: - Functions
-    
-    //placeholder, implement in view model
-    func leaveGroup() {
-        guard let currentID = currentUser.id else { return }
-        var updatedGroup = group
-        updatedGroup.memberIDs.removeAll { $0 == currentID }
-        if let index = groups.firstIndex(where: { $0.id == group.id }) {
-            groups[index] = updatedGroup
-        }
-        dismiss()
     }
 }
 

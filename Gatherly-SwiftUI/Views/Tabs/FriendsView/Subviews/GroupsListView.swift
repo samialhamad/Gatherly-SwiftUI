@@ -44,17 +44,33 @@ private extension GroupsListView {
         }
     }
     
+    // MARK: - Functions
+    
+    func shouldShowGroup(_ group: UserGroup) -> Bool {
+        let isLeader = (group.leaderID == currentUser.id)
+        let isMember = currentUser.groupIDs?.contains(group.id) ?? false
+        let matchesRole = isLeader || isMember
+        
+        if searchText.isEmpty {
+            return matchesRole
+        } else {
+            return matchesRole && group.name.lowercased().contains(searchText.lowercased())
+        }
+    }
+    
     //MARK: - Subviews
     
     var groupListContent: some View {
-        ForEach(filteredGroups, id: \.id) { group in
-            NavigationLink(destination: GroupDetailView(
-                group: group,
-                currentUser: currentUser,
-                users: users,
-                groups: $groups
-            )) {
-                GroupRow(group: group)
+        ForEach($groups, id: \.id) { $group in
+            if shouldShowGroup(group) {
+                NavigationLink(destination: GroupDetailView(
+                    group: $group,
+                    groups: $groups,
+                    currentUser: currentUser,
+                    users: users
+                )) {
+                    GroupRow(group: group)
+                }
             }
         }
     }

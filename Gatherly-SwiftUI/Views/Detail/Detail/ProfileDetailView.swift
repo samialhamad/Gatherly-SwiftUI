@@ -52,6 +52,17 @@ struct ProfileDetailView: View {
 
 private extension ProfileDetailView {
     
+    //MARK: - Computed Vars
+    
+    var isFriend: Bool {
+        guard let userID = user.id else { return false }
+        return currentUser.friendIDs?.contains(userID) == true
+    }
+    
+    private var isViewingSelf: Bool {
+        currentUser.id == user.id
+    }
+    
     //MARK: - Subviews
     
     var userInfoView: some View {
@@ -95,17 +106,6 @@ private extension ProfileDetailView {
         }) {
             Image(systemName: "ellipsis")
         }
-    }
-    
-    //MARK: - Computed Vars
-    
-    var isFriend: Bool {
-        guard let userID = user.id else { return false }
-        return currentUser.friendIDs?.contains(userID) == true
-    }
-    
-    private var isViewingSelf: Bool {
-        currentUser.id == user.id
     }
 }
 

@@ -38,6 +38,19 @@ struct ImagePicker: View {
 
 private extension ImagePicker {
     
+    //MARK: - Functions
+    
+    func cropConfig(for shape: MaskShape) -> SwiftyCropConfiguration {
+        SwiftyCropConfiguration(
+            maxMagnificationScale: 4.0,
+            maskRadius: 130,
+            cropImageCircular: shape == .circle,
+            rotateImage: false,
+            zoomSensitivity: 4.0,
+            rectAspectRatio: 16 / 9
+        )
+    }
+    
     //MARK: - Subviews
     
     var selectedImagePreview: some View {
@@ -98,18 +111,5 @@ private extension ImagePicker {
                 }
             }
         }
-    }
-    
-    //MARK: - Functions
-    
-    func cropConfig(for shape: MaskShape) -> SwiftyCropConfiguration {
-        SwiftyCropConfiguration(
-            maxMagnificationScale: 4.0,
-            maskRadius: 130,
-            cropImageCircular: shape == .circle,
-            rotateImage: false,
-            zoomSensitivity: 4.0,
-            rectAspectRatio: 16 / 9
-        )
     }
 }

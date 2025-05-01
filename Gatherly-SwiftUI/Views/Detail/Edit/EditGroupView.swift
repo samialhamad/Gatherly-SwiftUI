@@ -65,6 +65,17 @@ struct EditGroupView: View {
 
 private extension EditGroupView {
     
+    //MARK: - Computed vars
+    
+    private var allFriends: [User] {
+        guard let friendIDs = currentUser.friendIDs else {
+            return []
+        }
+        return SampleData.sampleUsers.filter { user in
+            friendIDs.contains(user.id ?? -1)
+        }
+    }
+    
     // MARK: - Subviews
     
     var cancelToolbarButton: some ToolbarContent {
@@ -92,17 +103,6 @@ private extension EditGroupView {
             }
             .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.secondary))
             .disabled(viewModel.isFormEmpty)
-        }
-    }
-    
-    //MARK: - Computed vars
-    
-    private var allFriends: [User] {
-        guard let friendIDs = currentUser.friendIDs else {
-            return []
-        }
-        return SampleData.sampleUsers.filter { user in
-            friendIDs.contains(user.id ?? -1)
         }
     }
 }
