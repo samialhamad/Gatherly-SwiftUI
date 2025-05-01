@@ -55,12 +55,12 @@ struct EventDateTimeSection: View {
 }
 
 struct EventMembersSection: View {
-    let header: String
-    let allUsers: [User]
-    let plannerID: Int?
-    
-    @Binding var selectedMemberIDs: Set<Int>
     @State private var isMembersPickerPresented = false
+    @Binding var selectedMemberIDs: Set<Int>
+    
+    let header: String
+    let plannerID: Int?
+    let users: [User]
     
     var body: some View {
         Section(header: Text(header)) {
@@ -86,7 +86,7 @@ struct EventMembersSection: View {
     }
     
     private var filteredUsers: [User] {
-        allUsers.filter { user in
+        users.filter { user in
             if let id = user.id, let plannerID = plannerID {
                 return id != plannerID
             }

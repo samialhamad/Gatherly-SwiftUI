@@ -33,10 +33,10 @@ struct EditEventView: View {
                     endTimeRange: viewModel.endTimeRange
                 )
                 EventMembersSection(
+                    selectedMemberIDs: $viewModel.selectedMemberIDs,
                     header: "Members",
-                    allUsers: friends,
                     plannerID: viewModel.plannerID,
-                    selectedMemberIDs: $viewModel.selectedMemberIDs
+                    users: friends
                 )
                 EventLocationSection(
                     header: "Location",
