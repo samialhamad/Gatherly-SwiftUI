@@ -10,52 +10,39 @@ import XCTest
 
 final class CalendarViewModelTests: XCTestCase {
     let viewModel = CalendarViewModel()
+        
+    func makeEvent(id: Int, date: Date, title: String = "Test", description: String = "Test event") -> Event {
+        Event(
+            date: date,
+            description: description,
+            endTimestamp: nil,
+            id: id,
+            plannerID: 1,
+            memberIDs: [],
+            title: title,
+            startTimestamp: nil
+        )
+    }
     
     func testEventCountLabelPastDateNoEvents() {
         let yesterday = Date().minus(calendarComponent: .day, value: 1)!
         let label = viewModel.eventCountLabel(for: yesterday, events: [])
+        
         XCTAssertEqual(label, "No finished events")
     }
     
     func testEventCountLabelPastDateOneEvent() {
         let yesterday = Date().minus(calendarComponent: .day, value: 1)!
-        let event = Event(
-            date: yesterday,
-            description: "Test event 1",
-            endTimestamp: nil,
-            id: 1,
-            plannerID: 1,
-            memberIDs: [],
-            title: "Test 1",
-            startTimestamp: nil
-        )
-        
+        let event = makeEvent(id: 1, date: yesterday)
+
         let label = viewModel.eventCountLabel(for: yesterday, events: [event])
         XCTAssertEqual(label, "1 finished event")
     }
     
     func testEventCountLabelPastDateTwoEvents() {
         let yesterday = Date().minus(calendarComponent: .day, value: 1)!
-        let event1 = Event(
-            date: yesterday,
-            description: "Test event 1",
-            endTimestamp: nil,
-            id: 1,
-            plannerID: 1,
-            memberIDs: [],
-            title: "Test 1",
-            startTimestamp: nil
-        )
-        let event2 = Event(
-            date: yesterday,
-            description: "Test event 2",
-            endTimestamp: nil,
-            id: 1,
-            plannerID: 1,
-            memberIDs: [],
-            title: "Test 2",
-            startTimestamp: nil
-        )
+        let event1 = makeEvent(id: 1, date: yesterday)
+        let event2 = makeEvent(id: 2, date: yesterday)
         
         let label = viewModel.eventCountLabel(for: yesterday, events: [event1, event2])
         XCTAssertEqual(label, "2 finished events")
@@ -71,16 +58,8 @@ final class CalendarViewModelTests: XCTestCase {
     func testEventCountLabelTodaySingleEvent() {
         let today = Date()
         let todayStart = Calendar.current.startOfDay(for: today)
-        let event = Event(
-            date: todayStart,
-            description: "Test event",
-            endTimestamp: nil,
-            id: 1,
-            plannerID: 1,
-            memberIDs: [],
-            title: "Test",
-            startTimestamp: nil
-        )
+        let event = makeEvent(id: 1, date: todayStart)
+
         let label = viewModel.eventCountLabel(for: today, events: [event])
         XCTAssertEqual(label, "1 event planned for today")
     }
@@ -88,27 +67,9 @@ final class CalendarViewModelTests: XCTestCase {
     func testEventCountLabelTodayMultipleEvents() {
         let today = Date()
         let todayStart = Calendar.current.startOfDay(for: today)
-        let event1 = Event(
-            date: todayStart,
-            description: "Test event",
-            endTimestamp: nil,
-            id: 1,
-            plannerID: 1,
-            memberIDs: [],
-            title: "Test",
-            startTimestamp: nil
-        )
-        let event2 = Event(
-            date: todayStart,
-            description: "Test event 2",
-            endTimestamp: nil,
-            id: 1,
-            plannerID: 1,
-            memberIDs: [],
-            title: "Test 2",
-            startTimestamp: nil
-        )
-        
+        let event1 = makeEvent(id: 1, date: todayStart)
+        let event2 = makeEvent(id: 2, date: todayStart)
+
         let label = viewModel.eventCountLabel(for: today, events: [event1, event2])
         XCTAssertEqual(label, "2 events planned for today")
     }
@@ -122,43 +83,17 @@ final class CalendarViewModelTests: XCTestCase {
     
     func testEventCountLabelFutureOneEvent() {
         let tomorrow = Date().plus(calendarComponent: .day, value: 1)!
-        let event1 = Event(
-            date: tomorrow,
-            description: "Test event 1",
-            endTimestamp: nil,
-            id: 1,
-            plannerID: 1,
-            memberIDs: [],
-            title: "Test 1",
-            startTimestamp: nil
-        )
+        let event = makeEvent(id: 1, date: tomorrow)
         
-        let label = viewModel.eventCountLabel(for: tomorrow, events: [event1])
+        let label = viewModel.eventCountLabel(for: tomorrow, events: [event])
         XCTAssertEqual(label, "1 upcoming event")
     }
     
     func testEventCountLabelFutureMultipleEvents() {
         let tomorrow = Date().plus(calendarComponent: .day, value: 1)!
-        let event1 = Event(
-            date: tomorrow,
-            description: "Test event 1",
-            endTimestamp: nil,
-            id: 1,
-            plannerID: 1,
-            memberIDs: [],
-            title: "Test 1",
-            startTimestamp: nil
-        )
-        let event2 = Event(
-            date: tomorrow,
-            description: "Test event 2",
-            endTimestamp: nil,
-            id: 2,
-            plannerID: 1,
-            memberIDs: [],
-            title: "Test 2",
-            startTimestamp: nil
-        )
+        let event1 = makeEvent(id: 1, date: tomorrow)
+        let event2 = makeEvent(id: 2, date: tomorrow)
+       
         let label = viewModel.eventCountLabel(for: tomorrow, events: [event1, event2])
         XCTAssertEqual(label, "2 upcoming events")
     }
