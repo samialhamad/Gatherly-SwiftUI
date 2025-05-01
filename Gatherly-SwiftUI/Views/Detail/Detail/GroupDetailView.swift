@@ -42,28 +42,7 @@ struct GroupDetailView: View {
             Button("Cancel", role: .cancel) {}
         }
         .sheet(isPresented: $isShowingEditView) {
-            EditGroupView(
-                viewModel: EditGroupViewModel(group: group),
-                allUsers: SampleData.sampleUsers,
-                currentUser: currentUser,
-                groups: groups,
-                onSave: { updatedGroup in
-                    if let index = groups.firstIndex(where: { $0.id == updatedGroup.id }) {
-                        groups[index] = updatedGroup
-                        UserDefaultsManager.saveGroups(groups)
-                    }
-                    isShowingEditView = false
-                },
-                onCancel: {
-                    isShowingEditView = false
-                },
-                onDelete: { deletedGroup in
-                    groups = GroupEditor.deleteGroup(from: groups, groupToDelete: deletedGroup)
-                    UserDefaultsManager.saveGroups(groups)
-                    isShowingEditView = false
-                    dismiss()
-                }
-            )
+            editGroupSheet
         }
         .refreshOnAppear()
     }
@@ -95,6 +74,31 @@ private extension GroupDetailView {
     }
     
     // MARK: - Subviews
+    
+    var editGroupSheet: some View {
+        EditGroupView(
+            viewModel: EditGroupViewModel(group: group),
+            allUsers: users,
+            currentUser: currentUser,
+            groups: groups,
+            onSave: { updatedGroup in
+                if let index = groups.firstIndex(where: { $0.id == updatedGroup.id }) {
+                    groups[index] = updatedGroup
+                    UserDefaultsManager.saveGroups(groups)
+                }
+                isShowingEditView = false
+            },
+            onCancel: {
+                isShowingEditView = false
+            },
+            onDelete: { deletedGroup in
+                groups = GroupEditor.deleteGroup(from: groups, groupToDelete: deletedGroup)
+                UserDefaultsManager.saveGroups(groups)
+                isShowingEditView = false
+                dismiss()
+            }
+        )
+    }
     
     var groupLeaderAndMembersView: some View {
         Group {
