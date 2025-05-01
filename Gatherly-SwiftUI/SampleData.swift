@@ -150,30 +150,30 @@ struct SampleData {
     static let sampleGroups: [UserGroup] = [
         UserGroup(
             id: 1,
-            name: "Group Sami Leads",
-            memberIDs: [2, 3],
             leaderID: 1,
+            memberIDs: [2, 3],
             messages: [
                 Message(id: 1, userID: 1, message: "Welcome to the group!", read: true)
-            ]
+            ],
+            name: "Group Sami Leads"
         ),
         UserGroup(
             id: 2,
-            name: "Group I'm a Member in",
-            memberIDs: [1, 5],
             leaderID: 4,
+            memberIDs: [1, 5],
             messages: [
                 Message(id: 2, userID: 4, message: "Let's plan an event!", read: false)
-            ]
+            ],
+            name: "Group I'm a Member in"
         ),
         UserGroup(
             id: 3,
-            name: "Group Sami is not in",
-            memberIDs: [4, 5, 6],
             leaderID: 4,
+            memberIDs: [4, 5, 6],
             messages: [
                 Message(id: 1, userID: 4, message: "Welcome to the group!", read: true)
-            ]
+            ],
+            name: "Group Sami is not in"
         )
     ]
 }

@@ -26,10 +26,10 @@ struct GroupEditor {
         
         var group = UserGroup(
             id: groupID,
-            name: name,
-            memberIDs: Array(memberIDs).sorted(),
             leaderID: leaderID,
-            messages: originalGroup?.messages
+            memberIDs: Array(memberIDs).sorted(),
+            messages: originalGroup?.messages,
+            name: name
         )
         
         group.imageName = imageName
