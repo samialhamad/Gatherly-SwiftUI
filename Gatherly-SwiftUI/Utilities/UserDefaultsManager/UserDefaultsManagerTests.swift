@@ -46,8 +46,8 @@ final class UserDefaultsManagerTests: XCTestCase {
     
     func testSaveAndLoadGroups() {
         let sampleGroups = [
-            UserGroup(id: 1, name: "Team", memberIDs: [1, 2], leaderID: 1),
-            UserGroup(id: 2, name: "Friends", memberIDs: [2, 3], leaderID: 2)
+            UserGroup(id: 1, leaderID: 1, memberIDs: [1, 2], name: "Team"),
+            UserGroup(id: 2, leaderID: 2, memberIDs: [2, 3], name: "Friends")
         ]
         
         UserDefaultsManager.saveGroups(sampleGroups)
@@ -59,7 +59,7 @@ final class UserDefaultsManagerTests: XCTestCase {
     func testResetAllClearsData() {
         UserDefaultsManager.saveUsers([User(id: 1)])
         UserDefaultsManager.saveEvents([Event(id: 1)])
-        UserDefaultsManager.saveGroups([UserGroup(id: 1, name: "Group", memberIDs: [1], leaderID: 1)])
+        UserDefaultsManager.saveGroups([UserGroup(id: 1, leaderID: 1, memberIDs: [1], name: "Group")])
         
         UserDefaultsManager.resetAll()
         

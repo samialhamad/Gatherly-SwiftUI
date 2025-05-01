@@ -14,8 +14,8 @@ final class GroupEditorTests: XCTestCase {
     
     func testCreateGroup() {
         let existingGroups = [
-            UserGroup(id: 1, name: "Group 1", memberIDs: [], leaderID: 1),
-            UserGroup(id: 2, name: "Group 2", memberIDs: [], leaderID: 2)
+            UserGroup(id: 1, leaderID: 1, memberIDs: [], name: "Group 1"),
+            UserGroup(id: 2, leaderID: 2, memberIDs: [], name: "Group 2")
         ]
         
         let createdGroup = GroupEditor.saveGroup(
@@ -40,10 +40,10 @@ final class GroupEditorTests: XCTestCase {
     func testUpdateGroup() {
         let original = UserGroup(
             id: 99999,
-            name: "Original Name",
-            memberIDs: [1, 2],
             leaderID: 4,
-            messages: []
+            memberIDs: [1, 2],
+            messages: [],
+            name: "Original Name"
         )
         
         let updatedGroup = GroupEditor.saveGroup(
@@ -67,8 +67,8 @@ final class GroupEditorTests: XCTestCase {
     // MARK: - Delete Group
     
     func testDeleteGroup() {
-        let groupToDelete = UserGroup(id: 11111, name: "Delete Me", memberIDs: [], leaderID: 1)
-        let groupToKeep = UserGroup(id: 22222, name: "Keep Me", memberIDs: [], leaderID: 2)
+        let groupToDelete = UserGroup(id: 11111, leaderID: 1, memberIDs: [], name: "Delete Me")
+        let groupToKeep = UserGroup(id: 22222, leaderID: 2, memberIDs: [], name: "Keep Me")
         
         let groups = [groupToDelete, groupToKeep]
         let updatedGroups = GroupEditor.deleteGroup(from: groups, groupToDelete: groupToDelete)

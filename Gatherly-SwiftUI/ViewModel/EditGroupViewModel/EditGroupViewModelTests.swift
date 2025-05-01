@@ -13,12 +13,12 @@ final class EditGroupViewModelTests: XCTestCase {
     //helper func
     func makeSampleGroup() -> UserGroup {
         UserGroup(
+            bannerImageName: nil,
             id: 100,
-            name: "Sample Group",
-            memberIDs: [1, 2],
-            leaderID: 1,
             imageName: nil,
-            bannerImageName: nil
+            leaderID: 1,
+            memberIDs: [1, 2],
+            name: "Sample Group"
         )
     }
     
