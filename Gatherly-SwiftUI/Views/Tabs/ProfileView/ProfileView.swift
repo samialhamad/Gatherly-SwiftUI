@@ -20,8 +20,8 @@ struct ProfileView: View {
             ScrollView {
                 VStack(spacing: Constants.ProfileView.vstackSpacing) {
                     AvatarHeaderView(
-                        user: currentUser,
-                        refreshID: refreshID
+                        refreshID: refreshID,
+                        user: currentUser
                     )
                     profileRowsSection
                 }
