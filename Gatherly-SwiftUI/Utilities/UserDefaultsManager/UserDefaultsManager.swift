@@ -10,10 +10,11 @@ import Foundation
 enum UserDefaultsManager {
     
     // MARK: - Keys
+    
     private enum Keys {
-        static let users = "gatherly_users"
         static let events = "gatherly_events"
         static let groups = "gatherly_groups"
+        static let users = "gatherly_users"
     }
     
     private static let defaults = UserDefaults.standard
