@@ -8,13 +8,13 @@
 import Foundation
 
 struct UserGroup: Codable, Identifiable, Equatable {
-    var id: Int
-    var name: String
-    var memberIDs: [Int]
-    var leaderID: Int
-    var messages: [Message]?
-    var imageName: String? = nil
     var bannerImageName: String? = nil
+    var id: Int
+    var imageName: String? = nil
+    var leaderID: Int
+    var memberIDs: [Int]
+    var messages: [Message]?
+    var name: String
 
     // MARK: - Computed Vars
     
