@@ -79,10 +79,10 @@ private extension AvatarHeaderView {
     
     private func bannerView(bannerImage: UIImage) -> some View {
         BannerView(
-            uiImage: bannerImage,
-            height: Constants.AvatarHeaderView.rectangleFrameHeight,
+            bottomPadding: 0,
             cornerRadius: 0,
-            bottomPadding: 0
+            height: Constants.AvatarHeaderView.rectangleFrameHeight,
+            uiImage: bannerImage
         )
     }
 }

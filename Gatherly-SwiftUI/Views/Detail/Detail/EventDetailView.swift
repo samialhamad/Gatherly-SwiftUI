@@ -117,10 +117,10 @@ private extension EventDetailView {
     
     var eventBannerImageView: some View {
         BannerView(
-            imageName: updatedEvent.bannerImageName,
-            height: Constants.AvatarHeaderView.rectangleFrameHeight,
+            bottomPadding: 0,
             cornerRadius: 0,
-            bottomPadding: 0
+            height: Constants.AvatarHeaderView.rectangleFrameHeight,
+            imageName: updatedEvent.bannerImageName
         )
     }
     
