@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct BannerView: View {
-    var uiImage: UIImage?
-    var imageName: String?
-    var height: CGFloat = Constants.BannerView.height
-    var cornerRadius: CGFloat = Constants.BannerView.cornerRadius
     var bottomPadding: CGFloat = Constants.BannerView.bottomPadding
+    var cornerRadius: CGFloat = Constants.BannerView.cornerRadius
+    var height: CGFloat = Constants.BannerView.height
+    var imageName: String?
+    var uiImage: UIImage?
 
     var body: some View {
         Group {
