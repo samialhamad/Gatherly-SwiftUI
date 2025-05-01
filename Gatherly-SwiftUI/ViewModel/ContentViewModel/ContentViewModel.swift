@@ -11,12 +11,12 @@ import RxSwift
 import SwiftUI
 
 final class ContentViewModel: ObservableObject {
-    @Published private(set) var didLoadData = false
     @Published var currentUser: User? = nil
-    @Published var users: [User] = []
+    @Published private(set) var didLoadData = false
     @Published var events: [Event] = []
     @Published var groups: [UserGroup] = []
     @Published var isLoading = true
+    @Published var users: [User] = []
     
     private var cancellables = Set<AnyCancellable>()
     private var disposeBag = DisposeBag()
