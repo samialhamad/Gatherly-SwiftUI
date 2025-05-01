@@ -27,8 +27,10 @@ struct ContentView: View {
                             users: viewModel.users
                         )
                         .environmentObject(navigationState)
-                        .addActivityIndicator(isPresented: viewModel.isLoading && navigationState.selectedTab == 0,
-                                              message: Constants.ContentView.calendarViewLoadingString)
+                        .addActivityIndicator(
+                            isPresented: viewModel.isLoading && navigationState.selectedTab == 0,
+                            message: Constants.ContentView.calendarViewLoadingString
+                        )
                     }
                     .tabItem { Image(systemName: "calendar") }
                     .tag(0)
@@ -52,8 +54,10 @@ struct ContentView: View {
                             users: $viewModel.users
                         )
                         .environmentObject(navigationState)
-                        .addActivityIndicator(isPresented: viewModel.isLoading && navigationState.selectedTab == 2,
-                                              message: Constants.ContentView.friendsViewLoadingString)
+                        .addActivityIndicator(
+                            isPresented: viewModel.isLoading && navigationState.selectedTab == 2,
+                            message: Constants.ContentView.friendsViewLoadingString
+                        )
                     }
                     .tabItem { Image(systemName: "person.3.fill") }
                     .tag(2)
@@ -64,8 +68,10 @@ struct ContentView: View {
                             users: $viewModel.users
                         )
                         .environmentObject(navigationState)
-                        .addActivityIndicator(isPresented: viewModel.isLoading && navigationState.selectedTab == 3,
-                                              message: Constants.ContentView.profileViewLoadingString)
+                        .addActivityIndicator(
+                            isPresented: viewModel.isLoading && navigationState.selectedTab == 3,
+                            message: Constants.ContentView.profileViewLoadingString
+                        )
                     }
                     .tabItem { Image(systemName: "person") }
                     .tag(3)
