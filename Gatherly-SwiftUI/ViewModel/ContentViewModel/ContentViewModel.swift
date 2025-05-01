@@ -112,7 +112,9 @@ final class ContentViewModel: ObservableObject {
         
         for contact in contacts {
             let cleaned = contact.phoneNumber.filter(\.isWholeNumber)
-            guard !existingPhones.contains(cleaned) else { continue }
+            guard !existingPhones.contains(cleaned) else {
+                continue
+            }
             
             let newUser = User(from: contact, id: nextAvailableID)
             newUsers.append(newUser)
