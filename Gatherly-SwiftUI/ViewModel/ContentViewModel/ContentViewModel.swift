@@ -52,7 +52,12 @@ final class ContentViewModel: ObservableObject {
     func syncContacts(currentUserID: Int = 1) {
         ContactSyncManager.shared.fetchContacts { contacts in
             let (newUsers, newFriendIDs) = self.generateUsersFromContacts(contacts)
-            self.appendUsersAndUpdateFriends(newUsers: newUsers, newFriendIDs: newFriendIDs, currentUserID: currentUserID)
+            
+            self.appendUsersAndUpdateFriends(
+                newUsers: newUsers,
+                newFriendIDs: newFriendIDs,
+                currentUserID: currentUserID
+            )
         }
     }
     
