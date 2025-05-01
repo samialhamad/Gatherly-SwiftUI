@@ -38,7 +38,7 @@ struct CreateEventView: View {
                 )
                 EventMembersSection(
                     header: "Invite Friends",
-                    allUsers: allUsers,
+                    allUsers: friends,
                     plannerID: currentPlannerID,
                     selectedMemberIDs: $viewModel.selectedMemberIDs
                 )
@@ -67,9 +67,23 @@ struct CreateEventView: View {
     }
 }
 
-// MARK: - Subviews
 
 private extension CreateEventView {
+    
+    // MARK: - Computed Vars
+    
+    private var friends: [User] {
+        guard let friendIDs = currentUser.friendIDs else { return [] }
+        return allUsers.filter { user in
+            if let id = user.id {
+                return friendIDs.contains(id)
+            }
+            return false
+        }
+    }
+    
+    // MARK: - Subviews
+
     var createButtonSection: some View {
         Section {
             Button(action: {

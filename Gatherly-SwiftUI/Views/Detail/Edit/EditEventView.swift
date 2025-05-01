@@ -34,7 +34,7 @@ struct EditEventView: View {
                 )
                 EventMembersSection(
                     header: "Members",
-                    allUsers: allUsers,
+                    allUsers: friends,
                     plannerID: viewModel.plannerID,
                     selectedMemberIDs: $viewModel.selectedMemberIDs
                 )
@@ -77,6 +77,24 @@ struct EditEventView: View {
 
 private extension EditEventView {
     
+    // MARK: - Computed Vars
+    
+    private var friends: [User] {
+        guard let plannerID = viewModel.plannerID else { return [] }
+        
+        guard let planner = allUsers.first(where: { $0.id == plannerID }),
+              let friendIDs = planner.friendIDs else {
+            return []
+        }
+
+        return allUsers.filter { user in
+            if let id = user.id {
+                return friendIDs.contains(id)
+            }
+            return false
+        }
+    }
+
     // MARK: - Subviews
 
     var cancelToolbarButton: some ToolbarContent {
