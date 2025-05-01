@@ -8,11 +8,11 @@
 import Foundation
 
 class FriendsListViewModel: ObservableObject {
-    private let currentUserID: Int
-    private let allUsers: [User]
-    
     @Published var searchText: String = ""
-    
+
+    private let allUsers: [User]
+    private let currentUserID: Int
+        
     init(
         currentUserID: Int,
         allUsers: [User]
