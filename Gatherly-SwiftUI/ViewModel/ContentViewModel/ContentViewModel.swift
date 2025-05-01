@@ -13,6 +13,7 @@ import SwiftUI
 final class ContentViewModel: ObservableObject {
     @Published var currentUser: User? = nil
     @Published private(set) var didLoadData = false
+    @AppStorage("didSeedSampleData") private var didSeedSampleData = false
     @Published var events: [Event] = []
     @Published var groups: [UserGroup] = []
     @Published var isLoading = true
@@ -23,15 +24,23 @@ final class ContentViewModel: ObservableObject {
     private var pendingRequests = 0
     
     func loadAllData() {
-        self.users = SampleData.sampleUsers
-        self.events = SampleData.sampleEvents
-        self.groups = SampleData.sampleGroups
+        if !didSeedSampleData {
+                // First time launch – seed sample data
+                self.users = SampleData.sampleUsers
+                self.events = SampleData.sampleEvents
+                self.groups = SampleData.sampleGroups
+                applySampleDataForSami()
+                saveAllData()
+                didSeedSampleData = true
+            } else {
+                // Use persisted data
+                self.users = UserDefaultsManager.loadUsers()
+                self.events = UserDefaultsManager.loadEvents()
+                self.groups = UserDefaultsManager.loadGroups()
+            }
 
-        applySampleDataForSami()
-        saveAllData()
-        
-        self.currentUser = users.first(where: { $0.id == 1 })
-        self.isLoading = false
+            self.currentUser = users.first(where: { $0.id == 1 })
+            self.isLoading = false
     }
     
     func saveAllData() {
