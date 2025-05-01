@@ -23,6 +23,28 @@ final class ContentViewModel: ObservableObject {
     private var disposeBag = DisposeBag()
     private var pendingRequests = 0
     
+    // MARK: - Data
+    
+    private func applySampleDataForSami() {
+        guard let samiIndex = users.firstIndex(where: { $0.id == 1 }) else {
+            return
+        }
+        
+        let sami = users[samiIndex]
+        
+        sami.eventIDs = events
+            .filter { $0.plannerID == 1 || ($0.memberIDs?.contains(1) ?? false) }
+            .compactMap { $0.id }
+        
+        sami.groupIDs = groups
+            .filter { $0.leaderID == 1 || ($0.memberIDs.contains(1)) }
+            .compactMap { $0.id }
+        
+        sami.friendIDs = [2, 3, 4]
+        
+        users[samiIndex] = sami
+    }
+    
     func loadAllData() {
         if !didSeedSampleData {
                 // First time launch – seed sample data
@@ -49,19 +71,7 @@ final class ContentViewModel: ObservableObject {
         UserDefaultsManager.saveGroups(groups)
     }
     
-    func syncContacts(currentUserID: Int = 1) {
-        ContactSyncManager.shared.fetchContacts { contacts in
-            let (newUsers, newFriendIDs) = self.generateUsersFromContacts(contacts)
-            
-            self.appendUsersAndUpdateFriends(
-                newUsers: newUsers,
-                newFriendIDs: newFriendIDs,
-                currentUserID: currentUserID
-            )
-        }
-    }
-    
-    // MARK: - Helper Functions
+    // MARK: - Contacts & Users
     
     func appendUsersAndUpdateFriends(newUsers: [User], newFriendIDs: [Int], currentUserID: Int) {
         self.users.append(contentsOf: newUsers)
@@ -94,26 +104,6 @@ final class ContentViewModel: ObservableObject {
         UserDefaultsManager.saveUsers(self.users)
     }
     
-    private func applySampleDataForSami() {
-        guard let samiIndex = users.firstIndex(where: { $0.id == 1 }) else {
-            return
-        }
-        
-        let sami = users[samiIndex]
-        
-        sami.eventIDs = events
-            .filter { $0.plannerID == 1 || ($0.memberIDs?.contains(1) ?? false) }
-            .compactMap { $0.id }
-        
-        sami.groupIDs = groups
-            .filter { $0.leaderID == 1 || ($0.memberIDs.contains(1)) }
-            .compactMap { $0.id }
-        
-        sami.friendIDs = [2, 3, 4]
-        
-        users[samiIndex] = sami
-    }
-    
     func generateUsersFromContacts(_ contacts: [SyncedContact]) -> ([User], [Int]) {
         var existingPhones = Set(self.users.compactMap { $0.phone?.filter(\.isWholeNumber) })
         var newUsers: [User] = []
@@ -133,6 +123,20 @@ final class ContentViewModel: ObservableObject {
         
         return (newUsers, newFriendIDs)
     }
+    
+    func syncContacts(currentUserID: Int = 1) {
+        ContactSyncManager.shared.fetchContacts { contacts in
+            let (newUsers, newFriendIDs) = self.generateUsersFromContacts(contacts)
+            
+            self.appendUsersAndUpdateFriends(
+                newUsers: newUsers,
+                newFriendIDs: newFriendIDs,
+                currentUserID: currentUserID
+            )
+        }
+    }
+    
+    // MARK: - Mock API Requests
     
     func markRequestFinished() {
         pendingRequests -= 1
