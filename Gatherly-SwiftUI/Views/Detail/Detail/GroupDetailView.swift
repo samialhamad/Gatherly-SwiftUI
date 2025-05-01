@@ -62,16 +62,25 @@ private extension GroupDetailView {
     
     // MARK: - Functions
     
-    //placeholder, implement in view model
     func leaveGroup() {
         guard let currentID = currentUser.id else { return }
+        
         var updatedGroup = group
         updatedGroup.memberIDs.removeAll { $0 == currentID }
         if let index = groups.firstIndex(where: { $0.id == group.id }) {
             groups[index] = updatedGroup
         }
+        if var groupIDs = currentUser.groupIDs {
+            groupIDs.removeAll { $0 == group.id }
+            currentUser.groupIDs = groupIDs
+        }
+        
+        UserDefaultsManager.saveGroups(groups)
+        UserDefaultsManager.saveUsers(users)
+        
         dismiss()
     }
+    
     
     // MARK: - Subviews
     
