@@ -41,7 +41,7 @@ struct CreateGroupView: View {
                     selectedMemberIDs: $viewModel.selectedMemberIDs,
                     header: "Invite Friends",
                     plannerID: currentUser.id,
-                    users: allFriends
+                    users: friends
                 )
                 createButtonSection
             }
@@ -58,7 +58,7 @@ private extension CreateGroupView {
     
     //MARK: - Computed Vars
     
-    private var allFriends: [User] {
+    private var friends: [User] {
         guard let friendIDs = currentUser.friendIDs else {
             return []
         }
