@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct GroupDetailView: View {
-    let group: UserGroup
-    let currentUser: User
-    let users: [User]
-    
+    @Environment(\.dismiss) private var dismiss
     @Binding var groups: [UserGroup]
     @State private var isShowingEditView = false
     @State private var isShowingActionSheet = false
-    @Environment(\.dismiss) private var dismiss
+
+    let group: UserGroup
+    let currentUser: User
+    let users: [User]
     
     var body: some View {
         ScrollView {
@@ -67,9 +67,11 @@ private extension GroupDetailView {
         
         var updatedGroup = group
         updatedGroup.memberIDs.removeAll { $0 == currentID }
+        
         if let index = groups.firstIndex(where: { $0.id == group.id }) {
             groups[index] = updatedGroup
         }
+        
         if var groupIDs = currentUser.groupIDs {
             groupIDs.removeAll { $0 == group.id }
             currentUser.groupIDs = groupIDs
@@ -157,9 +159,8 @@ private extension GroupDetailView {
 
 #Preview {
     GroupDetailView(
-        group: SampleData.sampleGroups.first!,
+        groups: .constant(SampleData.sampleGroups), group: SampleData.sampleGroups.first!,
         currentUser: SampleData.sampleUsers.first!,
-        users: SampleData.sampleUsers,
-        groups: .constant(SampleData.sampleGroups)
+        users: SampleData.sampleUsers
     )
 }

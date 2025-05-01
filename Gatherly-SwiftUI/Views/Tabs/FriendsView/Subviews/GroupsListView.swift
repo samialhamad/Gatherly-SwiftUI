@@ -49,10 +49,10 @@ private extension GroupsListView {
     var groupListContent: some View {
         ForEach(filteredGroups, id: \.id) { group in
             NavigationLink(destination: GroupDetailView(
+                groups: $groups,
                 group: group,
                 currentUser: currentUser,
-                users: users,
-                groups: $groups
+                users: users
             )) {
                 GroupRow(group: group)
             }
