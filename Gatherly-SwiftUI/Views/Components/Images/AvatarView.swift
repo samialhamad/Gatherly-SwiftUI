@@ -8,30 +8,30 @@
 import SwiftUI
 
 struct AvatarView: View {
-    let user: User?
-    let group: UserGroup?
-    let size: CGFloat
-    let font: Font
     let backgroundColor: Color
     let borderColor: Color?
     let borderWidth: CGFloat?
+    let font: Font
+    let group: UserGroup?
+    let size: CGFloat
+    let user: User?
     
     init(
-        user: User? = nil,
-        group: UserGroup? = nil,
-        size: CGFloat,
-        font: Font,
         backgroundColor: Color,
         borderColor: Color? = nil,
-        borderWidth: CGFloat? = nil
+        borderWidth: CGFloat? = nil,
+        font: Font,
+        group: UserGroup? = nil,
+        size: CGFloat,
+        user: User? = nil
     ) {
-        self.user = user
-        self.group = group
-        self.size = size
-        self.font = font
         self.backgroundColor = backgroundColor
         self.borderColor = borderColor
         self.borderWidth = borderWidth
+        self.font = font
+        self.group = group
+        self.size = size
+        self.user = user
     }
     
     var body: some View {
