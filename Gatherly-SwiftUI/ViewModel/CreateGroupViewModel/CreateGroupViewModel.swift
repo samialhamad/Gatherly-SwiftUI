@@ -9,10 +9,10 @@ import Foundation
 import SwiftUI
 
 class CreateGroupViewModel: ObservableObject {
-    @Published var selectedMemberIDs: Set<Int> = []
-    @Published var groupName: String = ""
-    @Published var groupImage: UIImage? = nil
     @Published var bannerImage: UIImage? = nil
+    @Published var groupImage: UIImage? = nil
+    @Published var groupName: String = ""
+    @Published var selectedMemberIDs: Set<Int> = []
     
     func createGroup(leaderID: Int) -> UserGroup {
         var groupImageName: String? = nil
