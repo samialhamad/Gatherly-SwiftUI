@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct EditGroupView: View {
+    @State private var showingDeleteAlert = false
     @StateObject var viewModel: EditGroupViewModel
+    
     let allUsers: [User]
     let currentUser: User
     let groups: [UserGroup]
     let onSave: (UserGroup) -> Void
     let onCancel: () -> Void
     let onDelete: (UserGroup) -> Void
-    
-    @State private var showingDeleteAlert = false
     
     var body: some View {
         NavigationStack {
