@@ -7,15 +7,14 @@
 
 import Foundation
 
-
 // NOT BEING USED AT MOMENT
 
 class GroupsListViewModel: ObservableObject {
-    private var currentUserID: Int
+    @Published var searchText: String = ""
+    
     private let allUsers: [User]
     private var allUserGroups: [UserGroup]
-    
-    @Published var searchText: String = ""
+    private var currentUserID: Int
     
     //needs to change in future
     init(currentUserID: Int = 1,
