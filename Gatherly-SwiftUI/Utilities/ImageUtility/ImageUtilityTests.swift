@@ -11,39 +11,30 @@ import UIKit
 
 final class ImageUtilityTests: XCTestCase {
     
-    //come back to this, failing because of image comparisons.. could change from jpg to png?
-//    func testSaveAndLoadImage() {
-//            let image = UIImage(systemName: "star")!
-//            
-//            guard let savedFilename = ImageUtility.saveImageToDocuments(image: image) else {
-//                XCTFail("Failed to save image")
-//                return
-//            }
-//            
-//            let loadedImage = ImageUtility.loadImageFromDocuments(named: savedFilename)
-//            
-//            XCTAssertNotNil(loadedImage)
-//            XCTAssertTrue(compareImages(image1: image, image2: loadedImage!))
-//            
-//            // cleanup
-//            ImageUtility.deleteImageFromDocuments(named: savedFilename)
-//        }
+    func testSaveImage() {
+        let image = UIImage(systemName: "star")!
         
-        func testDeleteImage() {
-            let image = UIImage(systemName: "trash")!
-            guard let savedFilename = ImageUtility.saveImageToDocuments(image: image) else {
-                XCTFail("Failed to save image for delete test")
-                return
-            }
-            
-            ImageUtility.deleteImageFromDocuments(named: savedFilename)
-            let deletedImage = ImageUtility.loadImageFromDocuments(named: savedFilename)
-            
-            XCTAssertNil(deletedImage)
+        guard let filename = ImageUtility.saveImageToDocuments(image: image) else {
+            XCTFail("Failed to save image")
+            return
         }
-
-        // helper: rough comparison dimensions only for test simplicity
-        private func compareImages(image1: UIImage, image2: UIImage) -> Bool {
-            return image1.size == image2.size
+        
+        let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(filename)
+        let fileExists = FileManager.default.fileExists(atPath: fileURL.path)
+        
+        XCTAssertTrue(fileExists)
+    }
+    
+    func testDeleteImage() {
+        let image = UIImage(systemName: "trash")!
+        guard let savedFilename = ImageUtility.saveImageToDocuments(image: image) else {
+            XCTFail("Failed to save image for delete test")
+            return
         }
+        
+        ImageUtility.deleteImageFromDocuments(named: savedFilename)
+        let deletedImage = ImageUtility.loadImageFromDocuments(named: savedFilename)
+        
+        XCTAssertNil(deletedImage)
+    }
 }
