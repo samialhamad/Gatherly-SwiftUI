@@ -11,16 +11,10 @@ import XCTest
 final class CalendarViewModelTests: XCTestCase {
     let viewModel = CalendarViewModel()
         
-    func makeEvent(id: Int, date: Date, title: String = "Test", description: String = "Test event") -> Event {
+    func makeEvent(id: Int, date: Date) -> Event {
         Event(
             date: date,
-            description: description,
-            endTimestamp: nil,
-            id: id,
-            plannerID: 1,
-            memberIDs: [],
-            title: title,
-            startTimestamp: nil
+            id: id
         )
     }
     
