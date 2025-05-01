@@ -10,7 +10,7 @@ import XCTest
 
 final class ContentViewModelTests: XCTestCase {
     
-    func test_appendUsersAndUpdateFriends() {
+    func testAppendUsersAndUpdateFriends() {
         let viewModel = ContentViewModel()
         viewModel.users = [
             User(firstName: "Sami", friendIDs: [2], id: 1)
@@ -31,7 +31,7 @@ final class ContentViewModelTests: XCTestCase {
         XCTAssertEqual(Set(currentUser?.friendIDs ?? []), Set([2, 3, 4]))
     }
     
-    func test_generateUsersFromContacts() {
+    func testGenerateUsersFromContacts() {
         let viewModel = ContentViewModel()
         viewModel.users = [
             User(firstName: "Sami", id: 1, phone: "1234567890")
