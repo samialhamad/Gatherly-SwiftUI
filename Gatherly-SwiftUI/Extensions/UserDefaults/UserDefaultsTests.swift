@@ -22,7 +22,7 @@ final class UserDefaultsTests: XCTestCase {
         UserDefaults.standard.removeObject(forKey: testKey)
     }
 
-    func testSetAndGetCodable_Succeeds() {
+    func testSetAndGetCodable() {
         let model = TestModel(id: 1, name: "Test User")
         UserDefaults.standard.setCodable(model, forKey: testKey)
         
