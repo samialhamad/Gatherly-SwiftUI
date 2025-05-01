@@ -10,10 +10,10 @@ import SwiftUI
 import Contacts
 
 class AddFriendViewModel: ObservableObject {
+    @Published var searchText: String = ""
+
     let currentUserID: Int
     let allUsers: [User]
-
-    @Published var searchText: String = ""
     
     var currentUser: User? {
         allUsers.first(where: { $0.id == currentUserID })
