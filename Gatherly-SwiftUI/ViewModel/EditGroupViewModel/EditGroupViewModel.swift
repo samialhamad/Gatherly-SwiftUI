@@ -9,10 +9,10 @@ import Foundation
 import SwiftUI
 
 class EditGroupViewModel: ObservableObject {
+    @Published var bannerImage: UIImage?
+    @Published var groupImage: UIImage?
     @Published var groupName: String
     @Published var selectedMemberIDs: Set<Int>
-    @Published var groupImage: UIImage?
-    @Published var bannerImage: UIImage?
     
     private let original: UserGroup
     
