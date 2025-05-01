@@ -8,24 +8,24 @@
 import SwiftUI
 
 struct AvatarHeaderView: View {
-    let user: User?
-    let group: UserGroup?
-    let size: CGFloat
     let font: Font
+    let group: UserGroup?
     let refreshID: UUID
+    let size: CGFloat
+    let user: User?
     
     init(
-        user: User? = nil,
-        group: UserGroup? = nil,
-        size: CGFloat = Constants.AvatarHeaderView.size,
         font: Font = .largeTitle,
-        refreshID: UUID = UUID()
+        group: UserGroup? = nil,
+        refreshID: UUID = UUID(),
+        size: CGFloat = Constants.AvatarHeaderView.size,
+        user: User? = nil
     ) {
-        self.user = user
-        self.group = group
-        self.size = size
         self.font = font
+        self.group = group
         self.refreshID = refreshID
+        self.size = size
+        self.user = user
     }
     
     var body: some View {
