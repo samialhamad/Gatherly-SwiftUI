@@ -10,6 +10,30 @@ import XCTest
 
 final class ContentViewModelTests: XCTestCase {
     
+    func testLoadAllData_seedsSampleDataOnFirstLaunch() {
+        let viewModel = ContentViewModel()
+        
+        UserDefaults.standard.removeObject(forKey: "didSeedSampleData")
+        UserDefaultsManager.resetAll()
+        
+        viewModel.loadAllData()
+        
+        XCTAssertFalse(viewModel.users.isEmpty)
+        XCTAssertEqual(viewModel.currentUser?.id, 1)
+    }
+    
+    func testSaveAllData_persistsToUserDefaults() {
+        let viewModel = ContentViewModel()
+        viewModel.users = SampleData.sampleUsers
+        viewModel.events = SampleData.sampleEvents
+        viewModel.groups = SampleData.sampleGroups
+        
+        viewModel.saveAllData()
+        
+        let savedUsers = UserDefaultsManager.loadUsers()
+        XCTAssertEqual(savedUsers.count, SampleData.sampleUsers.count)
+    }
+    
     func testAppendUsersAndUpdateFriends() {
         let viewModel = ContentViewModel()
         viewModel.users = [
