@@ -20,7 +20,7 @@ final class UserEditorTests: XCTestCase {
         )
     }
     
-    func test_saveUser_updatesNameCorrectly() {
+    func testSaveUser_updatesNameCorrectly() {
         let original = makeSampleUser()
         let users = [original]
         
@@ -36,7 +36,7 @@ final class UserEditorTests: XCTestCase {
         XCTAssertEqual(updated.first?.lastName, "User")
     }
     
-    func test_saveUser_updatesAvatarAndBanner() {
+    func testSaveUser_updatesAvatarAndBanner() {
         let original = makeSampleUser()
         let users = [original]
         
@@ -54,7 +54,7 @@ final class UserEditorTests: XCTestCase {
         XCTAssertEqual(updatedUser?.bannerImageName, "banner123.png")
     }
     
-    func test_saveUser_appendsIfUserNotFound() {
+    func testSaveUser_appendsIfUserNotFound() {
         let existing = makeSampleUser(id: 99) // Different user
         let newUser = makeSampleUser(id: 1)
         
