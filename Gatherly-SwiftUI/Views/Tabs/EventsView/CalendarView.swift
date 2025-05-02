@@ -44,7 +44,6 @@ struct CalendarView: View {
     }
 }
 
-
 private extension CalendarView {
     
     // MARK: - Computed Vars
