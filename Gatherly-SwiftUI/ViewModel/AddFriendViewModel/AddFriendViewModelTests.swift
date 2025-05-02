@@ -18,7 +18,7 @@ final class AddFriendViewModelTests: XCTestCase {
         User(firstName: "Eve", id: 5, lastName: "Davis")
     ]
     
-    func testFilteredUsers_EmptySearchText() {
+    func testFilteredUsers_emptySearchText() {
         let viewModel = AddFriendViewModel(currentUserID: 1, allUsers: sampleUsers)
         viewModel.searchText = ""
         
@@ -27,7 +27,7 @@ final class AddFriendViewModelTests: XCTestCase {
         XCTAssertTrue(result.isEmpty)
     }
     
-    func testFilteredUsers_MatchingFirstName() {
+    func testFilteredUsers_matchingFirstName() {
         let viewModel = AddFriendViewModel(currentUserID: 1, allUsers: sampleUsers)
         viewModel.searchText = "eve"
         
@@ -37,7 +37,7 @@ final class AddFriendViewModelTests: XCTestCase {
         XCTAssertEqual(result.first?.firstName, "Eve")
     }
     
-    func testFilteredUsers_MatchingLastName() {
+    func testFilteredUsers_matchingLastName() {
         let viewModel = AddFriendViewModel(currentUserID: 1, allUsers: sampleUsers)
         viewModel.searchText = "smith"
         
@@ -48,7 +48,7 @@ final class AddFriendViewModelTests: XCTestCase {
         XCTAssertEqual(result.first?.firstName, "David")
     }
     
-    func testFilteredUsers_ExcludesCurrentUser() {
+    func testFilteredUsers_excludesCurrentUser() {
         let viewModel = AddFriendViewModel(currentUserID: 1, allUsers: sampleUsers)
         viewModel.searchText = "charlie"
         
@@ -57,7 +57,7 @@ final class AddFriendViewModelTests: XCTestCase {
         XCTAssertTrue(result.isEmpty)
     }
     
-    func testFilteredUsers_ExcludesAlreadyFriends() {
+    func testFilteredUsers_excludesAlreadyFriends() {
         let viewModel = AddFriendViewModel(currentUserID: 1, allUsers: sampleUsers)
         viewModel.searchText = "bob"
         
@@ -66,7 +66,7 @@ final class AddFriendViewModelTests: XCTestCase {
         XCTAssertTrue(result.isEmpty)
     }
     
-    func testFilteredUsers_TrimsWhitespaceAndIsCaseInsensitive() {
+    func testFilteredUsers_trimsWhitespaceAndIsCaseInsensitive() {
         let viewModel = AddFriendViewModel(currentUserID: 1, allUsers: sampleUsers)
         viewModel.searchText = "  DAVIS  "
         
