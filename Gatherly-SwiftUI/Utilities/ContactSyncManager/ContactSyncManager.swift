@@ -62,3 +62,24 @@ class ContactSyncManager {
         }
     }
 }
+
+extension ContactSyncManager {
+    // Solely for unit testing - ensure the parsing of contacts is done correctly
+    func parseContacts(_ contacts: [CNContact]) -> [SyncedContact] {
+        var results: [SyncedContact] = []
+
+        for contact in contacts {
+            let fullName = "\(contact.givenName) \(contact.familyName)".trimmingCharacters(in: .whitespaces)
+
+            if let number = contact.phoneNumbers.first {
+                let raw = number.value.stringValue
+                let digits = raw.filter(\.isWholeNumber)
+                if !digits.isEmpty {
+                    results.append(SyncedContact(fullName: fullName, phoneNumber: digits))
+                }
+            }
+        }
+
+        return results
+    }
+}
