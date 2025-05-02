@@ -34,7 +34,7 @@ extension Date {
     
     public static func startOfDay(_ date: Date?) -> Date {
         guard let date = date else {
-            return Date()  // fallback if nil
+            return Date()  
         }
         return Calendar.current.startOfDay(for: date)
     }
