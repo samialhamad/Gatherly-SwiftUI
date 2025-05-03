@@ -12,7 +12,7 @@ import ComposableArchitecture
 final class EditProfileFeatureTests: XCTestCase {
     
     func testSetFirstName() async {
-        let store = TestStore(
+        let store = await TestStore(
             initialState: EditProfileFeature.State(
                 allUsers: [],
                 currentUser: User(firstName: "Old", id: 1, lastName: "Name"),
@@ -28,7 +28,7 @@ final class EditProfileFeatureTests: XCTestCase {
     }
     
     func testSetLastName() async {
-        let store = TestStore(
+        let store = await TestStore(
             initialState: EditProfileFeature.State(
                 allUsers: [],
                 currentUser: User(firstName: "Test", id: 1, lastName: "Old"),
@@ -45,7 +45,7 @@ final class EditProfileFeatureTests: XCTestCase {
     
     func testSetAvatarImage() async {
         let dummyImage = UIImage(systemName: "person")!
-        let store = TestStore(
+        let store = await TestStore(
             initialState: EditProfileFeature.State(
                 allUsers: [],
                 currentUser: User(id: 1),
@@ -62,7 +62,7 @@ final class EditProfileFeatureTests: XCTestCase {
 
     func testSetBannerImage() async {
         let dummyImage = UIImage(systemName: "photo")!
-        let store = TestStore(
+        let store = await TestStore(
             initialState: EditProfileFeature.State(
                 allUsers: [],
                 currentUser: User(id: 1),
@@ -80,7 +80,7 @@ final class EditProfileFeatureTests: XCTestCase {
     func testSaveChanges_updatesUser() async {
         let originalUser = User(firstName: "Sami", id: 1, lastName: "Alhamad")
         
-        let store = TestStore(
+        let store = await TestStore(
             initialState: EditProfileFeature.State(
                 allUsers: [originalUser],
                 currentUser: originalUser,
@@ -97,7 +97,7 @@ final class EditProfileFeatureTests: XCTestCase {
     }
     
     func testCancel() async {
-        let store = TestStore(
+        let store = await TestStore(
             initialState: EditProfileFeature.State(
                 allUsers: [],
                 currentUser: User(id: 1),
