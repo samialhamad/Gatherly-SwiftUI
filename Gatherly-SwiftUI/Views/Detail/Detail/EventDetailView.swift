@@ -241,14 +241,6 @@ private extension EventDetailView {
             }
         }
     }
-    
-    // Old, unused
-    var eventTitleView: some View {
-        Text(updatedEvent.title ?? "Untitled Event")
-            .font(.title)
-            .bold()
-            .centerText()
-    }
 }
 
 #Preview {
