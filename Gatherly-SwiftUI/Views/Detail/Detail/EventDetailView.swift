@@ -61,16 +61,26 @@ private extension EventDetailView {
     // MARK: - Computed Vars
     
     var members: [User] {
-        guard let memberIDs = updatedEvent.memberIDs else { return [] }
+        guard let memberIDs = updatedEvent.memberIDs else {
+            return []
+        }
+        
         let filteredMemberIDs = memberIDs.filter { $0 != updatedEvent.plannerID }
+        
         return users.filter { user in
-            guard let userID = user.id else { return false }
+            guard let userID = user.id else {
+                return false
+            }
+            
             return filteredMemberIDs.contains(userID)
         }
     }
     
     var planner: User? {
-        guard let plannerID = updatedEvent.plannerID else { return nil }
+        guard let plannerID = updatedEvent.plannerID else {
+            return nil
+        }
+        
         return users.first(where: { $0.id == plannerID })
     }
     
