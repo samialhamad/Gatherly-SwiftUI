@@ -73,11 +73,15 @@ private extension CreateEventView {
     // MARK: - Computed Vars
     
     private var friends: [User] {
-        guard let friendIDs = currentUser.friendIDs else { return [] }
+        guard let friendIDs = currentUser.friendIDs else {
+            return []
+        }
+        
         return allUsers.filter { user in
             if let id = user.id {
                 return friendIDs.contains(id)
             }
+            
             return false
         }
     }
