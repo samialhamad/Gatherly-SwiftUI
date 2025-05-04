@@ -94,7 +94,7 @@ private extension AvatarView {
     
     private var borderOverlay: some View {
         Group {
-            if let borderColor = borderColor, let borderWidth = borderWidth {
+            if let borderColor, let borderWidth {
                 Circle().stroke(borderColor, lineWidth: borderWidth)
             }
         }
