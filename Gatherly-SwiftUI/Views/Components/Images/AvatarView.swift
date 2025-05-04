@@ -48,11 +48,11 @@ private extension AvatarView {
     //MARK: - Computed vars
     
     private var initials: String {
-        if let user = user {
+        if let user {
             let firstInitial = user.firstName?.first.map(String.init) ?? ""
             let lastInitial = user.lastName?.first.map(String.init) ?? ""
             return firstInitial + lastInitial
-        } else if let group = group {
+        } else if let group {
             return group.name.first.map { String($0).uppercased() } ?? "?"
         } else {
             return ""
@@ -60,12 +60,14 @@ private extension AvatarView {
     }
     
     private var profileImage: UIImage? {
-        if let user = user, let imageName = user.avatarImageName {
+        if let user, let imageName = user.avatarImageName {
             return ImageUtility.loadImageFromDocuments(named: imageName)
         }
-        if let group = group, let imageName = group.imageName {
+        
+        if let group, let imageName = group.imageName {
             return ImageUtility.loadImageFromDocuments(named: imageName)
         }
+        
         return nil
     }
     
