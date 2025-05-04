@@ -100,7 +100,7 @@ private extension ImagePicker {
     
     var cropperView: some View {
         Group {
-            if let imageToCrop = imageToCrop {
+            if let imageToCrop {
                 SwiftyCropView(
                     imageToCrop: imageToCrop,
                     maskShape: maskShape,
