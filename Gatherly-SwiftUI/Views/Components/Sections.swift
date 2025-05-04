@@ -87,9 +87,10 @@ struct EventMembersSection: View {
     
     private var filteredUsers: [User] {
         users.filter { user in
-            if let id = user.id, let plannerID = plannerID {
+            if let id = user.id, let plannerID {
                 return id != plannerID
             }
+            
             return true
         }
     }
