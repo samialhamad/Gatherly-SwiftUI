@@ -35,7 +35,7 @@ struct AvatarView: View {
     }
     
     var body: some View {
-        if let profileImage = profileImage {
+        if let profileImage {
             profileImageView(profileImage)
         } else {
             initialsView
