@@ -14,7 +14,7 @@ struct ActivityIndicator: View {
         VStack(spacing: Constants.ActivityIndicator.vstackSpacing) {
             DotsLoader()
             
-            if let message = message {
+            if let message {
                 Text(message)
                     .font(.headline)
                     .foregroundColor(Color(Colors.primary))
