@@ -5,6 +5,7 @@
 //  Created by Sami Alhamad on 3/12/25.
 //
 
+import SwiftUI
 import UIKit
 
 struct Colors {
@@ -19,6 +20,19 @@ struct Colors {
     }
     static var tertiary: UIColor {
         return UIColor(red: 41.0 / 255.0, green: 42.0 / 255.0, blue: 44.0 / 255.0, alpha: 1.0)
+    }
+}
+
+//MARK: - Configure
+
+enum GatherlyAppearance {
+    static func configure() {
+        UINavigationBar.applyGatherlyStyle()
+        UITabBar.applyGatherlyStyle()
+        UISegmentedControl.applyGatherlyStyle()
+        
+        UITextField.appearance().tintColor = Colors.primary
+        UITextField.appearance().clearButtonMode = .whileEditing
     }
 }
 

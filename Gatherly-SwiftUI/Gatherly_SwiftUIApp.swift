@@ -12,11 +12,7 @@ struct Gatherly_SwiftUIApp: App {
     @StateObject var navigationState = NavigationState()
     
     init() {
-        UINavigationBar.applyGatherlyStyle()
-        UITabBar.applyGatherlyStyle()
-        UISegmentedControl.applyGatherlyStyle()  
-        UITextField.appearance().tintColor = Colors.primary
-        UITextField.appearance().clearButtonMode = .whileEditing
+        GatherlyAppearance.configure()
     }
     
     var body: some Scene {
