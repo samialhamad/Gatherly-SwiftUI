@@ -219,7 +219,7 @@ private extension EventDetailView {
     
     var eventPlannerAndMembersView: some View {
         Group {
-            if let planner = planner {
+            if let planner {
                 Text("Planner")
                     .font(.headline)
                 NavigationLink(destination: ProfileDetailView(currentUser: currentUser, user: planner)) {
