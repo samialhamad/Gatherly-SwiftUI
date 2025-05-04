@@ -18,7 +18,7 @@ struct ContentView: View {
     
     var body: some View {
         Group {
-            if let currentUser = currentUser {
+            if let currentUser {
                 TabView(selection: $navigationState.selectedTab) {
                     NavigationStack {
                         CalendarView(
