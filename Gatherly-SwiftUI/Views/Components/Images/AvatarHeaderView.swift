@@ -30,7 +30,7 @@ struct AvatarHeaderView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            if let bannerImage = bannerImage {
+            if let bannerImage {
                 bannerView(bannerImage: bannerImage)
                     .frame(height: Constants.AvatarHeaderView.rectangleFrameHeight)
             }
@@ -56,20 +56,20 @@ private extension AvatarHeaderView {
     // MARK: - Computed Vars
     
     private var profileImage: UIImage? {
-        if let user = user, let imageName = user.avatarImageName {
+        if let user, let imageName = user.avatarImageName {
             return ImageUtility.loadImageFromDocuments(named: imageName)
         }
-        if let group = group, let imageName = group.imageName {
+        if let group, let imageName = group.imageName {
             return ImageUtility.loadImageFromDocuments(named: imageName)
         }
         return nil
     }
     
     private var bannerImage: UIImage? {
-        if let user = user, let bannerName = user.bannerImageName {
+        if let user, let bannerName = user.bannerImageName {
             return ImageUtility.loadImageFromDocuments(named: bannerName)
         }
-        if let group = group, let bannerName = group.bannerImageName {
+        if let group, let bannerName = group.bannerImageName {
             return ImageUtility.loadImageFromDocuments(named: bannerName)
         }
         return nil
