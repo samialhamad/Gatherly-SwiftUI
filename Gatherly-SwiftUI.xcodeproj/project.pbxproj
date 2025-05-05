@@ -46,6 +46,7 @@
 				Model/Message/MessageTests.swift,
 				Model/User/UserTests.swift,
 				Model/UserGroup/UserGroupTests.swift,
+				Reducers/EditProfileFeatureTests.swift,
 				Utilities/ContactSyncManager/ContactSyncManagerTests.swift,
 				Utilities/EventEditor/EventEditorTests.swift,
 				Utilities/GroupEditor/GroupEditorTests.swift,
@@ -62,7 +63,6 @@
 				ViewModel/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
 				ViewModel/FriendsListViewModel/FriendsListViewModelTests.swift,
 				ViewModel/GroupsListViewModel/GroupsListViewModelTests.swift,
-				Views/Tabs/ProfileView/Subviews/EditProfile/EditProfileFeatureTests.swift,
 			);
 			target = F11CDC2F2D77958B007BC1F1 /* Gatherly-SwiftUITests */;
 		};
@@ -77,6 +77,7 @@
 				Model/Message/MessageTests.swift,
 				Model/User/UserTests.swift,
 				Model/UserGroup/UserGroupTests.swift,
+				Reducers/EditProfileFeatureTests.swift,
 				Utilities/ContactSyncManager/ContactSyncManagerTests.swift,
 				Utilities/EventEditor/EventEditorTests.swift,
 				Utilities/GroupEditor/GroupEditorTests.swift,
@@ -93,7 +94,6 @@
 				ViewModel/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
 				ViewModel/FriendsListViewModel/FriendsListViewModelTests.swift,
 				ViewModel/GroupsListViewModel/GroupsListViewModelTests.swift,
-				Views/Tabs/ProfileView/Subviews/EditProfile/EditProfileFeatureTests.swift,
 			);
 			target = F11CDC1F2D77958A007BC1F1 /* Gatherly-SwiftUI */;
 		};
