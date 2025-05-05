@@ -17,10 +17,6 @@ struct CreateEventView: View {
     
     let allUsers: [User]
     
-    var currentPlannerID: Int {
-        currentUser.id ?? -1
-    }
-    
     var body: some View {
         NavigationStack {
             Form {
@@ -39,7 +35,7 @@ struct CreateEventView: View {
                 EventMembersSection(
                     selectedMemberIDs: $viewModel.selectedMemberIDs,
                     header: "Invite Friends",
-                    plannerID: currentPlannerID,
+                    currentUser: currentUser,
                     users: friends
                 )
                 EventLocationSection(
@@ -91,7 +87,7 @@ private extension CreateEventView {
     var createButtonSection: some View {
         Section {
             Button(action: {
-                let newEvent = viewModel.createEvent(with: currentPlannerID)
+                let newEvent = viewModel.createEvent(with: currentUser.id ?? -1)
                 events.append(newEvent)
                 UserDefaultsManager.saveEvents(events)
                 viewModel.clearFields()

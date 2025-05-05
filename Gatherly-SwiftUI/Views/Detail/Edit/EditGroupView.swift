@@ -39,7 +39,7 @@ struct EditGroupView: View {
                 EventMembersSection(
                     selectedMemberIDs: $viewModel.selectedMemberIDs,
                     header: "Friends",
-                    plannerID: viewModel.leaderID,
+                    currentUser: currentUser,
                     users: friends
                 )
                 deleteButton

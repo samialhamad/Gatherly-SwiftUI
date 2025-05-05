@@ -40,7 +40,7 @@ struct CreateGroupView: View {
                 EventMembersSection(
                     selectedMemberIDs: $viewModel.selectedMemberIDs,
                     header: "Invite Friends",
-                    plannerID: currentUser.id,
+                    currentUser: currentUser,
                     users: friends
                 )
                 createButtonSection
