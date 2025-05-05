@@ -59,7 +59,7 @@ struct EventMembersSection: View {
     @Binding var selectedMemberIDs: Set<Int>
     
     let header: String
-    let plannerID: Int?
+    let currentUser: User
     let users: [User]
     
     var body: some View {
@@ -78,20 +78,17 @@ struct EventMembersSection: View {
             }
             .sheet(isPresented: $isMembersPickerPresented) {
                 EventMembersPicker(
+                    selectedMemberIDs: $selectedMemberIDs,
                     allUsers: filteredUsers,
-                    selectedMemberIDs: $selectedMemberIDs
+                    currentUser: currentUser
                 )
             }
         }
     }
     
     private var filteredUsers: [User] {
-        users.filter { user in
-            if let id = user.id, let plannerID {
-                return id != plannerID
-            }
-            
-            return true
+        users.filter {
+            $0.id != currentUser.id
         }
     }
 }
