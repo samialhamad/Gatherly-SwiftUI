@@ -20,13 +20,15 @@ struct FriendsView: View {
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                pickerView(selectedTab: $selectedTab, tabTitles: tabTitles)
-                SearchBarView(searchText: $searchText)
-                
+            SearchableTabPickerView(
+                tabTitles: tabTitles,
+                users: users,
+                groups: groups,
+                currentUser: currentUser
+            ) { selectedTab, searchText in
                 if selectedTab == 0 {
                     FriendsListView(
-                        searchText: $searchText,
+                        searchText: searchText,
                         currentUserID: currentUser.id ?? 1,
                         users: users
                     )
@@ -34,7 +36,7 @@ struct FriendsView: View {
                     GroupsListView(
                         currentUser: currentUser,
                         groups: $groups,
-                        searchText: $searchText,
+                        searchText: searchText,
                         users: users
                     )
                 }
