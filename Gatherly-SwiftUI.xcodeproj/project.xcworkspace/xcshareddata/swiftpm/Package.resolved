@@ -1,5 +1,9 @@
 {
+<<<<<<< Updated upstream
   "originHash" : "40901b0e5dd90f4c78ac77d461268893bc858b1c9149bfe4933e0b64a2093957",
+=======
+  "originHash" : "3fc5eb108d66b73f33987d8d216a61b56efc1eb26d238f7b0cc73bc2e5bdfec7",
+>>>>>>> Stashed changes
   "pins" : [
     {
       "identity" : "animatedtabbar",
