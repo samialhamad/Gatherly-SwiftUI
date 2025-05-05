@@ -10,6 +10,7 @@
 		F16B31A12D9DD41700C17188 /* SwiftyCrop in Frameworks */ = {isa = PBXBuildFile; productRef = F16B31A02D9DD41700C17188 /* SwiftyCrop */; };
 		F1BF19442DB1D40B005F18F7 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F1BF19432DB1D40B005F18F7 /* RxSwift */; };
 		F1BF19552DB6F40B005F18F7 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = F1BF19542DB6F40B005F18F7 /* ComposableArchitecture */; };
+		F1D794C32DC95C8400636C21 /* AnimatedTabBar in Frameworks */ = {isa = PBXBuildFile; productRef = F1D794C22DC95C8400636C21 /* AnimatedTabBar */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -127,6 +128,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1BF19442DB1D40B005F18F7 /* RxSwift in Frameworks */,
+				F1D794C32DC95C8400636C21 /* AnimatedTabBar in Frameworks */,
 				F16B31A12D9DD41700C17188 /* SwiftyCrop in Frameworks */,
 				F1BF19552DB6F40B005F18F7 /* ComposableArchitecture in Frameworks */,
 			);
@@ -192,6 +194,7 @@
 				F16B31A02D9DD41700C17188 /* SwiftyCrop */,
 				F1BF19432DB1D40B005F18F7 /* RxSwift */,
 				F1BF19542DB6F40B005F18F7 /* ComposableArchitecture */,
+				F1D794C22DC95C8400636C21 /* AnimatedTabBar */,
 			);
 			productName = "Gatherly-SwiftUI";
 			productReference = F11CDC202D77958A007BC1F1 /* Gatherly-SwiftUI.app */;
@@ -279,6 +282,7 @@
 				F16B319F2D9DD41700C17188 /* XCRemoteSwiftPackageReference "SwiftyCrop" */,
 				F1BF19422DB1D40B005F18F7 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				F1BF19532DB6F40B005F18F7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+				F1D794C12DC95C8400636C21 /* XCRemoteSwiftPackageReference "AnimatedTabBar" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = F11CDC212D77958A007BC1F1 /* Products */;
@@ -677,6 +681,14 @@
 				version = 1.19.1;
 			};
 		};
+		F1D794C12DC95C8400636C21 /* XCRemoteSwiftPackageReference "AnimatedTabBar" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/exyte/AnimatedTabBar";
+			requirement = {
+				kind = exactVersion;
+				version = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -694,6 +706,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = F1BF19532DB6F40B005F18F7 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
 			productName = ComposableArchitecture;
+		};
+		F1D794C22DC95C8400636C21 /* AnimatedTabBar */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F1D794C12DC95C8400636C21 /* XCRemoteSwiftPackageReference "AnimatedTabBar" */;
+			productName = AnimatedTabBar;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
