@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct EventMembersPicker: View {
-    let allUsers: [User]
-    @Binding var selectedMemberIDs: Set<Int>
     @Environment(\.dismiss) var dismiss
+    @Binding var selectedMemberIDs: Set<Int>
+    
+    let allUsers: [User]
+    let currentUser: User
 
     var body: some View {
         NavigationStack {
