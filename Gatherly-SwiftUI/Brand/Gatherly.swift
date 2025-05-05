@@ -25,7 +25,7 @@ struct Colors {
 
 //MARK: - Configure
 
-enum GatherlyAppearance {
+struct GatherlyAppearance {
     static func configure() {
         UINavigationBar.applyGatherlyStyle()
         UITabBar.applyGatherlyStyle()
