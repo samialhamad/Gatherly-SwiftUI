@@ -9,7 +9,9 @@ import SwiftUI
 
 struct EditEventView: View {
     @StateObject var viewModel: EditEventViewModel
+    
     let allUsers: [User]
+    let currentUser: User
     let events: [Event]
     let onSave: (Event) -> Void
     let onCancel: () -> Void
@@ -35,7 +37,7 @@ struct EditEventView: View {
                 EventMembersSection(
                     selectedMemberIDs: $viewModel.selectedMemberIDs,
                     header: "Members",
-                    plannerID: viewModel.plannerID,
+                    currentUser: currentUser,
                     users: friends
                 )
                 EventLocationSection(
@@ -80,23 +82,21 @@ private extension EditEventView {
     // MARK: - Computed Vars
     
     private var friends: [User] {
-        guard let plannerID = viewModel.plannerID else { return [] }
-        
-        guard let planner = allUsers.first(where: { $0.id == plannerID }),
-              let friendIDs = planner.friendIDs else {
+        guard let friendIDs = currentUser.friendIDs else {
             return []
         }
-
+        
         return allUsers.filter { user in
-            if let id = user.id {
-                return friendIDs.contains(id)
+            guard let id = user.id else {
+                return false
             }
-            return false
+            
+            return friendIDs.contains(id)
         }
     }
-
+    
     // MARK: - Subviews
-
+    
     var cancelToolbarButton: some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
             Button("Cancel") {
@@ -131,6 +131,7 @@ private extension EditEventView {
         EditEventView(
             viewModel: EditEventViewModel(event: SampleData.sampleEvents.first!),
             allUsers: SampleData.sampleUsers,
+            currentUser: SampleData.sampleUsers.first!,
             events: SampleData.sampleEvents,
             onSave: { updatedEvent in
                 print("Event updated: \(updatedEvent)")
