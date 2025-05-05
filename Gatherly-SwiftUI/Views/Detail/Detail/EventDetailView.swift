@@ -101,6 +101,7 @@ private extension EventDetailView {
         EditEventView(
             viewModel: EditEventViewModel(event: updatedEvent),
             allUsers: users,
+            currentUser: currentUser,
             events: events,
             onSave: { updatedEvent in
                 if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
