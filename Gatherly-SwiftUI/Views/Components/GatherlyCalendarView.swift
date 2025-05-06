@@ -70,7 +70,9 @@ extension GatherlyCalendarView: ElegantCalendarDataSource {
     }
     
     func calendar(backgroundColorOpacityForDate date: Date) -> Double {
-        allEvents.contains(where: { Calendar.current.isDate($0.date ?? .distantPast, inSameDayAs: date) }) ? 1.0 : 0.0
+        allEvents.contains { event in
+            Date.isSameDay(date1: event.date ?? .distantPast, date2: date)
+        } ? 1.0 : 0.0
     }
     
     func calendar(canSelectDate date: Date) -> Bool {
