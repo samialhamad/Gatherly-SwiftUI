@@ -14,12 +14,12 @@ extension UITabBar {
         tabBarAppearance.configureWithOpaqueBackground()
         tabBarAppearance.backgroundColor = Colors.primary
         
-        tabBarAppearance.stackedLayoutAppearance.selected.iconColor = Colors.secondary
+        tabBarAppearance.stackedLayoutAppearance.selected.iconColor = .white
         tabBarAppearance.stackedLayoutAppearance.selected.titleTextAttributes = [
             .foregroundColor: Colors.secondary
         ]
         
-        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = Colors.accent
+        tabBarAppearance.stackedLayoutAppearance.normal.iconColor = UIColor.white.withAlphaComponent(0.4)
         tabBarAppearance.stackedLayoutAppearance.normal.titleTextAttributes = [
             .foregroundColor: Colors.accent
         ]
