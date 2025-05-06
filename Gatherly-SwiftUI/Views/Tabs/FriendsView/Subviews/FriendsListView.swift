@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct FriendsListView: View {
-    let currentUserID: Int
-    let users: [User]
-    
     @Binding var searchText: String
     @StateObject private var viewModel: FriendsListViewModel
+    
+    let currentUserID: Int
+    let users: [User]
     
     init(searchText: Binding<String>, currentUserID: Int, users: [User]) {
         _searchText = searchText
