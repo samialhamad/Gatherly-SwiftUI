@@ -41,18 +41,16 @@ struct ContentView: View {
 private extension ContentView {
     
     func calendarTab(for user: User) -> some View {
-        NavigationStack {
-            CalendarView(
-                currentUser: user,
-                events: $viewModel.events,
-                users: viewModel.users
-            )
-            .environmentObject(navigationState)
-            .addActivityIndicator(
-                isPresented: viewModel.isLoading && navigationState.selectedTab == 0,
-                message: Constants.ContentView.calendarViewLoadingString
-            )
-        }
+        CalendarView(
+            currentUser: user,
+            events: $viewModel.events,
+            users: viewModel.users
+        )
+        .environmentObject(navigationState)
+        .addActivityIndicator(
+            isPresented: viewModel.isLoading && navigationState.selectedTab == 0,
+            message: Constants.ContentView.calendarViewLoadingString
+        )
         .tabItem { Image(systemName: "calendar") }
         .tag(0)
     }
