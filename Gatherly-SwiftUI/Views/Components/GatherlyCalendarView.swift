@@ -15,26 +15,24 @@ struct GatherlyCalendarView: View {
     
     let currentUser: User
     let users: [User]
-
+    
     init(selectedDate: Binding<Date>,
          allEvents: Binding<[Event]>,
          currentUser: User,
          users: [User]) {
-
+        
         _selectedDate = selectedDate
         _allEvents = allEvents
         self.currentUser = currentUser
         self.users = users
-
-        let config = CalendarConfiguration(
-            startDate: Date().addingTimeInterval(-60*60*24*365),
-            endDate: Date().addingTimeInterval(60*60*24*365)
+        
+        let manager = ElegantCalendarManager.withEvents(
+            selectedDate: selectedDate,
+            events: allEvents.wrappedValue
         )
-
-        let manager = ElegantCalendarManager(configuration: config, initialMonth: selectedDate.wrappedValue)
         _calendarManager = StateObject(wrappedValue: manager)
     }
-
+    
     var body: some View {
         VStack(spacing: 0) {
             ElegantCalendarView(calendarManager: calendarManager)
@@ -70,15 +68,17 @@ extension GatherlyCalendarView: ElegantCalendarDataSource {
         )
         .erased
     }
-
+    
     func calendar(backgroundColorOpacityForDate date: Date) -> Double {
         allEvents.contains(where: { Calendar.current.isDate($0.date ?? .distantPast, inSameDayAs: date) }) ? 1.0 : 0.0
     }
-
+    
     func calendar(canSelectDate date: Date) -> Bool {
         true
     }
 }
+
+// MARK: - Calendar Delegate
 
 extension GatherlyCalendarView: ElegantCalendarDelegate {
     func calendar(didSelectDay date: Date) {
@@ -94,11 +94,11 @@ struct GatherlyEventListView: View {
     let currentUser: User
     let date: Date
     let users: [User]
-
+    
     var filteredEvents: [Event] {
         allEvents.filterEvents(by: date)
     }
-
+    
     var body: some View {
         VStack(spacing: Constants.CalendarView.eventListViewSpacing) {
             if filteredEvents.isEmpty {
