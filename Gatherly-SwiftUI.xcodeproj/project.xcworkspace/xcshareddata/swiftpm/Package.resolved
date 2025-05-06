@@ -1,15 +1,6 @@
 {
-  "originHash" : "3fc5eb108d66b73f33987d8d216a61b56efc1eb26d238f7b0cc73bc2e5bdfec7",
+  "originHash" : "3813d29af7ce3021d0b27f5959ff92538078138e9df0d5c78b3ca88ae9a4d02b",
   "pins" : [
-    {
-      "identity" : "animatedtabbar",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/exyte/AnimatedTabBar",
-      "state" : {
-        "revision" : "e958616dcaf725dea1dedeb61ba1e52c8f6a79f7",
-        "version" : "1.0.0"
-      }
-    },
     {
       "identity" : "combine-schedulers",
       "kind" : "remoteSourceControl",
@@ -17,6 +8,24 @@
       "state" : {
         "revision" : "5928286acce13def418ec36d05a001a9641086f2",
         "version" : "1.0.3"
+      }
+    },
+    {
+      "identity" : "elegantcalendar",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ThasianX/ElegantCalendar",
+      "state" : {
+        "revision" : "d446234f27e60f5bef15f91c35d384f388ff2c7d",
+        "version" : "4.3.2"
+      }
+    },
+    {
+      "identity" : "elegantpages",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ThasianX/ElegantPages",
+      "state" : {
+        "revision" : "d598ce4824c40296decc84eae5b3c042d3dff842",
+        "version" : "1.4.2"
       }
     },
     {
