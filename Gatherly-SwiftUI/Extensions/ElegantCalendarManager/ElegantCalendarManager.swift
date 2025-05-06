@@ -17,7 +17,8 @@ extension ElegantCalendarManager {
         let manager = ElegantCalendarManager(configuration: config,
                                              initialMonth: selectedDate.wrappedValue)
         
-        manager.delegate = EventHighlightDelegate(selectedDate: selectedDate, events: events)
+        manager.delegate = EventHighlightDelegate(selectedDate: selectedDate,
+                                                  events: events)
         return manager
     }
 }
