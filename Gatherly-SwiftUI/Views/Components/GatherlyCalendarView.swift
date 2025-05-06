@@ -52,6 +52,7 @@ struct GatherlyCalendarView: View {
         .onAppear {
             calendarManager.datasource = self
             calendarManager.delegate = self
+            calendarManager.scrollToDay(selectedDate, animated: true)
         }
     }
 }
