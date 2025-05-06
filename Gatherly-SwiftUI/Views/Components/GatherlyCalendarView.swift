@@ -103,7 +103,7 @@ struct GatherlyEventListView: View {
             if filteredEvents.isEmpty {
                 Text("Nothing planned for this day!")
                     .font(.body)
-                    .foregroundColor(.gray)
+                    .foregroundColor(Color(Colors.primary))
                     .padding()
                     .frame(maxWidth: .infinity)
             } else {
