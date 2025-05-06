@@ -63,10 +63,10 @@ struct GatherlyCalendarView: View {
 extension GatherlyCalendarView: ElegantCalendarDataSource {
     func calendar(viewForSelectedDate date: Date, dimensions size: CGSize) -> AnyView {
         return GatherlyEventListView(
-            date: date,
+            allEvents: $allEvents,
             currentUser: currentUser,
-            users: users,
-            allEvents: $allEvents
+            date: date,
+            users: users
         )
         .erased
     }
@@ -89,10 +89,11 @@ extension GatherlyCalendarView: ElegantCalendarDelegate {
 // MARK: - Event List View
 
 struct GatherlyEventListView: View {
-    let date: Date
-    let currentUser: User
-    let users: [User]
     @Binding var allEvents: [Event]
+    
+    let currentUser: User
+    let date: Date
+    let users: [User]
 
     var filteredEvents: [Event] {
         allEvents.filterEvents(by: date)
