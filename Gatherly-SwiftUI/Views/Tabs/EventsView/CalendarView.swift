@@ -18,28 +18,30 @@ struct CalendarView: View {
     
     var body: some View {
         NavigationStack {
-            content
-                .navigationTitle("My Events")
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    calendarToolbarButton
+            VStack(spacing: 0) {
+                content
+            }
+            .navigationTitle("My Events")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                calendarToolbarButton
+            }
+            .navigationDestination(isPresented: Binding(
+                get: { navigationState.navigateToEvent != nil },
+                set: { newValue in
+                    if !newValue { navigationState.navigateToEvent = nil }
                 }
-                .navigationDestination(isPresented: Binding(
-                    get: { navigationState.navigateToEvent != nil },
-                    set: { newValue in
-                        if !newValue { navigationState.navigateToEvent = nil }
-                    }
-                )) {
-                    if let event = navigationState.navigateToEvent {
-                        EventDetailView(
-                            currentUser: currentUser,
-                            events: $events,
-                            event: event,
-                            users: users)
-                    } else {
-                        EmptyView()
-                    }
+            )) {
+                if let event = navigationState.navigateToEvent {
+                    EventDetailView(
+                        currentUser: currentUser,
+                        events: $events,
+                        event: event,
+                        users: users)
+                } else {
+                    EmptyView()
                 }
+            }
         }
     }
 }
@@ -65,13 +67,10 @@ private extension CalendarView {
     @ViewBuilder
     var content: some View {
         if isCalendarView {
-            ScrollView {
-                VStack(alignment: .leading, spacing: Constants.CalendarView.zeroSpacing) {
-                    headerView
-                    calendarView
-                    eventListView
-                }
+            VStack(spacing: 0) {
+                calendarView
             }
+            .frame(maxHeight: .infinity)
         } else {
             EventsGroupedListView(
                 currentUser: currentUser,
@@ -113,10 +112,13 @@ private extension CalendarView {
     }
     
     var calendarView: some View {
-        DatePicker("", selection: $navigationState.calendarSelectedDate, displayedComponents: .date)
-            .datePickerStyle(.graphical)
-            .tint(Color(Colors.primary))
-            .padding()
+        GatherlyCalendarView(
+            selectedDate: $navigationState.calendarSelectedDate,
+            allEvents: $events,
+            currentUser: currentUser,
+            users: users
+        )
+        .frame(maxHeight: .infinity) 
     }
     
     var eventListView: some View {
