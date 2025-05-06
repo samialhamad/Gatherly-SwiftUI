@@ -110,6 +110,14 @@ struct Constants {
         static let pickerViewVerticalPadding: CGFloat = 8
     }
     
+    struct GatherlyCalendarView {
+        static let eventListViewLeadingPadding: CGFloat = -12
+        static let eventListViewTopPadding: CGFloat = 8
+        static let eventListViewTrailingPadding: CGFloat = 16
+        static let topPadding: CGFloat = 76
+        static let vstackSpacing: CGFloat = 0
+    }
+    
     struct GroupDetailView {
         static let topPadding: CGFloat = 10
         static let vstackSpacing: CGFloat = 16
