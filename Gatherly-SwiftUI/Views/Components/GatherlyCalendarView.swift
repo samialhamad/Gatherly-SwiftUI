@@ -34,14 +34,14 @@ struct GatherlyCalendarView: View {
     }
     
     var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: Constants.GatherlyCalendarView.vstackSpacing) {
             ElegantCalendarView(calendarManager: calendarManager)
                 .theme(CalendarTheme(
                     primary: Color(Colors.primary),
                     todayTextColor: .white,
                     todayBackgroundColor: Color(Colors.primary)
                 ))
-                .padding(.top, 76)
+                .padding(.top, Constants.GatherlyCalendarView.topPadding)
         }
         .onReceive(calendarManager.$monthlyManager.map(\.selectedDate)) { newDate in
             if let date = newDate {
@@ -125,8 +125,8 @@ struct GatherlyEventListView: View {
                 }
             }
         }
-        .padding(.leading, -12)
-        .padding(.trailing, 16)
-        .padding(.top, 8)
+        .padding(.leading, Constants.GatherlyCalendarView.eventListViewLeadingPadding)
+        .padding(.trailing, Constants.GatherlyCalendarView.eventListViewTrailingPadding)
+        .padding(.top, Constants.GatherlyCalendarView.eventListViewTopPadding)
     }
 }
