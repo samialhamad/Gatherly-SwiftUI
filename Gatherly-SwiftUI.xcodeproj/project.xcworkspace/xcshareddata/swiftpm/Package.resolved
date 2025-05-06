@@ -1,6 +1,15 @@
 {
-  "originHash" : "1b9a4918bd7c3b40eca6d66cf24d12f94fda6f9961d04880357a09285f6d140c",
+  "originHash" : "3fc5eb108d66b73f33987d8d216a61b56efc1eb26d238f7b0cc73bc2e5bdfec7",
   "pins" : [
+    {
+      "identity" : "animatedtabbar",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/exyte/AnimatedTabBar",
+      "state" : {
+        "revision" : "e958616dcaf725dea1dedeb61ba1e52c8f6a79f7",
+        "version" : "1.0.0"
+      }
+    },
     {
       "identity" : "combine-schedulers",
       "kind" : "remoteSourceControl",
