@@ -23,7 +23,7 @@ final class EventHighlightDelegate: ElegantCalendarDelegate {
     }
     
     func backgroundColor(for date: Date) -> Color {
-        if Calendar.current.isDate(date, inSameDayAs: selectedDate) {
+        if Date.isSameDay(date1: date, date2: selectedDate) {
             return Color(Colors.primary)
         } else if hasEvent(on: date) {
             return Color(Colors.primary).opacity(0.2)
@@ -43,8 +43,9 @@ final class EventHighlightDelegate: ElegantCalendarDelegate {
     private func hasEvent(on date: Date) -> Bool {
         events.contains { event in
             if let eventDate = event.date {
-                return Calendar.current.isDate(eventDate, inSameDayAs: date)
+                return Date.isSameDay(date1: eventDate, date2: date)
             }
+            
             return false
         }
     }
