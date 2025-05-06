@@ -48,12 +48,6 @@ struct CalendarView: View {
 
 private extension CalendarView {
     
-    // MARK: - Computed Vars
-    
-    var filteredEvents: [Event] {
-        events.filterEvents(by: navigationState.calendarSelectedDate)
-    }
-    
     // MARK: - Subviews
     
     var calendarToolbarButton: some ToolbarContent {
@@ -82,72 +76,6 @@ private extension CalendarView {
                     }
                 }
             )
-        }
-    }
-    
-    var headerView: some View {
-        HStack {
-            VStack(alignment: .leading, spacing: Constants.CalendarView.headerViewSpacing) {
-                Text(navigationState.calendarSelectedDate, format: .dateTime.year().month().day())
-                    .font(.title2)
-                    .bold()
-                Text(viewModel.eventCountLabel(for: navigationState.calendarSelectedDate, events: events))
-                    .font(.body)
-                    .foregroundColor(.black)
-            }
-            
-            Spacer()
-            
-            if !Date.isSameDay(date1: navigationState.calendarSelectedDate, date2: Date()) {
-                Button {
-                    navigationState.calendarSelectedDate = Date()
-                } label: {
-                    Image(systemName: "calendar.badge.clock.rtl")
-                        .font(.title2)
-                        .foregroundColor(Color(Colors.primary))
-                }
-            }
-        }
-        .padding()
-    }
-    
-    var calendarView: some View {
-        GatherlyCalendarView(
-            selectedDate: $navigationState.calendarSelectedDate,
-            allEvents: $events,
-            currentUser: currentUser,
-            users: users
-        )
-        .frame(maxHeight: .infinity) 
-    }
-    
-    var eventListView: some View {
-        VStack {
-            if !filteredEvents.isEmpty {
-                VStack(spacing: Constants.CalendarView.eventListViewSpacing) {
-                    ForEach(filteredEvents) { event in
-                        EventRowLink(
-                            currentUser: currentUser,
-                            events: $events,
-                            event: event,
-                            users: users,
-                            onSave: { updatedEvent in
-                                if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
-                                    events[index] = updatedEvent
-                                }
-                            },
-                            showDisclosure: true
-                        )
-                        .padding(.horizontal)
-                    }
-                }
-            } else {
-                Text("Nothing planned for this day!")
-                    .font(.body)
-                    .foregroundColor(.gray)
-                    .padding()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            }
         }
     }
 }
