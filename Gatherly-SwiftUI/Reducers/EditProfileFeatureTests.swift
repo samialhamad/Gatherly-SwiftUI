@@ -86,9 +86,21 @@ final class EditProfileFeatureTests: XCTestCase {
         )
         
         await store.send(.saveChanges)
-
-        XCTAssertEqual(store.state.currentUser.firstName, "New")
-        XCTAssertEqual(store.state.currentUser.lastName, "Name")
+        
+        await store.receive(.userSaved(.init(
+            firstName: "New",
+            id: 1,
+            lastName: "Name"
+        ))) {
+            $0.currentUser.firstName = "New"
+            $0.currentUser.lastName = "Name"
+        }
+        
+        await store.receive(.delegate(.didSave(.init(
+            firstName: "New",
+            id: 1,
+            lastName: "Name"
+        ))))
     }
     
     func testCancel() async {

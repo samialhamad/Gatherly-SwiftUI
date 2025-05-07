@@ -7,7 +7,6 @@
 
 import ComposableArchitecture
 import SwiftUI
-import Combine
 
 struct EditProfileFeature: Reducer {
     struct State: Equatable {
@@ -35,8 +34,6 @@ struct EditProfileFeature: Reducer {
             case didSave(User)
         }
     }
-    
-    @Dependency(\.mainQueue) var mainQueue
     
     func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
@@ -68,10 +65,6 @@ struct EditProfileFeature: Reducer {
                     avatarImageName: avatarImageName,
                     bannerImageName: bannerImageName
                 )
-                    .receive(on: mainQueue)
-                    .values
-                    .first(where: { _ in true }) ?? currentUser
-                
                 await send(.userSaved(updated))
             }
             
