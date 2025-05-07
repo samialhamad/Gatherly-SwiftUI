@@ -14,7 +14,6 @@ final class EditProfileFeatureTests: XCTestCase {
     func testSetFirstName() async {
         let store = await TestStore(
             initialState: EditProfileFeature.State(
-                allUsers: [],
                 currentUser: User(firstName: "Old", id: 1, lastName: "Name"),
                 firstName: "Old",
                 lastName: "Name"
@@ -30,7 +29,6 @@ final class EditProfileFeatureTests: XCTestCase {
     func testSetLastName() async {
         let store = await TestStore(
             initialState: EditProfileFeature.State(
-                allUsers: [],
                 currentUser: User(firstName: "Test", id: 1, lastName: "Old"),
                 firstName: "Test",
                 lastName: "Old"
@@ -47,7 +45,6 @@ final class EditProfileFeatureTests: XCTestCase {
         let dummyImage = UIImage(systemName: "person")!
         let store = await TestStore(
             initialState: EditProfileFeature.State(
-                allUsers: [],
                 currentUser: User(id: 1),
                 firstName: "Test",
                 lastName: "User"
@@ -64,7 +61,6 @@ final class EditProfileFeatureTests: XCTestCase {
         let dummyImage = UIImage(systemName: "photo")!
         let store = await TestStore(
             initialState: EditProfileFeature.State(
-                allUsers: [],
                 currentUser: User(id: 1),
                 firstName: "Test",
                 lastName: "User"
@@ -82,7 +78,6 @@ final class EditProfileFeatureTests: XCTestCase {
         
         let store = await TestStore(
             initialState: EditProfileFeature.State(
-                allUsers: [originalUser],
                 currentUser: originalUser,
                 firstName: "New",
                 lastName: "Name"
@@ -99,7 +94,6 @@ final class EditProfileFeatureTests: XCTestCase {
     func testCancel() async {
         let store = await TestStore(
             initialState: EditProfileFeature.State(
-                allUsers: [],
                 currentUser: User(id: 1),
                 firstName: "Test",
                 lastName: "User",
