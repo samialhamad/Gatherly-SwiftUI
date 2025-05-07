@@ -61,11 +61,7 @@ private extension ProfileView {
         case .cancel:
             break
         case .delegate(let delegateAction):
-            if case let .didSave(updatedUser) = delegateAction {
-                currentUser.firstName = updatedUser.firstName
-                currentUser.lastName = updatedUser.lastName
-                currentUser.avatarImageName = updatedUser.avatarImageName
-                currentUser.bannerImageName = updatedUser.bannerImageName
+            if case .didSave = delegateAction {
                 refreshID = UUID()
             }
         default:
