@@ -57,30 +57,6 @@ struct SampleData {
             isEmailEnabled: true,
             lastName: "Zebrus",
             phone: "9876543210"
-        ),
-        User(
-            createdTimestamp: Int(Date().timestamp),
-            deviceToken: "45596",
-            email: "woah@zowers.com",
-            eventIDs: nil,
-            firstName: "LeBron",
-            friendIDs: nil,
-            id: 5,
-            isEmailEnabled: true,
-            lastName: "James",
-            phone: "122872722"
-        ),
-        User(
-            createdTimestamp: Int(Date().timestamp),
-            deviceToken: "mj232",
-            email: "mj@nike.com",
-            eventIDs: nil,
-            firstName: "Michael",
-            friendIDs: nil,
-            id: 6,
-            isEmailEnabled: true,
-            lastName: "Jordan",
-            phone: "9876543210"
         )
     ]
     
