@@ -86,21 +86,7 @@ class User: Codable, Equatable, Hashable, Identifiable, ObservableObject {
         self.phone = phone
     }
     
-    convenience init(from syncedContact: SyncedContact, id: Int) {
-        self.init(
-            createdTimestamp: Int(Date().timeIntervalSince1970),
-            eventIDs: [],
-            firstName: syncedContact.fullName.components(separatedBy: " ").first,
-            friendIDs: [],
-            groupIDs: [],
-            id: id,
-            isEmailEnabled: false,
-            lastName: syncedContact.fullName.components(separatedBy: " ").dropFirst().joined(separator: " "),
-            phone: syncedContact.phoneNumber
-        )
-    }
-    
-    // MARK: - Codable (Manual Implementation)
+    // MARK: - Codable Conformance (Manual Implementation)
     
     private enum CodingKeys: String, CodingKey {
         case avatarImageName
