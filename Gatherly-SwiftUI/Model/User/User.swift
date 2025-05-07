@@ -36,6 +36,24 @@ class User: Codable, Equatable, Hashable, Identifiable, ObservableObject {
         return !(groupIDs?.isEmpty ?? true)
     }
     
+    //MARK: - Functions
+    
+    func resolvedFriends(from lookup: [Int: User]) -> [User] {
+        guard let ids = friendIDs else {
+            return []
+        }
+        
+        return ids.compactMap { lookup[$0] }
+    }
+    
+    func resolvedGroups(from groups: [UserGroup]) -> [UserGroup] {
+        guard let ids = groupIDs else {
+            return []
+        }
+        
+        return groups.filter { ids.contains($0.id) }
+    }
+    
     // MARK: - Initializers
     
     init(
@@ -83,7 +101,7 @@ class User: Codable, Equatable, Hashable, Identifiable, ObservableObject {
     }
     
     // MARK: - Codable (Manual Implementation)
-
+    
     private enum CodingKeys: String, CodingKey {
         case avatarImageName
         case bannerImageName
@@ -99,7 +117,7 @@ class User: Codable, Equatable, Hashable, Identifiable, ObservableObject {
         case lastName
         case phone
     }
-
+    
     required convenience init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
@@ -133,7 +151,7 @@ class User: Codable, Equatable, Hashable, Identifiable, ObservableObject {
             phone: phone
         )
     }
-
+    
     func encode(to encoder: Encoder) throws {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
