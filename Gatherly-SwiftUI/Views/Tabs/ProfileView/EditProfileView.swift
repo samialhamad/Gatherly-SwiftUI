@@ -17,24 +17,27 @@ struct EditProfileView: View {
     
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
-            NavigationStack {
-                Form {
-                    nameSection(viewStore)
-                    imagePickersSection(viewStore)
-                    deleteButton
-                }
-                .navigationTitle("Edit Profile")
-                .toolbar {
-                    cancelToolbarButton(viewStore)
-                    saveToolbarButton(viewStore)
-                }
-                .alert("Delete Profile?", isPresented: $showingDeleteAlert) {
-                    Button("Delete", role: .destructive) {
-                        // Placeholder: no delete functionality yet
+            ZStack {
+                NavigationStack {
+                    Form {
+                        nameSection(viewStore)
+                        imagePickersSection(viewStore)
+                        deleteButton
                     }
-                    Button("Cancel", role: .cancel) {}
-                } message: {
-                    Text("Are you sure you want to delete your profile?")
+                    .navigationTitle("Edit Profile")
+                    .toolbar {
+                        cancelToolbarButton(viewStore)
+                        saveToolbarButton(viewStore)
+                    }
+                    .alert("Delete Profile?", isPresented: $showingDeleteAlert) {
+                        Button("Delete", role: .destructive) {
+                            // Placeholder: no delete functionality yet
+                        }
+                        Button("Cancel", role: .cancel) {}
+                    } message: {
+                        Text("Are you sure you want to delete your profile?")
+                    }
+                }
                 if isSaving {
                     ActivityIndicator(message: "Saving your changes…")
                 }
@@ -110,7 +113,10 @@ private extension EditProfileView {
             Button("Save") {
                 isSaving = true
                 viewStore.send(.saveChanges)
-                onComplete(.delegate(.didSave(viewStore.currentUser)))
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    onComplete(.delegate(.didSave(viewStore.currentUser)))
+                }
             }
             .foregroundColor(Color(Colors.secondary))
         }
