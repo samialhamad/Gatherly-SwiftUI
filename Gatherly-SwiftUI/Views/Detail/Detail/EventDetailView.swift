@@ -64,7 +64,11 @@ private extension EventDetailView {
         guard let plannerID = event.plannerID else {
             return nil
         }
-        
+
+        if plannerID == currentUser.id {
+            return currentUser
+        }
+
         return friendsDict[plannerID]
     }
 
