@@ -11,28 +11,18 @@ import SwiftUI
 struct UserEditor {
     
     static func saveUser(
-        originalUser: User,
+        user: User,
         firstName: String,
         lastName: String,
         avatarImageName: String? = nil,
-        bannerImageName: String? = nil,
-        existingUsers: [User]
-    ) -> [User] {
-        var updatedUsers = existingUsers
-        var updatedUser = originalUser
+        bannerImageName: String? = nil
+    ) -> User {
+        user.firstName = firstName
+        user.lastName = lastName
+        user.avatarImageName = avatarImageName
+        user.bannerImageName = bannerImageName
         
-        updatedUser.firstName = firstName
-        updatedUser.lastName = lastName
-        updatedUser.avatarImageName = avatarImageName
-        updatedUser.bannerImageName = bannerImageName
-        
-        if let index = updatedUsers.firstIndex(where: { $0.id == originalUser.id }) {
-            updatedUsers[index] = updatedUser
-        } else {
-            updatedUsers.append(updatedUser)
-        }
-        
-        UserDefaultsManager.saveUsers(updatedUsers)
-        return updatedUsers
+        UserDefaultsManager.saveUsers([user])
+        return user
     }
 }
