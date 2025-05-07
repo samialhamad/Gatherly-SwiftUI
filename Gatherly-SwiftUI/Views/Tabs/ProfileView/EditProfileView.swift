@@ -9,6 +9,7 @@ import ComposableArchitecture
 import SwiftUI
 
 struct EditProfileView: View {
+    @State private var isSaving = false
     @State private var showingDeleteAlert = false
     
     let store: Store<EditProfileFeature.State, EditProfileFeature.Action>
@@ -34,6 +35,8 @@ struct EditProfileView: View {
                     Button("Cancel", role: .cancel) {}
                 } message: {
                     Text("Are you sure you want to delete your profile?")
+                if isSaving {
+                    ActivityIndicator(message: "Saving your changes…")
                 }
             }
             .keyboardDismissable()
@@ -105,6 +108,7 @@ private extension EditProfileView {
     func saveToolbarButton(_ viewStore: ViewStore<EditProfileFeature.State, EditProfileFeature.Action>) -> some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
             Button("Save") {
+                isSaving = true
                 viewStore.send(.saveChanges)
                 onComplete(.delegate(.didSave(viewStore.currentUser)))
             }
