@@ -12,7 +12,7 @@ struct GroupDetailView: View {
     @Binding var groups: [UserGroup]
     @State private var isShowingEditView = false
     @State private var isShowingActionSheet = false
-
+    
     let currentUser: User
     let friendsDict: [Int: User]
     let group: UserGroup
@@ -57,7 +57,16 @@ private extension GroupDetailView {
     }
     
     var memberUsers: [User] {
-        group.memberIDs.compactMap { friendsDict[$0] }
+        group.memberIDs.compactMap { id in
+            if id == currentUser.id {
+                return currentUser
+            }
+            return friendsDict[id]
+        }
+    }
+    
+    var resolvedLeader: User? {
+        group.leaderID == currentUser.id ? currentUser : friendsDict[group.leaderID]
     }
     
     // MARK: - Functions
@@ -113,7 +122,7 @@ private extension GroupDetailView {
     
     var groupLeaderAndMembersView: some View {
         Group {
-            if let leader = friendsDict[group.leaderID] {
+            if let leader = resolvedLeader {
                 Text("Leader")
                     .font(.headline)
                 
@@ -161,7 +170,7 @@ private extension GroupDetailView {
     let sampleUsers = SampleData.sampleUsers
     let currentUser = sampleUsers.first!
     let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
-
+    
     GroupDetailView(
         groups: .constant(SampleData.sampleGroups),
         currentUser: currentUser,
