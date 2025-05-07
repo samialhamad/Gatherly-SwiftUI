@@ -108,26 +108,30 @@ final class ContentViewModel: ObservableObject {
         updateLocalFriendsAndGroups()
     }
     
-    func generateUsersFromContacts(_ contacts: [SyncedContact]) -> ([User], [Int]) {
-        var existingPhones = Set(self.users.compactMap { $0.phone?.filter(\.isWholeNumber) })
-        var newUsers: [User] = []
-        var newFriendIDs: [Int] = []
+    func generateUsersFromContacts(_ contacts: [SyncedContact]) -> AnyPublisher<([User], [Int]), Never> {
+        let existingPhones = Set(self.users.compactMap { $0.phone?.filter(\.isWholeNumber) })
+        var filteredContacts: [(SyncedContact, Int)] = []
+        
         var nextAvailableID = (self.users.map { $0.id ?? 0 }.max() ?? 999) + 1
         
         for contact in contacts {
             let cleaned = contact.phoneNumber.filter(\.isWholeNumber)
-            guard !existingPhones.contains(cleaned) else {
-                continue
-            }
-            
-            let newUser = User(from: contact, id: nextAvailableID)
-            newUsers.append(newUser)
-            newFriendIDs.append(nextAvailableID)
-            existingPhones.insert(cleaned)
+            guard !existingPhones.contains(cleaned) else { continue }
+            filteredContacts.append((contact, nextAvailableID))
             nextAvailableID += 1
         }
         
-        return (newUsers, newFriendIDs)
+        let publishers = filteredContacts.map { contact, id in
+            GatherlyAPI.createUser(from: contact, id: id)
+        }
+
+        return Publishers.MergeMany(publishers)
+            .collect()
+            .map { newUsers in
+                let ids = newUsers.compactMap { $0.id }
+                return (newUsers, ids)
+            }
+            .eraseToAnyPublisher()
     }
     
     func syncContacts(currentUserID: Int = 1) {
