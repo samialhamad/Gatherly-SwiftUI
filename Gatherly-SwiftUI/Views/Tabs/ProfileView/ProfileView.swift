@@ -11,9 +11,8 @@ import SwiftUI
 struct ProfileView: View {
     @ObservedObject var currentUser: User
     @State private var editProfileStore: Store<EditProfileFeature.State, EditProfileFeature.Action>? = nil
-    @State private var isShowingEditSheet = false
     @State private var refreshID = UUID()
-        
+    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -28,8 +27,20 @@ struct ProfileView: View {
             .navigationTitle(fullName)
             .navigationBarTitleDisplayMode(.large)
         }
-        .sheet(isPresented: $isShowingEditSheet) {
-            editProfileSheet
+        .sheet(isPresented: Binding(
+            get: { editProfileStore != nil },
+            set: { newValue in
+                if !newValue {
+                    editProfileStore = nil
+                }
+            }
+        )) {
+            if let store = editProfileStore {
+                EditProfileView(
+                    store: store,
+                    onComplete: handleEditComplete
+                )
+            }
         }
         .refreshOnAppear()
     }
@@ -43,38 +54,28 @@ private extension ProfileView {
         "\(currentUser.firstName ?? "") \(currentUser.lastName ?? "")"
     }
     
-    // MARK: - Subviews
+    // MARK: Functions
     
-    var editProfileSheet: some View {
-        if let store = editProfileStore {
-            return AnyView(
-                EditProfileView(
-                    store: store,
-                    onComplete: { action in
-                        switch action {
-                        case .cancel:
-                            break
-                        case .delegate(let delegateAction):
-                            if case let .didSave(updatedUser) = delegateAction {
-                               currentUser.firstName = updatedUser.firstName
-                                currentUser.lastName = updatedUser.lastName
-                                currentUser.avatarImageName = updatedUser.avatarImageName
-                                currentUser.bannerImageName = updatedUser.bannerImageName
-                                refreshID = UUID()
-                        }
-                    default:
-                        break
-                    }
-                    
-                    isShowingEditSheet = false
-                    editProfileStore = nil
-                    }
-                )
-            )
-        } else {
-            return AnyView(EmptyView())
+    func handleEditComplete(_ action: EditProfileFeature.Action) {
+        switch action {
+        case .cancel:
+            break
+        case .delegate(let delegateAction):
+            if case let .didSave(updatedUser) = delegateAction {
+                currentUser.firstName = updatedUser.firstName
+                currentUser.lastName = updatedUser.lastName
+                currentUser.avatarImageName = updatedUser.avatarImageName
+                currentUser.bannerImageName = updatedUser.bannerImageName
+                refreshID = UUID()
+            }
+        default:
+            break
         }
+        
+        editProfileStore = nil
     }
+    
+    // MARK: - Subviews
     
     @ViewBuilder
     private func profileRowContent(title: String, icon: String, isDestructive: Bool = false) -> some View {
@@ -125,7 +126,6 @@ private extension ProfileView {
                     ),
                     reducer: { EditProfileFeature() }
                 )
-                isShowingEditSheet = true
             } label: {
                 profileRowContent(title: "Profile", icon: "person.fill")
             }
@@ -139,6 +139,6 @@ private extension ProfileView {
 
 #Preview {
     let sampleUser = SampleData.sampleUsers.first!
-
+    
     ProfileView(currentUser: sampleUser)
 }
