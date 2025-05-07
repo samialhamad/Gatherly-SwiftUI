@@ -7,6 +7,7 @@
 
 import ComposableArchitecture
 import SwiftUI
+import Combine
 
 struct EditProfileFeature: Reducer {
     struct State: Equatable {
@@ -26,6 +27,7 @@ struct EditProfileFeature: Reducer {
         case setAvatarImage(UIImage?)
         case setBannerImage(UIImage?)
         case saveChanges
+        case userSaved(User)
         case cancel
         case delegate(DelegateAction)
         
@@ -33,6 +35,8 @@ struct EditProfileFeature: Reducer {
             case didSave(User)
         }
     }
+    
+    @Dependency(\.mainQueue) var mainQueue
     
     func reduce(into state: inout State, action: Action) -> Effect<Action> {
         switch action {
@@ -55,16 +59,28 @@ struct EditProfileFeature: Reducer {
         case .saveChanges:
             let avatarImageName = state.avatarImage.flatMap { ImageUtility.saveImageToDocuments(image: $0) }
             let bannerImageName = state.bannerImage.flatMap { ImageUtility.saveImageToDocuments(image: $0) }
-
-            let updatedUser = UserEditor.saveUser(
-                user: state.currentUser,
-                firstName: state.firstName,
-                lastName: state.lastName,
-                avatarImageName: avatarImageName,
-                bannerImageName: bannerImageName
-            )
             
-            state.currentUser = updatedUser
+            return .run { [currentUser = state.currentUser, firstName = state.firstName, lastName = state.lastName] send in
+                let updated = await GatherlyAPI.updateUser(
+                    currentUser,
+                    firstName: firstName,
+                    lastName: lastName,
+                    avatarImageName: avatarImageName,
+                    bannerImageName: bannerImageName
+                )
+                    .receive(on: mainQueue)
+                    .values
+                    .first(where: { _ in true }) ?? currentUser
+                
+                await send(.userSaved(updated))
+            }
+            
+        case .userSaved(let updatedUser):
+            state.currentUser.firstName = updatedUser.firstName
+            state.currentUser.lastName = updatedUser.lastName
+            state.currentUser.avatarImageName = updatedUser.avatarImageName
+            state.currentUser.bannerImageName = updatedUser.bannerImageName
+            
             return .send(.delegate(.didSave(updatedUser)))
             
         case .cancel:
