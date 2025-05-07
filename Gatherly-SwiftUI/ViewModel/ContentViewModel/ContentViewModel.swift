@@ -108,43 +108,38 @@ final class ContentViewModel: ObservableObject {
         updateLocalFriendsAndGroups()
     }
     
-    func generateUsersFromContacts(_ contacts: [SyncedContact]) -> AnyPublisher<([User], [Int]), Never> {
+    func generateUsersFromContacts(_ contacts: [SyncedContact]) async -> ([User], [Int]) {
         let existingPhones = Set(self.users.compactMap { $0.phone?.filter(\.isWholeNumber) })
-        var filteredContacts: [(SyncedContact, Int)] = []
-        
+        var newUsers: [User] = []
+        var newFriendIDs: [Int] = []
+
         var nextAvailableID = (self.users.map { $0.id ?? 0 }.max() ?? 999) + 1
-        
+
         for contact in contacts {
             let cleaned = contact.phoneNumber.filter(\.isWholeNumber)
             guard !existingPhones.contains(cleaned) else { continue }
-            filteredContacts.append((contact, nextAvailableID))
+
+            let user = await GatherlyAPI.createUser(from: contact, id: nextAvailableID)
+            newUsers.append(user)
+            newFriendIDs.append(nextAvailableID)
             nextAvailableID += 1
         }
-        
-        let publishers = filteredContacts.map { contact, id in
-            GatherlyAPI.createUser(from: contact, id: id)
-        }
 
-        return Publishers.MergeMany(publishers)
-            .collect()
-            .map { newUsers in
-                let ids = newUsers.compactMap { $0.id }
-                return (newUsers, ids)
-            }
-            .eraseToAnyPublisher()
+        return (newUsers, newFriendIDs)
     }
 
     func syncContacts(currentUserID: Int = 1) {
         ContactSyncManager.shared.fetchContacts { contacts in
-            self.generateUsersFromContacts(contacts)
-                .sink { [weak self] newUsers, newFriendIDs in
-                    self?.appendUsersAndUpdateFriends(
+            Task {
+                let (newUsers, newFriendIDs) = await self.generateUsersFromContacts(contacts)
+                await MainActor.run {
+                    self.appendUsersAndUpdateFriends(
                         newUsers: newUsers,
                         newFriendIDs: newFriendIDs,
                         currentUserID: currentUserID
                     )
                 }
-                .store(in: &self.cancellables)
+            }
         }
     }
     

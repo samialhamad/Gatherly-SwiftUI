@@ -55,7 +55,7 @@ final class ContentViewModelTests: XCTestCase {
         XCTAssertEqual(Set(currentUser?.friendIDs ?? []), Set([2, 3, 4]))
     }
     
-    func testGenerateUsersFromContacts() {
+    func testGenerateUsersFromContacts() async {
         let viewModel = ContentViewModel()
         viewModel.users = [
             User(firstName: "Sami", id: 1, phone: "1234567890")
@@ -64,11 +64,11 @@ final class ContentViewModelTests: XCTestCase {
         let contacts: [SyncedContact] = [
             SyncedContact(fullName: "Bob Smith", phoneNumber: "9876543210"),
             SyncedContact(fullName: "Alice Jones", phoneNumber: "5556667777"),
-            SyncedContact(fullName: "Duplicate", phoneNumber: "1234567890")
+            SyncedContact(fullName: "Duplicate", phoneNumber: "1234567890") // should be filtered out
         ]
         
-        let (newUsers, newFriendIDs) = viewModel.generateUsersFromContacts(contacts)
-        
+        let (newUsers, newFriendIDs) = await viewModel.generateUsersFromContacts(contacts)
+
         XCTAssertEqual(newUsers.count, 2)
         XCTAssertEqual(newFriendIDs.count, 2)
         XCTAssertEqual(newUsers[0].firstName, "Bob")
