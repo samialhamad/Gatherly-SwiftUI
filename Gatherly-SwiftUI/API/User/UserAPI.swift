@@ -5,7 +5,6 @@
 //  Created by Sami Alhamad on 5/7/25.
 //
 
-import Combine
 import Foundation
 
 extension GatherlyAPI {
@@ -17,7 +16,7 @@ extension GatherlyAPI {
         lastName: String,
         phone: String? = nil,
         email: String? = nil
-    ) -> AnyPublisher<User, Never> {
+    ) async -> User {
         var users = UserDefaultsManager.loadUsers()
         let nextID = (users.map { $0.id ?? 0 }.max() ?? 999) + 1
         
@@ -36,12 +35,12 @@ extension GatherlyAPI {
         
         users.append(user)
         UserDefaultsManager.saveUsers(users)
-        return Just(user).eraseToAnyPublisher()
+        return user
     }
     
     // MARK: - Create from Synced Contact
-    
-    static func createUser(from contact: SyncedContact, id: Int) -> AnyPublisher<User, Never> {
+
+    static func createUser(from contact: SyncedContact, id: Int) async -> User {
         let user = User(
             createdTimestamp: Int(Date().timeIntervalSince1970),
             eventIDs: [],
@@ -57,21 +56,21 @@ extension GatherlyAPI {
         var users = UserDefaultsManager.loadUsers()
         users.append(user)
         UserDefaultsManager.saveUsers(users)
-        return Just(user).eraseToAnyPublisher()
+        return user
     }
     
     // MARK: - Update Existing User
-    
+
     static func updateUser(
         _ user: User,
         firstName: String,
         lastName: String,
         avatarImageName: String? = nil,
         bannerImageName: String? = nil
-    ) -> AnyPublisher<User, Never> {
+    ) async -> User {
         var users = UserDefaultsManager.loadUsers()
         guard let id = user.id else {
-            return Just(user).eraseToAnyPublisher()
+            return user
         }
 
         if let index = users.firstIndex(where: { $0.id == id }) {
@@ -83,9 +82,9 @@ extension GatherlyAPI {
 
             users[index] = updatedUser
             UserDefaultsManager.saveUsers(users)
-            return Just(updatedUser).eraseToAnyPublisher()
+            return updatedUser
         }
 
-        return Just(user).eraseToAnyPublisher()
+        return user
     }
 }
