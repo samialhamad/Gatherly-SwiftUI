@@ -1,5 +1,5 @@
 //
-//  User.swift
+//  UserAPI.swift
 //  Gatherly-SwiftUI
 //
 //  Created by Sami Alhamad on 5/7/25.
