@@ -10,7 +10,6 @@ import SwiftUI
 
 struct EditProfileFeature: Reducer {
     struct State: Equatable {
-        var allUsers: [User]
         var currentUser: User
         var firstName: String
         var lastName: String
@@ -56,22 +55,17 @@ struct EditProfileFeature: Reducer {
         case .saveChanges:
             let avatarImageName = state.avatarImage.flatMap { ImageUtility.saveImageToDocuments(image: $0) }
             let bannerImageName = state.bannerImage.flatMap { ImageUtility.saveImageToDocuments(image: $0) }
-            
-            let updatedUsers = UserEditor.saveUser(
-                originalUser: state.currentUser,
+
+            let updatedUser = UserEditor.saveUser(
+                user: state.currentUser,
                 firstName: state.firstName,
                 lastName: state.lastName,
                 avatarImageName: avatarImageName,
-                bannerImageName: bannerImageName,
-                existingUsers: state.allUsers
+                bannerImageName: bannerImageName
             )
-
-            if let updatedUser = updatedUsers.first(where: { $0.id == state.currentUser.id }) {
-                state.allUsers = updatedUsers
-                state.currentUser = updatedUser
-            }
-
-            return .none
+            
+            state.currentUser = updatedUser
+            return .send(.delegate(.didSave(updatedUser)))
             
         case .cancel:
             state.isPresented = false
