@@ -133,16 +133,18 @@ final class ContentViewModel: ObservableObject {
             }
             .eraseToAnyPublisher()
     }
-    
+
     func syncContacts(currentUserID: Int = 1) {
         ContactSyncManager.shared.fetchContacts { contacts in
-            let (newUsers, newFriendIDs) = self.generateUsersFromContacts(contacts)
-            
-            self.appendUsersAndUpdateFriends(
-                newUsers: newUsers,
-                newFriendIDs: newFriendIDs,
-                currentUserID: currentUserID
-            )
+            self.generateUsersFromContacts(contacts)
+                .sink { [weak self] newUsers, newFriendIDs in
+                    self?.appendUsersAndUpdateFriends(
+                        newUsers: newUsers,
+                        newFriendIDs: newFriendIDs,
+                        currentUserID: currentUserID
+                    )
+                }
+                .store(in: &self.cancellables)
         }
     }
     
