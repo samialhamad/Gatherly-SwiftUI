@@ -10,33 +10,19 @@ import XCTest
 
 final class FriendsListViewModelTests: XCTestCase {
     
-    func makeUser(id: Int, firstName: String, lastName: String, friendIDs: [Int]? = nil) -> User {
-        User(firstName: firstName, friendIDs: friendIDs, id: id, lastName: lastName)
+    func makeUser(id: Int, firstName: String, lastName: String) -> User {
+        User(firstName: firstName, id: id, lastName: lastName)
     }
     
-    func sampleTestUsers() -> [User] {
+    func sampleFriends() -> [User] {
         [
-            makeUser(id: 1, firstName: "Current", lastName: "User", friendIDs: [2, 3]),
             makeUser(id: 2, firstName: "Friend", lastName: "One"),
-            makeUser(id: 3, firstName: "Friend", lastName: "Two"),
-            makeUser(id: 4, firstName: "Non", lastName: "Friend")
+            makeUser(id: 3, firstName: "Friend", lastName: "Two")
         ]
     }
     
-    func testFriends() {
-        let allUsers = sampleTestUsers()
-        let viewModel = FriendsListViewModel(currentUserID: 1, allUsers: allUsers)
-        let friends = viewModel.friends
-        
-        XCTAssertEqual(friends.count, 2)
-        XCTAssertTrue(friends.contains { $0.id == 2 })
-        XCTAssertTrue(friends.contains { $0.id == 3 })
-        XCTAssertFalse(friends.contains { $0.id == 4 })
-    }
-    
     func testFilteredFriends() {
-        let allUsers = sampleTestUsers()
-        let viewModel = FriendsListViewModel(currentUserID: 1, allUsers: allUsers)
+        let viewModel = FriendsListViewModel(friends: sampleFriends())
         
         viewModel.searchText = "two"
         let filtered = viewModel.filteredFriends
@@ -46,34 +32,30 @@ final class FriendsListViewModelTests: XCTestCase {
     }
     
     func testGroupedFriends() {
-        let allUsers = [
-            makeUser(id: 1, firstName: "Current", lastName: "User", friendIDs: [2, 3]),
+        let friends = [
             makeUser(id: 2, firstName: "Matt", lastName: "Simon"),
             makeUser(id: 3, firstName: "Logan", lastName: "Harrison")
         ]
         
-        let viewModel = FriendsListViewModel(currentUserID: 1, allUsers: allUsers)
-        
+        let viewModel = FriendsListViewModel(friends: friends)
         viewModel.searchText = ""
-        let groupedFriends = viewModel.groupedFriends
         
-        XCTAssertEqual(groupedFriends.count, 2)
-        XCTAssertNotNil(groupedFriends["L"])
-        XCTAssertNotNil(groupedFriends["M"])
-        XCTAssertEqual(groupedFriends["L"]?.first?.firstName, "Logan")
-        XCTAssertEqual(groupedFriends["M"]?.first?.firstName, "Matt")
+        let grouped = viewModel.groupedFriends
+        
+        XCTAssertEqual(grouped.count, 2)
+        XCTAssertEqual(grouped["L"]?.first?.firstName, "Logan")
+        XCTAssertEqual(grouped["M"]?.first?.firstName, "Matt")
     }
     
     func testSortedSectionKeys() {
-        let allUsers = [
-            makeUser(id: 1, firstName: "Current", lastName: "User", friendIDs: [2, 3]),
+        let friends = [
             makeUser(id: 2, firstName: "Zack", lastName: "Andrews"),
             makeUser(id: 3, firstName: "Anna", lastName: "Bell")
         ]
         
-        let viewModel = FriendsListViewModel(currentUserID: 1, allUsers: allUsers)
-        let sectionKeys = viewModel.sortedSectionKeys
+        let viewModel = FriendsListViewModel(friends: friends)
+        let keys = viewModel.sortedSectionKeys
         
-        XCTAssertEqual(sectionKeys, ["A", "Z"])
+        XCTAssertEqual(keys, ["A", "Z"])
     }
 }
