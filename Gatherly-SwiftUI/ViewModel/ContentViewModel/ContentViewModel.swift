@@ -15,9 +15,11 @@ final class ContentViewModel: ObservableObject {
     @Published private(set) var didLoadData = false
     @AppStorage("didSeedSampleData") private var didSeedSampleData = false
     @Published var events: [Event] = []
+    @Published var friendsDict: [Int: User] = [:]
     @Published var groups: [UserGroup] = []
     @Published var isLoading = true
     @Published var users: [User] = []
+    @Published var userGroups: [UserGroup] = []
     
     private var cancellables = Set<AnyCancellable>()
     private var disposeBag = DisposeBag()
@@ -47,22 +49,23 @@ final class ContentViewModel: ObservableObject {
     
     func loadAllData() {
         if !didSeedSampleData {
-                // First time launch – seed sample data
-                self.users = SampleData.sampleUsers
-                self.events = SampleData.sampleEvents
-                self.groups = SampleData.sampleGroups
-                applySampleDataForSami()
-                saveAllData()
-                didSeedSampleData = true
-            } else {
-                // Use persisted data
-                self.users = UserDefaultsManager.loadUsers()
-                self.events = UserDefaultsManager.loadEvents()
-                self.groups = UserDefaultsManager.loadGroups()
-            }
-
-            self.currentUser = users.first(where: { $0.id == 1 })
-            self.isLoading = false
+            // First time launch – seed sample data
+            self.users = SampleData.sampleUsers
+            self.events = SampleData.sampleEvents
+            self.groups = SampleData.sampleGroups
+            applySampleDataForSami()
+            saveAllData()
+            didSeedSampleData = true
+        } else {
+            // Use persisted data
+            self.users = UserDefaultsManager.loadUsers()
+            self.events = UserDefaultsManager.loadEvents()
+            self.groups = UserDefaultsManager.loadGroups()
+        }
+        
+        self.currentUser = users.first(where: { $0.id == 1 })
+        updateLocalFriendsAndGroups()
+        self.isLoading = false
     }
     
     func saveAllData() {
@@ -102,6 +105,7 @@ final class ContentViewModel: ObservableObject {
         }
         
         UserDefaultsManager.saveUsers(self.users)
+        updateLocalFriendsAndGroups()
     }
     
     func generateUsersFromContacts(_ contacts: [SyncedContact]) -> ([User], [Int]) {
@@ -138,6 +142,20 @@ final class ContentViewModel: ObservableObject {
         }
     }
     
+    private func updateLocalFriendsAndGroups() {
+        guard let currentUser else { return }
+        
+        self.friendsDict = Dictionary(
+            uniqueKeysWithValues: (currentUser.friendIDs ?? []).compactMap { id in
+                users.first(where: { $0.id == id }).map { ($0.id!, $0) }
+            }
+        )
+        
+        self.userGroups = groups.filter { group in
+            group.leaderID == currentUser.id || (currentUser.groupIDs?.contains(group.id) ?? false)
+        }
+    }
+    
     // MARK: - Mock API Requests
     
     func markRequestFinished() {
@@ -158,6 +176,7 @@ final class ContentViewModel: ObservableObject {
                     guard let self = self else { return }
                     self.users = fetchedUsers
                     self.currentUser = fetchedUsers.first(where: { $0.id == 1 })
+                    self.updateLocalFriendsAndGroups()
                     UserDefaultsManager.saveUsers(fetchedUsers)
                     self.markRequestFinished()
                 }
