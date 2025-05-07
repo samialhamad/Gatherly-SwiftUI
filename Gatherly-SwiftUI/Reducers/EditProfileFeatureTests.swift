@@ -20,7 +20,7 @@ final class EditProfileFeatureTests: XCTestCase {
             ),
             reducer: { EditProfileFeature() }
         )
-
+        
         await store.send(.setFirstName("New")) {
             $0.firstName = "New"
         }
@@ -35,7 +35,7 @@ final class EditProfileFeatureTests: XCTestCase {
             ),
             reducer: { EditProfileFeature() }
         )
-
+        
         await store.send(.setLastName("New")) {
             $0.lastName = "New"
         }
@@ -51,12 +51,12 @@ final class EditProfileFeatureTests: XCTestCase {
             ),
             reducer: { EditProfileFeature() }
         )
-
+        
         await store.send(.setAvatarImage(dummyImage)) {
             $0.avatarImage = dummyImage
         }
     }
-
+    
     func testSetBannerImage() async {
         let dummyImage = UIImage(systemName: "photo")!
         let store = await TestStore(
@@ -67,7 +67,7 @@ final class EditProfileFeatureTests: XCTestCase {
             ),
             reducer: { EditProfileFeature() }
         )
-
+        
         await store.send(.setBannerImage(dummyImage)) {
             $0.bannerImage = dummyImage
         }
