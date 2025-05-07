@@ -22,50 +22,29 @@ final class UserEditorTests: XCTestCase {
     
     func testSaveUser_updatesNameCorrectly() {
         let original = makeSampleUser()
-        let users = [original]
         
-        let updated = UserEditor.saveUser(
-            originalUser: original,
+        let updatedUser = UserEditor.saveUser(
+            user: original,
             firstName: "New",
-            lastName: "User",
-            existingUsers: users
+            lastName: "User"
         )
         
-        XCTAssertEqual(updated.count, 1)
-        XCTAssertEqual(updated.first?.firstName, "New")
-        XCTAssertEqual(updated.first?.lastName, "User")
+        XCTAssertEqual(updatedUser.firstName, "New")
+        XCTAssertEqual(updatedUser.lastName, "User")
     }
     
     func testSaveUser_updatesAvatarAndBanner() {
         let original = makeSampleUser()
-        let users = [original]
         
-        let updated = UserEditor.saveUser(
-            originalUser: original,
+        let updatedUser = UserEditor.saveUser(
+            user: original,
             firstName: "New",
             lastName: "User",
             avatarImageName: "avatar123.png",
-            bannerImageName: "banner123.png",
-            existingUsers: users
+            bannerImageName: "banner123.png"
         )
         
-        let updatedUser = updated.first
-        XCTAssertEqual(updatedUser?.avatarImageName, "avatar123.png")
-        XCTAssertEqual(updatedUser?.bannerImageName, "banner123.png")
-    }
-    
-    func testSaveUser_appendsIfUserNotFound() {
-        let existing = makeSampleUser(id: 99) // Different user
-        let newUser = makeSampleUser(id: 1)
-        
-        let updated = UserEditor.saveUser(
-            originalUser: newUser,
-            firstName: "Added",
-            lastName: "User",
-            existingUsers: [existing]
-        )
-        
-        XCTAssertEqual(updated.count, 2)
-        XCTAssertTrue(updated.contains(where: { $0.id == 1 }))
+        XCTAssertEqual(updatedUser.avatarImageName, "avatar123.png")
+        XCTAssertEqual(updatedUser.bannerImageName, "banner123.png")
     }
 }
