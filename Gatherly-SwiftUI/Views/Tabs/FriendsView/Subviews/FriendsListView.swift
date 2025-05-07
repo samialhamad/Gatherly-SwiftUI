@@ -11,17 +11,14 @@ struct FriendsListView: View {
     @Binding var searchText: String
     @StateObject private var viewModel: FriendsListViewModel
     
-    let currentUserID: Int
-    let users: [User]
+    let currentUser: User
+    let friends: [User]
     
-    init(searchText: Binding<String>, currentUserID: Int, users: [User]) {
+    init(searchText: Binding<String>, currentUser: User, friends: [User]) {
         _searchText = searchText
-        self.currentUserID = currentUserID
-        self.users = users
-        _viewModel = StateObject(wrappedValue: FriendsListViewModel(
-            currentUserID: currentUserID,
-            allUsers: users
-        ))
+        self.currentUser = currentUser
+        self.friends = friends
+        _viewModel = StateObject(wrappedValue: FriendsListViewModel(friends: friends))
     }
     
     var body: some View {
@@ -47,7 +44,7 @@ private extension FriendsListView {
                         id: \.id
                     ) { friend in
                         NavigationLink(destination: ProfileDetailView(
-                            currentUser: users.first(where: { $0.id == currentUserID }) ?? friend,
+                            currentUser: currentUser,
                             user: friend
                         )) {
                             ProfileRow(user: friend)

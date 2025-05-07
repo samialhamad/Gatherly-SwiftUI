@@ -10,46 +10,32 @@ import Foundation
 class FriendsListViewModel: ObservableObject {
     @Published var searchText: String = ""
 
-    private let allUsers: [User]
-    private let currentUserID: Int
-        
-    init(
-        currentUserID: Int,
-        allUsers: [User]
-    ) {
-        self.currentUserID = currentUserID
-        self.allUsers = allUsers
+    private let allFriends: [User]
+
+    init(friends: [User]) {
+        self.allFriends = friends
     }
-    
-    var friends: [User] {
-        guard let currentUser = allUsers.first(where: { $0.id == currentUserID }),
-              let friendIDs = currentUser.friendIDs else {
-            return []
-        }
-        
-        return allUsers.filter { friendIDs.contains($0.id ?? 0) }
-    }
-    
+
     var filteredFriends: [User] {
         if searchText.isEmpty {
-            return friends
-        } else {
-            let lowercasedQuery = searchText.lowercased()
-            
-            return friends.filter { user in
-                (user.firstName?.lowercased().contains(lowercasedQuery) ?? false)
-                || (user.lastName?.lowercased().contains(lowercasedQuery) ?? false)
-            }
+            return allFriends
+        }
+
+        let lowercasedQuery = searchText.lowercased()
+
+        return allFriends.filter { user in
+            (user.firstName?.lowercased().contains(lowercasedQuery) ?? false)
+            || (user.lastName?.lowercased().contains(lowercasedQuery) ?? false)
         }
     }
-    
+
     var groupedFriends: [String: [User]] {
         Dictionary(grouping: filteredFriends) { user in
             let firstLetter = user.firstName?.first.map { String($0).uppercased() } ?? ""
             return firstLetter
         }
     }
-    
+
     var sortedSectionKeys: [String] {
         groupedFriends.keys.sorted()
     }

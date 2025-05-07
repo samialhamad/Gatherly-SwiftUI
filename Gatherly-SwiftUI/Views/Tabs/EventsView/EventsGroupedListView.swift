@@ -12,7 +12,7 @@ struct EventsGroupedListView: View {
     @Binding var events: [Event]
     @StateObject private var viewModel = EventsGroupedListViewModel()
     
-    let users: [User]
+    let friendsDict: [Int: User]
     let onEventSave: (Event) -> Void
     
     var body: some View {
@@ -48,7 +48,7 @@ private extension EventsGroupedListView {
                             currentUser: currentUser,
                             events: $events,
                             event: event,
-                            users: users,
+                            friendsDict: friendsDict,
                             onSave: onEventSave,
                             showDisclosure: false
                         )
@@ -86,14 +86,16 @@ private extension EventsGroupedListView {
 }
 
 #Preview {
-    if let sampleUser = SampleData.sampleUsers.first {
-        EventsGroupedListView(
-            currentUser: sampleUser,
-            events: .constant(SampleData.sampleEvents),
-            users: SampleData.sampleUsers,
-            onEventSave: { updatedEvent in
-                print("Updated event: \(updatedEvent)")
-            }
-        )
-    }
+    let sampleUsers = SampleData.sampleUsers
+    let currentUser = sampleUsers.first!
+    let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
+
+    return EventsGroupedListView(
+        currentUser: currentUser,
+        events: .constant(SampleData.sampleEvents),
+        friendsDict: friendsDict,
+        onEventSave: { updatedEvent in
+            print("Updated event: \(updatedEvent)")
+        }
+    )
 }

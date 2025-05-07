@@ -13,8 +13,7 @@ struct ProfileView: View {
     @State private var editProfileStore: Store<EditProfileFeature.State, EditProfileFeature.Action>? = nil
     @State private var isShowingEditSheet = false
     @State private var refreshID = UUID()
-    @Binding var users: [User]
-    
+        
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -56,17 +55,19 @@ private extension ProfileView {
                         case .cancel:
                             break
                         case .delegate(let delegateAction):
-                            if case let .didSave(updatedUser) = delegateAction,
-                               let index = users.firstIndex(where: { $0.id == updatedUser.id }) {
-                                users[index] = updatedUser
+                            if case let .didSave(updatedUser) = delegateAction {
+                               currentUser.firstName = updatedUser.firstName
+                                currentUser.lastName = updatedUser.lastName
+                                currentUser.avatarImageName = updatedUser.avatarImageName
+                                currentUser.bannerImageName = updatedUser.bannerImageName
                                 refreshID = UUID()
-                            }
-                        default:
-                            break
                         }
-                        
-                        isShowingEditSheet = false
-                        editProfileStore = nil
+                    default:
+                        break
+                    }
+                    
+                    isShowingEditSheet = false
+                    editProfileStore = nil
                     }
                 )
             )
@@ -114,7 +115,6 @@ private extension ProfileView {
             Button {
                 editProfileStore = Store(
                     initialState: EditProfileFeature.State(
-                        allUsers: users,
                         currentUser: currentUser,
                         firstName: currentUser.firstName ?? "",
                         lastName: currentUser.lastName ?? "",
@@ -138,10 +138,7 @@ private extension ProfileView {
 }
 
 #Preview {
-    if let sampleUser = SampleData.sampleUsers.first {
-        ProfileView(
-            currentUser: sampleUser,
-            users: .constant(SampleData.sampleUsers)
-        )
-    }
+    let sampleUser = SampleData.sampleUsers.first!
+
+    ProfileView(currentUser: sampleUser)
 }

@@ -13,9 +13,9 @@ struct GroupDetailView: View {
     @State private var isShowingEditView = false
     @State private var isShowingActionSheet = false
 
-    let group: UserGroup
     let currentUser: User
-    let users: [User]
+    let friendsDict: [Int: User]
+    let group: UserGroup
     
     var body: some View {
         ScrollView {
@@ -57,7 +57,7 @@ private extension GroupDetailView {
     }
     
     var memberUsers: [User] {
-        users.filter { group.memberIDs.contains($0.id ?? -1) }
+        group.memberIDs.compactMap { friendsDict[$0] }
     }
     
     // MARK: - Functions
@@ -78,7 +78,7 @@ private extension GroupDetailView {
         }
         
         UserDefaultsManager.saveGroups(groups)
-        UserDefaultsManager.saveUsers(users)
+        UserDefaultsManager.saveUsers([currentUser])
         
         dismiss()
     }
@@ -89,8 +89,8 @@ private extension GroupDetailView {
     var editGroupSheet: some View {
         EditGroupView(
             viewModel: EditGroupViewModel(group: group),
-            allUsers: users,
             currentUser: currentUser,
+            friendsDict: friendsDict,
             groups: groups,
             onSave: { updatedGroup in
                 if let index = groups.firstIndex(where: { $0.id == updatedGroup.id }) {
@@ -113,7 +113,7 @@ private extension GroupDetailView {
     
     var groupLeaderAndMembersView: some View {
         Group {
-            if let leader = users.first(where: { $0.id == group.leaderID }) {
+            if let leader = friendsDict[group.leaderID] {
                 Text("Leader")
                     .font(.headline)
                 
@@ -158,9 +158,14 @@ private extension GroupDetailView {
 }
 
 #Preview {
+    let sampleUsers = SampleData.sampleUsers
+    let currentUser = sampleUsers.first!
+    let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
+
     GroupDetailView(
-        groups: .constant(SampleData.sampleGroups), group: SampleData.sampleGroups.first!,
-        currentUser: SampleData.sampleUsers.first!,
-        users: SampleData.sampleUsers
+        groups: .constant(SampleData.sampleGroups),
+        currentUser: currentUser,
+        friendsDict: friendsDict,
+        group: SampleData.sampleGroups.first!
     )
 }

@@ -60,7 +60,7 @@ struct EventMembersSection: View {
     
     let header: String
     let currentUser: User
-    let users: [User]
+    let friendsDict: [Int: User]
     
     var body: some View {
         Section(header: Text(header)) {
@@ -79,17 +79,17 @@ struct EventMembersSection: View {
             .sheet(isPresented: $isMembersPickerPresented) {
                 EventMembersPicker(
                     selectedMemberIDs: $selectedMemberIDs,
-                    allUsers: filteredUsers,
-                    currentUser: currentUser
+                    currentUser: currentUser,
+                    friends: friends
                 )
             }
         }
     }
     
-    private var filteredUsers: [User] {
-        users.filter {
-            $0.id != currentUser.id
-        }
+    private var friends: [User] {
+        currentUser
+            .resolvedFriends(from: friendsDict)
+            .filter { $0.id != currentUser.id }
     }
 }
 
@@ -190,7 +190,7 @@ struct EventRowLink: View {
     @ObservedObject var currentUser: User
     @Binding var events: [Event]
     let event: Event
-    let users: [User]
+    let friendsDict: [Int: User]
     let onSave: (Event) -> Void
     var showDisclosure: Bool
     
@@ -200,7 +200,7 @@ struct EventRowLink: View {
                 currentUser: currentUser,
                 events: $events,
                 event: event,
-                users: users,
+                friendsDict: friendsDict,
                 onSave: onSave
             )
         } label: {

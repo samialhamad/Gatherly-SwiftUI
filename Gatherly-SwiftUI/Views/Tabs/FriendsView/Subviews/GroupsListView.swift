@@ -12,7 +12,7 @@ struct GroupsListView: View {
     @Binding var groups: [UserGroup]
     @Binding var searchText: String
     
-    let users: [User]
+    let friendsDict: [Int: User]
     
     var body: some View {
         List {
@@ -50,9 +50,9 @@ private extension GroupsListView {
         ForEach(filteredGroups, id: \.id) { group in
             NavigationLink(destination: GroupDetailView(
                 groups: $groups,
-                group: group,
                 currentUser: currentUser,
-                users: users
+                friendsDict: friendsDict,
+                group: group
             )) {
                 GroupRow(group: group)
             }
@@ -61,12 +61,14 @@ private extension GroupsListView {
 }
 
 #Preview {
-    if let sampleUser = SampleData.sampleUsers.first {
-        GroupsListView(
-            currentUser: sampleUser,
-            groups: .constant(SampleData.sampleGroups),
-            searchText: .constant(""),
-            users: SampleData.sampleUsers
-        )
-    }
+    let sampleUsers = SampleData.sampleUsers
+    let currentUser = sampleUsers.first!
+    let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
+
+    return GroupsListView(
+        currentUser: currentUser,
+        groups: .constant(SampleData.sampleGroups),
+        searchText: .constant(""),
+        friendsDict: friendsDict
+    )
 }

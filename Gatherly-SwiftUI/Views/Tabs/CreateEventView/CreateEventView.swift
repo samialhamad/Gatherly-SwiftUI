@@ -15,7 +15,7 @@ struct CreateEventView: View {
     @EnvironmentObject var navigationState: NavigationState
     @StateObject private var viewModel = CreateEventViewModel()
     
-    let allUsers: [User]
+    let friendsDict: [Int: User]
     
     var body: some View {
         NavigationStack {
@@ -36,7 +36,7 @@ struct CreateEventView: View {
                     selectedMemberIDs: $viewModel.selectedMemberIDs,
                     header: "Invite Friends",
                     currentUser: currentUser,
-                    users: friends
+                    friendsDict: friendsDict
                 )
                 EventLocationSection(
                     header: "Location",
@@ -69,17 +69,7 @@ private extension CreateEventView {
     // MARK: - Computed Vars
     
     private var friends: [User] {
-        guard let friendIDs = currentUser.friendIDs else {
-            return []
-        }
-        
-        return allUsers.filter { user in
-            if let id = user.id {
-                return friendIDs.contains(id)
-            }
-            
-            return false
-        }
+        currentUser.resolvedFriends(from: friendsDict)
     }
     
     // MARK: - Subviews
@@ -105,14 +95,16 @@ private extension CreateEventView {
 }
 
 #Preview {
-    if let sampleUser = SampleData.sampleUsers.first {
-        NavigationStack {
-            CreateEventView(
-                currentUser: sampleUser,
-                events: .constant(SampleData.sampleEvents),
-                allUsers: SampleData.sampleUsers
-            )
-            .environmentObject(NavigationState())
-        }
+    let sampleUsers = SampleData.sampleUsers
+    let currentUser = sampleUsers.first!
+    let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
+
+    NavigationStack {
+        CreateEventView(
+            currentUser: currentUser,
+            events: .constant(SampleData.sampleEvents),
+            friendsDict: friendsDict
+        )
+        .environmentObject(NavigationState())
     }
 }

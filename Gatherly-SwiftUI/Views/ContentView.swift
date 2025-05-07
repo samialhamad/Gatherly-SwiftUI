@@ -16,6 +16,12 @@ struct ContentView: View {
         viewModel.currentUser
     }
     
+    var friendsSorted: [User] {
+        viewModel.friendsDict.values.sorted {
+            ($0.firstName ?? "") < ($1.firstName ?? "")
+        }
+    }
+    
     var body: some View {
         Group {
             if let currentUser {
@@ -44,7 +50,7 @@ private extension ContentView {
         CalendarView(
             currentUser: user,
             events: $viewModel.events,
-            users: viewModel.users
+            friendsDict: viewModel.friendsDict
         )
         .environmentObject(navigationState)
         .addActivityIndicator(
@@ -60,7 +66,7 @@ private extension ContentView {
             CreateEventView(
                 currentUser: user,
                 events: $viewModel.events,
-                allUsers: viewModel.users
+                friendsDict: viewModel.friendsDict
             )
             .environmentObject(navigationState)
             .navigationTitle("Create Event")
@@ -74,7 +80,7 @@ private extension ContentView {
             FriendsView(
                 currentUser: user,
                 groups: $viewModel.groups,
-                users: $viewModel.users
+                friendsDict: viewModel.friendsDict
             )
             .environmentObject(navigationState)
             .addActivityIndicator(
@@ -89,8 +95,7 @@ private extension ContentView {
     func profileTab(for user: User) -> some View {
         NavigationStack {
             ProfileView(
-                currentUser: user,
-                users: $viewModel.users
+                currentUser: user
             )
             .environmentObject(navigationState)
             .addActivityIndicator(

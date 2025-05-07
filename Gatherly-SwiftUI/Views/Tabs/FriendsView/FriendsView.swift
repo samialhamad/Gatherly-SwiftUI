@@ -14,9 +14,13 @@ struct FriendsView: View {
     @State private var isShowingCreateGroup = false
     @State private var searchText = ""
     @State private var selectedTab = 0
-    @Binding var users: [User]
     
+    let friendsDict: [Int: User]
     private let tabTitles = ["Friends", "Groups"]
+    
+    private var friends: [User] {
+        currentUser.resolvedFriends(from: friendsDict)
+    }
     
     var body: some View {
         NavigationStack {
@@ -27,15 +31,15 @@ struct FriendsView: View {
                 if selectedTab == 0 {
                     FriendsListView(
                         searchText: $searchText,
-                        currentUserID: currentUser.id ?? 1,
-                        users: users
+                        currentUser: currentUser,
+                        friends: friends
                     )
                 } else {
                     GroupsListView(
                         currentUser: currentUser,
                         groups: $groups,
                         searchText: $searchText,
-                        users: users
+                        friendsDict: friendsDict
                     )
                 }
             }
@@ -65,7 +69,7 @@ private extension FriendsView {
             currentUser: currentUser,
             viewModel: AddFriendViewModel(
                 currentUserID: currentUser.id ?? 1,
-                allUsers: users
+                allUsers: friends
             )
         )
     }
@@ -74,7 +78,7 @@ private extension FriendsView {
         CreateGroupView(
             currentUser: currentUser,
             groups: $groups,
-            users: users
+            friendsDict: friendsDict
         )
     }
     
@@ -110,12 +114,14 @@ private extension FriendsView {
 }
 
 #Preview {
-    if let sampleUser = SampleData.sampleUsers.first {
-        FriendsView(
-            currentUser: sampleUser,
-            groups: .constant(SampleData.sampleGroups),
-            users: .constant(SampleData.sampleUsers)
-        )
-        .environmentObject(NavigationState())
-    }
+    let sampleUsers = SampleData.sampleUsers
+    let currentUser = sampleUsers.first!
+    let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
+
+    return FriendsView(
+        currentUser: currentUser,
+        groups: .constant(SampleData.sampleGroups),
+        friendsDict: friendsDict
+    )
+    .environmentObject(NavigationState())
 }

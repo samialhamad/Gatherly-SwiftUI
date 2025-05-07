@@ -18,7 +18,7 @@ struct EventDetailView: View {
     @StateObject private var viewModel = EventDetailViewModel()
     
     let event: Event
-    let users: [User]
+    let friendsDict: [Int: User]
     var onSave: ((Event) -> Void)? = nil
     
     private var updatedEvent: Event {
@@ -60,28 +60,22 @@ private extension EventDetailView {
     
     // MARK: - Computed Vars
     
+    var planner: User? {
+        guard let plannerID = event.plannerID else {
+            return nil
+        }
+        
+        return friendsDict[plannerID]
+    }
+
     var members: [User] {
         guard let memberIDs = updatedEvent.memberIDs else {
             return []
         }
         
-        let filteredMemberIDs = memberIDs.filter { $0 != updatedEvent.plannerID }
-        
-        return users.filter { user in
-            guard let userID = user.id else {
-                return false
-            }
-            
-            return filteredMemberIDs.contains(userID)
-        }
-    }
-    
-    var planner: User? {
-        guard let plannerID = updatedEvent.plannerID else {
-            return nil
-        }
-        
-        return users.first(where: { $0.id == plannerID })
+        return memberIDs
+            .filter { $0 != updatedEvent.plannerID }
+            .compactMap { friendsDict[$0] }
     }
     
     // MARK: - Subviews
@@ -100,9 +94,9 @@ private extension EventDetailView {
     var editEventSheet: some View {
         EditEventView(
             viewModel: EditEventViewModel(event: updatedEvent),
-            allUsers: users,
             currentUser: currentUser,
             events: events,
+            friendsDict: friendsDict,
             onSave: { updatedEvent in
                 if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
                     events[index] = updatedEvent
@@ -255,13 +249,15 @@ private extension EventDetailView {
 }
 
 #Preview {
-    if let sampleUser = SampleData.sampleUsers.first {
-        EventDetailView(
-            currentUser: sampleUser,
-            events: .constant(SampleData.sampleEvents),
-            event: SampleData.sampleEvents[1],
-            users: SampleData.sampleUsers
-        )
-        .environmentObject(NavigationState())
-    }
+    let sampleUsers = SampleData.sampleUsers
+    let currentUser = sampleUsers.first!
+    let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
+
+    EventDetailView(
+        currentUser: currentUser,
+        events: .constant(SampleData.sampleEvents),
+        event: SampleData.sampleEvents[1],
+        friendsDict: friendsDict
+    )
+    .environmentObject(NavigationState())
 }

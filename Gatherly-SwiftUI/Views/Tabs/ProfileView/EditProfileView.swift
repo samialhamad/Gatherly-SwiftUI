@@ -117,7 +117,6 @@ private extension EditProfileView {
     EditProfileView(
         store: Store(
             initialState: EditProfileFeature.State(
-                allUsers: SampleData.sampleUsers,
                 currentUser: SampleData.sampleUsers.first!,
                 firstName: "Sami",
                 lastName: "Alhamad",

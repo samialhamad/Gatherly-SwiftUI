@@ -15,8 +15,7 @@ struct ProfileDetailView: View {
     var body: some View {
         if isViewingSelf {
             ProfileView(
-                currentUser: currentUser,
-                users: .constant([currentUser])
+                currentUser: currentUser
             )
         } else {
             ScrollView {

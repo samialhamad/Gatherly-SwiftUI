@@ -10,9 +10,9 @@ import SwiftUI
 struct EditEventView: View {
     @StateObject var viewModel: EditEventViewModel
     
-    let allUsers: [User]
     let currentUser: User
     let events: [Event]
+    let friendsDict: [Int: User]
     let onSave: (Event) -> Void
     let onCancel: () -> Void
     let onDelete: (Event) -> Void
@@ -38,7 +38,7 @@ struct EditEventView: View {
                     selectedMemberIDs: $viewModel.selectedMemberIDs,
                     header: "Members",
                     currentUser: currentUser,
-                    users: friends
+                    friendsDict: friendsDict
                 )
                 EventLocationSection(
                     header: "Location",
@@ -82,17 +82,7 @@ private extension EditEventView {
     // MARK: - Computed Vars
     
     private var friends: [User] {
-        guard let friendIDs = currentUser.friendIDs else {
-            return []
-        }
-        
-        return allUsers.filter { user in
-            guard let id = user.id else {
-                return false
-            }
-            
-            return friendIDs.contains(id)
-        }
+        currentUser.resolvedFriends(from: friendsDict)
     }
     
     // MARK: - Subviews
@@ -127,12 +117,16 @@ private extension EditEventView {
 }
 
 #Preview {
+    let sampleUsers = SampleData.sampleUsers
+    let currentUser = sampleUsers.first!
+    let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
+
     NavigationStack {
         EditEventView(
             viewModel: EditEventViewModel(event: SampleData.sampleEvents.first!),
-            allUsers: SampleData.sampleUsers,
-            currentUser: SampleData.sampleUsers.first!,
+            currentUser: currentUser,
             events: SampleData.sampleEvents,
+            friendsDict: friendsDict,
             onSave: { updatedEvent in
                 print("Event updated: \(updatedEvent)")
             },

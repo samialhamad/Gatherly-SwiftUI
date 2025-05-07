@@ -11,12 +11,12 @@ struct EventMembersPicker: View {
     @Environment(\.dismiss) var dismiss
     @Binding var selectedMemberIDs: Set<Int>
     
-    let allUsers: [User]
     let currentUser: User
+    let friends: [User]
 
     var body: some View {
         NavigationStack {
-            List(allUsers, id: \.id) { user in
+            List(friends, id: \.id) { user in
                 Button(action: {
                     toggleMemberSelection(user.id)
                 }) {

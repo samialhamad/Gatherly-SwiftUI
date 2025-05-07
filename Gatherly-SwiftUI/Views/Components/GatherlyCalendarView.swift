@@ -14,17 +14,17 @@ struct GatherlyCalendarView: View {
     @Binding var selectedDate: Date
     
     let currentUser: User
-    let users: [User]
+    let friendsDict: [Int: User]
     
     init(selectedDate: Binding<Date>,
          allEvents: Binding<[Event]>,
          currentUser: User,
-         users: [User]) {
+         friendsDict: [Int: User]) {
         
         _selectedDate = selectedDate
         _allEvents = allEvents
         self.currentUser = currentUser
-        self.users = users
+        self.friendsDict = friendsDict
         
         let manager = ElegantCalendarManager.withEvents(
             selectedDate: selectedDate,
@@ -65,7 +65,7 @@ extension GatherlyCalendarView: ElegantCalendarDataSource {
             allEvents: $allEvents,
             currentUser: currentUser,
             date: date,
-            users: users
+            friendsDict: friendsDict
         )
         .erased
     }
@@ -96,7 +96,7 @@ struct GatherlyEventListView: View {
     
     let currentUser: User
     let date: Date
-    let users: [User]
+    let friendsDict: [Int: User]
     
     var filteredEvents: [Event] {
         allEvents.filterEvents(by: date)
@@ -116,7 +116,7 @@ struct GatherlyEventListView: View {
                         currentUser: currentUser,
                         events: $allEvents,
                         event: event,
-                        users: users,
+                        friendsDict: friendsDict,
                         onSave: { updatedEvent in
                             if let index = allEvents.firstIndex(where: { $0.id == updatedEvent.id }) {
                                 allEvents[index] = updatedEvent

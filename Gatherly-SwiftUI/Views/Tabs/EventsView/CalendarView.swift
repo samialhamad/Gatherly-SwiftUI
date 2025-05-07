@@ -14,8 +14,8 @@ struct CalendarView: View {
     @EnvironmentObject var navigationState: NavigationState
     @StateObject private var viewModel = CalendarViewModel()
     
-    let users: [User]
-    
+    let friendsDict: [Int: User]
+        
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -37,7 +37,7 @@ struct CalendarView: View {
                         currentUser: currentUser,
                         events: $events,
                         event: event,
-                        users: users)
+                        friendsDict: friendsDict)
                 } else {
                     EmptyView()
                 }
@@ -66,7 +66,7 @@ private extension CalendarView {
                     selectedDate: $navigationState.calendarSelectedDate,
                     allEvents: $events,
                     currentUser: currentUser,
-                    users: users
+                    friendsDict: friendsDict
                 )
             }
             .frame(maxHeight: .infinity)
@@ -74,7 +74,7 @@ private extension CalendarView {
             EventsGroupedListView(
                 currentUser: currentUser,
                 events: $events,
-                users: users,
+                friendsDict: friendsDict,
                 onEventSave: { updatedEvent in
                     if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
                         events[index] = updatedEvent
@@ -86,12 +86,14 @@ private extension CalendarView {
 }
 
 #Preview {
-    if let sampleUser = SampleData.sampleUsers.first {
-        CalendarView(
-            currentUser: sampleUser,
-            events: .constant(SampleData.sampleEvents),
-            users: SampleData.sampleUsers
-        )
-        .environmentObject(NavigationState())
-    }
+    let sampleUsers = SampleData.sampleUsers
+    let currentUser = sampleUsers.first!
+    let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
+
+    CalendarView(
+        currentUser: currentUser,
+        events: .constant(SampleData.sampleEvents),
+        friendsDict: friendsDict
+    )
+    .environmentObject(NavigationState())
 }

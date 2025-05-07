@@ -14,8 +14,8 @@ struct CreateGroupView: View {
     @Binding var groups: [UserGroup]
     @StateObject private var viewModel = CreateGroupViewModel()
     
-    let users: [User]
-    
+    let friendsDict: [Int: User]
+
     var body: some View {
         NavigationStack {
             Form {
@@ -41,7 +41,7 @@ struct CreateGroupView: View {
                     selectedMemberIDs: $viewModel.selectedMemberIDs,
                     header: "Invite Friends",
                     currentUser: currentUser,
-                    users: friends
+                    friendsDict: friendsDict
                 )
                 createButtonSection
             }
@@ -59,13 +59,7 @@ private extension CreateGroupView {
     //MARK: - Computed Vars
     
     private var friends: [User] {
-        guard let friendIDs = currentUser.friendIDs else {
-            return []
-        }
-        
-        return users.filter { user in
-            friendIDs.contains(user.id ?? -1)
-        }
+        currentUser.resolvedFriends(from: friendsDict)
     }
     
     //MARK: - Subviews
@@ -96,11 +90,13 @@ private extension CreateGroupView {
 }
 
 #Preview {
-    if let sampleUser = SampleData.sampleUsers.first {
-        CreateGroupView(
-            currentUser: sampleUser,
-            groups: .constant(SampleData.sampleGroups),
-            users: SampleData.sampleUsers
-        )
-    }
+    let sampleUsers = SampleData.sampleUsers
+    let currentUser = sampleUsers.first!
+    let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
+
+    CreateGroupView(
+        currentUser: currentUser,
+        groups: .constant(SampleData.sampleGroups),
+        friendsDict: friendsDict
+    )
 }
