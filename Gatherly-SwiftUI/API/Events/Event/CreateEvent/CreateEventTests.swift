@@ -19,20 +19,21 @@ final class CreateEventTests: XCTestCase {
 
     func testCreateEvent() async {
         let fixedDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
-        let startTime = calendar.date(from: DateComponents(hour: 10, minute: 0))!
-        let endTime = calendar.date(from: DateComponents(hour: 12, minute: 0))!
+        let startTime = calendar.date(bySettingHour: 10, minute: 0, second: 0, of: fixedDate)!
+        let endTime = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: fixedDate)!
 
-        let createdEvent = await GatherlyAPI.createEvent(
-            title: "New Event",
-            description: "Description",
-            selectedDate: fixedDate,
-            startTime: startTime,
-            endTime: endTime,
-            selectedMemberIDs: Set([2, 3]),
-            plannerID: 1,
-            categories: [.entertainment],
-            bannerImageName: "test_banner.jpg"
-        )
+        var event = Event()
+        event.title = "New Event"
+        event.description = "Description"
+        event.date = fixedDate
+        event.startTimestamp = Int(startTime.timestamp)
+        event.endTimestamp = Int(endTime.timestamp)
+        event.memberIDs = [2, 3]
+        event.categories = [.entertainment]
+        event.bannerImageName = "test_banner.jpg"
+        event.plannerID = 1
+
+        let createdEvent = await GatherlyAPI.createEvent(event)
 
         XCTAssertEqual(createdEvent.title, "New Event")
         XCTAssertEqual(createdEvent.description, "Description")
@@ -41,11 +42,8 @@ final class CreateEventTests: XCTestCase {
         XCTAssertGreaterThan(createdEvent.id ?? 0, 0)
         XCTAssertLessThanOrEqual(createdEvent.id ?? 0, Int(Date().timestamp))
 
-        let expectedStart = calendar.date(bySettingHour: 10, minute: 0, second: 0, of: fixedDate)!
-        let expectedEnd = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: fixedDate)!
-
-        XCTAssertEqual(createdEvent.startTimestamp, Int(expectedStart.timestamp))
-        XCTAssertEqual(createdEvent.endTimestamp, Int(expectedEnd.timestamp))
+        XCTAssertEqual(createdEvent.startTimestamp, Int(startTime.timestamp))
+        XCTAssertEqual(createdEvent.endTimestamp, Int(endTime.timestamp))
         XCTAssertEqual(createdEvent.plannerID, 1)
         XCTAssertEqual(Set(createdEvent.memberIDs ?? []), Set([2, 3]))
         XCTAssertEqual(createdEvent.categories, [.entertainment])
