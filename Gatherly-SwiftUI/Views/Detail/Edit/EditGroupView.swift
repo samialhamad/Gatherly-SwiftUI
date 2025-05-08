@@ -24,28 +24,33 @@ struct EditGroupView: View {
             ZStack {
                 Form {
                     Section(header: Text("Group Name")) {
-                        TextField("Enter group name", text: $viewModel.groupName)
+                        TextField("Enter group name", text: nameBinding)
                     }
+                    
                     ImagePicker(
                         title: "Group Image",
                         imageHeight: Constants.CreateGroupView.groupImageHeight,
                         maskShape: .circle,
                         selectedImage: $viewModel.groupImage
                     )
+                    
                     ImagePicker(
                         title: "Banner Image",
                         imageHeight: Constants.CreateGroupView.groupBannerImageHeight,
                         maskShape: .rectangle,
                         selectedImage: $viewModel.bannerImage
                     )
+                    
                     EventMembersSection(
-                        selectedMemberIDs: $viewModel.selectedMemberIDs,
+                        selectedMemberIDs: memberIDsBinding,
                         header: "Friends",
                         currentUser: currentUser,
                         friendsDict: friendsDict
                     )
+                    
                     deleteButton
                 }
+                
                 if isSaving {
                     ActivityIndicator(message: "Saving your changes…")
                 }
@@ -74,6 +79,22 @@ struct EditGroupView: View {
 
 
 private extension EditGroupView {
+    
+    // MARK: - Bindings
+    
+    var nameBinding: Binding<String> {
+        Binding<String>(
+            get: { viewModel.group.name ?? "" },
+            set: { viewModel.group.name = $0 }
+        )
+    }
+    
+    var memberIDsBinding: Binding<Set<Int>> {
+        Binding<Set<Int>>(
+            get: { Set(viewModel.group.memberIDs) },
+            set: { viewModel.group.memberIDs = Array($0).sorted() }
+        )
+    }
     
     // MARK: - Computed Vars
     
