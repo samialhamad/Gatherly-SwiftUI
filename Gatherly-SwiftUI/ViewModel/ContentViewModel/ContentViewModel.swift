@@ -112,22 +112,22 @@ final class ContentViewModel: ObservableObject {
         let existingPhones = Set(self.users.compactMap { $0.phone?.filter(\.isWholeNumber) })
         var newUsers: [User] = []
         var newFriendIDs: [Int] = []
-
+        
         var nextAvailableID = (self.users.map { $0.id ?? 0 }.max() ?? 999) + 1
-
+        
         for contact in contacts {
             let cleaned = contact.phoneNumber.filter(\.isWholeNumber)
             guard !existingPhones.contains(cleaned) else { continue }
-
+            
             let user = await GatherlyAPI.createUser(from: contact, id: nextAvailableID)
             newUsers.append(user)
             newFriendIDs.append(nextAvailableID)
             nextAvailableID += 1
         }
-
+        
         return (newUsers, newFriendIDs)
     }
-
+    
     func syncContacts(currentUserID: Int = 1) {
         ContactSyncManager.shared.fetchContacts { contacts in
             Task {
@@ -153,7 +153,8 @@ final class ContentViewModel: ObservableObject {
         )
         
         self.userGroups = groups.filter { group in
-            group.leaderID == currentUser.id || (currentUser.groupIDs?.contains(group.id) ?? false)
+            group.leaderID == currentUser.id ||
+            (group.id != nil && currentUser.groupIDs?.contains(group.id!) == true)
         }
     }
     

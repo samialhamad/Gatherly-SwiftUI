@@ -36,7 +36,7 @@ struct GroupDetailView: View {
                 ActivityIndicator(message: "Deleting your group…")
             }
         }
-        .navigationTitle(group.name)
+        .navigationTitle(group.name ?? "")
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 toolbarButton

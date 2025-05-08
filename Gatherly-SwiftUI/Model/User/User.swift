@@ -51,7 +51,12 @@ class User: Codable, Equatable, Hashable, Identifiable, ObservableObject {
             return []
         }
         
-        return groups.filter { ids.contains($0.id) }
+        return groups.filter { group in
+            if let id = group.id {
+                return ids.contains(id)
+            }
+            return false
+        }
     }
     
     // MARK: - Initializers

@@ -28,7 +28,7 @@ struct GroupRow: View {
 private extension GroupRow {
     var groupInfoView: some View {
         VStack(alignment: .leading) {
-            Text(group.name)
+            Text(group.name ?? "")
                 .font(.body)
             Text("\(group.memberIDs.count) members")
                 .font(.caption)

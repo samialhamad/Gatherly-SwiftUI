@@ -20,7 +20,7 @@ class EditGroupViewModel: ObservableObject {
 
     init(group: UserGroup) {
         self.original = group
-        self.groupName = group.name
+        self.groupName = group.name ?? ""
         self.selectedMemberIDs = Set(group.memberIDs)
         self.groupImage = group.imageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) }
         self.bannerImage = group.bannerImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) }

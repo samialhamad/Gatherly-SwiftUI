@@ -52,8 +52,8 @@ private extension AvatarView {
             let firstInitial = user.firstName?.first.map(String.init) ?? ""
             let lastInitial = user.lastName?.first.map(String.init) ?? ""
             return firstInitial + lastInitial
-        } else if let group {
-            return group.name.first.map { String($0).uppercased() } ?? "?"
+        } else if let groupName = group?.name, let firstChar = groupName.first {
+            return String(firstChar).uppercased()
         } else {
             return ""
         }

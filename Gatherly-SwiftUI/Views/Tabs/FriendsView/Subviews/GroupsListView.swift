@@ -29,7 +29,7 @@ private extension GroupsListView {
     var filteredGroups: [UserGroup] {
         let userGroups = groups.filter { group in
             let isLeader = (group.leaderID == currentUser.id)
-            let isMember = currentUser.groupIDs?.contains(group.id) ?? false
+            let isMember = group.id.flatMap { currentUser.groupIDs?.contains($0) } ?? false
             return isLeader || isMember
         }
         
@@ -39,7 +39,7 @@ private extension GroupsListView {
             let lowercasedQuery = searchText.lowercased()
             
             return userGroups.filter {
-                $0.name.lowercased().contains(lowercasedQuery)
+                ($0.name ?? "").lowercased().contains(lowercasedQuery)
             }
         }
     }
