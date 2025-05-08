@@ -9,62 +9,81 @@ import Foundation
 import SwiftUI
 
 class CreateEventViewModel: ObservableObject {
-    @Published var description: String = ""
-    @Published var endTime: Date = Date().plus(calendarComponent: .hour, value: 1) ?? Date()
-    @Published var location: Location? = nil
-    @Published var locationName: String = ""
+    @Published var event: Event
     @Published var selectedBannerImage: UIImage?
-    @Published var selectedCategories: [EventCategory] = []
-    @Published var selectedDate: Date = Date()
-    @Published var selectedMemberIDs: Set<Int> = []
-    @Published var startTime: Date = Date()
-    @Published var title: String = ""
-
-    // MARK: - Event Creation
-
-    func createEvent(with plannerID: Int) async -> Event {
-        var bannerImageName: String? = nil
-        if let image = selectedBannerImage {
-            bannerImageName = ImageUtility.saveImageToDocuments(image: image)
-        }
-
-        return await GatherlyAPI.createEvent(
-            title: title,
-            description: description,
-            selectedDate: selectedDate,
-            startTime: startTime,
-            endTime: endTime,
-            selectedMemberIDs: selectedMemberIDs,
-            plannerID: plannerID,
-            location: location,
-            categories: selectedCategories,
-            bannerImageName: bannerImageName
+    
+    // MARK: - Init
+    
+    init() {
+        self.event = Event(
+            bannerImageName: nil,
+            categories: [],
+            date: Date(),
+            description: "",
+            endTimestamp: Int(Date().addingTimeInterval(3600).timestamp),
+            location: nil,
+            memberIDs: [],
+            title: "",
+            startTimestamp: Int(Date().timestamp)
         )
     }
-
+    
+    // MARK: - Event Creation
+    
+    func createEvent(plannerID: Int) async -> Event {
+        let calendar = Calendar.current
+        let mergedStart = Date.merge(
+            date: event.date ?? Date(),
+            time: Date(timeIntervalSince1970: TimeInterval(event.startTimestamp ?? Int(Date().timestamp)))
+        )
+        let mergedEnd = Date.merge(
+            date: event.date ?? Date(),
+            time: Date(timeIntervalSince1970: TimeInterval(event.endTimestamp ?? Int(Date().timestamp + 3600)))
+        )
+        
+        let bannerImageName = selectedBannerImage.flatMap { ImageUtility.saveImageToDocuments(image: $0) }
+        
+        await MainActor.run {
+            event.plannerID = plannerID
+            event.date = calendar.startOfDay(for: event.date ?? Date())
+            event.startTimestamp = Int(mergedStart.timestamp)
+            event.endTimestamp = Int(mergedEnd.timestamp)
+            event.memberIDs = event.memberIDs?.sorted()
+            event.bannerImageName = bannerImageName
+        }
+        
+        return await GatherlyAPI.createEvent(event)
+    }
+    
     // MARK: - Helpers
-
+    
     func clearFields() {
-        title = ""
-        description = ""
-        selectedDate = Date()
-        startTime = Date()
-        endTime = Date().plus(calendarComponent: .hour, value: 1) ?? Date()
-        selectedMemberIDs.removeAll()
-        location = nil
-        selectedCategories = []
-        selectedBannerImage = nil
+        self.event = Event(
+            bannerImageName: nil,
+            categories: [],
+            date: Date(),
+            description: "",
+            endTimestamp: Int(Date().addingTimeInterval(3600).timestamp),
+            location: nil,
+            memberIDs: [],
+            title: "",
+            startTimestamp: Int(Date().timestamp)
+        )
+        self.selectedBannerImage = nil
     }
-
+    
     var isFormEmpty: Bool {
-        title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        (event.title ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
-
+    
     var startTimeRange: ClosedRange<Date> {
-        Date.startTimeRange(for: selectedDate)
+        Date.startTimeRange(for: event.date ?? Date())
     }
-
+    
     var endTimeRange: ClosedRange<Date> {
-        Date.endTimeRange(for: selectedDate, startTime: startTime)
+        Date.endTimeRange(
+            for: event.date ?? Date(),
+            startTime: Date(timeIntervalSince1970: TimeInterval(event.startTimestamp ?? Int(Date().timestamp)))
+        )
     }
 }
