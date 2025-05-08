@@ -16,11 +16,10 @@ extension GatherlyAPI {
         leaderID: Int
     ) async -> UserGroup {
         var groups = UserDefaultsManager.loadGroups()
-        let nextID = (groups.map { $0.id }.max() ?? 0) + 1
 
         let group = UserGroup(
             bannerImageName: bannerImageName,
-            id: nextID,
+            id: generateID(),
             imageName: imageName,
             leaderID: leaderID,
             memberIDs: Array(memberIDs).sorted(),
