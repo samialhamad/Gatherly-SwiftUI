@@ -42,9 +42,14 @@
 		F11CDC642D779DC7007BC1F1 /* Exceptions for "Gatherly-SwiftUI" folder in "Gatherly-SwiftUITests" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				API/Events/Events/EventsAPITests.swift,
-				API/Groups/Groups/GroupsAPITest.swift,
-				API/User/User/UserAPITests.swift,
+				API/Events/Event/CreateEvent/CreateEventTests.swift,
+				API/Events/Event/DeleteEvent/DeleteEventTests.swift,
+				API/Events/Event/UpdateEvent/UpdateEventTests.swift,
+				API/Groups/Group/CreateGroup/CreateGroupTests.swift,
+				API/Groups/Group/DeleteGroup/DeleteGroupTests.swift,
+				API/Groups/Group/UpdateGroup/UpdateGroupTests.swift,
+				API/User/User/CreateUser/CreateUserTests.swift,
+				API/User/User/UpdateUser/UpdateUserTests.swift,
 				Extensions/Array/ArrayTests.swift,
 				Extensions/Date/DateTests.swift,
 				Extensions/UserDefaults/UserDefaultsTests.swift,
@@ -72,9 +77,14 @@
 		F11CDC652D779DE7007BC1F1 /* Exceptions for "Gatherly-SwiftUI" folder in "Gatherly-SwiftUI" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				API/Events/Events/EventsAPITests.swift,
-				API/Groups/Groups/GroupsAPITest.swift,
-				API/User/User/UserAPITests.swift,
+				API/Events/Event/CreateEvent/CreateEventTests.swift,
+				API/Events/Event/DeleteEvent/DeleteEventTests.swift,
+				API/Events/Event/UpdateEvent/UpdateEventTests.swift,
+				API/Groups/Group/CreateGroup/CreateGroupTests.swift,
+				API/Groups/Group/DeleteGroup/DeleteGroupTests.swift,
+				API/Groups/Group/UpdateGroup/UpdateGroupTests.swift,
+				API/User/User/CreateUser/CreateUserTests.swift,
+				API/User/User/UpdateUser/UpdateUserTests.swift,
 				Extensions/Array/ArrayTests.swift,
 				Extensions/Date/DateTests.swift,
 				Extensions/UserDefaults/UserDefaultsTests.swift,
