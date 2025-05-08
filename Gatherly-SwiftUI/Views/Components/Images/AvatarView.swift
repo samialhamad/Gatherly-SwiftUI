@@ -17,10 +17,10 @@ struct AvatarView: View {
     let user: User?
     
     init(
-        backgroundColor: Color,
+        backgroundColor: Color = Color(Colors.primary),
         borderColor: Color? = nil,
         borderWidth: CGFloat? = nil,
-        font: Font,
+        font: Font = .headline,
         group: UserGroup? = nil,
         size: CGFloat,
         user: User? = nil
