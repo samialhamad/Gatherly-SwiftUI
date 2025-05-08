@@ -25,7 +25,7 @@ extension GatherlyAPI {
         let mergedEnd = Date.merge(date: selectedDate, time: endTime)
         
         var event = Event()
-        event.id = generateNextID()
+        event.id = generateID()
         event.plannerID = plannerID
         event.title = title
         event.description = description
