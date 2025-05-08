@@ -8,6 +8,13 @@
 import Foundation
 import Combine
 
-final class GatherlyAPI {
-    // namespace only — actual logic lives in extensions in subfolders
+struct GatherlyAPI {
+    static func generateNextID() -> Int {
+        Int(Date().timestamp)
+    }
+    
+    static func simulateNetworkDelay(seconds: Double = 1.0) async {
+        let ns = UInt64(seconds * 1_000_000_000) // 1 second
+        try? await Task.sleep(nanoseconds: ns)
+    }
 }
