@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct EditEventView: View {
+    @State private var isSaving = false
     @StateObject var viewModel: EditEventViewModel
     
     let currentUser: User
@@ -72,6 +73,11 @@ struct EditEventView: View {
             } message: {
                 Text("Are you sure you want to delete this event?")
             }
+            .overlay {
+                if isSaving {
+                    ActivityIndicator(message: "Saving your changes…")
+                }
+            }
         }
         .keyboardDismissable()
     }
@@ -107,8 +113,12 @@ private extension EditEventView {
     var saveToolbarButton: some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
             Button("Save") {
-                let updatedEvent = viewModel.updatedEvent()
-                onSave(updatedEvent)
+                isSaving = true
+                Task {
+                    let updatedEvent = await viewModel.updateEvent()
+                    isSaving = false
+                    onSave(updatedEvent)
+                }
             }
             .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.secondary))
             .disabled(viewModel.isFormEmpty)
@@ -120,7 +130,7 @@ private extension EditEventView {
     let sampleUsers = SampleData.sampleUsers
     let currentUser = sampleUsers.first!
     let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
-
+    
     NavigationStack {
         EditEventView(
             viewModel: EditEventViewModel(event: SampleData.sampleEvents.first!),
