@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 struct GatherlyAPI {
-    static func generateNextID() -> Int {
+    static func generateID() -> Int {
         Int(Date().timestamp)
     }
     
