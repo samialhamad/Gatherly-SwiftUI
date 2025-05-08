@@ -44,6 +44,7 @@ extension GatherlyAPI {
         events.append(event)
         UserDefaultsManager.saveEvents(events)
 
+        await simulateNetworkDelay()
         return event
     }
 
@@ -82,6 +83,7 @@ extension GatherlyAPI {
             UserDefaultsManager.saveEvents(events)
         }
 
+        await simulateNetworkDelay()
         return updatedEvent
     }
 
@@ -89,8 +91,11 @@ extension GatherlyAPI {
 
     static func deleteEvent(_ eventToDelete: Event) async -> [Event] {
         var events = UserDefaultsManager.loadEvents()
+        
         events.removeAll { $0.id == eventToDelete.id }
         UserDefaultsManager.saveEvents(events)
+        
+        await simulateNetworkDelay()
         return events
     }
 
@@ -98,5 +103,12 @@ extension GatherlyAPI {
 
     private static func generateNextEventID() -> Int {
         Int(Date().timestamp)
+    }
+    
+    // MARK: - Simulate Delay
+    
+    private static func simulateNetworkDelay(seconds: Double = 1.0) async {
+        let ns = UInt64(seconds * 1_000_000_000) // 1 second
+        try? await Task.sleep(nanoseconds: ns)
     }
 }
