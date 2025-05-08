@@ -32,7 +32,7 @@ final class EditGroupViewModelTests: XCTestCase {
         let originalGroup = makeSampleGroup()
         let viewModel = EditGroupViewModel(group: originalGroup)
         
-        viewModel.groupName = "Updated Group Name"
+        viewModel.group.name = "Updated Group Name"
         let updatedGroup = await viewModel.updateGroup()
         
         XCTAssertEqual(updatedGroup.name, "Updated Group Name")
@@ -42,7 +42,7 @@ final class EditGroupViewModelTests: XCTestCase {
         let originalGroup = makeSampleGroup()
         let viewModel = EditGroupViewModel(group: originalGroup)
         
-        viewModel.selectedMemberIDs = Set([1, 2, 3])
+        viewModel.group.memberIDs = [1, 2, 3]
         let updatedGroup = await viewModel.updateGroup()
         
         XCTAssertEqual(Set(updatedGroup.memberIDs), Set([1, 2, 3]))
@@ -67,6 +67,8 @@ final class EditGroupViewModelTests: XCTestCase {
         
         XCTAssertNotNil(updatedGroup.bannerImageName)
     }
+    
+    // MARK: - Remove Images
     
     func testRemoveGroupImage() {
         var group = makeSampleGroup()
@@ -96,7 +98,7 @@ final class EditGroupViewModelTests: XCTestCase {
         let group = makeSampleGroup()
         let viewModel = EditGroupViewModel(group: group)
         
-        viewModel.groupName = "   "
+        viewModel.group.name = "   "
         XCTAssertTrue(viewModel.isFormEmpty)
     }
     
@@ -104,7 +106,7 @@ final class EditGroupViewModelTests: XCTestCase {
         let group = makeSampleGroup()
         let viewModel = EditGroupViewModel(group: group)
         
-        viewModel.groupName = "Group Name"
+        viewModel.group.name = "Group Name"
         XCTAssertFalse(viewModel.isFormEmpty)
     }
     
