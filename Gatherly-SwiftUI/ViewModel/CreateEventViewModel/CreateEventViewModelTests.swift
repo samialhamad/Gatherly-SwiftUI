@@ -10,12 +10,19 @@ import XCTest
 
 final class CreateEventViewModelTests: XCTestCase {
     
-    func testCreateEvent() {
+    override func setUp() {
+        super.setUp()
+        UserDefaultsManager.removeEvents()
+    }
+    
+    // MARK: - Create Event
+    
+    func testCreateEvent() async {
         let calendar = Calendar.current
         let fixedDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
-        let fixedStartTime = calendar.date(from: DateComponents(hour: 10, minute: 0))!
-        let fixedEndTime = calendar.date(from: DateComponents(hour: 12, minute: 0))!
-        
+        let fixedStartTime = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 10, minute: 0))!
+        let fixedEndTime = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 12, minute: 0))!
+
         let viewModel = CreateEventViewModel()
         viewModel.title = "Test Event"
         viewModel.description = "Test description"
@@ -24,32 +31,36 @@ final class CreateEventViewModelTests: XCTestCase {
         viewModel.endTime = fixedEndTime
         viewModel.selectedMemberIDs = Set([2, 3])
         viewModel.selectedCategories = [.food, .sports]
-        
+
         let testImage = UIImage(systemName: "photo")!
         viewModel.selectedBannerImage = testImage
-        
+
         let plannerID = 1
-        let event = viewModel.createEvent(with: plannerID)
-        
-        let expectedStartDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 10, minute: 0))!
-        let expectedEndDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 12, minute: 0))!
-        
+        let event = await viewModel.createEvent(with: plannerID)
+
+        let expectedStartTimestamp = Int(fixedStartTime.timestamp)
+        let expectedEndTimestamp = Int(fixedEndTime.timestamp)
+
         XCTAssertEqual(event.title, "Test Event")
         XCTAssertEqual(event.description, "Test description")
-        XCTAssertGreaterThan(event.id ?? 0, 0)
-        XCTAssertLessThanOrEqual(event.id ?? 0, Int(Date().timestamp))
+        XCTAssertNotNil(event.id)
         XCTAssertEqual(event.date, calendar.startOfDay(for: fixedDate))
-        XCTAssertEqual(event.startTimestamp, Int(expectedStartDate.timestamp))
-        XCTAssertEqual(event.endTimestamp, Int(expectedEndDate.timestamp))
+        XCTAssertEqual(event.startTimestamp, expectedStartTimestamp)
+        XCTAssertEqual(event.endTimestamp, expectedEndTimestamp)
         XCTAssertEqual(event.plannerID, plannerID)
         XCTAssertEqual(Set(event.memberIDs ?? []), Set([2, 3]))
         XCTAssertEqual(event.categories, [.food, .sports])
         XCTAssertNotNil(event.bannerImageName)
+        
+        let allEvents = UserDefaultsManager.loadEvents()
+        XCTAssertTrue(allEvents.contains(where: { $0.id == event.id }))
     }
     
-    func testClearFieldsResetsViewModel() {
+    // MARK: - Clear Fields
+
+    func testClearFields() {
         let viewModel = CreateEventViewModel()
-        
+
         viewModel.title = "Something"
         viewModel.description = "Something"
         viewModel.selectedMemberIDs = Set([1, 2, 3])
@@ -57,23 +68,34 @@ final class CreateEventViewModelTests: XCTestCase {
         viewModel.startTime = Date(timeIntervalSince1970: 0)
         viewModel.endTime = Date(timeIntervalSince1970: 1000)
         viewModel.selectedCategories = [.travel, .networking]
-        
-        let testImage = UIImage(systemName: "photo")!
-        viewModel.selectedBannerImage = testImage
-        
+        viewModel.selectedBannerImage = UIImage(systemName: "photo")!
+
         viewModel.clearFields()
-        
+
         XCTAssertEqual(viewModel.title, "")
         XCTAssertEqual(viewModel.description, "")
         XCTAssertTrue(viewModel.selectedMemberIDs.isEmpty)
         XCTAssertTrue(viewModel.selectedCategories.isEmpty)
         XCTAssertNil(viewModel.selectedBannerImage)
-        
-        //a small 2 second window to address this unit test failing as a result of time issues.
+
         let now = Date()
         let tolerance: TimeInterval = 2.0
         XCTAssertLessThan(abs(viewModel.selectedDate.timeIntervalSince(now)), tolerance)
         XCTAssertLessThan(abs(viewModel.startTime.timeIntervalSince(now)), tolerance)
         XCTAssertLessThan(abs(viewModel.endTime.timeIntervalSince(now.addingTimeInterval(3600))), tolerance)
+    }
+    
+    // MARK: isFormEmpty
+    
+    func testIsFormEmpty() {
+        let viewModel = CreateEventViewModel()
+
+        XCTAssertTrue(viewModel.isFormEmpty)
+
+        viewModel.title = "   "
+        XCTAssertTrue(viewModel.isFormEmpty)
+
+        viewModel.title = "Birthday Bash"
+        XCTAssertFalse(viewModel.isFormEmpty)
     }
 }
