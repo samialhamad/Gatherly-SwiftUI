@@ -104,7 +104,6 @@ private extension EventDetailView {
             onSave: { updatedEvent in
                 if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
                     events[index] = updatedEvent
-                    UserDefaultsManager.saveEvents(events)
                 }
                 isShowingEditView = false
             },
@@ -112,13 +111,16 @@ private extension EventDetailView {
                 isShowingEditView = false
             },
             onDelete: { eventToDelete in
-                let (updatedEvents, newSelectedDate) = EventEditor.deleteEvent(from: events, eventToDelete: eventToDelete)
-                events = updatedEvents
-                UserDefaultsManager.saveEvents(events)
-                navigationState.calendarSelectedDate = newSelectedDate
-                navigationState.navigateToEvent = nil
-                isShowingEditView = false
-                dismiss()
+                Task {
+                    let updatedEvents = await GatherlyAPI.deleteEvent(eventToDelete)
+                    await MainActor.run {
+                        events = updatedEvents
+                        navigationState.calendarSelectedDate = eventToDelete.date ?? Date()
+                        navigationState.navigateToEvent = nil
+                        isShowingEditView = false
+                        dismiss()
+                    }
+                }
             }
         )
         .refreshOnDismiss()
