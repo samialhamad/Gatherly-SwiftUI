@@ -11,6 +11,7 @@ import PhotosUI
 struct CreateEventView: View {
     @ObservedObject var currentUser: User
     @Binding var events: [Event]
+    @State private var isSaving = false
     @State private var navigateToEvent: Event? = nil
     @EnvironmentObject var navigationState: NavigationState
     @StateObject private var viewModel = CreateEventViewModel()
@@ -19,43 +20,48 @@ struct CreateEventView: View {
     
     var body: some View {
         NavigationStack {
-            Form {
-                EventDetailsSection(
-                    header: "Event Details",
-                    title: $viewModel.title,
-                    description: $viewModel.description)
-                EventDateTimeSection(
-                    header: "Date & Time",
-                    eventDate: $viewModel.selectedDate,
-                    startTime: $viewModel.startTime,
-                    endTime: $viewModel.endTime,
-                    startTimeRange: viewModel.startTimeRange,
-                    endTimeRange: viewModel.endTimeRange
-                )
-                EventMembersSection(
-                    selectedMemberIDs: $viewModel.selectedMemberIDs,
-                    header: "Invite Friends",
-                    currentUser: currentUser,
-                    friendsDict: friendsDict
-                )
-                EventLocationSection(
-                    header: "Location",
-                    locationName: $viewModel.locationName,
-                    onSetLocation: { location in
-                        viewModel.location = location
-                    }
-                )
-                EventCategorySection(
-                    header: "Categories",
-                    selectedCategories: $viewModel.selectedCategories
-                )
-                ImagePicker(
-                    title: "Banner Image",
-                    imageHeight: Constants.CreateEventView.bannerImageHeight,
-                    maskShape: .rectangle,
-                    selectedImage: $viewModel.selectedBannerImage
-                )
-                createButtonSection
+            ZStack {
+                Form {
+                    EventDetailsSection(
+                        header: "Event Details",
+                        title: $viewModel.title,
+                        description: $viewModel.description)
+                    EventDateTimeSection(
+                        header: "Date & Time",
+                        eventDate: $viewModel.selectedDate,
+                        startTime: $viewModel.startTime,
+                        endTime: $viewModel.endTime,
+                        startTimeRange: viewModel.startTimeRange,
+                        endTimeRange: viewModel.endTimeRange
+                    )
+                    EventMembersSection(
+                        selectedMemberIDs: $viewModel.selectedMemberIDs,
+                        header: "Invite Friends",
+                        currentUser: currentUser,
+                        friendsDict: friendsDict
+                    )
+                    EventLocationSection(
+                        header: "Location",
+                        locationName: $viewModel.locationName,
+                        onSetLocation: { location in
+                            viewModel.location = location
+                        }
+                    )
+                    EventCategorySection(
+                        header: "Categories",
+                        selectedCategories: $viewModel.selectedCategories
+                    )
+                    ImagePicker(
+                        title: "Banner Image",
+                        imageHeight: Constants.CreateEventView.bannerImageHeight,
+                        maskShape: .rectangle,
+                        selectedImage: $viewModel.selectedBannerImage
+                    )
+                    createButtonSection
+                }
+                if isSaving {
+                    ActivityIndicator(message: "Creating your event…")
+                }
             }
             .navigationTitle("Create Event")
         }
@@ -73,23 +79,28 @@ private extension CreateEventView {
     }
     
     // MARK: - Subviews
-
+    
     var createButtonSection: some View {
         Section {
             Button(action: {
-                let newEvent = viewModel.createEvent(with: currentUser.id ?? -1)
-                events.append(newEvent)
-                UserDefaultsManager.saveEvents(events)
-                viewModel.clearFields()
-                navigationState.calendarSelectedDate = newEvent.date ?? Date()
-                navigationState.navigateToEvent = newEvent
-                navigationState.selectedTab = 0
+                isSaving = true
+                Task {
+                    let newEvent = await viewModel.createEvent(with: currentUser.id ?? -1)
+                    await MainActor.run {
+                        events.append(newEvent)
+                        viewModel.clearFields()
+                        navigationState.calendarSelectedDate = newEvent.date ?? Date()
+                        navigationState.navigateToEvent = newEvent
+                        navigationState.selectedTab = 0
+                        isSaving = false
+                    }
+                }
             }) {
                 Text("Create")
                     .font(.headline)
                     .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.primary))
             }
-            .disabled(viewModel.isFormEmpty)
+            .disabled(viewModel.isFormEmpty || isSaving)
         }
     }
 }
@@ -98,7 +109,7 @@ private extension CreateEventView {
     let sampleUsers = SampleData.sampleUsers
     let currentUser = sampleUsers.first!
     let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
-
+    
     NavigationStack {
         CreateEventView(
             currentUser: currentUser,
