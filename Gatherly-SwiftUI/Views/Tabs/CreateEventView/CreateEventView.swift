@@ -24,32 +24,76 @@ struct CreateEventView: View {
                 Form {
                     EventDetailsSection(
                         header: "Event Details",
-                        title: $viewModel.title,
-                        description: $viewModel.description)
+                        title: Binding(
+                            get: { viewModel.event.title ?? "" },
+                            set: { viewModel.event.title = $0 }
+                        ),
+                        description: Binding(
+                            get: { viewModel.event.description ?? "" },
+                            set: { viewModel.event.description = $0 }
+                        )
+                    )
                     EventDateTimeSection(
                         header: "Date & Time",
-                        eventDate: $viewModel.selectedDate,
-                        startTime: $viewModel.startTime,
-                        endTime: $viewModel.endTime,
+                        eventDate: Binding(
+                            get: { viewModel.event.date ?? Date() },
+                            set: { viewModel.event.date = $0 }
+                        ),
+                        startTime: Binding(
+                            get: {
+                                Date(timeIntervalSince1970: TimeInterval(viewModel.event.startTimestamp ?? Int(Date().timestamp)))
+                            },
+                            set: {
+                                viewModel.event.startTimestamp = Int($0.timestamp)
+                            }
+                        ),
+                        endTime: Binding(
+                            get: {
+                                Date(timeIntervalSince1970: TimeInterval(viewModel.event.endTimestamp ?? Int(Date().timestamp + 3600)))
+                            },
+                            set: {
+                                viewModel.event.endTimestamp = Int($0.timestamp)
+                            }
+                        ),
                         startTimeRange: viewModel.startTimeRange,
                         endTimeRange: viewModel.endTimeRange
                     )
                     EventMembersSection(
-                        selectedMemberIDs: $viewModel.selectedMemberIDs,
+                        selectedMemberIDs: Binding(
+                            get: { Set(viewModel.event.memberIDs ?? []) },
+                            set: { viewModel.event.memberIDs = Array($0).sorted() }
+                        ),
                         header: "Invite Friends",
                         currentUser: currentUser,
                         friendsDict: friendsDict
                     )
                     EventLocationSection(
                         header: "Location",
-                        locationName: $viewModel.locationName,
+                        locationName: Binding(
+                            get: { viewModel.event.location?.name ?? "" },
+                            set: { name in
+                                if viewModel.event.location == nil {
+                                    viewModel.event.location = Location(
+                                        address: nil,
+                                        latitude: 0,
+                                        longitude: 0,
+                                        name: name
+                                    )
+                                } else {
+                                    viewModel.event.location?.name = name
+                                }
+                            }
+                        ),
                         onSetLocation: { location in
-                            viewModel.location = location
+                            viewModel.event.location = location
                         }
                     )
                     EventCategorySection(
                         header: "Categories",
-                        selectedCategories: $viewModel.selectedCategories
+                        selectedCategories: Binding(
+                            get: { viewModel.event.categories },
+                            set: { viewModel.event.categories = $0 }
+                        )
                     )
                     ImagePicker(
                         title: "Banner Image",
@@ -85,7 +129,7 @@ private extension CreateEventView {
             Button(action: {
                 isSaving = true
                 Task {
-                    let newEvent = await viewModel.createEvent(with: currentUser.id ?? -1)
+                    let newEvent = await viewModel.createEvent(plannerID: currentUser.id ?? -1)
                     await MainActor.run {
                         events.append(newEvent)
                         viewModel.clearFields()
