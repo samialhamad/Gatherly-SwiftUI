@@ -10,37 +10,39 @@ import SwiftUI
 
 class CreateGroupViewModel: ObservableObject {
     @Published var bannerImage: UIImage? = nil
+    @Published var group: UserGroup
     @Published var groupImage: UIImage? = nil
-    @Published var groupName: String = ""
-    @Published var selectedMemberIDs: Set<Int> = []
-
-    // MARK: - Create Group
-
-    func createGroup(leaderID: Int) async -> UserGroup {
-        var groupImageName: String? = nil
-        var bannerImageName: String? = nil
-
-        if let profileImage = groupImage {
-            groupImageName = ImageUtility.saveImageToDocuments(image: profileImage)
-        }
-
-        if let banner = bannerImage {
-            bannerImageName = ImageUtility.saveImageToDocuments(image: banner)
-        }
-
-        return await GatherlyAPI.createGroup(
-            name: groupName,
-            memberIDs: selectedMemberIDs,
-            imageName: groupImageName,
-            bannerImageName: bannerImageName,
-            leaderID: leaderID
+    
+    init(currentUserID: Int) {
+        self.group = UserGroup(
+            id: nil,
+            leaderID: currentUserID,
+            memberIDs: [],
+            messages: [],
+            name: nil
         )
     }
-
+    
+    // MARK: - Create Group
+    
+    func createGroup() async -> UserGroup {
+        await MainActor.run {
+            if let image = groupImage {
+                group.imageName = ImageUtility.saveImageToDocuments(image: image)
+            }
+            
+            if let banner = bannerImage {
+                group.bannerImageName = ImageUtility.saveImageToDocuments(image: banner)
+            }
+        }
+        
+        return await GatherlyAPI.createGroup(group)
+    }
+    
     // MARK: - isFormEmpty
-
+    
     var isFormEmpty: Bool {
-        groupName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        (group.name ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 }
 
