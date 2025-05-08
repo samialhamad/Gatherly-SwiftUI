@@ -43,6 +43,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				API/Events/Events/EventsAPITests.swift,
+				API/Groups/Groups/GroupsAPITest.swift,
 				API/User/User/UserAPITests.swift,
 				Extensions/Array/ArrayTests.swift,
 				Extensions/Date/DateTests.swift,
@@ -72,6 +73,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				API/Events/Events/EventsAPITests.swift,
+				API/Groups/Groups/GroupsAPITest.swift,
 				API/User/User/UserAPITests.swift,
 				Extensions/Array/ArrayTests.swift,
 				Extensions/Date/DateTests.swift,
