@@ -16,25 +16,32 @@ final class DeleteGroupTests: XCTestCase {
     }
     
     func testDeleteGroup() async {
-        let groupToDelete = await GatherlyAPI.createGroup(
-            name: "Delete Me",
+        let groupToDelete = UserGroup(
+            id: nil,
+            leaderID: 1,
             memberIDs: [],
-            leaderID: 1
+            messages: [],
+            name: "Delete Me"
         )
-
-        let groupToKeep = await GatherlyAPI.createGroup(
-            name: "Keep Me",
+        
+        let groupToKeep = UserGroup(
+            id: nil,
+            leaderID: 2,
             memberIDs: [],
-            leaderID: 2
+            messages: [],
+            name: "Keep Me"
         )
-
+        
+        let savedDeleteGroup = await GatherlyAPI.createGroup(groupToDelete)
+        let savedKeepGroup = await GatherlyAPI.createGroup(groupToKeep)
+        
         let allGroupsBefore = UserDefaultsManager.loadGroups()
         XCTAssertEqual(allGroupsBefore.count, 2)
-
-        let updatedGroups = await GatherlyAPI.deleteGroup(groupToDelete)
-
+        
+        let updatedGroups = await GatherlyAPI.deleteGroup(savedDeleteGroup)
+        
         XCTAssertEqual(updatedGroups.count, 1)
-        XCTAssertFalse(updatedGroups.contains(where: { $0.id == groupToDelete.id }))
-        XCTAssertTrue(updatedGroups.contains(where: { $0.id == groupToKeep.id }))
+        XCTAssertFalse(updatedGroups.contains(where: { $0.id == savedDeleteGroup.id }))
+        XCTAssertTrue(updatedGroups.contains(where: { $0.id == savedKeepGroup.id }))
     }
 }
