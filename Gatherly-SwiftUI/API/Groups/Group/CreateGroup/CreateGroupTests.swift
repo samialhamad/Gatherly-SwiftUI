@@ -17,19 +17,24 @@ final class CreateGroupTests: XCTestCase {
     }
     
     func testCreateGroup() async {
-        let group = await GatherlyAPI.createGroup(
-            name: "New Group",
-            memberIDs: [2, 3],
-            imageName: "group_image.png",
+        var newGroup = UserGroup(
             bannerImageName: "banner_image.png",
-            leaderID: 1
+            id: nil,
+            imageName: "group_image.png",
+            leaderID: 1,
+            memberIDs: [2, 3],
+            messages: [],
+            name: "New Group"
         )
         
-        XCTAssertEqual(group.name, "New Group")
-        XCTAssertGreaterThan(group.id, 0)
-        XCTAssertEqual(group.leaderID, 1)
-        XCTAssertEqual(group.imageName, "group_image.png")
-        XCTAssertEqual(group.bannerImageName, "banner_image.png")
-        XCTAssertEqual(group.memberIDs, [2, 3])
+        let createdGroup = await GatherlyAPI.createGroup(newGroup)
+        
+        XCTAssertEqual(createdGroup.name, "New Group")
+        XCTAssertNotNil(createdGroup.id)
+        XCTAssertGreaterThan(createdGroup.id ?? 0, 0)
+        XCTAssertEqual(createdGroup.leaderID, 1)
+        XCTAssertEqual(createdGroup.imageName, "group_image.png")
+        XCTAssertEqual(createdGroup.bannerImageName, "banner_image.png")
+        XCTAssertEqual(createdGroup.memberIDs, [2, 3])
     }
 }

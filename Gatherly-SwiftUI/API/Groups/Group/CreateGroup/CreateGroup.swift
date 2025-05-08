@@ -8,29 +8,18 @@
 import Foundation
 
 extension GatherlyAPI {
-    static func createGroup(
-        name: String,
-        memberIDs: Set<Int>,
-        imageName: String? = nil,
-        bannerImageName: String? = nil,
-        leaderID: Int
-    ) async -> UserGroup {
+    static func createGroup(_ group: UserGroup) async -> UserGroup {
+        var storedGroup = group
+        
+        if storedGroup.id == nil {
+            storedGroup.id = generateID()
+        }
+        
         var groups = UserDefaultsManager.loadGroups()
-
-        let group = UserGroup(
-            bannerImageName: bannerImageName,
-            id: generateID(),
-            imageName: imageName,
-            leaderID: leaderID,
-            memberIDs: Array(memberIDs).sorted(),
-            messages: [],
-            name: name
-        )
-
-        groups.append(group)
+        groups.append(storedGroup)
         UserDefaultsManager.saveGroups(groups)
         
         await simulateNetworkDelay()
-        return group
+        return storedGroup
     }
 }
