@@ -25,39 +25,86 @@ struct EditEventView: View {
             Form {
                 EventDetailsSection(
                     header: "Event Info",
-                    title: $viewModel.title,
-                    description: $viewModel.description)
+                    title: Binding(
+                        get: { viewModel.event.title ?? "" },
+                        set: { viewModel.event.title = $0 }
+                    ),
+                    description: Binding(
+                        get: { viewModel.event.description ?? "" },
+                        set: { viewModel.event.description = $0 }
+                    )
+                )
+                
                 EventDateTimeSection(
                     header: "Date & Time",
-                    eventDate: $viewModel.selectedDate,
-                    startTime: $viewModel.startTime,
-                    endTime: $viewModel.endTime,
+                    eventDate: Binding(
+                        get: { viewModel.event.date ?? Date() },
+                        set: { viewModel.event.date = $0 }
+                    ),
+                    startTime: Binding(
+                        get: {
+                            Date(timeIntervalSince1970: TimeInterval(viewModel.event.startTimestamp ?? Int(Date().timestamp)))
+                        },
+                        set: {
+                            viewModel.event.startTimestamp = Int($0.timestamp)
+                        }
+                    ),
+                    endTime: Binding(
+                        get: {
+                            Date(timeIntervalSince1970: TimeInterval(viewModel.event.endTimestamp ?? Int(Date().addingTimeInterval(3600).timestamp)))
+                        },
+                        set: {
+                            viewModel.event.endTimestamp = Int($0.timestamp)
+                        }
+                    ),
                     startTimeRange: viewModel.startTimeRange,
                     endTimeRange: viewModel.endTimeRange
                 )
+                
                 EventMembersSection(
-                    selectedMemberIDs: $viewModel.selectedMemberIDs,
+                    selectedMemberIDs: Binding(
+                        get: { Set(viewModel.event.memberIDs ?? []) },
+                        set: { viewModel.event.memberIDs = Array($0).sorted() }
+                    ),
                     header: "Members",
                     currentUser: currentUser,
                     friendsDict: friendsDict
                 )
+                
                 EventLocationSection(
                     header: "Location",
-                    locationName: $viewModel.locationName,
+                    locationName: Binding(
+                        get: { viewModel.event.location?.name ?? "" },
+                        set: { newValue in
+                            var current = viewModel.event.location ?? Location(
+                                address: nil,
+                                latitude: 0,
+                                longitude: 0
+                            )
+                            current.name = newValue
+                            viewModel.event.location = current
+                        }
+                    ),
                     onSetLocation: { location in
-                        viewModel.location = location
+                        viewModel.event.location = location
                     }
                 )
+                
                 EventCategorySection(
                     header: "Categories",
-                    selectedCategories: $viewModel.selectedCategories
+                    selectedCategories: Binding(
+                        get: { viewModel.event.categories },
+                        set: { viewModel.event.categories = $0 }
+                    )
                 )
+                
                 ImagePicker(
                     title: "Banner Image",
                     imageHeight: Constants.EditEventView.bannerImageHeight,
                     maskShape: .rectangle,
                     selectedImage: $viewModel.selectedBannerImage
                 )
+                
                 deleteButton
             }
             .navigationTitle("Edit Event")
