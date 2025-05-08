@@ -13,20 +13,22 @@ class CreateGroupViewModel: ObservableObject {
     @Published var groupImage: UIImage? = nil
     @Published var groupName: String = ""
     @Published var selectedMemberIDs: Set<Int> = []
-    
-    func createGroup(leaderID: Int) -> UserGroup {
+
+    // MARK: - Create Group
+
+    func createGroup(leaderID: Int) async -> UserGroup {
         var groupImageName: String? = nil
         var bannerImageName: String? = nil
-        
+
         if let profileImage = groupImage {
             groupImageName = ImageUtility.saveImageToDocuments(image: profileImage)
         }
-        
+
         if let banner = bannerImage {
             bannerImageName = ImageUtility.saveImageToDocuments(image: banner)
         }
-        
-        return GroupEditor.saveGroup(
+
+        return await GatherlyAPI.createGroup(
             name: groupName,
             memberIDs: selectedMemberIDs,
             imageName: groupImageName,
@@ -34,8 +36,11 @@ class CreateGroupViewModel: ObservableObject {
             leaderID: leaderID
         )
     }
-    
+
+    // MARK: - isFormEmpty
+
     var isFormEmpty: Bool {
-        GroupEditor.isFormEmpty(name: groupName)
+        groupName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
 }
+
