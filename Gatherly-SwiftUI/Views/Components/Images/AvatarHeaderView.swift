@@ -36,7 +36,6 @@ struct AvatarHeaderView: View {
             }
             
             AvatarView(
-                backgroundColor: Color(Colors.primary),
                 borderColor: .white,
                 borderWidth: Constants.AvatarHeaderView.avatarBorderWidth,
                 font: font,

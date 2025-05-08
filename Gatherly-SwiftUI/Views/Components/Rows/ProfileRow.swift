@@ -13,8 +13,6 @@ struct ProfileRow: View {
     var body: some View {
         HStack {
             AvatarView(
-                backgroundColor: Color(Colors.primary),
-                font: .headline,
                 size: Constants.ProfileRow.avatarCircleSize,
                 user: user
             )

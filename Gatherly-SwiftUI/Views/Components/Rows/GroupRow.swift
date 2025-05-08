@@ -13,8 +13,6 @@ struct GroupRow: View {
     var body: some View {
         HStack {
             AvatarView(
-                backgroundColor: Color(Colors.primary),
-                font: .headline,
                 group: group,
                 size: Constants.GroupRow.avatarCircleSize
             )
