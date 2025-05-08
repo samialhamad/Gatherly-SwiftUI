@@ -9,55 +9,57 @@ import XCTest
 @testable import Gatherly_SwiftUI
 
 final class UpdateEventTests: XCTestCase {
-
+    
     let calendar = Calendar.current
-
+    
     override func setUp() {
         super.setUp()
         UserDefaultsManager.removeEvents()
     }
     
     func testUpdateEvent() async {
-        let baseDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
+        let originalDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
+        let originalStart = calendar.date(bySettingHour: 10, minute: 0, second: 0, of: originalDate)!
+        let originalEnd = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: originalDate)!
         
-        let original = await GatherlyAPI.createEvent(
-            title: "Old Title",
-            description: "Old Description",
-            selectedDate: baseDate,
-            startTime: calendar.date(bySettingHour: 10, minute: 0, second: 0, of: baseDate)!,
-            endTime: calendar.date(bySettingHour: 12, minute: 0, second: 0, of: baseDate)!,
-            selectedMemberIDs: [2],
-            plannerID: 1,
+        var event = Event(
             categories: [.entertainment],
-            bannerImageName: "old_banner.jpg"
+            bannerImageName: "old_banner.jpg",
+            date: calendar.startOfDay(for: originalDate),
+            description: "Old Description",
+            endTimestamp: Int(originalEnd.timestamp),
+            memberIDs: [2],
+            plannerID: 1,
+            startTimestamp: Int(originalStart.timestamp),
+            title: "Old Title"
         )
-
-        let newDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 6))!
-        let updated = await GatherlyAPI.updateEvent(
-            original,
-            title: "Updated Title",
-            description: "Updated Description",
-            selectedDate: newDate,
-            startTime: calendar.date(bySettingHour: 9, minute: 30, second: 0, of: newDate)!,
-            endTime: calendar.date(bySettingHour: 11, minute: 0, second: 0, of: newDate)!,
-            selectedMemberIDs: [2, 3],
-            categories: [.food, .other],
-            bannerImageName: "new_banner.jpg"
-        )
-
-        XCTAssertEqual(updated.title, "Updated Title")
-        XCTAssertEqual(updated.description, "Updated Description")
-        XCTAssertEqual(updated.date, calendar.startOfDay(for: newDate))
-
-        let expectedStart = calendar.date(bySettingHour: 9, minute: 30, second: 0, of: newDate)!
-        let expectedEnd = calendar.date(bySettingHour: 11, minute: 0, second: 0, of: newDate)!
-
-        XCTAssertEqual(updated.startTimestamp, Int(expectedStart.timestamp))
-        XCTAssertEqual(updated.endTimestamp, Int(expectedEnd.timestamp))
-        XCTAssertEqual(Set(updated.memberIDs ?? []), Set([2, 3]))
-        XCTAssertEqual(updated.plannerID, 1)
-        XCTAssertEqual(updated.id, original.id)
-        XCTAssertEqual(updated.categories, [.food, .other])
-        XCTAssertEqual(updated.bannerImageName, "new_banner.jpg")
+        
+        event = await GatherlyAPI.createEvent(event)
+        
+        let updatedDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 6))!
+        let updatedStart = calendar.date(bySettingHour: 9, minute: 30, second: 0, of: updatedDate)!
+        let updatedEnd = calendar.date(bySettingHour: 11, minute: 0, second: 0, of: updatedDate)!
+        
+        event.title = "Updated Title"
+        event.description = "Updated Description"
+        event.date = updatedDate
+        event.startTimestamp = Int(updatedStart.timestamp)
+        event.endTimestamp = Int(updatedEnd.timestamp)
+        event.memberIDs = [2, 3]
+        event.categories = [.food, .other]
+        event.bannerImageName = "new_banner.jpg"
+        
+        let updatedEvent = await GatherlyAPI.updateEvent(event)
+        
+        XCTAssertEqual(updatedEvent.title, "Updated Title")
+        XCTAssertEqual(updatedEvent.description, "Updated Description")
+        XCTAssertEqual(updatedEvent.date, calendar.startOfDay(for: updatedDate))
+        XCTAssertEqual(updatedEvent.startTimestamp, Int(updatedStart.timestamp))
+        XCTAssertEqual(updatedEvent.endTimestamp, Int(updatedEnd.timestamp))
+        XCTAssertEqual(Set(updatedEvent.memberIDs ?? []), Set([2, 3]))
+        XCTAssertEqual(updatedEvent.categories, [.food, .other])
+        XCTAssertEqual(updatedEvent.bannerImageName, "new_banner.jpg")
+        XCTAssertEqual(updatedEvent.plannerID, 1)
+        XCTAssertEqual(updatedEvent.id, event.id)
     }
 }
