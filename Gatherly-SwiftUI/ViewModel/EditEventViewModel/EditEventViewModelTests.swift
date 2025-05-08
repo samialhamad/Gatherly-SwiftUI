@@ -14,7 +14,7 @@ final class EditEventViewModelTests: XCTestCase {
         super.setUp()
         UserDefaultsManager.removeEvents()
     }
-
+    
     // Helper
     func makeSampleEvent() -> Event {
         let now = Date()
@@ -31,86 +31,91 @@ final class EditEventViewModelTests: XCTestCase {
     }
     
     // MARK: - Update Event
-
-    func testUpdatedEventTitle() async {
+    
+    func testUpdateEvent_updatesTitle() async {
         let event = makeSampleEvent()
         let viewModel = EditEventViewModel(event: event)
-        viewModel.title = "Updated Title"
-
+        viewModel.event.title = "Updated Title"
+        
         let updatedEvent = await viewModel.updateEvent()
         XCTAssertEqual(updatedEvent.title, "Updated Title")
     }
-
-    func testUpdatedEventDescription() async {
+    
+    func testUpdateEvent_updatesDescription() async {
         let event = makeSampleEvent()
         let viewModel = EditEventViewModel(event: event)
-        viewModel.description = "Updated description"
-
+        viewModel.event.description = "Updated description"
+        
         let updatedEvent = await viewModel.updateEvent()
         XCTAssertEqual(updatedEvent.description, "Updated description")
     }
-
-    func testUpdatedEventDateAndTimeMerging() async {
+    
+    func testUpdateEvent_mergesUpdatedDateAndTimes() async {
         let calendar = Calendar.current
         let fixedDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
-
-        let event = makeSampleEvent()
-        let viewModel = EditEventViewModel(event: event)
-        viewModel.selectedDate = fixedDate
-        viewModel.startTime = calendar.date(from: DateComponents(hour: 10, minute: 0))!
-        viewModel.endTime = calendar.date(from: DateComponents(hour: 12, minute: 0))!
-
-        let updatedEvent = await viewModel.updateEvent()
-
         let expectedStart = calendar.date(bySettingHour: 10, minute: 0, second: 0, of: fixedDate)!
         let expectedEnd = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: fixedDate)!
-
+        
+        var event = makeSampleEvent()
+        event.date = fixedDate
+        event.startTimestamp = Int(expectedStart.timestamp)
+        event.endTimestamp = Int(expectedEnd.timestamp)
+        
+        let viewModel = EditEventViewModel(event: event)
+        viewModel.event.date = fixedDate
+        viewModel.event.startTimestamp = Int(expectedStart.timestamp)
+        viewModel.event.endTimestamp = Int(expectedEnd.timestamp)
+        
+        let updatedEvent = await viewModel.updateEvent()
+        XCTAssertEqual(updatedEvent.date, calendar.startOfDay(for: fixedDate))
         XCTAssertEqual(updatedEvent.startTimestamp, Int(expectedStart.timestamp))
         XCTAssertEqual(updatedEvent.endTimestamp, Int(expectedEnd.timestamp))
-        XCTAssertEqual(updatedEvent.date, calendar.startOfDay(for: fixedDate))
     }
-
-    func testUpdatedEventMembers() async {
+    
+    func testUpdateEvent_updatesMembers() async {
         let event = makeSampleEvent()
         let viewModel = EditEventViewModel(event: event)
-        viewModel.selectedMemberIDs = Set([2, 3, 4])
-
+        viewModel.event.memberIDs = [2, 3, 4]
+        
         let updatedEvent = await viewModel.updateEvent()
-        XCTAssertEqual(Set(updatedEvent.memberIDs ?? []), Set([2, 3, 4]))
+        XCTAssertEqual(updatedEvent.memberIDs, [2, 3, 4])
     }
-
-    func testUpdatedEventCategories() async {
+    
+    func testUpdateEvent_updatesCategories() async {
         var event = makeSampleEvent()
         event.categories = [.food]
-
+        
         let viewModel = EditEventViewModel(event: event)
-        viewModel.selectedCategories = [.sports, .education]
-
+        viewModel.event.categories = [.sports, .education]
+        
         let updatedEvent = await viewModel.updateEvent()
         XCTAssertEqual(updatedEvent.categories, [.sports, .education])
     }
-
-    func testUpdateEventBannerImage() async {
+    
+    func testUpdateEvent_handlesBannerImageSaving() async {
         var event = makeSampleEvent()
         event.bannerImageName = "old_banner.jpg"
-
+        
         let viewModel = EditEventViewModel(event: event)
         viewModel.selectedBannerImage = UIImage(systemName: "star.fill")!
-
+        
         let updatedEvent = await viewModel.updateEvent()
         XCTAssertNotNil(updatedEvent.bannerImageName)
     }
     
     // MARK: - isFormEmpty
-
+    
     func testIsFormEmpty() {
-        let event = makeSampleEvent()
+        var event = makeSampleEvent()
+        event.title = ""
+        
         let viewModel = EditEventViewModel(event: event)
-
-        viewModel.title = "   "
         XCTAssertTrue(viewModel.isFormEmpty)
-
-        viewModel.title = "Conference"
+        
+        viewModel.event.title = "  "
+        XCTAssertTrue(viewModel.isFormEmpty)
+        
+        viewModel.event.title = "Conference"
         XCTAssertFalse(viewModel.isFormEmpty)
     }
 }
