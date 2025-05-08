@@ -10,7 +10,11 @@ import XCTest
 
 final class EditGroupViewModelTests: XCTestCase {
     
-    //helper func
+    override func setUp() {
+        super.setUp()
+        UserDefaultsManager.removeGroups()
+    }
+    
     func makeSampleGroup() -> UserGroup {
         UserGroup(
             bannerImageName: nil,
@@ -22,44 +26,44 @@ final class EditGroupViewModelTests: XCTestCase {
         )
     }
     
-    func testUpdatedGroupName() {
+    // MARK: - Update Group
+    
+    func testUpdateGroupName() async {
         let originalGroup = makeSampleGroup()
         let viewModel = EditGroupViewModel(group: originalGroup)
         
         viewModel.groupName = "Updated Group Name"
-        
-        let updatedGroup = viewModel.updatedGroup()
+        let updatedGroup = await viewModel.updateGroup()
         
         XCTAssertEqual(updatedGroup.name, "Updated Group Name")
     }
     
-    func testUpdatedGroupMembers() {
+    func testUpdateGroupMembers() async {
         let originalGroup = makeSampleGroup()
         let viewModel = EditGroupViewModel(group: originalGroup)
         
         viewModel.selectedMemberIDs = Set([1, 2, 3])
-        
-        let updatedGroup = viewModel.updatedGroup()
+        let updatedGroup = await viewModel.updateGroup()
         
         XCTAssertEqual(Set(updatedGroup.memberIDs), Set([1, 2, 3]))
     }
     
-    func testUpdateGroupImage() {
+    func testUpdateGroupImage() async {
         let originalGroup = makeSampleGroup()
         let viewModel = EditGroupViewModel(group: originalGroup)
         
         viewModel.groupImage = UIImage(systemName: "person.circle.fill")!
-        let updatedGroup = viewModel.updatedGroup()
+        let updatedGroup = await viewModel.updateGroup()
         
         XCTAssertNotNil(updatedGroup.imageName)
     }
     
-    func testUpdateGroupBannerImage() {
+    func testUpdateGroupBannerImage() async {
         let originalGroup = makeSampleGroup()
         let viewModel = EditGroupViewModel(group: originalGroup)
         
         viewModel.bannerImage = UIImage(systemName: "star.fill")!
-        let updatedGroup = viewModel.updatedGroup()
+        let updatedGroup = await viewModel.updateGroup()
         
         XCTAssertNotNil(updatedGroup.bannerImageName)
     }
@@ -70,7 +74,6 @@ final class EditGroupViewModelTests: XCTestCase {
         
         let viewModel = EditGroupViewModel(group: group)
         viewModel.groupImage = UIImage(systemName: "person.fill")
-        
         viewModel.removeGroupImage()
         
         XCTAssertNil(viewModel.groupImage)
@@ -82,11 +85,12 @@ final class EditGroupViewModelTests: XCTestCase {
         
         let viewModel = EditGroupViewModel(group: group)
         viewModel.bannerImage = UIImage(systemName: "star")
-        
         viewModel.removeBannerImage()
         
         XCTAssertNil(viewModel.bannerImage)
     }
+    
+    //MARK: - isFormEmpty
     
     func testIsFormEmptyTrue() {
         let group = makeSampleGroup()
@@ -104,12 +108,14 @@ final class EditGroupViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.isFormEmpty)
     }
     
-    func testLeaderIDRemainsUnchanged() {
+    //MARK: - leaderID
+    
+    func testLeaderIDRemainsUnchanged() async {
         let group = makeSampleGroup()
         let viewModel = EditGroupViewModel(group: group)
         
         XCTAssertEqual(viewModel.leaderID, group.leaderID)
-        let updatedGroup = viewModel.updatedGroup()
+        let updatedGroup = await viewModel.updateGroup()
         XCTAssertEqual(updatedGroup.leaderID, group.leaderID)
     }
 }
