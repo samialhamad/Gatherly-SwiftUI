@@ -23,15 +23,15 @@ final class UpdateEventTests: XCTestCase {
         let originalEnd = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: originalDate)!
         
         var event = Event(
-            categories: [.entertainment],
             bannerImageName: "old_banner.jpg",
+            categories: [.entertainment],
             date: calendar.startOfDay(for: originalDate),
             description: "Old Description",
             endTimestamp: Int(originalEnd.timestamp),
-            memberIDs: [2],
             plannerID: 1,
-            startTimestamp: Int(originalStart.timestamp),
-            title: "Old Title"
+            memberIDs: [2],
+            title: "Old Title",
+            startTimestamp: Int(originalStart.timestamp)
         )
         
         event = await GatherlyAPI.createEvent(event)
