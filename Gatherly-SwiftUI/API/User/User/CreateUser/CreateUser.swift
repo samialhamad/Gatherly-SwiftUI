@@ -17,7 +17,6 @@ extension GatherlyAPI {
         email: String? = nil
     ) async -> User {
         var users = UserDefaultsManager.loadUsers()
-        let nextID = (users.map { $0.id ?? 0 }.max() ?? 999) + 1
         
         let user = User(
             createdTimestamp: Int(Date().timeIntervalSince1970),
@@ -26,7 +25,7 @@ extension GatherlyAPI {
             firstName: firstName,
             friendIDs: [],
             groupIDs: [],
-            id: nextID,
+            id: generateID(),
             isEmailEnabled: false,
             lastName: lastName,
             phone: phone
