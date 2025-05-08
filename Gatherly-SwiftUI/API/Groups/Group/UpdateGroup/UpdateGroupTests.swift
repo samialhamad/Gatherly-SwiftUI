@@ -16,26 +16,30 @@ final class UpdateGroupTests: XCTestCase {
     }
     
     func testUpdateGroup() async {
-        let original = await GatherlyAPI.createGroup(
-            name: "Original Name",
+        var original = UserGroup(
+            id: nil,
+            leaderID: 4,
             memberIDs: [1, 2],
-            leaderID: 4
+            messages: [],
+            name: "Original Name"
         )
         
-        let updated = await GatherlyAPI.updateGroup(
-            original,
-            name: "Updated Name",
-            memberIDs: [1, 2, 3],
-            imageName: "new_image.png",
-            bannerImageName: "new_banner.png"
-        )
+        original = await GatherlyAPI.createGroup(original)
         
-        XCTAssertEqual(updated.id, original.id)
-        XCTAssertEqual(updated.leaderID, original.leaderID)
-        XCTAssertEqual(updated.name, "Updated Name")
-        XCTAssertEqual(updated.imageName, "new_image.png")
-        XCTAssertEqual(updated.bannerImageName, "new_banner.png")
-        XCTAssertEqual(updated.memberIDs, [1, 2, 3])
-        XCTAssertEqual(updated.messages ?? [], original.messages ?? [])
+        var updated = original
+        updated.name = "Updated Name"
+        updated.memberIDs = [1, 2, 3]
+        updated.imageName = "new_image.png"
+        updated.bannerImageName = "new_banner.png"
+        
+        let result = await GatherlyAPI.updateGroup(updated)
+        
+        XCTAssertEqual(result.id, original.id)
+        XCTAssertEqual(result.leaderID, original.leaderID)
+        XCTAssertEqual(result.name, "Updated Name")
+        XCTAssertEqual(result.imageName, "new_image.png")
+        XCTAssertEqual(result.bannerImageName, "new_banner.png")
+        XCTAssertEqual(result.memberIDs, [1, 2, 3])
+        XCTAssertEqual(result.messages ?? [], original.messages ?? [])
     }
 }
