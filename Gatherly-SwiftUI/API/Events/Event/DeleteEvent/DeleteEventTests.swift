@@ -17,30 +17,34 @@ final class DeleteEventTests: XCTestCase {
         UserDefaultsManager.removeEvents()
     }
     
-    func testDeleteEvent_removesEventFromStorage() async {
+    func testDeleteEvent() async {
         let sampleDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
         
-        let eventToDelete = await GatherlyAPI.createEvent(
-            title: "Delete Me",
+        var eventToDelete = Event(
+            date: calendar.startOfDay(for: sampleDate),
             description: "Event to delete",
-            selectedDate: sampleDate,
-            startTime: calendar.date(bySettingHour: 10, minute: 0, second: 0, of: sampleDate)!,
-            endTime: calendar.date(bySettingHour: 12, minute: 0, second: 0, of: sampleDate)!,
-            selectedMemberIDs: [2, 3],
-            plannerID: 1
+            endTimestamp: Int(calendar.date(bySettingHour: 12, minute: 0, second: 0, of: sampleDate)!.timestamp),
+            plannerID: 1,
+            memberIDs: [2, 3],
+            title: "Delete Me",
+            startTimestamp: Int(calendar.date(bySettingHour: 10, minute: 0, second: 0, of: sampleDate)!.timestamp)
         )
         
-        try? await Task.sleep(nanoseconds: 1_000_000_000) // addresses same ID events failing this test
+        eventToDelete = await GatherlyAPI.createEvent(eventToDelete)
         
-        let eventToKeep = await GatherlyAPI.createEvent(
-            title: "Keep Me",
+        await GatherlyAPI.simulateNetworkDelay()
+        
+        var eventToKeep = Event(
+            date: calendar.startOfDay(for: sampleDate),
             description: "Keep this event",
-            selectedDate: sampleDate,
-            startTime: calendar.date(bySettingHour: 14, minute: 0, second: 0, of: sampleDate)!,
-            endTime: calendar.date(bySettingHour: 16, minute: 0, second: 0, of: sampleDate)!,
-            selectedMemberIDs: [2, 3],
-            plannerID: 1
+            endTimestamp: Int(calendar.date(bySettingHour: 16, minute: 0, second: 0, of: sampleDate)!.timestamp),
+            plannerID: 1,
+            memberIDs: [2, 3],
+            title: "Keep Me",
+            startTimestamp: Int(calendar.date(bySettingHour: 14, minute: 0, second: 0, of: sampleDate)!.timestamp)
         )
+        
+        eventToKeep = await GatherlyAPI.createEvent(eventToKeep)
         
         let updatedEvents = await GatherlyAPI.deleteEvent(eventToDelete)
         
@@ -48,4 +52,5 @@ final class DeleteEventTests: XCTestCase {
         XCTAssertTrue(updatedEvents.contains(where: { $0.id == eventToKeep.id }))
         XCTAssertEqual(updatedEvents.count, 1)
     }
+
 }
