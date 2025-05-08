@@ -33,6 +33,7 @@ struct CreateEventView: View {
                             set: { viewModel.event.description = $0 }
                         )
                     )
+                    
                     EventDateTimeSection(
                         header: "Date & Time",
                         eventDate: Binding(
@@ -58,6 +59,7 @@ struct CreateEventView: View {
                         startTimeRange: viewModel.startTimeRange,
                         endTimeRange: viewModel.endTimeRange
                     )
+                    
                     EventMembersSection(
                         selectedMemberIDs: Binding(
                             get: { Set(viewModel.event.memberIDs ?? []) },
@@ -67,6 +69,7 @@ struct CreateEventView: View {
                         currentUser: currentUser,
                         friendsDict: friendsDict
                     )
+                    
                     EventLocationSection(
                         header: "Location",
                         locationName: Binding(
@@ -88,6 +91,7 @@ struct CreateEventView: View {
                             viewModel.event.location = location
                         }
                     )
+                    
                     EventCategorySection(
                         header: "Categories",
                         selectedCategories: Binding(
@@ -95,12 +99,14 @@ struct CreateEventView: View {
                             set: { viewModel.event.categories = $0 }
                         )
                     )
+                    
                     ImagePicker(
                         title: "Banner Image",
                         imageHeight: Constants.CreateEventView.bannerImageHeight,
                         maskShape: .rectangle,
                         selectedImage: $viewModel.selectedBannerImage
                     )
+                    
                     createButtonSection
                 }
                 if isSaving {
