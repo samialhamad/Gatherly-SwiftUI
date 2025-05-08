@@ -10,6 +10,7 @@ import SwiftUI
 struct GroupDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @Binding var groups: [UserGroup]
+    @State private var isDeleting = false
     @State private var isShowingEditView = false
     @State private var isShowingActionSheet = false
     
@@ -18,15 +19,21 @@ struct GroupDetailView: View {
     let group: UserGroup
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: Constants.GroupDetailView.vstackSpacing) {
-                AvatarHeaderView(
-                    group: group
-                )
-                
-                groupLeaderAndMembersView
-                
-                Spacer()
+        ZStack {
+            ScrollView {
+                VStack(spacing: Constants.GroupDetailView.vstackSpacing) {
+                    AvatarHeaderView(
+                        group: group
+                    )
+                    
+                    groupLeaderAndMembersView
+                    
+                    Spacer()
+                }
+            }
+            
+            if isDeleting {
+                ActivityIndicator(message: "Deleting your group…")
             }
         }
         .navigationTitle(group.name)
@@ -112,10 +119,16 @@ private extension GroupDetailView {
                 isShowingEditView = false
             },
             onDelete: { deletedGroup in
-                groups = GroupEditor.deleteGroup(from: groups, groupToDelete: deletedGroup)
-                UserDefaultsManager.saveGroups(groups)
-                isShowingEditView = false
-                dismiss()
+                isDeleting = true
+                Task {
+                    let updatedGroups = await GatherlyAPI.deleteGroup(deletedGroup)
+                    await MainActor.run {
+                        groups = updatedGroups
+                        isShowingEditView = false
+                        isDeleting = false
+                        dismiss()
+                    }
+                }
             }
         )
     }

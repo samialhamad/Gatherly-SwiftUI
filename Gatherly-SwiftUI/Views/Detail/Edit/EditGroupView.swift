@@ -9,6 +9,7 @@ import SwiftUI
 
 struct EditGroupView: View {
     @State private var showingDeleteAlert = false
+    @State private var isSaving = false
     @StateObject var viewModel: EditGroupViewModel
     
     let currentUser: User
@@ -20,29 +21,34 @@ struct EditGroupView: View {
     
     var body: some View {
         NavigationStack {
-            Form {
-                Section(header: Text("Group Name")) {
-                    TextField("Enter group name", text: $viewModel.groupName)
+            ZStack {
+                Form {
+                    Section(header: Text("Group Name")) {
+                        TextField("Enter group name", text: $viewModel.groupName)
+                    }
+                    ImagePicker(
+                        title: "Group Image",
+                        imageHeight: Constants.CreateGroupView.groupImageHeight,
+                        maskShape: .circle,
+                        selectedImage: $viewModel.groupImage
+                    )
+                    ImagePicker(
+                        title: "Banner Image",
+                        imageHeight: Constants.CreateGroupView.groupBannerImageHeight,
+                        maskShape: .rectangle,
+                        selectedImage: $viewModel.bannerImage
+                    )
+                    EventMembersSection(
+                        selectedMemberIDs: $viewModel.selectedMemberIDs,
+                        header: "Friends",
+                        currentUser: currentUser,
+                        friendsDict: friendsDict
+                    )
+                    deleteButton
                 }
-                ImagePicker(
-                    title: "Group Image",
-                    imageHeight: Constants.CreateGroupView.groupImageHeight,
-                    maskShape: .circle,
-                    selectedImage: $viewModel.groupImage
-                )
-                ImagePicker(
-                    title: "Banner Image",
-                    imageHeight: Constants.CreateGroupView.groupBannerImageHeight,
-                    maskShape: .rectangle,
-                    selectedImage: $viewModel.bannerImage
-                )
-                EventMembersSection(
-                    selectedMemberIDs: $viewModel.selectedMemberIDs,
-                    header: "Friends",
-                    currentUser: currentUser,
-                    friendsDict: friendsDict
-                )
-                deleteButton
+                if isSaving {
+                    ActivityIndicator(message: "Saving your changes…")
+                }
             }
             .navigationTitle("Edit Group")
             .toolbar {
@@ -51,7 +57,11 @@ struct EditGroupView: View {
             }
             .alert("Delete Group?", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
-                    onDelete(viewModel.originalGroup)
+                    isSaving = true
+                    Task {
+                        await onDelete(viewModel.originalGroup)
+                        isSaving = false
+                    }
                 }
                 Button("Cancel", role: .cancel) {}
             } message: {
@@ -93,11 +103,15 @@ private extension EditGroupView {
     var saveToolbarButton: some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
             Button("Save") {
-                let updatedGroup = viewModel.updatedGroup()
-                onSave(updatedGroup)
+                isSaving = true
+                Task {
+                    let updatedGroup = await viewModel.updateGroup()
+                    isSaving = false
+                    onSave(updatedGroup)
+                }
             }
             .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.secondary))
-            .disabled(viewModel.isFormEmpty)
+            .disabled(viewModel.isFormEmpty || isSaving)
         }
     }
 }
@@ -106,7 +120,7 @@ private extension EditGroupView {
     let sampleUsers = SampleData.sampleUsers
     let currentUser = sampleUsers.first!
     let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
-
+    
     NavigationStack {
         EditGroupView(
             viewModel: EditGroupViewModel(group: SampleData.sampleGroups.first!),
