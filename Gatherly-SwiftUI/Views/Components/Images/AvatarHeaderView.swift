@@ -65,11 +65,8 @@ private extension AvatarHeaderView {
     }
     
     private var bannerImage: UIImage? {
-        if let user, let bannerName = user.bannerImageName {
-            return ImageUtility.loadImageFromDocuments(named: bannerName)
-        }
-        if let group, let bannerName = group.bannerImageName {
-            return ImageUtility.loadImageFromDocuments(named: bannerName)
+        if let name = user?.bannerImageName ?? group?.bannerImageName {
+            return ImageUtility.loadImageFromDocuments(named: name)
         }
         return nil
     }
@@ -78,10 +75,9 @@ private extension AvatarHeaderView {
     
     private func bannerView(bannerImage: UIImage) -> some View {
         BannerView(
-            bottomPadding: 0,
             cornerRadius: 0,
-            height: Constants.AvatarHeaderView.rectangleFrameHeight,
-            uiImage: bannerImage
+            bottomPadding: 0, height: Constants.AvatarHeaderView.rectangleFrameHeight,
+            image: bannerImage
         )
     }
 }
