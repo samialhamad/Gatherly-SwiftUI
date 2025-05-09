@@ -9,50 +9,50 @@ import XCTest
 @testable import Gatherly_SwiftUI
 
 final class UpdateUserTests: XCTestCase {
-
+    
     override func setUp() {
         super.setUp()
         UserDefaultsManager.removeUsers()
     }
-
+    
     func makeSampleUser(id: Int = 1) -> User {
         User(
-            avatarImageName: nil,
-            bannerImageName: nil,
+            createdTimestamp: Int(Date().timestamp),
+            email: nil,
+            eventIDs: [],
             firstName: "Old",
+            friendIDs: [],
+            groupIDs: [],
             id: id,
-            lastName: "Name"
+            isEmailEnabled: false,
+            lastName: "Name",
+            phone: nil
         )
     }
     
     func testUpdateUser_updatesNameCorrectly() async {
-        let original = makeSampleUser(id: 1)
-        UserDefaultsManager.saveUsers([original])
-
-        let updated = await GatherlyAPI.updateUser(
-            original,
-            firstName: "New",
-            lastName: "User"
-        )
-
-        XCTAssertEqual(updated.firstName, "New")
-        XCTAssertEqual(updated.lastName, "User")
+        var originalUser = makeSampleUser(id: 1)
+        UserDefaultsManager.saveUsers([originalUser])
+        
+        originalUser.firstName = "New"
+        originalUser.lastName = "User"
+        
+        let updatedUser = await GatherlyAPI.updateUser(originalUser)
+        
+        XCTAssertEqual(updatedUser.firstName, "New")
+        XCTAssertEqual(updatedUser.lastName, "User")
     }
-
+    
     func testUpdateUser_updatesAvatarAndBanner() async {
-        let original = makeSampleUser(id: 1)
-        UserDefaultsManager.saveUsers([original])
-
-        let updated = await GatherlyAPI.updateUser(
-            original,
-            firstName: "New",
-            lastName: "User",
-            avatarImageName: "avatar123.png",
-            bannerImageName: "banner123.png"
-        )
-
-        XCTAssertEqual(updated.avatarImageName, "avatar123.png")
-        XCTAssertEqual(updated.bannerImageName, "banner123.png")
+        var originalUser = makeSampleUser(id: 1)
+        UserDefaultsManager.saveUsers([originalUser])
+        
+        originalUser.avatarImageName = "avatar123.png"
+        originalUser.bannerImageName = "banner123.png"
+        
+        let updatedUser = await GatherlyAPI.updateUser(originalUser)
+        
+        XCTAssertEqual(updatedUser.avatarImageName, "avatar123.png")
+        XCTAssertEqual(updatedUser.bannerImageName, "banner123.png")
     }
-
 }

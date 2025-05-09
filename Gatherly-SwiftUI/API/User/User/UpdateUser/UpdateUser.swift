@@ -8,30 +8,18 @@
 import Foundation
 
 extension GatherlyAPI {
-    static func updateUser(
-        _ user: User,
-        firstName: String,
-        lastName: String,
-        avatarImageName: String? = nil,
-        bannerImageName: String? = nil
-    ) async -> User {
+    static func updateUser(_ user: User) async -> User {
         var users = UserDefaultsManager.loadUsers()
-        guard let id = user.id else {
+        
+        guard let id = user.id,
+              let index = users.firstIndex(where: { $0.id == id }) else {
             return user
         }
-        
-        if let index = users.firstIndex(where: { $0.id == id }) {
-            let updatedUser = users[index]
-            updatedUser.firstName = firstName
-            updatedUser.lastName = lastName
-            updatedUser.avatarImageName = avatarImageName
-            updatedUser.bannerImageName = bannerImageName
-            
-            users[index] = updatedUser
-            UserDefaultsManager.saveUsers(users)
-            return updatedUser
-        }
-        
+
+        users[index] = user
+        UserDefaultsManager.saveUsers(users)
+
+        await simulateNetworkDelay()
         return user
     }
 }
