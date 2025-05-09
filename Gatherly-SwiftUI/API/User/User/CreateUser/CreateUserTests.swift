@@ -15,25 +15,29 @@ final class CreateUserTests: XCTestCase {
         UserDefaultsManager.removeUsers()
     }
     
-    func makeSampleUser(id: Int = 1) -> User {
+    func makeSampleUser(id: Int? = nil, firstName: String = "Old", lastName: String = "Name") -> User {
         User(
             avatarImageName: nil,
             bannerImageName: nil,
-            firstName: "Old",
+            createdTimestamp: Int(Date().timestamp),
+            email: nil,
+            eventIDs: [],
+            firstName: firstName,
+            friendIDs: [],
+            groupIDs: [],
             id: id,
-            lastName: "Name"
+            isEmailEnabled: false,
+            lastName: lastName,
+            phone: nil
         )
     }
     
     func testCreateUser_incrementsIDAndPersists() async {
-        let _ = await GatherlyAPI.createUser(
-            firstName: "Alice",
-            lastName: "One"
-        )
-        let secondUser = await GatherlyAPI.createUser(
-            firstName: "Bob",
-            lastName: "Two"
-        )
+        let user1 = makeSampleUser(firstName: "Alice", lastName: "One")
+        let firstUser = await GatherlyAPI.createUser(user1)
+        
+        let user2 = makeSampleUser(firstName: "Bob", lastName: "Two")
+        let secondUser = await GatherlyAPI.createUser(user2)
         
         let allUsers = UserDefaultsManager.loadUsers()
         XCTAssertEqual(allUsers.count, 2)

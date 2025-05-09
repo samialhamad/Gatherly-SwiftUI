@@ -9,38 +9,28 @@ import Foundation
 
 extension GatherlyAPI {
     // MARK: - Create Manually
-
-    static func createUser(
-        firstName: String,
-        lastName: String,
-        phone: String? = nil,
-        email: String? = nil
-    ) async -> User {
+    
+    static func createUser(_ user: User) async -> User {
+        var storedUser = user
+        
+        if storedUser.id == nil {
+            storedUser.id = generateID()
+        }
+        
         var users = UserDefaultsManager.loadUsers()
-        
-        let user = User(
-            createdTimestamp: Int(Date().timeIntervalSince1970),
-            email: email,
-            eventIDs: [],
-            firstName: firstName,
-            friendIDs: [],
-            groupIDs: [],
-            id: generateID(),
-            isEmailEnabled: false,
-            lastName: lastName,
-            phone: phone
-        )
-        
-        users.append(user)
+        users.append(storedUser)
         UserDefaultsManager.saveUsers(users)
-        return user
+        
+        await simulateNetworkDelay()
+        return storedUser
     }
     
     // MARK: - Create from Synced Contact
-
+    
     static func createUser(from contact: SyncedContact, id: Int) async -> User {
         let user = User(
             createdTimestamp: Int(Date().timeIntervalSince1970),
+            email: nil,
             eventIDs: [],
             firstName: contact.fullName.components(separatedBy: " ").first,
             friendIDs: [],
@@ -50,10 +40,7 @@ extension GatherlyAPI {
             lastName: contact.fullName.components(separatedBy: " ").dropFirst().joined(separator: " "),
             phone: contact.phoneNumber
         )
-
-        var users = UserDefaultsManager.loadUsers()
-        users.append(user)
-        UserDefaultsManager.saveUsers(users)
-        return user
+        
+        return await createUser(user)
     }
 }
