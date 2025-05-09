@@ -74,7 +74,18 @@ final class EditProfileFeatureTests: XCTestCase {
     }
     
     func testSaveChanges_updatesUser() async {
-        let originalUser = User(firstName: "Sami", id: 1, lastName: "Alhamad")
+        var originalUser = User(
+            createdTimestamp: 1234567890,
+            email: "sam@example.com",
+            eventIDs: [],
+            firstName: "Sami",
+            friendIDs: [],
+            groupIDs: [],
+            id: 1,
+            isEmailEnabled: false,
+            lastName: "Alhamad",
+            phone: nil
+        )
         
         let store = await TestStore(
             initialState: EditProfileFeature.State(
@@ -87,20 +98,16 @@ final class EditProfileFeatureTests: XCTestCase {
         
         await store.send(.saveChanges)
         
-        await store.receive(.userSaved(.init(
-            firstName: "New",
-            id: 1,
-            lastName: "Name"
-        ))) {
+        var updatedUser = originalUser
+        updatedUser.firstName = "New"
+        updatedUser.lastName = "Name"
+        
+        await store.receive(.userSaved(updatedUser)) {
             $0.currentUser.firstName = "New"
             $0.currentUser.lastName = "Name"
         }
         
-        await store.receive(.delegate(.didSave(.init(
-            firstName: "New",
-            id: 1,
-            lastName: "Name"
-        ))))
+        await store.receive(.delegate(.didSave(updatedUser)))
     }
     
     func testCancel() async {

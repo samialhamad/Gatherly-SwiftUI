@@ -57,15 +57,18 @@ struct EditProfileFeature: Reducer {
             let avatarImageName = state.avatarImage.flatMap { ImageUtility.saveImageToDocuments(image: $0) }
             let bannerImageName = state.bannerImage.flatMap { ImageUtility.saveImageToDocuments(image: $0) }
             
-            return .run { [currentUser = state.currentUser, firstName = state.firstName, lastName = state.lastName] send in
-                let updated = await GatherlyAPI.updateUser(
-                    currentUser,
-                    firstName: firstName,
-                    lastName: lastName,
-                    avatarImageName: avatarImageName,
-                    bannerImageName: bannerImageName
-                )
-                await send(.userSaved(updated))
+            return .run { [state] send in
+                let updatedUser = await MainActor.run {
+                    var user = state.currentUser
+                    user.firstName = state.firstName
+                    user.lastName = state.lastName
+                    user.avatarImageName = avatarImageName
+                    user.bannerImageName = bannerImageName
+                    return user
+                }
+                
+                let saved = await GatherlyAPI.updateUser(updatedUser)
+                await send(.userSaved(saved))
             }
             
         case .userSaved(let updatedUser):
