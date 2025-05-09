@@ -64,14 +64,14 @@ private extension EventDetailView {
         guard let plannerID = event.plannerID else {
             return nil
         }
-
+        
         if plannerID == currentUser.id {
             return currentUser
         }
-
+        
         return friendsDict[plannerID]
     }
-
+    
     var members: [User] {
         guard let memberIDs = updatedEvent.memberIDs else {
             return []
@@ -127,11 +127,18 @@ private extension EventDetailView {
     }
     
     var eventBannerImageView: some View {
-        BannerView(
-            bottomPadding: 0,
+        let image: UIImage? = {
+            guard let imageName = updatedEvent.bannerImageName else {
+                return nil
+            }
+            return ImageUtility.loadImageFromDocuments(named: imageName)
+        }()
+        
+        return BannerView(
             cornerRadius: 0,
+            bottomPadding: 0,
             height: Constants.AvatarHeaderView.rectangleFrameHeight,
-            imageName: updatedEvent.bannerImageName
+            image: image
         )
     }
     
@@ -258,7 +265,7 @@ private extension EventDetailView {
     let sampleUsers = SampleData.sampleUsers
     let currentUser = sampleUsers.first!
     let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
-
+    
     EventDetailView(
         currentUser: currentUser,
         events: .constant(SampleData.sampleEvents),
