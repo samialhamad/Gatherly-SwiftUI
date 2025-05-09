@@ -29,10 +29,7 @@ struct CreateGroupView: View {
             ZStack {
                 Form {
                     Section(header: Text("Group Name")) {
-                        TextField("Enter group name", text: Binding(
-                            get: { viewModel.group.name ?? "" },
-                            set: { viewModel.group.name = $0 }
-                        ))
+                        TextField("Enter group name", text: groupNameBinding)
                     }
                     
                     ImagePicker(
@@ -50,10 +47,7 @@ struct CreateGroupView: View {
                     )
                     
                     EventMembersSection(
-                        selectedMemberIDs: Binding(
-                            get: { Set(viewModel.group.memberIDs) },
-                            set: { viewModel.group.memberIDs = Array($0).sorted() }
-                        ),
+                        selectedMemberIDs: memberIDsBinding,
                         header: "Invite Friends",
                         currentUser: currentUser,
                         friendsDict: friendsDict
@@ -75,6 +69,22 @@ struct CreateGroupView: View {
 }
 
 private extension CreateGroupView {
+    
+    // MARK: - Bindings
+    
+    var groupNameBinding: Binding<String> {
+        Binding(
+            get: { viewModel.group.name ?? "" },
+            set: { viewModel.group.name = $0 }
+        )
+    }
+    
+    var memberIDsBinding: Binding<Set<Int>> {
+        Binding(
+            get: { Set(viewModel.group.memberIDs) },
+            set: { viewModel.group.memberIDs = Array($0).sorted() }
+        )
+    }
     
     //MARK: - Computed Vars
     
