@@ -24,47 +24,21 @@ struct CreateEventView: View {
                 Form {
                     EventDetailsSection(
                         header: "Event Details",
-                        title: Binding(
-                            get: { viewModel.event.title ?? "" },
-                            set: { viewModel.event.title = $0 }
-                        ),
-                        description: Binding(
-                            get: { viewModel.event.description ?? "" },
-                            set: { viewModel.event.description = $0 }
-                        )
+                        title: titleBinding,
+                        description: descriptionBinding
                     )
                     
                     EventDateTimeSection(
                         header: "Date & Time",
-                        eventDate: Binding(
-                            get: { viewModel.event.date ?? Date() },
-                            set: { viewModel.event.date = $0 }
-                        ),
-                        startTime: Binding(
-                            get: {
-                                Date(timeIntervalSince1970: TimeInterval(viewModel.event.startTimestamp ?? Int(Date().timestamp)))
-                            },
-                            set: {
-                                viewModel.event.startTimestamp = Int($0.timestamp)
-                            }
-                        ),
-                        endTime: Binding(
-                            get: {
-                                Date(timeIntervalSince1970: TimeInterval(viewModel.event.endTimestamp ?? Int(Date().timestamp + 3600)))
-                            },
-                            set: {
-                                viewModel.event.endTimestamp = Int($0.timestamp)
-                            }
-                        ),
+                        eventDate: eventDateBinding,
+                        startTime: startTimeBinding,
+                        endTime: endTimeBinding,
                         startTimeRange: viewModel.startTimeRange,
                         endTimeRange: viewModel.endTimeRange
                     )
                     
                     EventMembersSection(
-                        selectedMemberIDs: Binding(
-                            get: { Set(viewModel.event.memberIDs ?? []) },
-                            set: { viewModel.event.memberIDs = Array($0).sorted() }
-                        ),
+                        selectedMemberIDs: memberIDsBinding,
                         header: "Invite Friends",
                         currentUser: currentUser,
                         friendsDict: friendsDict
@@ -72,21 +46,7 @@ struct CreateEventView: View {
                     
                     EventLocationSection(
                         header: "Location",
-                        locationName: Binding(
-                            get: { viewModel.event.location?.name ?? "" },
-                            set: { name in
-                                if viewModel.event.location == nil {
-                                    viewModel.event.location = Location(
-                                        address: nil,
-                                        latitude: 0,
-                                        longitude: 0,
-                                        name: name
-                                    )
-                                } else {
-                                    viewModel.event.location?.name = name
-                                }
-                            }
-                        ),
+                        locationName: locationNameBinding,
                         onSetLocation: { location in
                             viewModel.event.location = location
                         }
@@ -94,10 +54,7 @@ struct CreateEventView: View {
                     
                     EventCategorySection(
                         header: "Categories",
-                        selectedCategories: Binding(
-                            get: { viewModel.event.categories },
-                            set: { viewModel.event.categories = $0 }
-                        )
+                        selectedCategories: categoriesBinding
                     )
                     
                     ImagePicker(
@@ -121,6 +78,83 @@ struct CreateEventView: View {
 
 
 private extension CreateEventView {
+    
+    // MARK: - Bindings
+    
+    var categoriesBinding: Binding<[EventCategory]> {
+        Binding(
+            get: { viewModel.event.categories },
+            set: { viewModel.event.categories = $0 }
+        )
+    }
+    
+    var descriptionBinding: Binding<String> {
+        Binding(
+            get: { viewModel.event.description ?? "" },
+            set: { viewModel.event.description = $0 }
+        )
+    }
+    
+    var endTimeBinding: Binding<Date> {
+        Binding(
+            get: {
+                Date(timeIntervalSince1970: TimeInterval(viewModel.event.endTimestamp ?? Int(Date().timestamp + 3600)))
+            },
+            set: {
+                viewModel.event.endTimestamp = Int($0.timestamp)
+            }
+        )
+    }
+    
+    var eventDateBinding: Binding<Date> {
+        Binding(
+            get: { viewModel.event.date ?? Date() },
+            set: { viewModel.event.date = $0 }
+        )
+    }
+    
+    var locationNameBinding: Binding<String> {
+        Binding(
+            get: { viewModel.event.location?.name ?? "" },
+            set: { name in
+                if viewModel.event.location == nil {
+                    viewModel.event.location = Location(
+                        address: nil,
+                        latitude: 0,
+                        longitude: 0,
+                        name: name
+                    )
+                } else {
+                    viewModel.event.location?.name = name
+                }
+            }
+        )
+    }
+    
+    var memberIDsBinding: Binding<Set<Int>> {
+        Binding(
+            get: { Set(viewModel.event.memberIDs ?? []) },
+            set: { viewModel.event.memberIDs = Array($0).sorted() }
+        )
+    }
+    
+    var startTimeBinding: Binding<Date> {
+        Binding(
+            get: {
+                Date(timeIntervalSince1970: TimeInterval(viewModel.event.startTimestamp ?? Int(Date().timestamp)))
+            },
+            set: {
+                viewModel.event.startTimestamp = Int($0.timestamp)
+            }
+        )
+    }
+    
+    var titleBinding: Binding<String> {
+        Binding(
+            get: { viewModel.event.title ?? "" },
+            set: { viewModel.event.title = $0 }
+        )
+    }
     
     // MARK: - Computed Vars
     
