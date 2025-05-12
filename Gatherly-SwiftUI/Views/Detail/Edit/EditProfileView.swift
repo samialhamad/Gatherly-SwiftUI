@@ -121,6 +121,7 @@ private extension EditProfileView {
                     onComplete(.delegate(.didSave(viewStore.currentUser)))
                 }
             }
+            .disabled(viewStore.firstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             .foregroundColor(Color(Colors.secondary))
         }
     }
