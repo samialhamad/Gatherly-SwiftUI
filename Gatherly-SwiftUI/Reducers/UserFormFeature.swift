@@ -1,5 +1,5 @@
 //
-//  EditProfileFeature.swift
+//  UserFormFeature.swift
 //  Gatherly-SwiftUI
 //
 //  Created by Sami Alhamad on 4/21/25.
@@ -8,7 +8,7 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct EditProfileFeature: Reducer {
+struct UserFormFeature: Reducer {
     struct State: Equatable {
         var currentUser: User
         var firstName: String
