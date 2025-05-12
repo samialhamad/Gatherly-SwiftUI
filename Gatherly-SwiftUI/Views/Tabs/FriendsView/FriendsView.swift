@@ -136,7 +136,7 @@ private extension FriendsView {
                         bannerImageName: nil,
                         avatarImage: nil,
                         bannerImage: nil,
-                        isCreatingContact: true
+                        isCreatingFriend: true
                     ),
                     reducer: { EditProfileFeature() }
                 )
