@@ -15,6 +15,7 @@ final class ContentViewModel: ObservableObject {
     @Published private(set) var didLoadData = false
     @AppStorage("didSeedSampleData") private var didSeedSampleData = false
     @Published var events: [Event] = []
+    @Published var friends: [User] = []
     @Published var friendsDict: [Int: User] = [:]
     @Published var groups: [UserGroup] = []
     @Published var isLoading = true
@@ -106,6 +107,7 @@ final class ContentViewModel: ObservableObject {
         
         UserDefaultsManager.saveUsers(self.users)
         updateLocalFriendsAndGroups()
+        self.currentUser = users.first(where: { $0.id == currentUserID })
     }
     
     func generateUsersFromContacts(_ contacts: [SyncedContact]) async -> ([User], [Int]) {
@@ -144,13 +146,17 @@ final class ContentViewModel: ObservableObject {
     }
     
     private func updateLocalFriendsAndGroups() {
-        guard let currentUser else { return }
+        guard let currentUser else {
+            return
+        }
         
         self.friendsDict = Dictionary(
             uniqueKeysWithValues: (currentUser.friendIDs ?? []).compactMap { id in
                 users.first(where: { $0.id == id }).map { ($0.id!, $0) }
             }
         )
+        
+        self.friends = currentUser.resolvedFriends(from: self.friendsDict)
         
         self.userGroups = groups.filter { group in
             group.leaderID == currentUser.id ||
