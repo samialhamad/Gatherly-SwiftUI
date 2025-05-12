@@ -8,12 +8,11 @@
 import SwiftUI
 
 struct GroupsListView: View {
+    @EnvironmentObject var contentViewModel: ContentViewModel
     @ObservedObject var currentUser: User
     @Binding var groups: [UserGroup]
     @Binding var searchText: String
-    
-    let friendsDict: [Int: User]
-    
+        
     var body: some View {
         List {
             groupListContent
@@ -51,7 +50,7 @@ private extension GroupsListView {
             NavigationLink(destination: GroupDetailView(
                 groups: $groups,
                 currentUser: currentUser,
-                friendsDict: friendsDict,
+                friendsDict: contentViewModel.friendsDict,
                 group: group
             )) {
                 GroupRow(group: group)
@@ -65,10 +64,9 @@ private extension GroupsListView {
     let currentUser = sampleUsers.first!
     let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
 
-    return GroupsListView(
+    GroupsListView(
         currentUser: currentUser,
         groups: .constant(SampleData.sampleGroups),
-        searchText: .constant(""),
-        friendsDict: friendsDict
+        searchText: .constant("")
     )
 }
