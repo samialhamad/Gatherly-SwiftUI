@@ -17,7 +17,7 @@ struct EditProfileFeature: Reducer {
         var bannerImageName: String?
         var avatarImage: UIImage?
         var bannerImage: UIImage?
-        var isCreatingContact: Bool = false
+        var isCreatingFriend: Bool = false
         var isPresented: Bool = false
     }
     
@@ -69,7 +69,7 @@ struct EditProfileFeature: Reducer {
                 }
                 
                 let savedUser: User
-                if state.isCreatingContact {
+                if state.isCreatingFriend {
                     savedUser = await GatherlyAPI.createUser(user)
                 } else {
                     savedUser = await GatherlyAPI.updateUser(user)
