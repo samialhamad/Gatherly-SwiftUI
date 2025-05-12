@@ -5,21 +5,19 @@
 //  Created by Sami Alhamad on 3/24/25.
 //
 
+import ComposableArchitecture
 import SwiftUI
 
 struct FriendsView: View {
+    @EnvironmentObject var contentViewModel: ContentViewModel
+    @State private var createContactStore: Store<EditProfileFeature.State, EditProfileFeature.Action>? = nil
     @ObservedObject var currentUser: User
     @Binding var groups: [UserGroup]
     @State private var isShowingCreateGroup = false
     @State private var searchText = ""
     @State private var selectedTab = 0
     
-    let friendsDict: [Int: User]
     private let tabTitles = ["Friends", "Groups"]
-    
-    private var friends: [User] {
-        currentUser.resolvedFriends(from: friendsDict)
-    }
     
     var body: some View {
         NavigationStack {
@@ -30,15 +28,13 @@ struct FriendsView: View {
                 if selectedTab == 0 {
                     FriendsListView(
                         searchText: $searchText,
-                        currentUser: currentUser,
-                        friends: friends
+                        currentUser: currentUser
                     )
                 } else {
                     GroupsListView(
                         currentUser: currentUser,
                         groups: $groups,
-                        searchText: $searchText,
-                        friendsDict: friendsDict
+                        searchText: $searchText
                     )
                 }
             }
@@ -48,26 +44,65 @@ struct FriendsView: View {
                     toolbarButton
                 }
             }
+            .sheet(isPresented: Binding(
+                get: { createContactStore != nil },
+                set: { newValue in
+                    if !newValue {
+                        createContactStore = nil
+                    }
+                }
+            )) {
+                createContactSheet
             }
             .sheet(isPresented: $isShowingCreateGroup) {
                 createGroupSheet
             }
         }
+        .refreshOnAppear()
         .keyboardDismissable()
     }
 }
 
 private extension FriendsView {
     
+    //MARK: - Functions
+    
+    func handleCreateContactComplete(_ action: EditProfileFeature.Action) {
+        switch action {
+        case .cancel:
+            break
+        case .delegate(let delegateAction):
+            if case let .didSave(newContact) = delegateAction {
+                contentViewModel.appendUsersAndUpdateFriends(
+                    newUsers: [newContact],
+                    newFriendIDs: [newContact.id ?? 0],
+                    currentUserID: currentUser.id ?? 1
+                )
+            }
+        default:
+            break
+        }
+        
+        createContactStore = nil
+    }
+    
     //MARK: - Subviews
     
+    var createContactSheet: some View {
+        Group {
+            if let store = createContactStore {
+                EditProfileView(
+                    store: store,
+                    onComplete: handleCreateContactComplete
+                )
+            }
+        }
     }
     
     var createGroupSheet: some View {
         CreateGroupView(
             currentUser: currentUser,
-            groups: $groups,
-            friendsDict: friendsDict
+            groups: $groups
         )
     }
     
@@ -92,6 +127,19 @@ private extension FriendsView {
     var toolbarButton: some View {
         Button {
             if selectedTab == 0 {
+                createContactStore = Store(
+                    initialState: EditProfileFeature.State(
+                        currentUser: User(),
+                        firstName: "",
+                        lastName: "",
+                        avatarImageName: nil,
+                        bannerImageName: nil,
+                        avatarImage: nil,
+                        bannerImage: nil,
+                        isCreatingContact: true
+                    ),
+                    reducer: { EditProfileFeature() }
+                )
             } else {
                 isShowingCreateGroup = true
             }
@@ -105,11 +153,10 @@ private extension FriendsView {
     let sampleUsers = SampleData.sampleUsers
     let currentUser = sampleUsers.first!
     let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
-
-    return FriendsView(
+    
+    FriendsView(
         currentUser: currentUser,
-        groups: .constant(SampleData.sampleGroups),
-        friendsDict: friendsDict
+        groups: .constant(SampleData.sampleGroups)
     )
     .environmentObject(NavigationState())
 }
