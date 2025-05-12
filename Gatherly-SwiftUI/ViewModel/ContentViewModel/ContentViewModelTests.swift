@@ -55,6 +55,19 @@ final class ContentViewModelTests: XCTestCase {
         XCTAssertEqual(Set(currentUser?.friendIDs ?? []), Set([2, 3, 4]))
     }
     
+    func testUpdateLocalFriendsAndGroups_setsFriends() {
+        let viewModel = ContentViewModel()
+        let user1 = User(firstName: "Sami", friendIDs: [2], id: 1)
+        let user2 = User(firstName: "Friend", id: 2)
+        viewModel.users = [user1, user2]
+        viewModel.currentUser = user1
+
+        viewModel.updateLocalFriendsAndGroups()
+
+        XCTAssertEqual(viewModel.friends.count, 1)
+        XCTAssertEqual(viewModel.friends.first?.id, 2)
+    }
+    
     func testGenerateUsersFromContacts() async {
         let viewModel = ContentViewModel()
         viewModel.users = [
