@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ProfileView: View {
     @ObservedObject var currentUser: User
-    @State private var editProfileStore: Store<EditProfileFeature.State, EditProfileFeature.Action>? = nil
+    @State private var userFormStore: Store<UserFormFeature.State, UserFormFeature.Action>? = nil
     @State private var refreshID = UUID()
     
     var body: some View {
@@ -28,15 +28,15 @@ struct ProfileView: View {
             .navigationBarTitleDisplayMode(.large)
         }
         .sheet(isPresented: Binding(
-            get: { editProfileStore != nil },
+            get: { userFormStore != nil },
             set: { newValue in
                 if !newValue {
-                    editProfileStore = nil
+                    userFormStore = nil
                 }
             }
         )) {
-            if let store = editProfileStore {
-                EditProfileView(
+            if let store = userFormStore {
+                UserFormView(
                     store: store,
                     onComplete: handleEditComplete
                 )
@@ -56,7 +56,7 @@ private extension ProfileView {
     
     // MARK: Functions
     
-    func handleEditComplete(_ action: EditProfileFeature.Action) {
+    func handleEditComplete(_ action: UserFormFeature.Action) {
         switch action {
         case .cancel:
             break
@@ -68,7 +68,7 @@ private extension ProfileView {
             break
         }
         
-        editProfileStore = nil
+        userFormStore = nil
     }
     
     // MARK: - Subviews
@@ -110,8 +110,8 @@ private extension ProfileView {
     var profileRowsSection: some View {
         VStack(spacing: Constants.ProfileView.profileVStackSpacing) {
             Button {
-                editProfileStore = Store(
-                    initialState: EditProfileFeature.State(
+                userFormStore = Store(
+                    initialState: UserFormFeature.State(
                         currentUser: currentUser,
                         firstName: currentUser.firstName ?? "",
                         lastName: currentUser.lastName ?? "",
@@ -120,7 +120,7 @@ private extension ProfileView {
                         avatarImage: currentUser.avatarImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) },
                         bannerImage: currentUser.bannerImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) }
                     ),
-                    reducer: { EditProfileFeature() }
+                    reducer: { UserFormFeature() }
                 )
             } label: {
                 profileRowContent(title: "Profile", icon: "person.fill")

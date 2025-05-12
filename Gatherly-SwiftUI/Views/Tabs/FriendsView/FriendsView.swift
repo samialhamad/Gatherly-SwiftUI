@@ -10,7 +10,7 @@ import SwiftUI
 
 struct FriendsView: View {
     @EnvironmentObject var contentViewModel: ContentViewModel
-    @State private var createFriendStore: Store<EditProfileFeature.State, EditProfileFeature.Action>? = nil
+    @State private var createFriendStore: Store<UserFormFeature.State, UserFormFeature.Action>? = nil
     @ObservedObject var currentUser: User
     @Binding var groups: [UserGroup]
     @State private var isShowingCreateGroup = false
@@ -67,7 +67,7 @@ private extension FriendsView {
     
     //MARK: - Functions
     
-    func handleCreateFriendComplete(_ action: EditProfileFeature.Action) {
+    func handleCreateFriendComplete(_ action: UserFormFeature.Action) {
         switch action {
         case .cancel:
             break
@@ -91,7 +91,7 @@ private extension FriendsView {
     var createFriendSheet: some View {
         Group {
             if let store = createFriendStore {
-                EditProfileView(
+                UserFormView(
                     store: store,
                     onComplete: handleCreateFriendComplete
                 )
@@ -128,7 +128,7 @@ private extension FriendsView {
         Button {
             if selectedTab == 0 {
                 createFriendStore = Store(
-                    initialState: EditProfileFeature.State(
+                    initialState: UserFormFeature.State(
                         currentUser: User(),
                         firstName: "",
                         lastName: "",
@@ -138,7 +138,7 @@ private extension FriendsView {
                         bannerImage: nil,
                         isCreatingFriend: true
                     ),
-                    reducer: { EditProfileFeature() }
+                    reducer: { UserFormFeature() }
                 )
             } else {
                 isShowingCreateGroup = true
