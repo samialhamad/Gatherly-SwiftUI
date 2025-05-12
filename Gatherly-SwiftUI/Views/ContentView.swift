@@ -79,9 +79,9 @@ private extension ContentView {
         NavigationStack {
             FriendsView(
                 currentUser: user,
-                groups: $viewModel.groups,
-                friendsDict: viewModel.friendsDict
+                groups: $viewModel.groups
             )
+            .environmentObject(viewModel)
             .environmentObject(navigationState)
             .addActivityIndicator(
                 isPresented: viewModel.isLoading && navigationState.selectedTab == 2,
