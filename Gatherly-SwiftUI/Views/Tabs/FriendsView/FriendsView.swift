@@ -10,7 +10,7 @@ import SwiftUI
 
 struct FriendsView: View {
     @EnvironmentObject var contentViewModel: ContentViewModel
-    @State private var createContactStore: Store<EditProfileFeature.State, EditProfileFeature.Action>? = nil
+    @State private var createFriendStore: Store<EditProfileFeature.State, EditProfileFeature.Action>? = nil
     @ObservedObject var currentUser: User
     @Binding var groups: [UserGroup]
     @State private var isShowingCreateGroup = false
@@ -45,14 +45,14 @@ struct FriendsView: View {
                 }
             }
             .sheet(isPresented: Binding(
-                get: { createContactStore != nil },
+                get: { createFriendStore != nil },
                 set: { newValue in
                     if !newValue {
-                        createContactStore = nil
+                        createFriendStore = nil
                     }
                 }
             )) {
-                createContactSheet
+                createFriendSheet
             }
             .sheet(isPresented: $isShowingCreateGroup) {
                 createGroupSheet
@@ -67,15 +67,15 @@ private extension FriendsView {
     
     //MARK: - Functions
     
-    func handleCreateContactComplete(_ action: EditProfileFeature.Action) {
+    func handleCreateFriendComplete(_ action: EditProfileFeature.Action) {
         switch action {
         case .cancel:
             break
         case .delegate(let delegateAction):
-            if case let .didSave(newContact) = delegateAction {
+            if case let .didSave(newFriend) = delegateAction {
                 contentViewModel.appendUsersAndUpdateFriends(
-                    newUsers: [newContact],
-                    newFriendIDs: [newContact.id ?? 0],
+                    newUsers: [newFriend],
+                    newFriendIDs: [newFriend.id ?? 0],
                     currentUserID: currentUser.id ?? 1
                 )
             }
@@ -83,17 +83,17 @@ private extension FriendsView {
             break
         }
         
-        createContactStore = nil
+        createFriendStore = nil
     }
     
     //MARK: - Subviews
     
-    var createContactSheet: some View {
+    var createFriendSheet: some View {
         Group {
-            if let store = createContactStore {
+            if let store = createFriendStore {
                 EditProfileView(
                     store: store,
-                    onComplete: handleCreateContactComplete
+                    onComplete: handleCreateFriendComplete
                 )
             }
         }
@@ -127,7 +127,7 @@ private extension FriendsView {
     var toolbarButton: some View {
         Button {
             if selectedTab == 0 {
-                createContactStore = Store(
+                createFriendStore = Store(
                     initialState: EditProfileFeature.State(
                         currentUser: User(),
                         firstName: "",
