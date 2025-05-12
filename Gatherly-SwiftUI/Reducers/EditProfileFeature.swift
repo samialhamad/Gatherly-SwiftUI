@@ -17,6 +17,7 @@ struct EditProfileFeature: Reducer {
         var bannerImageName: String?
         var avatarImage: UIImage?
         var bannerImage: UIImage?
+        var isCreatingContact: Bool = false
         var isPresented: Bool = false
     }
     
