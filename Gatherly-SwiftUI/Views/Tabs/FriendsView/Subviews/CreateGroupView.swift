@@ -9,19 +9,17 @@ import SwiftUI
 import PhotosUI
 
 struct CreateGroupView: View {
+    @EnvironmentObject var contentViewModel: ContentViewModel
     @ObservedObject var currentUser: User
     @Environment(\.dismiss) private var dismiss
     @Binding var groups: [UserGroup]
     @State private var isSaving = false
     @StateObject private var viewModel: CreateGroupViewModel
-    
-    let friendsDict: [Int: User]
-    
-    init(currentUser: User, groups: Binding<[UserGroup]>, friendsDict: [Int: User]) {
+        
+    init(currentUser: User, groups: Binding<[UserGroup]>) {
         self._viewModel = StateObject(wrappedValue: CreateGroupViewModel(currentUserID: currentUser.id ?? 1))
         self.currentUser = currentUser
         self._groups = groups
-        self.friendsDict = friendsDict
     }
     
     var body: some View {
@@ -50,7 +48,7 @@ struct CreateGroupView: View {
                         selectedMemberIDs: memberIDsBinding,
                         header: "Invite Friends",
                         currentUser: currentUser,
-                        friendsDict: friendsDict
+                        friendsDict: contentViewModel.friendsDict
                     )
                     
                     createButtonSection
@@ -89,7 +87,7 @@ private extension CreateGroupView {
     //MARK: - Computed Vars
     
     private var friends: [User] {
-        currentUser.resolvedFriends(from: friendsDict)
+        currentUser.resolvedFriends(from: contentViewModel.friendsDict)
     }
     
     //MARK: - Subviews
@@ -131,7 +129,6 @@ private extension CreateGroupView {
     
     CreateGroupView(
         currentUser: currentUser,
-        groups: .constant(SampleData.sampleGroups),
-        friendsDict: friendsDict
+        groups: .constant(SampleData.sampleGroups)
     )
 }
