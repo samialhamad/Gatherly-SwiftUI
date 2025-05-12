@@ -75,28 +75,8 @@ private extension ProfileDetailView {
                     .font(.subheadline)
                     .foregroundColor(.gray)
             }
-            
-            if !isFriend {
-                addFriendButton
-            }
         }
         .padding()
-    }
-    
-    var addFriendButton: some View {
-        Button(action: {
-            // handle friend request
-        }) {
-            Text("Add Friend")
-                .font(.headline)
-                .frame(maxWidth: .infinity)
-                .padding()
-                .background(Color(Colors.primary))
-                .foregroundColor(.white)
-                .cornerRadius(Constants.ProfileDetailView.friendButtonRadius)
-        }
-        .padding(.top, Constants.ProfileDetailView.friendButtonTopPadding)
-        .padding(.horizontal, Constants.ProfileDetailView.friendButtonHorizontalPadding)
     }
     
     var actionSheetButton: some View {
