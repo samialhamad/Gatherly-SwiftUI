@@ -22,23 +22,11 @@ struct EditProfileView: View {
                     Form {
                         nameSection(viewStore)
                         imagePickersSection(viewStore)
-                        
-                        if !viewStore.isCreatingContact {
-                            deleteButton
-                        }
                     }
                     .navigationTitle(viewStore.isCreatingContact ? "New Contact" : "Edit Profile")
                     .toolbar {
                         cancelToolbarButton(viewStore)
                         saveToolbarButton(viewStore)
-                    }
-                    .alert("Delete Profile?", isPresented: $showingDeleteAlert) {
-                        Button("Delete", role: .destructive) {
-                            // Placeholder: no delete functionality yet
-                        }
-                        Button("Cancel", role: .cancel) {}
-                    } message: {
-                        Text("Are you sure you want to delete your profile?")
                     }
                 }
                 if isSaving {
@@ -99,15 +87,6 @@ private extension EditProfileView {
                 viewStore.send(.cancel)
                 onComplete(.cancel)
             }
-        }
-    }
-    
-    var deleteButton: some View {
-        Section {
-            Button("Delete Profile") {
-                showingDeleteAlert = true
-            }
-            .foregroundColor(.red)
         }
     }
     
