@@ -1,5 +1,5 @@
 //
-//  EditProfileView.swift
+//  UserFormView.swift
 //  Gatherly-SwiftUI
 //
 //  Created by Sami Alhamad on 4/21/25.
@@ -8,12 +8,12 @@
 import ComposableArchitecture
 import SwiftUI
 
-struct EditProfileView: View {
+struct UserFormView: View {
     @State private var isSaving = false
     @State private var showingDeleteAlert = false
     
-    let store: Store<EditProfileFeature.State, EditProfileFeature.Action>
-    let onComplete: (EditProfileFeature.Action) -> Void
+    let store: Store<UserFormFeature.State, UserFormFeature.Action>
+    let onComplete: (UserFormFeature.Action) -> Void
     
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
@@ -38,24 +38,24 @@ struct EditProfileView: View {
     }
 }
 
-private extension EditProfileView {
+private extension UserFormView {
     
     // MARK: - Form Views
     
-    private func nameSection(_ viewStore: ViewStore<EditProfileFeature.State, EditProfileFeature.Action>) -> some View {
+    private func nameSection(_ viewStore: ViewStore<UserFormFeature.State, UserFormFeature.Action>) -> some View {
         Section(header: Text("Name")) {
             TextField("First Name", text: viewStore.binding(
                 get: \.firstName,
-                send: EditProfileFeature.Action.setFirstName
+                send: UserFormFeature.Action.setFirstName
             ))
             TextField("Last Name", text: viewStore.binding(
                 get: \.lastName,
-                send: EditProfileFeature.Action.setLastName
+                send: UserFormFeature.Action.setLastName
             ))
         }
     }
     
-    private func imagePickersSection(_ viewStore: ViewStore<EditProfileFeature.State, EditProfileFeature.Action>) -> some View {
+    private func imagePickersSection(_ viewStore: ViewStore<UserFormFeature.State, UserFormFeature.Action>) -> some View {
         Group {
             ImagePicker(
                 title: "Avatar Image",
@@ -63,7 +63,7 @@ private extension EditProfileView {
                 maskShape: .circle,
                 selectedImage: viewStore.binding(
                     get: \.avatarImage,
-                    send: EditProfileFeature.Action.setAvatarImage
+                    send: UserFormFeature.Action.setAvatarImage
                 )
             )
             
@@ -73,7 +73,7 @@ private extension EditProfileView {
                 maskShape: .rectangle,
                 selectedImage: viewStore.binding(
                     get: \.bannerImage,
-                    send: EditProfileFeature.Action.setBannerImage
+                    send: UserFormFeature.Action.setBannerImage
                 )
             )
         }
@@ -81,7 +81,7 @@ private extension EditProfileView {
     
     // MARK: - Buttons
     
-    func cancelToolbarButton(_ viewStore: ViewStore<EditProfileFeature.State, EditProfileFeature.Action>) -> some ToolbarContent {
+    func cancelToolbarButton(_ viewStore: ViewStore<UserFormFeature.State, UserFormFeature.Action>) -> some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
             Button("Cancel") {
                 viewStore.send(.cancel)
@@ -90,7 +90,7 @@ private extension EditProfileView {
         }
     }
     
-    func saveToolbarButton(_ viewStore: ViewStore<EditProfileFeature.State, EditProfileFeature.Action>) -> some ToolbarContent {
+    func saveToolbarButton(_ viewStore: ViewStore<UserFormFeature.State, UserFormFeature.Action>) -> some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
             Button("Save") {
                 isSaving = true
@@ -107,16 +107,16 @@ private extension EditProfileView {
 }
 
 #Preview {
-    EditProfileView(
+    UserFormView(
         store: Store(
-            initialState: EditProfileFeature.State(
+            initialState: UserFormFeature.State(
                 currentUser: SampleData.sampleUsers.first!,
                 firstName: "Sami",
                 lastName: "Alhamad",
                 avatarImageName: nil,
                 bannerImageName: nil
             ),
-            reducer: { EditProfileFeature() }
+            reducer: { UserFormFeature() }
         ),
         onComplete: { _ in }
     )
