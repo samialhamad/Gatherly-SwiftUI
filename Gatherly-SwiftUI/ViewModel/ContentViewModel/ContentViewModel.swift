@@ -145,7 +145,7 @@ final class ContentViewModel: ObservableObject {
         }
     }
     
-    private func updateLocalFriendsAndGroups() {
+    func updateLocalFriendsAndGroups() {
         guard let currentUser else {
             return
         }
