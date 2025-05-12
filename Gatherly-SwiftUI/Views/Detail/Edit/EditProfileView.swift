@@ -22,9 +22,8 @@ struct EditProfileView: View {
                     Form {
                         nameSection(viewStore)
                         imagePickersSection(viewStore)
-                        deleteButton
+                        
                     }
-                    .navigationTitle("Edit Profile")
                     .toolbar {
                         cancelToolbarButton(viewStore)
                         saveToolbarButton(viewStore)
