@@ -10,7 +10,6 @@ import SwiftUI
 struct FriendsView: View {
     @ObservedObject var currentUser: User
     @Binding var groups: [UserGroup]
-    @State private var isShowingAddFriend = false
     @State private var isShowingCreateGroup = false
     @State private var searchText = ""
     @State private var selectedTab = 0
@@ -49,8 +48,6 @@ struct FriendsView: View {
                     toolbarButton
                 }
             }
-            .sheet(isPresented: $isShowingAddFriend) {
-                addFriendSheet
             }
             .sheet(isPresented: $isShowingCreateGroup) {
                 createGroupSheet
@@ -64,14 +61,6 @@ private extension FriendsView {
     
     //MARK: - Subviews
     
-    var addFriendSheet: some View {
-        AddFriendView(
-            currentUser: currentUser,
-            viewModel: AddFriendViewModel(
-                currentUserID: currentUser.id ?? 1,
-                allUsers: friends
-            )
-        )
     }
     
     var createGroupSheet: some View {
@@ -103,7 +92,6 @@ private extension FriendsView {
     var toolbarButton: some View {
         Button {
             if selectedTab == 0 {
-                isShowingAddFriend = true
             } else {
                 isShowingCreateGroup = true
             }
