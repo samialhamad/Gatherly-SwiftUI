@@ -8,18 +8,11 @@
 import SwiftUI
 
 struct FriendsListView: View {
+    @EnvironmentObject var contentViewModel: ContentViewModel
     @Binding var searchText: String
-    @StateObject private var viewModel: FriendsListViewModel
+    @StateObject private var viewModel = FriendsListViewModel()
     
     let currentUser: User
-    let friends: [User]
-    
-    init(searchText: Binding<String>, currentUser: User, friends: [User]) {
-        _searchText = searchText
-        self.currentUser = currentUser
-        self.friends = friends
-        _viewModel = StateObject(wrappedValue: FriendsListViewModel(friends: friends))
-    }
     
     var body: some View {
         ZStack(alignment: .trailing) {
@@ -33,14 +26,28 @@ struct FriendsListView: View {
 
 private extension FriendsListView {
     
+    // MARK: - Computed Vars
+    
+    private var filteredFriends: [User] {
+        viewModel.filteredFriends(from: contentViewModel.friends)
+    }
+    
+    private var groupedFriends: [String: [User]] {
+        viewModel.groupedFriends(from: filteredFriends)
+    }
+    
+    private var sortedSectionKeys: [String] {
+        viewModel.sortedSectionKeys(from: filteredFriends)
+    }
+    
     // MARK: - Subviews
     
     func friendList(proxy: ScrollViewProxy) -> some View {
         List {
-            ForEach(viewModel.sortedSectionKeys, id: \.self) { key in
+            ForEach(sortedSectionKeys, id: \.self) { key in
                 Section(header: Text(key).id(key)) {
                     ForEach(
-                        viewModel.groupedFriends[key]?.sorted(by: { ($0.firstName ?? "") < ($1.firstName ?? "") }) ?? [],
+                        groupedFriends[key]?.sorted(by: { ($0.firstName ?? "") < ($1.firstName ?? "") }) ?? [],
                         id: \.id
                     ) { friend in
                         NavigationLink(destination: ProfileDetailView(
@@ -54,18 +61,12 @@ private extension FriendsListView {
             }
         }
         .listStyle(.plain)
-        .onAppear {
-            viewModel.searchText = searchText
-        }
-        .onChange(of: searchText) { newValue in
-            viewModel.searchText = newValue
-        }
     }
     
     func alphabetOverlay(proxy: ScrollViewProxy) -> some View {
         Group {
             if viewModel.searchText.isEmpty {
-                AlphabetIndexView(letters: viewModel.sortedSectionKeys) { letter in
+                AlphabetIndexView(letters: sortedSectionKeys) { letter in
                     withAnimation {
                         proxy.scrollTo(letter, anchor: .top)
                     }
