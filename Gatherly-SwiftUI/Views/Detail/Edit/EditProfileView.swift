@@ -23,7 +23,11 @@ struct EditProfileView: View {
                         nameSection(viewStore)
                         imagePickersSection(viewStore)
                         
+                        if !viewStore.isCreatingContact {
+                            deleteButton
+                        }
                     }
+                    .navigationTitle(viewStore.isCreatingContact ? "New Contact" : "Edit Profile")
                     .toolbar {
                         cancelToolbarButton(viewStore)
                         saveToolbarButton(viewStore)
