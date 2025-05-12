@@ -9,34 +9,27 @@ import Foundation
 
 class FriendsListViewModel: ObservableObject {
     @Published var searchText: String = ""
-
-    private let allFriends: [User]
-
-    init(friends: [User]) {
-        self.allFriends = friends
-    }
-
-    var filteredFriends: [User] {
+    
+    func filteredFriends(from friends: [User]) -> [User] {
         if searchText.isEmpty {
-            return allFriends
+            return friends
         }
-
-        let lowercasedQuery = searchText.lowercased()
-
-        return allFriends.filter { user in
-            (user.firstName?.lowercased().contains(lowercasedQuery) ?? false)
-            || (user.lastName?.lowercased().contains(lowercasedQuery) ?? false)
-        }
-    }
-
-    var groupedFriends: [String: [User]] {
-        Dictionary(grouping: filteredFriends) { user in
-            let firstLetter = user.firstName?.first.map { String($0).uppercased() } ?? ""
-            return firstLetter
+        let query = searchText.lowercased()
+        
+        return friends.filter {
+            ($0.firstName?.lowercased().contains(query) ?? false) ||
+            ($0.lastName?.lowercased().contains(query) ?? false)
         }
     }
-
-    var sortedSectionKeys: [String] {
-        groupedFriends.keys.sorted()
+    
+    func groupedFriends(from friends: [User]) -> [String: [User]] {
+        Dictionary(grouping: friends) { user in
+            user.firstName?.first.map { String($0).uppercased() } ?? ""
+        }
+    }
+    
+    func sortedSectionKeys(from friends: [User]) -> [String] {
+        let grouped = groupedFriends(from: friends)
+        return grouped.keys.sorted()
     }
 }
