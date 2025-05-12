@@ -22,10 +22,10 @@ final class FriendsListViewModelTests: XCTestCase {
     }
     
     func testFilteredFriends() {
-        let viewModel = FriendsListViewModel(friends: sampleFriends())
-        
+        let viewModel = FriendsListViewModel()
         viewModel.searchText = "two"
-        let filtered = viewModel.filteredFriends
+        
+        let filtered = viewModel.filteredFriends(from: sampleFriends())
         
         XCTAssertEqual(filtered.count, 1)
         XCTAssertEqual(filtered.first?.lastName, "Two")
@@ -37,10 +37,8 @@ final class FriendsListViewModelTests: XCTestCase {
             makeUser(id: 3, firstName: "Logan", lastName: "Harrison")
         ]
         
-        let viewModel = FriendsListViewModel(friends: friends)
-        viewModel.searchText = ""
-        
-        let grouped = viewModel.groupedFriends
+        let viewModel = FriendsListViewModel()
+        let grouped = viewModel.groupedFriends(from: friends)
         
         XCTAssertEqual(grouped.count, 2)
         XCTAssertEqual(grouped["L"]?.first?.firstName, "Logan")
@@ -53,8 +51,8 @@ final class FriendsListViewModelTests: XCTestCase {
             makeUser(id: 3, firstName: "Anna", lastName: "Bell")
         ]
         
-        let viewModel = FriendsListViewModel(friends: friends)
-        let keys = viewModel.sortedSectionKeys
+        let viewModel = FriendsListViewModel()
+        let keys = viewModel.sortedSectionKeys(from: friends)
         
         XCTAssertEqual(keys, ["A", "Z"])
     }
