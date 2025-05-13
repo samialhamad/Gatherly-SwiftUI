@@ -9,22 +9,22 @@ import ElegantCalendar
 import SwiftUI
 
 struct GatherlyCalendarView: View {
+    @EnvironmentObject var session: AppSession
     @Binding var allEvents: [Event]
     @StateObject private var calendarManager: ElegantCalendarManager
     @Binding var selectedDate: Date
     
-    let currentUser: User
-    let friendsDict: [Int: User]
+    private var currentUser: User? {
+        session.currentUser
+    }
     
-    init(selectedDate: Binding<Date>,
-         allEvents: Binding<[Event]>,
-         currentUser: User,
-         friendsDict: [Int: User]) {
-        
+    private var friendsDict: [Int: User] {
+        session.friendsDict
+    }
+    
+    init(selectedDate: Binding<Date>, allEvents: Binding<[Event]>) {
         _selectedDate = selectedDate
         _allEvents = allEvents
-        self.currentUser = currentUser
-        self.friendsDict = friendsDict
         
         let manager = ElegantCalendarManager.withEvents(
             selectedDate: selectedDate,
@@ -63,9 +63,7 @@ extension GatherlyCalendarView: ElegantCalendarDataSource {
     func calendar(viewForSelectedDate date: Date, dimensions size: CGSize) -> AnyView {
         return GatherlyEventListView(
             allEvents: $allEvents,
-            currentUser: currentUser,
-            date: date,
-            friendsDict: friendsDict
+            date: date
         )
         .erased
     }
@@ -92,13 +90,20 @@ extension GatherlyCalendarView: ElegantCalendarDelegate {
 // MARK: - Event List View
 
 struct GatherlyEventListView: View {
+    @EnvironmentObject var session: AppSession
     @Binding var allEvents: [Event]
     
-    let currentUser: User
     let date: Date
-    let friendsDict: [Int: User]
     
-    var filteredEvents: [Event] {
+    private var currentUser: User? {
+        session.currentUser
+    }
+    
+    private var friendsDict: [Int: User] {
+        session.friendsDict
+    }
+    
+    private var filteredEvents: [Event] {
         allEvents.filterEvents(by: date)
     }
     
@@ -112,19 +117,8 @@ struct GatherlyEventListView: View {
                     .frame(maxWidth: .infinity)
             } else {
                 ForEach(filteredEvents) { event in
-                    EventRowLink(
-                        currentUser: currentUser,
-                        events: $allEvents,
-                        event: event,
-                        friendsDict: friendsDict,
-                        onSave: { updatedEvent in
-                            if let index = allEvents.firstIndex(where: { $0.id == updatedEvent.id }) {
-                                allEvents[index] = updatedEvent
-                            }
-                        },
-                        showDisclosure: true
-                    )
-                    .frame(maxWidth: .infinity)
+                    EventRowLink(event: event)
+                        .frame(maxWidth: .infinity)
                 }
             }
         }
