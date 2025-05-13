@@ -8,75 +8,76 @@
 import SwiftUI
 
 struct EditGroupView: View {
+    @EnvironmentObject var session: AppSession
     @State private var showingDeleteAlert = false
     @State private var isSaving = false
     @StateObject var viewModel: EditGroupViewModel
     
-    let currentUser: User
     let friendsDict: [Int: User]
     let groups: [UserGroup]
     let onSave: (UserGroup) -> Void
     let onCancel: () -> Void
     let onDelete: (UserGroup) -> Void
     
+    private var currentUser: User? {
+        session.currentUser
+    }
+    
     var body: some View {
         NavigationStack {
-            ZStack {
-                Form {
-                    Section(header: Text("Group Name")) {
-                        TextField("Enter group name", text: nameBinding)
+                ZStack {
+                    Form {
+                        Section(header: Text("Group Name")) {
+                            TextField("Enter group name", text: nameBinding)
+                        }
+                        
+                        ImagePicker(
+                            title: "Group Image",
+                            imageHeight: Constants.CreateGroupView.groupImageHeight,
+                            maskShape: .circle,
+                            selectedImage: $viewModel.groupImage
+                        )
+                        
+                        ImagePicker(
+                            title: "Banner Image",
+                            imageHeight: Constants.CreateGroupView.groupBannerImageHeight,
+                            maskShape: .rectangle,
+                            selectedImage: $viewModel.bannerImage
+                        )
+                        
+                        EventMembersSection(
+                            selectedMemberIDs: memberIDsBinding,
+                            header: "Friends"
+                        )
+                        
+                        deleteButton
                     }
                     
-                    ImagePicker(
-                        title: "Group Image",
-                        imageHeight: Constants.CreateGroupView.groupImageHeight,
-                        maskShape: .circle,
-                        selectedImage: $viewModel.groupImage
-                    )
-                    
-                    ImagePicker(
-                        title: "Banner Image",
-                        imageHeight: Constants.CreateGroupView.groupBannerImageHeight,
-                        maskShape: .rectangle,
-                        selectedImage: $viewModel.bannerImage
-                    )
-                    
-                    EventMembersSection(
-                        selectedMemberIDs: memberIDsBinding,
-                        header: "Friends",
-                        currentUser: currentUser,
-                        friendsDict: friendsDict
-                    )
-                    
-                    deleteButton
-                }
-                
-                if isSaving {
-                    ActivityIndicator(message: "Saving your changes…")
-                }
-            }
-            .navigationTitle("Edit Group")
-            .toolbar {
-                cancelToolbarButton
-                saveToolbarButton
-            }
-            .alert("Delete Group?", isPresented: $showingDeleteAlert) {
-                Button("Delete", role: .destructive) {
-                    isSaving = true
-                    Task {
-                        await onDelete(viewModel.originalGroup)
-                        isSaving = false
+                    if isSaving {
+                        ActivityIndicator(message: "Saving your changes…")
                     }
                 }
-                Button("Cancel", role: .cancel) {}
-            } message: {
-                Text("Are you sure you want to delete this group?")
-            }
+                .navigationTitle("Edit Group")
+                .toolbar {
+                    cancelToolbarButton
+                    saveToolbarButton
+                }
+                .alert("Delete Group?", isPresented: $showingDeleteAlert) {
+                    Button("Delete", role: .destructive) {
+                        isSaving = true
+                        Task {
+                            onDelete(viewModel.originalGroup)
+                            isSaving = false
+                        }
+                    }
+                    Button("Cancel", role: .cancel) {}
+                } message: {
+                    Text("Are you sure you want to delete this group?")
+                }
         }
         .keyboardDismissable()
     }
 }
-
 
 private extension EditGroupView {
     
@@ -94,12 +95,6 @@ private extension EditGroupView {
             get: { Set(viewModel.group.memberIDs) },
             set: { viewModel.group.memberIDs = Array($0).sorted() }
         )
-    }
-    
-    // MARK: - Computed Vars
-    
-    private var friends: [User] {
-        currentUser.resolvedFriends(from: friendsDict)
     }
     
     // MARK: - Subviews
@@ -139,24 +134,17 @@ private extension EditGroupView {
 
 #Preview {
     let sampleUsers = SampleData.sampleUsers
-    let currentUser = sampleUsers.first!
     let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
-    
+
     NavigationStack {
         EditGroupView(
             viewModel: EditGroupViewModel(group: SampleData.sampleGroups.first!),
-            currentUser: currentUser,
             friendsDict: friendsDict,
             groups: SampleData.sampleGroups,
-            onSave: { updatedGroup in
-                print("Group updated: \(updatedGroup)")
-            },
-            onCancel: {
-                print("Edit cancelled")
-            },
-            onDelete: { group in
-                print("Delete group: \(group)")
-            }
+            onSave: { _ in },
+            onCancel: {},
+            onDelete: { _ in }
         )
+        .environmentObject(AppSession())
     }
 }
