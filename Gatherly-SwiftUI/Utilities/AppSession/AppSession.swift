@@ -30,7 +30,10 @@ final class AppSession: ObservableObject {
     // MARK: - Data
     
     private func applySampleDataForSami() {
-        guard let samiIndex = users.firstIndex(where: { $0.id == 1 }) else { return }
+        guard let samiIndex = users.firstIndex(where: { $0.id == 1 }) else {
+            return
+        }
+        
         let sami = users[samiIndex]
         
         sami.eventIDs = events
@@ -80,6 +83,7 @@ final class AppSession: ObservableObject {
             let currentUser = self.users[index]
             var friendIDs = currentUser.friendIDs ?? []
             let uniqueNewFriendIDs = newFriendIDs.filter { !friendIDs.contains($0) }
+            
             friendIDs.append(contentsOf: uniqueNewFriendIDs)
             currentUser.friendIDs = Array(Set(friendIDs))
         } else {
@@ -112,7 +116,9 @@ final class AppSession: ObservableObject {
         
         for contact in contacts {
             let cleaned = contact.phoneNumber.filter(\.isWholeNumber)
-            guard !existingPhones.contains(cleaned) else { continue }
+            guard !existingPhones.contains(cleaned) else {
+                continue
+            }
             
             let user = await GatherlyAPI.createUser(from: contact, id: nextAvailableID)
             newUsers.append(user)
@@ -124,7 +130,9 @@ final class AppSession: ObservableObject {
     }
     
     func updateLocalFriendsAndGroups() {
-        guard let currentUser else { return }
+        guard let currentUser else {
+            return
+        }
         
         self.friendsDict = Dictionary(
             uniqueKeysWithValues: (currentUser.friendIDs ?? []).compactMap { id in
