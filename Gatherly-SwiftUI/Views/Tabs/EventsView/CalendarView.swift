@@ -8,14 +8,14 @@
 import SwiftUI
 
 struct CalendarView: View {
-    @ObservedObject var currentUser: User
-    @Binding var events: [Event]
+    @EnvironmentObject var session: AppSession
     @State private var isCalendarView = true
-    @EnvironmentObject var navigationState: NavigationState
     @StateObject private var viewModel = CalendarViewModel()
     
-    let friendsDict: [Int: User]
-        
+    private var currentUser: User? {
+        session.currentUser
+    }
+    
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -27,17 +27,13 @@ struct CalendarView: View {
                 calendarToolbarButton
             }
             .navigationDestination(isPresented: Binding(
-                get: { navigationState.navigateToEvent != nil },
+                get: { session.navigationState.navigateToEvent != nil },
                 set: { newValue in
-                    if !newValue { navigationState.navigateToEvent = nil }
+                    if !newValue { session.navigationState.navigateToEvent = nil }
                 }
             )) {
-                if let event = navigationState.navigateToEvent {
-                    EventDetailView(
-                        currentUser: currentUser,
-                        events: $events,
-                        event: event,
-                        friendsDict: friendsDict)
+                if let event = session.navigationState.navigateToEvent {
+                    EventDetailView(event: event)
                 } else {
                     EmptyView()
                 }
@@ -63,37 +59,18 @@ private extension CalendarView {
         if isCalendarView {
             VStack(spacing: 0) {
                 GatherlyCalendarView(
-                    selectedDate: $navigationState.calendarSelectedDate,
-                    allEvents: $events,
-                    currentUser: currentUser,
-                    friendsDict: friendsDict
+                    selectedDate: $session.navigationState.calendarSelectedDate,
+                    allEvents: $session.events
                 )
             }
             .frame(maxHeight: .infinity)
         } else {
-            EventsGroupedListView(
-                currentUser: currentUser,
-                events: $events,
-                friendsDict: friendsDict,
-                onEventSave: { updatedEvent in
-                    if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
-                        events[index] = updatedEvent
-                    }
-                }
-            )
+            EventsGroupedListView()
         }
     }
 }
 
 #Preview {
-    let sampleUsers = SampleData.sampleUsers
-    let currentUser = sampleUsers.first!
-    let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
-
-    CalendarView(
-        currentUser: currentUser,
-        events: .constant(SampleData.sampleEvents),
-        friendsDict: friendsDict
-    )
-    .environmentObject(NavigationState())
+    CalendarView()
+        .environmentObject(AppSession())
 }
