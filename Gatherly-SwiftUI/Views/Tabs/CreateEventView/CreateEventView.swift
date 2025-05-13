@@ -9,14 +9,14 @@ import SwiftUI
 import PhotosUI
 
 struct CreateEventView: View {
-    @ObservedObject var currentUser: User
-    @Binding var events: [Event]
+    @EnvironmentObject var session: AppSession
     @State private var isSaving = false
     @State private var navigateToEvent: Event? = nil
-    @EnvironmentObject var navigationState: NavigationState
     @StateObject private var viewModel = CreateEventViewModel()
     
-    let friendsDict: [Int: User]
+    private var currentUser: User? {
+        session.currentUser
+    }
     
     var body: some View {
         NavigationStack {
@@ -39,9 +39,7 @@ struct CreateEventView: View {
                     
                     EventMembersSection(
                         selectedMemberIDs: memberIDsBinding,
-                        header: "Invite Friends",
-                        currentUser: currentUser,
-                        friendsDict: friendsDict
+                        header: "Invite Friends"
                     )
                     
                     EventLocationSection(
@@ -156,26 +154,24 @@ private extension CreateEventView {
         )
     }
     
-    // MARK: - Computed Vars
-    
-    private var friends: [User] {
-        currentUser.resolvedFriends(from: friendsDict)
-    }
-    
     // MARK: - Subviews
     
     var createButtonSection: some View {
         Section {
             Button(action: {
                 isSaving = true
+                guard let plannerID = currentUser?.id else {
+                    return
+                }
+                
                 Task {
-                    let newEvent = await viewModel.createEvent(plannerID: currentUser.id ?? -1)
+                    let newEvent = await viewModel.createEvent(plannerID: plannerID)
                     await MainActor.run {
-                        events.append(newEvent)
+                        session.events.append(newEvent)
                         viewModel.clearFields()
-                        navigationState.calendarSelectedDate = newEvent.date ?? Date()
-                        navigationState.navigateToEvent = newEvent
-                        navigationState.selectedTab = 0
+                        session.navigationState.calendarSelectedDate = newEvent.date ?? Date()
+                        session.navigationState.navigateToEvent = newEvent
+                        session.navigationState.selectedTab = 0
                         isSaving = false
                     }
                 }
@@ -190,16 +186,6 @@ private extension CreateEventView {
 }
 
 #Preview {
-    let sampleUsers = SampleData.sampleUsers
-    let currentUser = sampleUsers.first!
-    let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
-    
-    NavigationStack {
-        CreateEventView(
-            currentUser: currentUser,
-            events: .constant(SampleData.sampleEvents),
-            friendsDict: friendsDict
-        )
-        .environmentObject(NavigationState())
-    }
+    CreateEventView()
+        .environmentObject(AppSession())
 }
