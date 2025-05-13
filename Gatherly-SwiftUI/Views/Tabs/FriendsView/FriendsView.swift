@@ -9,15 +9,17 @@ import ComposableArchitecture
 import SwiftUI
 
 struct FriendsView: View {
-    @EnvironmentObject var contentViewModel: ContentViewModel
+    @EnvironmentObject var session: AppSession
     @State private var createFriendStore: Store<UserFormFeature.State, UserFormFeature.Action>? = nil
-    @ObservedObject var currentUser: User
-    @Binding var groups: [UserGroup]
     @State private var isShowingCreateGroup = false
     @State private var searchText = ""
     @State private var selectedTab = 0
     
     private let tabTitles = ["Friends", "Groups"]
+    
+    private var currentUser: User? {
+        session.currentUser
+    }
     
     var body: some View {
         NavigationStack {
@@ -26,16 +28,9 @@ struct FriendsView: View {
                 SearchBarView(searchText: $searchText)
                 
                 if selectedTab == 0 {
-                    FriendsListView(
-                        searchText: $searchText,
-                        currentUser: currentUser
-                    )
+                    FriendsListView(searchText: $searchText)
                 } else {
-                    GroupsListView(
-                        currentUser: currentUser,
-                        groups: $groups,
-                        searchText: $searchText
-                    )
+                    GroupsListView(searchText: $searchText)
                 }
             }
             .navigationTitle(tabTitles[selectedTab])
@@ -68,15 +63,19 @@ private extension FriendsView {
     //MARK: - Functions
     
     func handleCreateFriendComplete(_ action: UserFormFeature.Action) {
+        guard let currentUserID = currentUser?.id else {
+            return
+        }
+        
         switch action {
         case .cancel:
             break
         case .delegate(let delegateAction):
             if case let .didSave(newFriend) = delegateAction {
-                contentViewModel.appendUsersAndUpdateFriends(
+                session.appendUsersAndUpdateFriends(
                     newUsers: [newFriend],
                     newFriendIDs: [newFriend.id ?? 0],
-                    currentUserID: currentUser.id ?? 1
+                    currentUserID: currentUserID
                 )
             }
         default:
@@ -100,10 +99,7 @@ private extension FriendsView {
     }
     
     var createGroupSheet: some View {
-        CreateGroupView(
-            currentUser: currentUser,
-            groups: $groups
-        )
+        CreateGroupView(currentUserID: session.currentUser?.id ?? 1)
     }
     
     struct pickerView: View {
@@ -150,13 +146,6 @@ private extension FriendsView {
 }
 
 #Preview {
-    let sampleUsers = SampleData.sampleUsers
-    let currentUser = sampleUsers.first!
-    let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
-    
-    FriendsView(
-        currentUser: currentUser,
-        groups: .constant(SampleData.sampleGroups)
-    )
-    .environmentObject(NavigationState())
+    FriendsView()
+        .environmentObject(AppSession())
 }
