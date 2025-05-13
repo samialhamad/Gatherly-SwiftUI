@@ -9,27 +9,16 @@ import SwiftUI
 import Combine
 
 struct ContentView: View {
-    @StateObject var navigationState = NavigationState()
-    @StateObject private var viewModel = ContentViewModel()
-    
-    var currentUser: User? {
-        viewModel.currentUser
-    }
-    
-    var friendsSorted: [User] {
-        viewModel.friendsDict.values.sorted {
-            ($0.firstName ?? "") < ($1.firstName ?? "")
-        }
-    }
+    @EnvironmentObject var session: AppSession
     
     var body: some View {
         Group {
-            if let currentUser {
-                TabView(selection: $navigationState.selectedTab) {
-                    calendarTab(for: currentUser)
-                    createEventTab(for: currentUser)
-                    friendsTab(for: currentUser)
-                    profileTab(for: currentUser)
+            if let currentUser = session.currentUser {
+                TabView(selection: $session.navigationState.selectedTab) {
+                    calendarTab
+                    createEventTab
+                    friendsTab
+                    profileTab
                 }
             } else {
                 Text("No current user loaded").onAppear {
@@ -38,53 +27,43 @@ struct ContentView: View {
             }
         }
         .task {
-            viewModel.loadAllData()
-            viewModel.syncContacts()
+            session.loadAllData()
+            session.syncContacts()
         }
     }
 }
 
 private extension ContentView {
     
-    func calendarTab(for user: User) -> some View {
-        CalendarView(
-            currentUser: user,
-            events: $viewModel.events,
-            friendsDict: viewModel.friendsDict
-        )
-        .environmentObject(navigationState)
+    // MARK: - Tabs
+    
+    var calendarTab: some View {
+        CalendarView()
+        .environmentObject(session)
         .addActivityIndicator(
-            isPresented: viewModel.isLoading && navigationState.selectedTab == 0,
+            isPresented: session.isLoading && session.navigationState.selectedTab == 0,
             message: Constants.ContentView.calendarViewLoadingString
         )
         .tabItem { Image(systemName: "calendar") }
         .tag(0)
     }
     
-    func createEventTab(for user: User) -> some View {
+    var createEventTab: some View {
         NavigationStack {
-            CreateEventView(
-                currentUser: user,
-                events: $viewModel.events,
-                friendsDict: viewModel.friendsDict
-            )
-            .environmentObject(navigationState)
+            CreateEventView()
+            .environmentObject(session)
             .navigationTitle("Create Event")
         }
         .tabItem { Image(systemName: "plus.app.fill") }
         .tag(1)
     }
     
-    func friendsTab(for user: User) -> some View {
+    var friendsTab: some View {
         NavigationStack {
-            FriendsView(
-                currentUser: user,
-                groups: $viewModel.groups
-            )
-            .environmentObject(viewModel)
-            .environmentObject(navigationState)
+            FriendsView()
+            .environmentObject(session)
             .addActivityIndicator(
-                isPresented: viewModel.isLoading && navigationState.selectedTab == 2,
+                isPresented: session.isLoading && session.navigationState.selectedTab == 2,
                 message: Constants.ContentView.friendsViewLoadingString
             )
         }
@@ -92,14 +71,12 @@ private extension ContentView {
         .tag(2)
     }
     
-    func profileTab(for user: User) -> some View {
+    var profileTab: some View {
         NavigationStack {
-            ProfileView(
-                currentUser: user
-            )
-            .environmentObject(navigationState)
+            ProfileView()
+            .environmentObject(session)
             .addActivityIndicator(
-                isPresented: viewModel.isLoading && navigationState.selectedTab == 3,
+                isPresented: session.isLoading && session.navigationState.selectedTab == 3,
                 message: Constants.ContentView.profileViewLoadingString
             )
         }
@@ -110,4 +87,5 @@ private extension ContentView {
 
 #Preview {
     ContentView()
+        .environmentObject(AppSession())
 }
