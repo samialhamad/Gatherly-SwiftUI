@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct FriendsListView: View {
-    @EnvironmentObject var contentViewModel: ContentViewModel
+    @EnvironmentObject var session: AppSession
     @Binding var searchText: String
     @StateObject private var viewModel = FriendsListViewModel()
     
-    let currentUser: User
+    private var currentUser: User? {
+        session.currentUser
+    }
+    
+    private var friends: [User] {
+        currentUser?.resolvedFriends(from: session.friendsDict) ?? []
+    }
     
     var body: some View {
         ZStack(alignment: .trailing) {
@@ -29,7 +35,7 @@ private extension FriendsListView {
     // MARK: - Computed Vars
     
     private var filteredFriends: [User] {
-        viewModel.filteredFriends(from: contentViewModel.friends)
+        viewModel.filteredFriends(from: friends)
     }
     
     private var groupedFriends: [String: [User]] {
@@ -50,10 +56,7 @@ private extension FriendsListView {
                         groupedFriends[key]?.sorted(by: { ($0.firstName ?? "") < ($1.firstName ?? "") }) ?? [],
                         id: \.id
                     ) { friend in
-                        NavigationLink(destination: ProfileDetailView(
-                            currentUser: currentUser,
-                            user: friend
-                        )) {
+                        NavigationLink(destination: ProfileDetailView(user: friend)) {
                             ProfileRow(user: friend)
                         }
                     }
