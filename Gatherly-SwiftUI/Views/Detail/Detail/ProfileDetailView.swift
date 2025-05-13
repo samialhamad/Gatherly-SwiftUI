@@ -8,21 +8,23 @@
 import SwiftUI
 
 struct ProfileDetailView: View {
-    @ObservedObject var currentUser: User
+    @EnvironmentObject var session: AppSession
     @State private var isShowingActionSheet = false
-    @ObservedObject var user: User
+    
+    let user: User
+    
+    private var currentUser: User? {
+        session.currentUser
+    }
     
     var body: some View {
         if isViewingSelf {
-            ProfileView(
-                currentUser: currentUser
-            )
+            ProfileView()
+                .environmentObject(session)
         } else {
             ScrollView {
                 VStack {
-                    AvatarHeaderView(
-                        user: user
-                    )
+                    AvatarHeaderView(user: user)
                     
                     userInfoView
                     
@@ -53,13 +55,16 @@ private extension ProfileDetailView {
     
     //MARK: - Computed Vars
     
-    var isFriend: Bool {
-        guard let userID = user.id else { return false }
-        return currentUser.friendIDs?.contains(userID) == true
+    private var isFriend: Bool {
+        guard let userID = user.id else {
+            return false
+        }
+        
+        return currentUser?.friendIDs?.contains(userID) == true
     }
     
     private var isViewingSelf: Bool {
-        currentUser.id == user.id
+        currentUser?.id == user.id
     }
     
     //MARK: - Subviews
@@ -91,10 +96,8 @@ private extension ProfileDetailView {
 #Preview {
     if let sampleUser = SampleData.sampleUsers.first {
         NavigationStack {
-            ProfileDetailView(
-                currentUser: sampleUser,
-                user: sampleUser
-            )
+            ProfileDetailView(user: sampleUser)
+                .environmentObject(AppSession())
         }
     }
 }
