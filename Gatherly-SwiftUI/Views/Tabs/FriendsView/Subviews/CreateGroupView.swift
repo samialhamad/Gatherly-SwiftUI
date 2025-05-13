@@ -9,17 +9,21 @@ import SwiftUI
 import PhotosUI
 
 struct CreateGroupView: View {
-    @EnvironmentObject var contentViewModel: ContentViewModel
-    @ObservedObject var currentUser: User
+    @EnvironmentObject var session: AppSession
     @Environment(\.dismiss) private var dismiss
-    @Binding var groups: [UserGroup]
     @State private var isSaving = false
     @StateObject private var viewModel: CreateGroupViewModel
-        
-    init(currentUser: User, groups: Binding<[UserGroup]>) {
-        self._viewModel = StateObject(wrappedValue: CreateGroupViewModel(currentUserID: currentUser.id ?? 1))
-        self.currentUser = currentUser
-        self._groups = groups
+    
+    init(currentUserID: Int) {
+        _viewModel = StateObject(wrappedValue: CreateGroupViewModel(currentUserID: currentUserID))
+    }
+    
+    private var currentUser: User? {
+        session.currentUser
+    }
+    
+    private var friends: [User] {
+        currentUser?.resolvedFriends(from: session.friendsDict) ?? []
     }
     
     var body: some View {
@@ -46,9 +50,7 @@ struct CreateGroupView: View {
                     
                     EventMembersSection(
                         selectedMemberIDs: memberIDsBinding,
-                        header: "Invite Friends",
-                        currentUser: currentUser,
-                        friendsDict: contentViewModel.friendsDict
+                        header: "Invite Friends"
                     )
                     
                     createButtonSection
@@ -84,12 +86,6 @@ private extension CreateGroupView {
         )
     }
     
-    //MARK: - Computed Vars
-    
-    private var friends: [User] {
-        currentUser.resolvedFriends(from: contentViewModel.friendsDict)
-    }
-    
     //MARK: - Subviews
     
     var cancelToolbarButton: some ToolbarContent {
@@ -107,7 +103,7 @@ private extension CreateGroupView {
                 Task {
                     let newGroup = await viewModel.createGroup()
                     await MainActor.run {
-                        groups.append(newGroup)
+                        session.groups.append(newGroup)
                         isSaving = false
                         dismiss()
                     }
@@ -123,12 +119,6 @@ private extension CreateGroupView {
 }
 
 #Preview {
-    let sampleUsers = SampleData.sampleUsers
-    let currentUser = sampleUsers.first!
-    let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
-    
-    CreateGroupView(
-        currentUser: currentUser,
-        groups: .constant(SampleData.sampleGroups)
-    )
+    CreateGroupView(currentUserID: 1)
+        .environmentObject(AppSession())
 }
