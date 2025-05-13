@@ -9,20 +9,21 @@ import SwiftUI
 import MapKit
 
 struct EventDetailView: View {
-    @ObservedObject var currentUser: User
-    @Binding var events: [Event]
+    @EnvironmentObject var session: AppSession
     @Environment(\.dismiss) var dismiss
     @State private var isShowingEditView = false
-    @EnvironmentObject var navigationState: NavigationState
     @State private var showMapOptions = false
     @StateObject private var viewModel = EventDetailViewModel()
     
     let event: Event
-    let friendsDict: [Int: User]
     var onSave: ((Event) -> Void)? = nil
     
+    private var currentUser: User? {
+        session.currentUser
+    }
+    
     private var updatedEvent: Event {
-        events.first(where: { $0.id == event.id }) ?? event
+        session.events.first(where: { $0.id == event.id }) ?? event
     }
     
     var body: some View {
@@ -42,17 +43,18 @@ struct EventDetailView: View {
                 .padding()
             }
             .frame(maxWidth: .infinity)
+            .navigationTitle(updatedEvent.title ?? "Untitled Event")
+            .navigationBarTitleDisplayMode(.large)
+            .toolbar {
+                editButton
+            }
+            .toolbarRole(.editor)
+            .sheet(isPresented: $isShowingEditView) {
+                editEventSheet
+            }
+            
         }
         .refreshOnAppear()
-        .navigationTitle(updatedEvent.title ?? "Untitled Event")
-        .navigationBarTitleDisplayMode(.large)
-        .toolbar {
-            editButton
-        }
-        .toolbarRole(.editor)
-        .sheet(isPresented: $isShowingEditView) {
-            editEventSheet
-        }
     }
 }
 
@@ -60,33 +62,28 @@ private extension EventDetailView {
     
     // MARK: - Computed Vars
     
-    var planner: User? {
-        guard let plannerID = event.plannerID else {
+    private var planner: User? {
+        guard let currentUser, let plannerID = event.plannerID else {
             return nil
         }
         
-        if plannerID == currentUser.id {
-            return currentUser
-        }
-        
-        return friendsDict[plannerID]
+        return plannerID == currentUser.id ? currentUser : session.friendsDict[plannerID]
     }
     
-    var members: [User] {
+    private var members: [User] {
         guard let memberIDs = updatedEvent.memberIDs else {
             return []
         }
         
-        return memberIDs
-            .filter { $0 != updatedEvent.plannerID }
-            .compactMap { friendsDict[$0] }
+        return memberIDs.filter { $0 != updatedEvent.plannerID }
+            .compactMap { session.friendsDict[$0] }
     }
     
     // MARK: - Subviews
     
     var editButton: some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
-            if updatedEvent.plannerID == currentUser.id {
+            if updatedEvent.plannerID == session.currentUser?.id {
                 Button("Edit") {
                     isShowingEditView = true
                 }
@@ -98,12 +95,11 @@ private extension EventDetailView {
     var editEventSheet: some View {
         EditEventView(
             viewModel: EditEventViewModel(event: updatedEvent),
-            currentUser: currentUser,
-            events: events,
-            friendsDict: friendsDict,
+            events: session.events,
+            friendsDict: session.friendsDict,
             onSave: { updatedEvent in
-                if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
-                    events[index] = updatedEvent
+                if let index = session.events.firstIndex(where: { $0.id == updatedEvent.id }) {
+                    session.events[index] = updatedEvent
                 }
                 isShowingEditView = false
             },
@@ -114,9 +110,9 @@ private extension EventDetailView {
                 Task {
                     let updatedEvents = await GatherlyAPI.deleteEvent(eventToDelete)
                     await MainActor.run {
-                        events = updatedEvents
-                        navigationState.calendarSelectedDate = eventToDelete.date ?? Date()
-                        navigationState.navigateToEvent = nil
+                        session.events = updatedEvents
+                        session.navigationState.calendarSelectedDate = eventToDelete.date ?? Date()
+                        session.navigationState.navigateToEvent = nil
                         isShowingEditView = false
                         dismiss()
                     }
@@ -230,7 +226,7 @@ private extension EventDetailView {
             if let planner {
                 Text("Planner")
                     .font(.headline)
-                NavigationLink(destination: ProfileDetailView(currentUser: currentUser, user: planner)) {
+                NavigationLink(destination: ProfileDetailView(user: planner)) {
                     ProfileRow(user: planner)
                 }
             }
@@ -238,7 +234,7 @@ private extension EventDetailView {
                 Text("Attendees")
                     .font(.headline)
                 ForEach(members, id: \.id) { user in
-                    NavigationLink(destination: ProfileDetailView(currentUser: currentUser, user: user)) {
+                    NavigationLink(destination: ProfileDetailView(user: user)) {
                         ProfileRow(user: user)
                     }
                 }
@@ -262,15 +258,7 @@ private extension EventDetailView {
 }
 
 #Preview {
-    let sampleUsers = SampleData.sampleUsers
-    let currentUser = sampleUsers.first!
-    let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
-    
-    EventDetailView(
-        currentUser: currentUser,
-        events: .constant(SampleData.sampleEvents),
-        event: SampleData.sampleEvents[1],
-        friendsDict: friendsDict
-    )
-    .environmentObject(NavigationState())
+    let sampleEvent = SampleData.sampleEvents[1]
+    EventDetailView(event: sampleEvent)
+        .environmentObject(AppSession())
 }
