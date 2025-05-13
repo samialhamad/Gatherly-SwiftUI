@@ -75,8 +75,11 @@ private extension EventDetailView {
             return []
         }
         
-        return memberIDs.filter { $0 != updatedEvent.plannerID }
-            .compactMap { session.friendsDict[$0] }
+        return memberIDs
+            .filter { $0 != updatedEvent.plannerID }
+            .compactMap { id in
+                id == currentUser?.id ? currentUser : session.friendsDict[id]
+            }
     }
     
     // MARK: - Subviews
