@@ -9,11 +9,16 @@ import ComposableArchitecture
 import SwiftUI
 
 struct UserFormView: View {
+    @EnvironmentObject var session: AppSession
     @State private var isSaving = false
     @State private var showingDeleteAlert = false
     
     let store: Store<UserFormFeature.State, UserFormFeature.Action>
     let onComplete: (UserFormFeature.Action) -> Void
+    
+    private var currentUser: User? {
+        session.currentUser
+    }
     
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
@@ -120,4 +125,5 @@ private extension UserFormView {
         ),
         onComplete: { _ in }
     )
+    .environmentObject(AppSession())
 }
