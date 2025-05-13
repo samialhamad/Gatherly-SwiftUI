@@ -149,6 +149,7 @@ final class AppSession: ObservableObject {
     }
     
     func syncContacts(currentUserID: Int = 1) {
+        isLoading = true
         ContactSyncManager.shared.fetchContacts { contacts in
             Task {
                 let (newUsers, newFriendIDs) = await self.generateUsersFromContacts(contacts)
@@ -158,6 +159,7 @@ final class AppSession: ObservableObject {
                         newFriendIDs: newFriendIDs,
                         currentUserID: currentUserID
                     )
+                    self.isLoading = false
                 }
             }
         }
