@@ -103,7 +103,7 @@ final class AppSession: ObservableObject {
             self.users.insert(newCurrentUser, at: 0)
         }
         
-        UserDefaultsManager.saveUsers(users)
+        UserDefaultsManager.saveUsers(self.users)
         updateLocalFriendsAndGroups()
         self.currentUser = users.first(where: { $0.id == currentUserID })
     }
