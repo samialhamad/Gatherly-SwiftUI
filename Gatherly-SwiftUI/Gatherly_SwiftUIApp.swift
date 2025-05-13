@@ -9,8 +9,6 @@ import SwiftUI
 
 @main
 struct Gatherly_SwiftUIApp: App {
-    @StateObject var navigationState = NavigationState()
-    
     init() {
         GatherlyAppearance.configure()
     }
@@ -19,7 +17,7 @@ struct Gatherly_SwiftUIApp: App {
         WindowGroup {
             ContentView()
                 .applyGatherlyToolbarStyle()
-                .environmentObject(navigationState)
+                .environmentObject(AppSession())
         }
     }
 }
