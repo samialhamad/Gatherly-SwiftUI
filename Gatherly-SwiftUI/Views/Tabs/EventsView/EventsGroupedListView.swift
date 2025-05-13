@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct EventsGroupedListView: View {
-    @ObservedObject var currentUser: User
-    @Binding var events: [Event]
+    @EnvironmentObject var session: AppSession
     @StateObject private var viewModel = EventsGroupedListViewModel()
     
-    let friendsDict: [Int: User]
-    let onEventSave: (Event) -> Void
+    private var currentUser: User? {
+        session.currentUser
+    }
     
     var body: some View {
-        let groupedEvents = events.groupEventsByDay
+        let groupedEvents = session.events.groupEventsByDay
         let keys = groupedEvents.keys.sorted()
         
         ScrollViewReader { proxy in
@@ -31,7 +31,7 @@ struct EventsGroupedListView: View {
 private extension EventsGroupedListView {
     
     // MARK: - Subviews
-
+    
     func groupedEventsList(
         keys: [Date],
         groupedEvents: [Date: [Event]],
@@ -41,18 +41,10 @@ private extension EventsGroupedListView {
             ForEach(keys, id: \.self) { date in
                 let dateLabel = date.formatted(date: .long, time: .omitted)
                 let eventsForDate = groupedEvents[date] ?? []
-
+                
                 Section {
                     ForEach(eventsForDate) { event in
-                        EventRowLink(
-                            currentUser: currentUser,
-                            events: $events,
-                            event: event,
-                            friendsDict: friendsDict,
-                            onSave: onEventSave,
-                            showDisclosure: false
-                        )
-                        .listRowSeparator(.hidden)
+                        EventRowLink(event: event, showDisclosure: false)
                     }
                 } header: {
                     Text(dateLabel)
@@ -70,7 +62,7 @@ private extension EventsGroupedListView {
             }
         }
     }
-
+    
     func scrollToTodayToolbarButton(keys: [Date], proxy: ScrollViewProxy) -> some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
             if viewModel.shouldShowTodayButton(keys: keys) {
@@ -86,16 +78,6 @@ private extension EventsGroupedListView {
 }
 
 #Preview {
-    let sampleUsers = SampleData.sampleUsers
-    let currentUser = sampleUsers.first!
-    let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
-
-    return EventsGroupedListView(
-        currentUser: currentUser,
-        events: .constant(SampleData.sampleEvents),
-        friendsDict: friendsDict,
-        onEventSave: { updatedEvent in
-            print("Updated event: \(updatedEvent)")
-        }
-    )
+    EventsGroupedListView()
+        .environmentObject(AppSession())
 }
