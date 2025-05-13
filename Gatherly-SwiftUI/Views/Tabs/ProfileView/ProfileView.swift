@@ -9,23 +9,29 @@ import ComposableArchitecture
 import SwiftUI
 
 struct ProfileView: View {
-    @ObservedObject var currentUser: User
+    @EnvironmentObject var session: AppSession
     @State private var userFormStore: Store<UserFormFeature.State, UserFormFeature.Action>? = nil
     @State private var refreshID = UUID()
     
+    private var currentUser: User? {
+        session.currentUser
+    }
+    
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(spacing: Constants.ProfileView.vstackSpacing) {
-                    AvatarHeaderView(
-                        refreshID: refreshID,
-                        user: currentUser
-                    )
-                    profileRowsSection
+            if let currentUser {
+                ScrollView {
+                    VStack(spacing: Constants.ProfileView.vstackSpacing) {
+                        AvatarHeaderView(
+                            refreshID: refreshID,
+                            user: currentUser
+                        )
+                        profileRowsSection(currentUser)
+                    }
                 }
+                .navigationTitle(fullName(for: currentUser))
+                .navigationBarTitleDisplayMode(.large)
             }
-            .navigationTitle(fullName)
-            .navigationBarTitleDisplayMode(.large)
         }
         .sheet(isPresented: Binding(
             get: { userFormStore != nil },
@@ -50,8 +56,8 @@ private extension ProfileView {
     
     // MARK: - Computed Vars
     
-    var fullName: String {
-        "\(currentUser.firstName ?? "") \(currentUser.lastName ?? "")"
+    func fullName(for user: User) -> String {
+        "\(user.firstName ?? "") \(user.lastName ?? "")"
     }
     
     // MARK: Functions
@@ -107,7 +113,7 @@ private extension ProfileView {
         }
     }
     
-    var profileRowsSection: some View {
+    func profileRowsSection(_ currentUser: User) -> some View {
         VStack(spacing: Constants.ProfileView.profileVStackSpacing) {
             Button {
                 userFormStore = Store(
@@ -135,7 +141,6 @@ private extension ProfileView {
 }
 
 #Preview {
-    let sampleUser = SampleData.sampleUsers.first!
-    
-    ProfileView(currentUser: sampleUser)
+    ProfileView()
+        .environmentObject(AppSession())
 }
