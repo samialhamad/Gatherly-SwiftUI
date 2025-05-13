@@ -55,12 +55,25 @@ struct EventDateTimeSection: View {
 }
 
 struct EventMembersSection: View {
+    @EnvironmentObject var session: AppSession
     @State private var isMembersPickerPresented = false
     @Binding var selectedMemberIDs: Set<Int>
     
     let header: String
-    let currentUser: User
-    let friendsDict: [Int: User]
+    
+    private var currentUser: User? {
+        session.currentUser
+    }
+    
+    private var friends: [User] {
+        guard let currentUser else {
+            return []
+        }
+        
+        return currentUser
+            .resolvedFriends(from: session.friendsDict)
+            .filter { $0.id != currentUser.id }
+    }
     
     var body: some View {
         Section(header: Text(header)) {
@@ -70,26 +83,18 @@ struct EventMembersSection: View {
                 HStack {
                     Text("Invite Friends")
                         .foregroundColor(.primary)
+                    
                     Spacer()
+                    
                     Text("\(selectedMemberIDs.count) selected")
                         .foregroundColor(.secondary)
                 }
                 .addDisclosureIcon()
             }
             .sheet(isPresented: $isMembersPickerPresented) {
-                EventMembersPicker(
-                    selectedMemberIDs: $selectedMemberIDs,
-                    currentUser: currentUser,
-                    friends: friends
-                )
+                EventMembersPicker(selectedMemberIDs: $selectedMemberIDs)
             }
         }
-    }
-    
-    private var friends: [User] {
-        currentUser
-            .resolvedFriends(from: friendsDict)
-            .filter { $0.id != currentUser.id }
     }
 }
 
@@ -187,22 +192,12 @@ struct EventCategorySection: View {
 }
 
 struct EventRowLink: View {
-    @ObservedObject var currentUser: User
-    @Binding var events: [Event]
     let event: Event
-    let friendsDict: [Int: User]
-    let onSave: (Event) -> Void
-    var showDisclosure: Bool
+    var showDisclosure: Bool = true
     
     var body: some View {
         NavigationLink {
-            EventDetailView(
-                currentUser: currentUser,
-                events: $events,
-                event: event,
-                friendsDict: friendsDict,
-                onSave: onSave
-            )
+            EventDetailView(event: event)
         } label: {
             EventRow(event: event, showDisclosure: showDisclosure)
         }
