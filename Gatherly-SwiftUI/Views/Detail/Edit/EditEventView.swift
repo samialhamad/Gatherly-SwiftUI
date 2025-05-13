@@ -8,17 +8,20 @@
 import SwiftUI
 
 struct EditEventView: View {
+    @EnvironmentObject var session: AppSession
     @State private var isSaving = false
+    @State private var showingDeleteAlert = false
     @StateObject var viewModel: EditEventViewModel
     
-    let currentUser: User
     let events: [Event]
     let friendsDict: [Int: User]
     let onSave: (Event) -> Void
     let onCancel: () -> Void
     let onDelete: (Event) -> Void
     
-    @State private var showingDeleteAlert = false
+    private var currentUser: User? {
+        session.currentUser
+    }
     
     var body: some View {
         NavigationStack {
@@ -40,9 +43,7 @@ struct EditEventView: View {
                 
                 EventMembersSection(
                     selectedMemberIDs: memberIDsBinding,
-                    header: "Members",
-                    currentUser: currentUser,
-                    friendsDict: friendsDict
+                    header: "Members"
                 )
                 
                 EventLocationSection(
@@ -162,12 +163,6 @@ private extension EditEventView {
         )
     }
     
-    // MARK: - Computed Vars
-    
-    private var friends: [User] {
-        currentUser.resolvedFriends(from: friendsDict)
-    }
-    
     // MARK: - Subviews
     
     var cancelToolbarButton: some ToolbarContent {
@@ -205,24 +200,17 @@ private extension EditEventView {
 
 #Preview {
     let sampleUsers = SampleData.sampleUsers
-    let currentUser = sampleUsers.first!
     let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
     
     NavigationStack {
         EditEventView(
             viewModel: EditEventViewModel(event: SampleData.sampleEvents.first!),
-            currentUser: currentUser,
             events: SampleData.sampleEvents,
             friendsDict: friendsDict,
-            onSave: { updatedEvent in
-                print("Event updated: \(updatedEvent)")
-            },
-            onCancel: {
-                print("Edit cancelled")
-            },
-            onDelete: { event in
-                print("Delete event: \(event)")
-            }
+            onSave: { _ in },
+            onCancel: {},
+            onDelete: { _ in }
         )
+        .environmentObject(AppSession())
     }
 }
