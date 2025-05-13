@@ -8,12 +8,24 @@
 import SwiftUI
 
 struct EventMembersPicker: View {
+    @EnvironmentObject var session: AppSession
     @Environment(\.dismiss) var dismiss
     @Binding var selectedMemberIDs: Set<Int>
     
-    let currentUser: User
-    let friends: [User]
-
+    private var currentUser: User? {
+        session.currentUser
+    }
+    
+    private var friends: [User] {
+        guard let currentUser else {
+            return []
+        }
+        
+        return currentUser
+            .resolvedFriends(from: session.friendsDict)
+            .filter { $0.id != currentUser.id }
+    }
+    
     var body: some View {
         NavigationStack {
             List(friends, id: \.id) { user in
