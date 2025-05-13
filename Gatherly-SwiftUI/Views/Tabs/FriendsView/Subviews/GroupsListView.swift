@@ -8,11 +8,17 @@
 import SwiftUI
 
 struct GroupsListView: View {
-    @EnvironmentObject var contentViewModel: ContentViewModel
-    @ObservedObject var currentUser: User
-    @Binding var groups: [UserGroup]
+    @EnvironmentObject var session: AppSession
     @Binding var searchText: String
-        
+    
+    private var currentUser: User? {
+        session.currentUser
+    }
+    
+    private var groups: [UserGroup] {
+        session.groups
+    }
+    
     var body: some View {
         List {
             groupListContent
@@ -26,6 +32,10 @@ private extension GroupsListView {
     //MARK: - Computed var
     
     var filteredGroups: [UserGroup] {
+        guard let currentUser else {
+            return []
+        }
+        
         let userGroups = groups.filter { group in
             let isLeader = (group.leaderID == currentUser.id)
             let isMember = group.id.flatMap { currentUser.groupIDs?.contains($0) } ?? false
@@ -47,12 +57,7 @@ private extension GroupsListView {
     
     var groupListContent: some View {
         ForEach(filteredGroups, id: \.id) { group in
-            NavigationLink(destination: GroupDetailView(
-                groups: $groups,
-                currentUser: currentUser,
-                friendsDict: contentViewModel.friendsDict,
-                group: group
-            )) {
+            NavigationLink(destination: GroupDetailView(group: group)) {
                 GroupRow(group: group)
             }
         }
@@ -60,13 +65,6 @@ private extension GroupsListView {
 }
 
 #Preview {
-    let sampleUsers = SampleData.sampleUsers
-    let currentUser = sampleUsers.first!
-    let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
-
-    GroupsListView(
-        currentUser: currentUser,
-        groups: .constant(SampleData.sampleGroups),
-        searchText: .constant("")
-    )
+    GroupsListView(searchText: .constant(""))
+        .environmentObject(AppSession())
 }
