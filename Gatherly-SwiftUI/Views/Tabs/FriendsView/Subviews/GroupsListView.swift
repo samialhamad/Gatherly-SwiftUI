@@ -11,6 +11,8 @@ struct GroupsListView: View {
     @EnvironmentObject var session: AppSession
     @Binding var searchText: String
     
+    let mode: SelectionMode
+    
     private var currentUser: User? {
         session.currentUser
     }
@@ -20,8 +22,8 @@ struct GroupsListView: View {
     }
     
     var body: some View {
-        List {
-            groupListContent
+        List(filteredGroups, id: \.id) { group in
+            rowView(for: group)
         }
         .listStyle(.plain)
     }
@@ -53,18 +55,44 @@ private extension GroupsListView {
         }
     }
     
+    // MARK: - Functions
+    
+    private func toggleGroupSelection(_ memberIDs: [Int], binding: Binding<Set<Int>>) {
+        let allSelected = memberIDs.allSatisfy { binding.wrappedValue.contains($0) }
+        if allSelected {
+            memberIDs.forEach { binding.wrappedValue.remove($0) }
+        } else {
+            memberIDs.forEach { binding.wrappedValue.insert($0) }
+        }
+    }
+    
     //MARK: - Subviews
     
-    var groupListContent: some View {
-        ForEach(filteredGroups, id: \.id) { group in
+    @ViewBuilder
+    private func rowView(for group: UserGroup) -> some View {
+        switch mode {
+        case .view:
             NavigationLink(destination: GroupDetailView(group: group)) {
                 GroupRow(group: group)
+            }
+        case .select(let binding):
+            Button {
+                toggleGroupSelection(group.memberIDs, binding: binding)
+            } label: {
+                HStack {
+                    GroupRow(group: group)
+                    Spacer()
+                    if group.memberIDs.allSatisfy({ binding.wrappedValue.contains($0) }) {
+                        Image(systemName: "checkmark")
+                            .foregroundColor(Color(Colors.primary))
+                    }
+                }
             }
         }
     }
 }
 
-#Preview {
-    GroupsListView(searchText: .constant(""))
-        .environmentObject(AppSession())
-}
+//#Preview {
+//    GroupsListView(searchText: .constant(""))
+//        .environmentObject(AppSession())
+//}
