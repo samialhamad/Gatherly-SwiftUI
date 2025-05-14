@@ -35,7 +35,7 @@ struct UserFormView: View {
                     }
                 }
                 if isSaving {
-                    ActivityIndicator(message: "Saving your changes…")
+                    ActivityIndicator(message: "Adding your friend!")
                 }
             }
             .keyboardDismissable()
