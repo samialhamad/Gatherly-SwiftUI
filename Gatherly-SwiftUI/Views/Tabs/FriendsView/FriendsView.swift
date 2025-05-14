@@ -72,7 +72,7 @@ struct FriendsView: View {
     }
 }
 
-private extension FriendsView {
+extension FriendsView {
     
     //MARK: - Functions
     
