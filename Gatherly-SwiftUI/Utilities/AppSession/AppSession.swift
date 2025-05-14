@@ -109,22 +109,43 @@ final class AppSession: ObservableObject {
     }
     
     func generateUsersFromContacts(_ contacts: [SyncedContact]) async -> ([User], [Int]) {
-        let existingPhones = Set(users.compactMap { $0.phone?.filter(\.isWholeNumber) })
+        let existingPhoneNumbers = Set(users.compactMap { $0.phone?.filter(\.isWholeNumber) })
         var newUsers: [User] = []
         var newFriendIDs: [Int] = []
         var nextAvailableID = (users.map { $0.id ?? 0 }.max() ?? 999) + 1
         
-        for contact in contacts {
+        // Filter out duplicates
+        let uniqueContacts = contacts.filter { contact in
             let cleaned = contact.phoneNumber.filter(\.isWholeNumber)
-            guard !existingPhones.contains(cleaned) else {
-                continue
+            return !existingPhoneNumbers.contains(cleaned)
+        }
+        
+        // Assign ID to every new contact
+        let contactIDPairs = uniqueContacts.map { contact in
+            let assignedID = nextAvailableID
+            nextAvailableID += 1
+            return (contact, assignedID)
+        }
+        
+        // Parallel (task group ) creation of users
+        let results = await withTaskGroup(of: (User).self) { group in
+            for (contact, id) in contactIDPairs {
+                group.addTask {
+                    return await GatherlyAPI.createUser(from: contact, id: id)
+                }
             }
             
-            let user = await GatherlyAPI.createUser(from: contact, id: nextAvailableID)
-            newUsers.append(user)
-            newFriendIDs.append(nextAvailableID)
-            nextAvailableID += 1
+            var collectedUsers: [User] = []
+            
+            for await user in group {
+                collectedUsers.append(user)
+            }
+            
+            return collectedUsers
         }
+        
+        newUsers = results
+        newFriendIDs = results.compactMap { $0.id }
         
         return (newUsers, newFriendIDs)
     }
