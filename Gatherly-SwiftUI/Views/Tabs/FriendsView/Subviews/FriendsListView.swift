@@ -12,6 +12,8 @@ struct FriendsListView: View {
     @Binding var searchText: String
     @StateObject private var viewModel = FriendsListViewModel()
     
+    let mode: SelectionMode
+    
     private var currentUser: User? {
         session.currentUser
     }
@@ -35,7 +37,7 @@ private extension FriendsListView {
     // MARK: - Computed Vars
     
     private var filteredFriends: [User] {
-        viewModel.filteredFriends(from: friends)
+        viewModel.filteredFriends(from: friends, searchText: searchText)
     }
     
     private var groupedFriends: [String: [User]] {
@@ -46,25 +48,18 @@ private extension FriendsListView {
         viewModel.sortedSectionKeys(from: filteredFriends)
     }
     
-    // MARK: - Subviews
+    // MARK: - Functions
     
-    func friendList(proxy: ScrollViewProxy) -> some View {
-        List {
-            ForEach(sortedSectionKeys, id: \.self) { key in
-                Section(header: Text(key).id(key)) {
-                    ForEach(
-                        groupedFriends[key]?.sorted(by: { ($0.firstName ?? "") < ($1.firstName ?? "") }) ?? [],
-                        id: \.id
-                    ) { friend in
-                        NavigationLink(destination: ProfileDetailView(user: friend)) {
-                            ProfileRow(user: friend)
-                        }
-                    }
-                }
-            }
+    private func toggleSelection(_ id: Int?, binding: Binding<Set<Int>>) {
+        guard let id = id else { return }
+        if binding.wrappedValue.contains(id) {
+            binding.wrappedValue.remove(id)
+        } else {
+            binding.wrappedValue.insert(id)
         }
-        .listStyle(.plain)
     }
+    
+    // MARK: - Subviews
     
     func alphabetOverlay(proxy: ScrollViewProxy) -> some View {
         Group {
@@ -75,6 +70,42 @@ private extension FriendsListView {
                     }
                 }
                 .padding(.trailing, Constants.FriendsListView.overlayTrailingPadding)
+            }
+        }
+    }
+    
+    func friendList(proxy: ScrollViewProxy) -> some View {
+        List {
+            ForEach(viewModel.sortedSectionKeys(from: viewModel.filteredFriends(from: friends, searchText: searchText)), id: \.self) { key in
+                Section(header: Text(key).id(key)) {
+                    ForEach(viewModel.groupedFriends(from: viewModel.filteredFriends(from: friends, searchText: searchText))[key] ?? []) { friend in
+                        rowView(for: friend)
+                    }
+                }
+            }
+        }
+        .listStyle(.plain)
+    }
+    
+    @ViewBuilder
+    private func rowView(for friend: User) -> some View {
+        switch mode {
+        case .view:
+            NavigationLink(destination: ProfileDetailView(user: friend)) {
+                ProfileRow(user: friend)
+            }
+        case .select(let binding):
+            Button {
+                toggleSelection(friend.id, binding: binding)
+            } label: {
+                HStack {
+                    ProfileRow(user: friend)
+                    Spacer()
+                    if binding.wrappedValue.contains(friend.id ?? -1) {
+                        Image(systemName: "checkmark")
+                            .foregroundColor(Color(Colors.primary))
+                    }
+                }
             }
         }
     }
