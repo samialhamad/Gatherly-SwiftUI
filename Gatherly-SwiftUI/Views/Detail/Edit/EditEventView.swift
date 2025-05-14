@@ -24,54 +24,56 @@ struct EditEventView: View {
     }
     
     var body: some View {
-        NavigationStack {
-            Form {
-                EventDetailsSection(
-                    header: "Event Info",
-                    title: titleBinding,
-                    description: descriptionBinding
-                )
-                
-                EventDateTimeSection(
-                    header: "Date & Time",
-                    eventDate: eventDateBinding,
-                    startTime: startTimeBinding,
-                    endTime: endTimeBinding,
-                    startTimeRange: viewModel.startTimeRange,
-                    endTimeRange: viewModel.endTimeRange
-                )
-                
-                EventMembersSection(
-                    selectedMemberIDs: memberIDsBinding,
-                    header: "Members"
-                )
-                
-                EventLocationSection(
-                    header: "Location",
-                    locationName: locationNameBinding,
-                    onSetLocation: { location in
-                        viewModel.event.location = location
-                    }
-                )
-                
-                EventCategorySection(
-                    header: "Categories",
-                    selectedCategories: categoriesBinding
-                )
-                
-                ImagePicker(
-                    title: "Banner Image",
-                    imageHeight: Constants.EditEventView.bannerImageHeight,
-                    maskShape: .rectangle,
-                    selectedImage: $viewModel.selectedBannerImage
-                )
-                
-                deleteButton
-            }
-            .navigationTitle("Edit Event")
-            .toolbar {
-                cancelToolbarButton
-                saveToolbarButton
+        ZStack {
+            NavigationStack {
+                Form {
+                    EventDetailsSection(
+                        header: "Event Info",
+                        title: titleBinding,
+                        description: descriptionBinding
+                    )
+                    
+                    EventDateTimeSection(
+                        header: "Date & Time",
+                        eventDate: eventDateBinding,
+                        startTime: startTimeBinding,
+                        endTime: endTimeBinding,
+                        startTimeRange: viewModel.startTimeRange,
+                        endTimeRange: viewModel.endTimeRange
+                    )
+                    
+                    EventMembersSection(
+                        selectedMemberIDs: memberIDsBinding,
+                        header: "Members"
+                    )
+                    
+                    EventLocationSection(
+                        header: "Location",
+                        locationName: locationNameBinding,
+                        onSetLocation: { location in
+                            viewModel.event.location = location
+                        }
+                    )
+                    
+                    EventCategorySection(
+                        header: "Categories",
+                        selectedCategories: categoriesBinding
+                    )
+                    
+                    ImagePicker(
+                        title: "Banner Image",
+                        imageHeight: Constants.EditEventView.bannerImageHeight,
+                        maskShape: .rectangle,
+                        selectedImage: $viewModel.selectedBannerImage
+                    )
+                    
+                    deleteButton
+                }
+                .navigationTitle("Edit Event")
+                .toolbar {
+                    cancelToolbarButton
+                    saveToolbarButton
+                }
             }
             .alert("Delete Event?", isPresented: $showingDeleteAlert) {
                 Button("Delete", role: .destructive) {
@@ -81,10 +83,8 @@ struct EditEventView: View {
             } message: {
                 Text("Are you sure you want to delete this event?")
             }
-            .overlay {
-                if isSaving {
-                    ActivityIndicator(message: "Saving your changes…")
-                }
+            if isSaving {
+                ActivityIndicator(message: "Saving your changes!")
             }
         }
         .keyboardDismissable()
