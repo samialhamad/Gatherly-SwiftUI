@@ -11,7 +11,6 @@ import PhotosUI
 struct CreateEventView: View {
     @EnvironmentObject var session: AppSession
     @State private var isSaving = false
-    @State private var navigateToEvent: Event? = nil
     @StateObject private var viewModel = CreateEventViewModel()
     
     private var currentUser: User? {
