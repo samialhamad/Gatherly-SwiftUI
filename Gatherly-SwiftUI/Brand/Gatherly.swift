@@ -49,3 +49,10 @@ enum EventCategory: String, Codable, CaseIterable {
     
     static let allCases: [EventCategory] = [.food, .entertainment, .travel, .sports, .education, .networking, .other]
 }
+
+//MARK: - SelectionMode
+
+enum SelectionMode {
+    case view
+    case select(selectedIDs: Binding<Set<Int>>)
+}
