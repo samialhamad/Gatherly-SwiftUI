@@ -104,6 +104,8 @@ private extension CreateGroupView {
                     let newGroup = await viewModel.createGroup()
                     await MainActor.run {
                         session.groups.append(newGroup)
+                        session.navigationState.navigateToGroup = newGroup
+                        session.navigationState.selectedTab = 2
                         isSaving = false
                         dismiss()
                     }

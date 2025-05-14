@@ -52,6 +52,20 @@ struct FriendsView: View {
             .sheet(isPresented: $isShowingCreateGroup) {
                 createGroupSheet
             }
+            .navigationDestination(isPresented: Binding(
+                get: { session.navigationState.navigateToGroup != nil },
+                set: { newValue in
+                    if !newValue {
+                        session.navigationState.navigateToGroup = nil
+                    }
+                }
+            )) {
+                if let group = session.navigationState.navigateToGroup {
+                    GroupDetailView(group: group)
+                } else {
+                    EmptyView()
+                }
+            }
         }
         .refreshOnAppear()
         .keyboardDismissable()
