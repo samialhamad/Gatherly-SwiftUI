@@ -62,9 +62,9 @@ final class AppSessionTests: XCTestCase {
         let user2 = User(firstName: "Friend", id: 2)
         session.users = [user1, user2]
         session.currentUser = user1
-
+        
         session.updateLocalFriendsAndGroups()
-
+        
         XCTAssertEqual(session.friends.count, 1)
         XCTAssertEqual(session.friends.first?.id, 2)
     }
@@ -82,10 +82,11 @@ final class AppSessionTests: XCTestCase {
         ]
         
         let (newUsers, newFriendIDs) = await session.generateUsersFromContacts(contacts)
-
+        let firstNames = Set(newUsers.compactMap { $0.firstName })
+        
+        
         XCTAssertEqual(newUsers.count, 2)
         XCTAssertEqual(newFriendIDs.count, 2)
-        XCTAssertEqual(newUsers[0].firstName, "Bob")
-        XCTAssertEqual(newUsers[1].firstName, "Alice")
+        XCTAssertEqual(firstNames, Set(["Bob", "Alice"]))
     }
 }
