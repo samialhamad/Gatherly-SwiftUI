@@ -10,7 +10,7 @@ import Foundation
 class FriendsListViewModel: ObservableObject {
     @Published var searchText: String = ""
     
-    func filteredFriends(from friends: [User]) -> [User] {
+    func filteredFriends(from friends: [User], searchText: String) -> [User] {
         if searchText.isEmpty {
             return friends
         }
