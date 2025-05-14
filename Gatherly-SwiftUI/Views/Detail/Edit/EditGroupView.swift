@@ -24,56 +24,56 @@ struct EditGroupView: View {
     }
     
     var body: some View {
-        NavigationStack {
-                ZStack {
-                    Form {
-                        Section(header: Text("Group Name")) {
-                            TextField("Enter group name", text: nameBinding)
-                        }
-                        
-                        ImagePicker(
-                            title: "Group Image",
-                            imageHeight: Constants.CreateGroupView.groupImageHeight,
-                            maskShape: .circle,
-                            selectedImage: $viewModel.groupImage
-                        )
-                        
-                        ImagePicker(
-                            title: "Banner Image",
-                            imageHeight: Constants.CreateGroupView.groupBannerImageHeight,
-                            maskShape: .rectangle,
-                            selectedImage: $viewModel.bannerImage
-                        )
-                        
-                        EventMembersSection(
-                            selectedMemberIDs: memberIDsBinding,
-                            header: "Friends"
-                        )
-                        
-                        deleteButton
+        ZStack {
+            NavigationStack {
+                Form {
+                    Section(header: Text("Group Name")) {
+                        TextField("Enter group name", text: nameBinding)
                     }
                     
-                    if isSaving {
-                        ActivityIndicator(message: "Saving your changes…")
-                    }
+                    ImagePicker(
+                        title: "Group Image",
+                        imageHeight: Constants.CreateGroupView.groupImageHeight,
+                        maskShape: .circle,
+                        selectedImage: $viewModel.groupImage
+                    )
+                    
+                    ImagePicker(
+                        title: "Banner Image",
+                        imageHeight: Constants.CreateGroupView.groupBannerImageHeight,
+                        maskShape: .rectangle,
+                        selectedImage: $viewModel.bannerImage
+                    )
+                    
+                    EventMembersSection(
+                        selectedMemberIDs: memberIDsBinding,
+                        header: "Friends"
+                    )
+                    
+                    deleteButton
                 }
                 .navigationTitle("Edit Group")
                 .toolbar {
                     cancelToolbarButton
                     saveToolbarButton
                 }
-                .alert("Delete Group?", isPresented: $showingDeleteAlert) {
-                    Button("Delete", role: .destructive) {
-                        isSaving = true
-                        Task {
-                            onDelete(viewModel.originalGroup)
-                            isSaving = false
-                        }
+            }
+            .alert("Delete Group?", isPresented: $showingDeleteAlert) {
+                Button("Delete", role: .destructive) {
+                    isSaving = true
+                    Task {
+                        onDelete(viewModel.originalGroup)
+                        isSaving = false
                     }
-                    Button("Cancel", role: .cancel) {}
-                } message: {
-                    Text("Are you sure you want to delete this group?")
                 }
+                Button("Cancel", role: .cancel) {}
+            } message: {
+                Text("Are you sure you want to delete this group?")
+            }
+            
+            if isSaving {
+                ActivityIndicator(message: "Saving your changes!")
+            }
         }
         .keyboardDismissable()
     }
@@ -135,7 +135,7 @@ private extension EditGroupView {
 #Preview {
     let sampleUsers = SampleData.sampleUsers
     let friendsDict = Dictionary(uniqueKeysWithValues: sampleUsers.map { ($0.id ?? -1, $0) })
-
+    
     NavigationStack {
         EditGroupView(
             viewModel: EditGroupViewModel(group: SampleData.sampleGroups.first!),
