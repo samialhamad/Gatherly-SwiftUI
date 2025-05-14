@@ -93,7 +93,7 @@ struct Constants {
         static let frameMaxHeight: CGFloat = 150
     }
     
-    struct EventMembersPicker {
+    struct FriendsPicker {
         static let topPadding: CGFloat = 20
     }
     
