@@ -27,8 +27,8 @@ struct CreateGroupView: View {
     }
     
     var body: some View {
-        NavigationStack {
-            ZStack {
+        ZStack {
+            NavigationStack {
                 Form {
                     Section(header: Text("Group Name")) {
                         TextField("Enter group name", text: groupNameBinding)
@@ -55,13 +55,13 @@ struct CreateGroupView: View {
                     
                     createButtonSection
                 }
-                if isSaving {
-                    ActivityIndicator(message: "Creating your group…")
+                .navigationTitle("New Group")
+                .toolbar {
+                    cancelToolbarButton
                 }
             }
-            .navigationTitle("New Group")
-            .toolbar {
-                cancelToolbarButton
+            if isSaving {
+                ActivityIndicator(message: "Creating your group!")
             }
         }
         .keyboardDismissable()
