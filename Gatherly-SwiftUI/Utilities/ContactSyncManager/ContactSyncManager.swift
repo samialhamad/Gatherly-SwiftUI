@@ -18,35 +18,29 @@ class ContactSyncManager {
     
     func fetchContacts(completion: @escaping ([SyncedContact]) -> Void) {
         let store = CNContactStore()
-        
+
         store.requestAccess(for: .contacts) { granted, _ in
             guard granted else {
                 completion([])
                 return
             }
+            
             DispatchQueue.global(qos: .userInitiated).async {
                 let keys: [CNKeyDescriptor] = [
                     CNContactGivenNameKey as CNKeyDescriptor, // first name
                     CNContactFamilyNameKey as CNKeyDescriptor, // last name
                     CNContactPhoneNumbersKey as CNKeyDescriptor
                 ]
-                
+
                 let request = CNContactFetchRequest(keysToFetch: keys)
-                var results: [SyncedContact] = []
-                
+                var contacts: [CNContact] = []
+
                 do {
                     try store.enumerateContacts(with: request) { contact, _ in
-                        let fullName = "\(contact.givenName) \(contact.familyName)".trimmingCharacters(in: .whitespaces)
-                        
-                        if let number = contact.phoneNumbers.first {
-                            let raw = number.value.stringValue
-                            let digits = raw.filter(\.isWholeNumber)
-                            
-                            if !digits.isEmpty {
-                                results.append(SyncedContact(fullName: fullName, phoneNumber: digits))
-                            }
-                        }
+                        contacts.append(contact)
                     }
+                    
+                    let results = self.parseContacts(contacts)
                     completion(results)
                 } catch {
                     print("Failed to fetch contacts:", error)
@@ -55,10 +49,7 @@ class ContactSyncManager {
             }
         }
     }
-}
-
-extension ContactSyncManager {
-    // Solely for unit testing - ensure the parsing of contacts is done correctly
+    
     func parseContacts(_ contacts: [CNContact]) -> [SyncedContact] {
         var results: [SyncedContact] = []
         
