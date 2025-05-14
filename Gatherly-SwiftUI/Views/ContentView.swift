@@ -21,9 +21,7 @@ struct ContentView: View {
                     profileTab
                 }
             } else {
-                Text("No current user loaded").onAppear {
-                    print("currentUser is nil in ContentView")
-                }
+                ActivityIndicator(message: "Gathering…")
             }
         }
         .task {
