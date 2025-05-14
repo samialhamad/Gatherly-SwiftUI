@@ -74,14 +74,14 @@ struct EditEventView: View {
                     cancelToolbarButton
                     saveToolbarButton
                 }
-            }
-            .alert("Delete Event?", isPresented: $showingDeleteAlert) {
-                Button("Delete", role: .destructive) {
-                    onDelete(viewModel.originalEvent)
+                .alert("Delete Event?", isPresented: $showingDeleteAlert) {
+                    Button("Delete", role: .destructive) {
+                        onDelete(viewModel.originalEvent)
+                    }
+                    Button("Cancel", role: .cancel) {}
+                } message: {
+                    Text("Are you sure you want to delete this event?")
                 }
-                Button("Cancel", role: .cancel) {}
-            } message: {
-                Text("Are you sure you want to delete this event?")
             }
             if isSaving {
                 ActivityIndicator(message: "Saving your changes!")
