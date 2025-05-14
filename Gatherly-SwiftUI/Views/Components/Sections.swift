@@ -92,7 +92,7 @@ struct EventMembersSection: View {
                 .addDisclosureIcon()
             }
             .sheet(isPresented: $isMembersPickerPresented) {
-                EventMembersPicker(selectedMemberIDs: $selectedMemberIDs)
+                FriendsPicker(selectedMemberIDs: $selectedMemberIDs)
             }
         }
     }
