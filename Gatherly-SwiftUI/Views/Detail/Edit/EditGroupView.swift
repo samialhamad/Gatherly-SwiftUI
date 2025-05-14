@@ -57,20 +57,19 @@ struct EditGroupView: View {
                     cancelToolbarButton
                     saveToolbarButton
                 }
-            }
-            .alert("Delete Group?", isPresented: $showingDeleteAlert) {
-                Button("Delete", role: .destructive) {
-                    isSaving = true
-                    Task {
-                        onDelete(viewModel.originalGroup)
-                        isSaving = false
+                .alert("Delete Group?", isPresented: $showingDeleteAlert) {
+                    Button("Delete", role: .destructive) {
+                        isSaving = true
+                        Task {
+                            onDelete(viewModel.originalGroup)
+                            isSaving = false
+                        }
                     }
+                    Button("Cancel", role: .cancel) {}
+                } message: {
+                    Text("Are you sure you want to delete this group?")
                 }
-                Button("Cancel", role: .cancel) {}
-            } message: {
-                Text("Are you sure you want to delete this group?")
             }
-            
             if isSaving {
                 ActivityIndicator(message: "Saving your changes!")
             }
