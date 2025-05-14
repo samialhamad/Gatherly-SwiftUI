@@ -47,16 +47,10 @@ class ContactSyncManager {
                             }
                         }
                     }
-                    
-                    DispatchQueue.main.async {
-                        completion(results)
-                    }
-                    
+                    completion(results)
                 } catch {
                     print("Failed to fetch contacts:", error)
-                    DispatchQueue.main.async {
-                        completion([])
-                    }
+                    completion([])
                 }
             }
         }
@@ -67,10 +61,10 @@ extension ContactSyncManager {
     // Solely for unit testing - ensure the parsing of contacts is done correctly
     func parseContacts(_ contacts: [CNContact]) -> [SyncedContact] {
         var results: [SyncedContact] = []
-
+        
         for contact in contacts {
             let fullName = "\(contact.givenName) \(contact.familyName)".trimmingCharacters(in: .whitespaces)
-
+            
             if let number = contact.phoneNumbers.first {
                 let raw = number.value.stringValue
                 let digits = raw.filter(\.isWholeNumber)
@@ -79,7 +73,7 @@ extension ContactSyncManager {
                 }
             }
         }
-
+        
         return results
     }
 }
