@@ -95,7 +95,7 @@ private extension ImagePicker {
                     }
                 }
             }
-            .foregroundColor(Color(Colors.primary))
+            .tint(Color(Colors.primary))
     }
     
     var cropperView: some View {
