@@ -18,8 +18,8 @@ struct CreateEventView: View {
     }
     
     var body: some View {
-        NavigationStack {
-            ZStack {
+        ZStack {
+            NavigationStack {
                 Form {
                     EventDetailsSection(
                         header: "Event Details",
@@ -63,16 +63,15 @@ struct CreateEventView: View {
                     
                     createButtonSection
                 }
-                if isSaving {
-                    ActivityIndicator(message: "Creating your event…")
-                }
+                .navigationTitle("Create Event")
             }
-            .navigationTitle("Create Event")
+            if isSaving {
+                ActivityIndicator(message: "Creating your event!")
+            }
         }
         .keyboardDismissable()
     }
 }
-
 
 private extension CreateEventView {
     
