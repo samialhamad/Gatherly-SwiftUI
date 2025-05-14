@@ -104,6 +104,8 @@ private extension EventDetailView {
                 if let index = session.events.firstIndex(where: { $0.id == updatedEvent.id }) {
                     session.events[index] = updatedEvent
                 }
+                session.navigationState.calendarSelectedDate = updatedEvent.date ?? Date()
+                session.navigationState.navigateToEvent = nil
                 isShowingEditView = false
             },
             onCancel: {
