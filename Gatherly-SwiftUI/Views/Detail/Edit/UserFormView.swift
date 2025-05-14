@@ -97,6 +97,8 @@ private extension UserFormView {
     
     func saveToolbarButton(_ viewStore: ViewStore<UserFormFeature.State, UserFormFeature.Action>) -> some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
+            let isDisabled = viewStore.firstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+
             Button("Save") {
                 isSaving = true
                 viewStore.send(.saveChanges)
@@ -105,8 +107,8 @@ private extension UserFormView {
                     onComplete(.delegate(.didSave(viewStore.currentUser)))
                 }
             }
-            .disabled(viewStore.firstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-            .foregroundColor(Color(Colors.secondary))
+            .disabled(isDisabled)
+            .foregroundColor(isDisabled ? .gray : Color(Colors.secondary))
         }
     }
 }
