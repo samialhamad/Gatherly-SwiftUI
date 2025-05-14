@@ -12,4 +12,5 @@ class NavigationState: ObservableObject {
     @Published var selectedTab: Int = 0
     @Published var calendarSelectedDate: Date = Date()
     @Published var navigateToEvent: Event? = nil
+    @Published var navigateToGroup: UserGroup? = nil
 }
