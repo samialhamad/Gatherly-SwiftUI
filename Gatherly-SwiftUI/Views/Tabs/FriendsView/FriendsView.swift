@@ -28,9 +28,9 @@ struct FriendsView: View {
                 SearchBarView(searchText: $searchText)
                 
                 if selectedTab == 0 {
-                    FriendsListView(searchText: $searchText)
+                    FriendsListView(searchText: $searchText, mode: .view)
                 } else {
-                    GroupsListView(searchText: $searchText)
+                    GroupsListView(searchText: $searchText, mode:. view)
                 }
             }
             .navigationTitle(tabTitles[selectedTab])
