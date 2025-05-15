@@ -38,6 +38,21 @@ struct CalendarView: View {
                     EmptyView()
                 }
             }
+            .navigationDestination(isPresented: Binding(
+                get: { session.navigationState.navigateToEventsForDate != nil },
+                set: { newValue in
+                    if !newValue { session.navigationState.navigateToEventsForDate = nil }
+                }
+            )) {
+                if let date = session.navigationState.navigateToEventsForDate {
+                    DayEventsView(date: date)
+                } else {
+                    EmptyView()
+                }
+            }
+            .onAppear {
+                session.navigationState.hasShownDayEventsView = false
+            }
         }
     }
 }
@@ -60,7 +75,8 @@ private extension CalendarView {
             VStack(spacing: 0) {
                 GatherlyCalendarView(
                     selectedDate: $session.navigationState.calendarSelectedDate,
-                    allEvents: $session.events
+                    allEvents: $session.events,
+                    session: session
                 )
             }
             .frame(maxHeight: .infinity)
