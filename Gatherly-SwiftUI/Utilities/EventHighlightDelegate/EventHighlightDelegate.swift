@@ -21,6 +21,23 @@ final class EventHighlightDelegate: ElegantCalendarDelegate {
     
     func calendar(didSelectDay date: Date) {
         selectedDate = date
+        
+        if session.navigationState.hasShownDayEventsView == false {
+            session.navigationState.hasShownDayEventsView = true
+            return
+        }
+        
+        let hasEvents = session.events.contains { event in
+            guard let eventDate = event.date else {
+                return false
+            }
+            
+            return Date.isSameDay(date1: eventDate, date2: date)
+        }
+        
+        if hasEvents {
+            session.navigationState.navigateToEventsForDate = date
+        }
     }
     
     func backgroundColor(for date: Date) -> Color {
