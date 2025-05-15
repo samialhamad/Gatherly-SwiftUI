@@ -19,7 +19,7 @@ struct DayEventsView: View {
                     .foregroundColor(.gray)
             } else {
                 ForEach(eventsForDate) { event in
-                    EventRowLink(event: event)
+                    EventRowLink(event: event, showDisclosure: false)
                 }
             }
         }
