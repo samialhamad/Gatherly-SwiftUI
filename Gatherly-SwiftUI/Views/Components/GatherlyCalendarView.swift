@@ -84,7 +84,7 @@ struct GatherlyCalendarView: View {
     
     private var dayEventsViewButton: some View {
         VStack(spacing: Constants.GatherlyCalendarView.dayEventsViewButtonSpacing) {
-            Text("View Events for \(selectedDate.formatted(date: .abbreviated, time: .omitted))")
+            Text(viewModel.eventCountLabel(for: selectedDate, events: allEvents))
                 .font(.headline)
                 .foregroundColor(Color(Colors.primary))
                 .multilineTextAlignment(.center)
@@ -96,7 +96,7 @@ struct GatherlyCalendarView: View {
                 }) {
                     HStack {
                         Image(systemName: "list.bullet")
-                        Text(viewModel.eventCountLabel(for: selectedDate, events: allEvents))
+                        Text("View Events for \(selectedDate.formatted(date: .abbreviated, time: .omitted))")
                     }
                     .font(.headline)
                     .foregroundColor(.white)
