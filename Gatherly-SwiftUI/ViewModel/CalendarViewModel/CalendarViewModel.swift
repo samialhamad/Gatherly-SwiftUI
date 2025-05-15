@@ -21,11 +21,11 @@ class CalendarViewModel: ObservableObject {
         
         if selectedDay < today {
             if count == 0 {
-                return "No finished events"
+                return "Looks like nothing happened this day!"
             } else if count == 1 {
-                return "1 finished event"
+                return "1 finished event!"
             } else {
-                return "\(count) finished events"
+                return "\(count) finished events!"
             }
         }
         
@@ -35,17 +35,17 @@ class CalendarViewModel: ObservableObject {
             } else if count == 1 {
                 return "1 event planned for today"
             } else {
-                return "\(count) events planned for today"
+                return "\(count) events planned for today!"
             }
         }
         
         else {
             if count == 0 {
-                return "No upcoming events"
+                return "No upcoming plans!"
             } else if count == 1 {
-                return "1 upcoming event"
+                return "1 upcoming event!"
             } else {
-                return "\(count) upcoming events"
+                return "\(count) upcoming events!"
             }
         }
     }
