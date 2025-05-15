@@ -22,13 +22,14 @@ struct GatherlyCalendarView: View {
         session.friendsDict
     }
     
-    init(selectedDate: Binding<Date>, allEvents: Binding<[Event]>) {
+    init(selectedDate: Binding<Date>, allEvents: Binding<[Event]>, session: AppSession) {
         _selectedDate = selectedDate
         _allEvents = allEvents
         
         let manager = ElegantCalendarManager.withEvents(
             selectedDate: selectedDate,
-            events: allEvents.wrappedValue
+            events: allEvents.wrappedValue,
+            session: session
         )
         _calendarManager = StateObject(wrappedValue: manager)
     }
