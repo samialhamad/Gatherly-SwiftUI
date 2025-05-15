@@ -11,11 +11,12 @@ import SwiftUI
 
 final class EventHighlightDelegate: ElegantCalendarDelegate {
     @Binding var selectedDate: Date
-    let events: [Event]
     
-    init(selectedDate: Binding<Date>, events: [Event]) {
+    let session: AppSession
+    
+    init(selectedDate: Binding<Date>, session: AppSession) {
         _selectedDate = selectedDate
-        self.events = events
+        self.session = session
     }
     
     func calendar(didSelectDay date: Date) {
@@ -37,7 +38,7 @@ final class EventHighlightDelegate: ElegantCalendarDelegate {
     }
     
     private func hasEvent(on date: Date) -> Bool {
-        events.contains { event in
+        session.events.contains { event in
             if let eventDate = event.date {
                 return Date.isSameDay(date1: eventDate, date2: date)
             }
