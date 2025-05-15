@@ -93,10 +93,6 @@ struct Constants {
         static let frameMaxHeight: CGFloat = 150
     }
     
-    struct FriendsPicker {
-        static let topPadding: CGFloat = 20
-    }
-    
     struct EventRow {
         static let topPadding: CGFloat = 5
         static let timeAndDisclosureSpacing: CGFloat = 8
@@ -104,6 +100,10 @@ struct Constants {
         
     struct FriendsListView {
         static let overlayTrailingPadding: CGFloat = 4
+    }
+    
+    struct FriendsPicker {
+        static let topPadding: CGFloat = 20
     }
     
     struct FriendsView {
