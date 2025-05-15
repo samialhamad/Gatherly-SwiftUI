@@ -83,7 +83,7 @@ struct GatherlyCalendarView: View {
     }
     
     private var dayEventsViewButton: some View {
-        VStack(spacing: 8) {
+        VStack(spacing: Constants.GatherlyCalendarView.dayEventsViewButtonSpacing) {
             Text("View Events for \(selectedDate.formatted(date: .abbreviated, time: .omitted))")
                 .font(.headline)
                 .foregroundColor(Color(Colors.primary))
@@ -103,10 +103,10 @@ struct GatherlyCalendarView: View {
                     .padding()
                     .frame(maxWidth: .infinity)
                     .background(Color(Colors.primary))
-                    .cornerRadius(12)
+                    .cornerRadius(Constants.GatherlyCalendarView.dayEventsViewButtonCornerRadius)
                     .padding(.horizontal)
                 }
-                .padding(.bottom, 8)
+                .padding(.bottom, Constants.GatherlyCalendarView.dayEventsViewButtonBottomPadding)
             }
         }
     }

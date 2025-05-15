@@ -111,6 +111,9 @@ struct Constants {
     }
     
     struct GatherlyCalendarView {
+        static let dayEventsViewButtonBottomPadding: CGFloat = 8
+        static let dayEventsViewButtonCornerRadius: CGFloat = 12
+        static let dayEventsViewButtonSpacing: CGFloat = 8
         static let eventListViewLeadingPadding: CGFloat = -12
         static let eventListViewTopPadding: CGFloat = 8
         static let eventListViewTrailingPadding: CGFloat = 16
