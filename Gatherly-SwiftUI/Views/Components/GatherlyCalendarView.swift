@@ -13,6 +13,7 @@ struct GatherlyCalendarView: View {
     @Binding var allEvents: [Event]
     @StateObject private var calendarManager: ElegantCalendarManager
     @Binding var selectedDate: Date
+    @State private var isShowingDayEvents = false
     
     private var currentUser: User? {
         session.currentUser
@@ -43,7 +44,17 @@ struct GatherlyCalendarView: View {
                     todayBackgroundColor: Color(Colors.primary)
                 ))
                 .padding(.top, Constants.GatherlyCalendarView.topPadding)
+                .frame(maxHeight: UIScreen.main.bounds.height * 0.5)
+            
+            dayEventsViewButton
         }
+        .background(
+            NavigationLink(
+                destination: DayEventsView(date: selectedDate),
+                isActive: $isShowingDayEvents,
+                label: { EmptyView() }
+            )
+        )
         .onReceive(calendarManager.$monthlyManager.map(\.selectedDate)) { newDate in
             if let date = newDate {
                 selectedDate = date
@@ -53,6 +64,29 @@ struct GatherlyCalendarView: View {
         .onAppear {
             calendarManager.datasource = self
             calendarManager.scrollToDay(selectedDate, animated: true)
+        }
+    }
+    
+    private var dayEventsViewButton: some View {
+        Group {
+            if !eventsForSelectedDate.isEmpty {
+                Button(action: {
+                    isShowingDayEvents = true
+                }) {
+                    HStack {
+                        Image(systemName: "list.bullet")
+                        Text("View Events for \(selectedDate.formatted(date: .abbreviated, time: .omitted))")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color(Colors.primary))
+                    .cornerRadius(12)
+                    .padding(.horizontal)
+                }
+                .padding(.bottom, 8)
+            }
         }
     }
 }
