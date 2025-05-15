@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 extension ElegantCalendarManager {
-    static func withEvents(selectedDate: Binding<Date>, events: [Event]) -> ElegantCalendarManager {
+    static func withEvents(selectedDate: Binding<Date>, events: [Event], session: AppSession) -> ElegantCalendarManager {
         let now = Date()
         let config = CalendarConfiguration(
             startDate: now.minus(calendarComponent: .day, value: 365) ?? now,
@@ -20,8 +20,8 @@ extension ElegantCalendarManager {
         let manager = ElegantCalendarManager(configuration: config,
                                              initialMonth: selectedDate.wrappedValue)
         
-        manager.delegate = EventHighlightDelegate(selectedDate: selectedDate,
-                                                  events: events)
+        manager.delegate = EventHighlightDelegate(selectedDate: selectedDate, session: session)
+        
         return manager
     }
 }
