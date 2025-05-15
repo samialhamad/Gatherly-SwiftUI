@@ -61,11 +61,7 @@ struct GatherlyCalendarView: View {
 
 extension GatherlyCalendarView: ElegantCalendarDataSource {
     func calendar(viewForSelectedDate date: Date, dimensions size: CGSize) -> AnyView {
-        return GatherlyEventListView(
-            allEvents: $allEvents,
-            date: date
-        )
-        .erased
+        return EmptyView().erased
     }
     
     func calendar(backgroundColorOpacityForDate date: Date) -> Double {
@@ -76,46 +72,5 @@ extension GatherlyCalendarView: ElegantCalendarDataSource {
     
     func calendar(canSelectDate date: Date) -> Bool {
         true
-    }
-}
-
-// MARK: - Event List View
-
-struct GatherlyEventListView: View {
-    @EnvironmentObject var session: AppSession
-    @Binding var allEvents: [Event]
-    
-    let date: Date
-    
-    private var currentUser: User? {
-        session.currentUser
-    }
-    
-    private var friendsDict: [Int: User] {
-        session.friendsDict
-    }
-    
-    private var filteredEvents: [Event] {
-        allEvents.filterEvents(by: date)
-    }
-    
-    var body: some View {
-        VStack(spacing: Constants.CalendarView.eventListViewSpacing) {
-            if filteredEvents.isEmpty {
-                Text("Nothing planned for this day!")
-                    .font(.body)
-                    .foregroundColor(Color(Colors.primary))
-                    .padding()
-                    .frame(maxWidth: .infinity)
-            } else {
-                ForEach(filteredEvents) { event in
-                    EventRowLink(event: event)
-                        .frame(maxWidth: .infinity)
-                }
-            }
-        }
-        .padding(.leading, Constants.GatherlyCalendarView.eventListViewLeadingPadding)
-        .padding(.trailing, Constants.GatherlyCalendarView.eventListViewTrailingPadding)
-        .padding(.top, Constants.GatherlyCalendarView.eventListViewTopPadding)
     }
 }
