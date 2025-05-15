@@ -14,6 +14,7 @@ struct GatherlyCalendarView: View {
     @StateObject private var calendarManager: ElegantCalendarManager
     @Binding var selectedDate: Date
     @State private var isShowingDayEvents = false
+    @StateObject private var viewModel = CalendarViewModel()
     
     private var currentUser: User? {
         session.currentUser
@@ -82,14 +83,20 @@ struct GatherlyCalendarView: View {
     }
     
     private var dayEventsViewButton: some View {
-        Group {
+        VStack(spacing: 8) {
+            Text("View Events for \(selectedDate.formatted(date: .abbreviated, time: .omitted))")
+                .font(.headline)
+                .foregroundColor(Color(Colors.primary))
+                .multilineTextAlignment(.center)
+                .padding(.horizontal)
+            
             if !eventsForSelectedDate.isEmpty {
                 Button(action: {
                     isShowingDayEvents = true
                 }) {
                     HStack {
                         Image(systemName: "list.bullet")
-                        Text("View Events for \(selectedDate.formatted(date: .abbreviated, time: .omitted))")
+                        Text(viewModel.eventCountLabel(for: selectedDate, events: allEvents))
                     }
                     .font(.headline)
                     .foregroundColor(.white)
