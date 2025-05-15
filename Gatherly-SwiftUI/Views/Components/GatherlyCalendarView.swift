@@ -23,7 +23,21 @@ struct GatherlyCalendarView: View {
         session.friendsDict
     }
     
-    init(selectedDate: Binding<Date>, allEvents: Binding<[Event]>, session: AppSession) {
+    private var eventsForSelectedDate: [Event] {
+        allEvents.filter { event in
+            guard let eventDate = event.date else {
+                return false
+            }
+            
+            return Date.isSameDay(date1: eventDate, date2: selectedDate)
+        }
+        .sorted(by: { ($0.startTimestamp ?? 0) < ($1.startTimestamp ?? 0) })
+    }
+    
+    init(selectedDate: Binding<Date>,
+         allEvents: Binding<[Event]>,
+         session: AppSession)
+    {
         _selectedDate = selectedDate
         _allEvents = allEvents
         
