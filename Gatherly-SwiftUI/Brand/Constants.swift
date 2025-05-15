@@ -114,7 +114,7 @@ struct Constants {
         static let eventListViewLeadingPadding: CGFloat = -12
         static let eventListViewTopPadding: CGFloat = 8
         static let eventListViewTrailingPadding: CGFloat = 16
-        static let topPadding: CGFloat = 128
+        static let topPadding: CGFloat = 150
         static let vstackSpacing: CGFloat = 0
     }
     
