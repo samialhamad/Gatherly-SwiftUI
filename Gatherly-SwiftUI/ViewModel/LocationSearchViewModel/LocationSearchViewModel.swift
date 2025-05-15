@@ -30,7 +30,11 @@ class LocationSearchViewModel: NSObject, ObservableObject, MKLocalSearchComplete
     
     //called whenever autocomplete results are updated
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [weak self] in
+            guard let self else {
+                return
+            }
+            
             self.suggestions = completer.results
         }
     }

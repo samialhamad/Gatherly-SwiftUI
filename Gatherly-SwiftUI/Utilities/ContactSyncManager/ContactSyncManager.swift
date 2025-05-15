@@ -25,7 +25,12 @@ class ContactSyncManager {
                 return
             }
             
-            DispatchQueue.global(qos: .userInitiated).async {
+            DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+                guard let self else {
+                    completion([])
+                    return
+                }
+                
                 let keys: [CNKeyDescriptor] = [
                     CNContactGivenNameKey as CNKeyDescriptor, // first name
                     CNContactFamilyNameKey as CNKeyDescriptor, // last name

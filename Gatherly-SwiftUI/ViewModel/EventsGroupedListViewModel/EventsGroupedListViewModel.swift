@@ -20,7 +20,11 @@ class EventsGroupedListViewModel: ObservableObject {
 
         if let index = keys.firstIndex(where: { $0 >= todayStart }) {
             let scrollID = "header-\(keys[index])"
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [weak self] in
+                guard let self else {
+                    return
+                }
+                
                 proxy.scrollTo(scrollID, anchor: .top)
             }
         }
