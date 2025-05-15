@@ -21,7 +21,7 @@ struct ContentView: View {
                     profileTab
                 }
             } else {
-                ActivityIndicator(message: "Gathering…")
+                ActivityIndicator(message: Constants.ContentView.gatheringLoadingString)
             }
         }
         .task {
