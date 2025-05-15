@@ -36,10 +36,6 @@ final class EventHighlightDelegate: ElegantCalendarDelegate {
         hasEvent(on: date) ? .primary : .secondary
     }
     
-    func didTapDay(date: Date) {
-        selectedDate = date
-    }
-    
     private func hasEvent(on date: Date) -> Bool {
         events.contains { event in
             if let eventDate = event.date {
