@@ -51,7 +51,6 @@ struct GatherlyCalendarView: View {
         .background(Color.white)
         .onAppear {
             calendarManager.datasource = self
-            calendarManager.delegate = self
             calendarManager.scrollToDay(selectedDate, animated: true)
         }
     }
@@ -76,14 +75,6 @@ extension GatherlyCalendarView: ElegantCalendarDataSource {
     
     func calendar(canSelectDate date: Date) -> Bool {
         true
-    }
-}
-
-// MARK: - Calendar Delegate
-
-extension GatherlyCalendarView: ElegantCalendarDelegate {
-    func calendar(didSelectDay date: Date) {
-        selectedDate = date
     }
 }
 
