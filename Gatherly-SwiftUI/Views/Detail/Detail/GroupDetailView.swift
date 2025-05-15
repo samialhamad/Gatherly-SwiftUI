@@ -33,7 +33,7 @@ struct GroupDetailView: View {
                     }
                     
                     if isDeleting {
-                        ActivityIndicator(message: "Deleting your group…")
+                        ActivityIndicator(message: Constants.GroupDetailView.deletingGroupString)
                     }
                 }
                 .navigationTitle(group.name ?? "")

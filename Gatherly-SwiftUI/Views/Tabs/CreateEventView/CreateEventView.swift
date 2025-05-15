@@ -66,7 +66,7 @@ struct CreateEventView: View {
                 .navigationTitle("Create Event")
             }
             if isSaving {
-                ActivityIndicator(message: "Creating your event!")
+                ActivityIndicator(message: Constants.CreateEventView.creatingEventString)
             }
         }
         .keyboardDismissable()

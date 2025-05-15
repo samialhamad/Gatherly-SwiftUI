@@ -61,7 +61,7 @@ struct CreateGroupView: View {
                 }
             }
             if isSaving {
-                ActivityIndicator(message: "Creating your group!")
+                ActivityIndicator(message: Constants.CreateGroupView.creatingGroupString)
             }
         }
         .keyboardDismissable()

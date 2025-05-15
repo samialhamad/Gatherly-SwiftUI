@@ -71,7 +71,7 @@ struct EditGroupView: View {
                 }
             }
             if isSaving {
-                ActivityIndicator(message: "Saving your changes!")
+                ActivityIndicator(message: Constants.EditGroupView.savingChangesString)
             }
         }
         .keyboardDismissable()

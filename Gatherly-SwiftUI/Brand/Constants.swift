@@ -48,20 +48,28 @@ struct Constants {
     struct ContentView {
         static let calendarViewLoadingString: String = "Getting your events!"
         static let friendsViewLoadingString: String = "Finding your friends!"
+        static let gatheringLoadingString: String = "Gathering!"
         static let profileViewLoadingString: String = "Trying to find you!"
     }
     
     struct CreateEventView {
+        static let creatingEventString: String = "Creating your event!"
         static let bannerImageHeight: CGFloat = 150
     }
     
     struct CreateGroupView {
+        static let creatingGroupString: String = "Creating your group!"
         static let groupImageHeight: CGFloat = 100
         static let groupBannerImageHeight: CGFloat = 150
     }
     
     struct EditEventView {
         static let bannerImageHeight: CGFloat = 150
+        static let savingChangesString: String = "Saving your changes!"
+    }
+    
+    struct EditGroupView {
+        static let savingChangesString: String = "Saving your changes!"
     }
     
     struct EventCategoryIcon {
@@ -122,6 +130,7 @@ struct Constants {
     }
     
     struct GroupDetailView {
+        static let deletingGroupString: String = "Deleting your group!"
         static let topPadding: CGFloat = 10
         static let vstackSpacing: CGFloat = 16
     }
@@ -155,5 +164,9 @@ struct Constants {
     struct ProfileRow {
         static let avatarCircleSize: CGFloat = 40
         static let hstackPadding: CGFloat = 4
+    }
+    
+    struct UserFormView {
+        static let addingFriendString: String = "Adding your friend!"
     }
 }

@@ -84,7 +84,7 @@ struct EditEventView: View {
                 }
             }
             if isSaving {
-                ActivityIndicator(message: "Saving your changes!")
+                ActivityIndicator(message: Constants.EditEventView.savingChangesString)
             }
         }
         .keyboardDismissable()
