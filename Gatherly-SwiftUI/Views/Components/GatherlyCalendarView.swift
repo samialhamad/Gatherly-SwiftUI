@@ -101,7 +101,6 @@ struct GatherlyCalendarView: View {
                     .font(.headline)
                     .foregroundColor(.white)
                     .padding()
-                    .frame(maxWidth: .infinity)
                     .background(Color(Colors.primary))
                     .cornerRadius(Constants.GatherlyCalendarView.dayEventsViewButtonCornerRadius)
                     .padding(.horizontal)
