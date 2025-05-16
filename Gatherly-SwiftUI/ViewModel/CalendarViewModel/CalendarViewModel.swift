@@ -33,7 +33,7 @@ class CalendarViewModel: ObservableObject {
             if count == 0 {
                 return "Nothing planned for today!"
             } else if count == 1 {
-                return "1 event planned for today"
+                return "1 event planned for today!"
             } else {
                 return "\(count) events planned for today!"
             }
