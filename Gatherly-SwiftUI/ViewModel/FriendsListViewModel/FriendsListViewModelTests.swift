@@ -23,9 +23,9 @@ final class FriendsListViewModelTests: XCTestCase {
     
     func testFilteredFriends() {
         let viewModel = FriendsListViewModel()
-        viewModel.searchText = "two"
+        let searchText = "two"
         
-        let filtered = viewModel.filteredFriends(from: sampleFriends())
+        let filtered = viewModel.filteredFriends(from: sampleFriends(), searchText: searchText)
         
         XCTAssertEqual(filtered.count, 1)
         XCTAssertEqual(filtered.first?.lastName, "Two")
