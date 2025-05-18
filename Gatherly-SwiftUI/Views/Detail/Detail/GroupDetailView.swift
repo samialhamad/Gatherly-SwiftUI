@@ -103,11 +103,17 @@ private extension GroupDetailView {
             onCancel: {
                 isShowingEditView = false
             },
-            onDelete: { deletedGroup in
+            onDelete: { [weak session] deletedGroup in
                 isDeleting = true
+                
                 Task {
                     let updatedGroups = await GatherlyAPI.deleteGroup(deletedGroup)
+                    
                     await MainActor.run {
+                        guard let session else {
+                            return
+                        }
+                        
                         session.groups = updatedGroups
                         isShowingEditView = false
                         isDeleting = false
