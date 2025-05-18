@@ -17,6 +17,17 @@ struct CreateEventView: View {
         session.currentUser
     }
     
+    init() {
+        _viewModel = StateObject(wrappedValue: CreateEventViewModel())
+    }
+
+    // Used for automatic date population from CalendarView
+    init(date: Date) {
+        let viewModel = CreateEventViewModel()
+        viewModel.event.date = date
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
+    
     var body: some View {
         ZStack {
             NavigationStack {
