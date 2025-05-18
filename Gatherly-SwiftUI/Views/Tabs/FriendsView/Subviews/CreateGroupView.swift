@@ -98,11 +98,17 @@ private extension CreateGroupView {
     
     var createButtonSection: some View {
         Section {
-            Button {
+            Button { [weak session] in
                 isSaving = true
+                
                 Task {
                     let newGroup = await viewModel.createGroup()
+                    
                     await MainActor.run {
+                        guard let session else {
+                            return
+                        }
+                        
                         session.groups.append(newGroup)
                         session.navigationState.navigateToGroup = newGroup
                         session.navigationState.selectedTab = 2
