@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DayEventsView: View {
     @EnvironmentObject var session: AppSession
+    @State private var isShowingCreateEvent = false
     
     let date: Date
     
@@ -26,6 +27,18 @@ struct DayEventsView: View {
         .listStyle(.insetGrouped)
         .navigationTitle(date.formatted(date: .long, time: .omitted))
         .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    isShowingCreateEvent = true
+                }) {
+                    Image(systemName: "plus")
+                }
+            }
+        }
+        .navigationDestination(isPresented: $isShowingCreateEvent) {
+            CreateEventView(date: date)
+        }
     }
 }
 
