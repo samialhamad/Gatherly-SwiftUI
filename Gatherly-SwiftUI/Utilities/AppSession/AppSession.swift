@@ -171,10 +171,22 @@ final class AppSession: ObservableObject {
     
     func syncContacts(currentUserID: Int = 1) {
         isLoading = true
-        ContactSyncManager.shared.fetchContacts { contacts in
-            Task {
+        ContactSyncManager.shared.fetchContacts { [weak self] contacts in
+            guard let self else {
+                return
+            }
+            
+            Task { [weak self] in
+                guard let self else {
+                    return
+                }
+                
                 let (newUsers, newFriendIDs) = await self.generateUsersFromContacts(contacts)
-                await MainActor.run {
+                
+                await MainActor.run { [weak self] in
+                    guard let self else {
+                        return
+                    }
                     self.appendUsersAndUpdateFriends(
                         newUsers: newUsers,
                         newFriendIDs: newFriendIDs,
