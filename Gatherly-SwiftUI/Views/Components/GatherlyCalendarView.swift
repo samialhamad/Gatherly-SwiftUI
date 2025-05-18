@@ -63,18 +63,22 @@ struct GatherlyCalendarView: View {
             
             dayEventsViewButton
         }
-        .background(Color.white)
+        .background(
+            NavigationLink(
+                destination: DayEventsView(date: selectedDate),
+                isActive: $isShowingDayEvents,
+                label: { EmptyView() }
+            )
+        )
         .onReceive(calendarManager.$monthlyManager.map(\.selectedDate)) { newDate in
             if let date = newDate {
                 selectedDate = date
             }
         }
+        .background(Color.white)
         .onAppear {
             calendarManager.datasource = self
             calendarManager.scrollToDay(selectedDate, animated: true)
-        }
-        .navigationDestination(isPresented: $isShowingDayEvents) {
-            DayEventsView(date: selectedDate)
         }
     }
     
@@ -85,22 +89,24 @@ struct GatherlyCalendarView: View {
                 .foregroundColor(Color(Colors.primary))
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
-
-            Button(action: {
-                isShowingDayEvents = true
-            }) {
-                HStack {
-                    Image(systemName: "list.bullet")
-                    Text("View Events for \(selectedDate.formatted(date: .abbreviated, time: .omitted))")
+            
+            if !eventsForSelectedDate.isEmpty {
+                Button(action: {
+                    isShowingDayEvents = true
+                }) {
+                    HStack {
+                        Image(systemName: "list.bullet")
+                        Text("View Events for \(selectedDate.formatted(date: .abbreviated, time: .omitted))")
+                    }
+                    .font(.headline)
+                    .foregroundColor(.white)
+                    .padding()
+                    .background(Color(Colors.primary))
+                    .cornerRadius(Constants.GatherlyCalendarView.dayEventsViewButtonCornerRadius)
+                    .padding(.horizontal)
                 }
-                .font(.headline)
-                .foregroundColor(.white)
-                .padding()
-                .background(Color(Colors.primary))
-                .cornerRadius(Constants.GatherlyCalendarView.dayEventsViewButtonCornerRadius)
-                .padding(.horizontal)
+                .padding(.bottom, Constants.GatherlyCalendarView.dayEventsViewButtonBottomPadding)
             }
-            .padding(.bottom, Constants.GatherlyCalendarView.dayEventsViewButtonBottomPadding)
         }
     }
 }
