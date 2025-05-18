@@ -111,10 +111,15 @@ private extension EventDetailView {
             onCancel: {
                 isShowingEditView = false
             },
-            onDelete: { eventToDelete in
+            onDelete: { [weak session] eventToDelete in
                 Task {
                     let updatedEvents = await GatherlyAPI.deleteEvent(eventToDelete)
+                    
                     await MainActor.run {
+                        guard let session else {
+                            return
+                        }
+                        
                         session.events = updatedEvents
                         session.navigationState.calendarSelectedDate = eventToDelete.date ?? Date()
                         session.navigationState.navigateToEvent = nil
