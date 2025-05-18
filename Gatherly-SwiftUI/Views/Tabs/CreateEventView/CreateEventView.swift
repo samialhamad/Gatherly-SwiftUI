@@ -156,7 +156,7 @@ private extension CreateEventView {
     
     var createButtonSection: some View {
         Section {
-            Button(action: {
+            Button(action: { [weak session] in
                 isSaving = true
                 guard let plannerID = currentUser?.id else {
                     return
@@ -164,7 +164,12 @@ private extension CreateEventView {
                 
                 Task {
                     let newEvent = await viewModel.createEvent(plannerID: plannerID)
+                    
                     await MainActor.run {
+                        guard let session else {
+                            return
+                        }
+                        
                         session.events.append(newEvent)
                         viewModel.clearFields()
                         session.navigationState.calendarSelectedDate = newEvent.date ?? Date()
