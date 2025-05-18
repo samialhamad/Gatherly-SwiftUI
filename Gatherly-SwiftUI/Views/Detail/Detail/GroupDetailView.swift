@@ -137,7 +137,7 @@ private extension GroupDetailView {
             if let leader = resolvedLeader {
                 Text("Leader")
                     .font(.headline)
-                NavigationLink(destination: ProfileDetailView(user: leader)) {
+                NavigationLink(destination: UserDetailView(user: leader)) {
                     ProfileRow(user: leader)
                 }
             }
@@ -145,7 +145,7 @@ private extension GroupDetailView {
                 Text("Members")
                     .font(.headline)
                 ForEach(memberUsers, id: \.id) { user in
-                    NavigationLink(destination: ProfileDetailView(user: user)) {
+                    NavigationLink(destination: UserDetailView(user: user)) {
                         ProfileRow(user: user)
                     }
                 }

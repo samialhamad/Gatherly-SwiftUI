@@ -1,5 +1,5 @@
 //
-//  ProfileDetailView.swift
+//  UserDetailView.swift
 //  Gatherly-SwiftUI
 //
 //  Created by Sami Alhamad on 3/25/25.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ProfileDetailView: View {
+struct UserDetailView: View {
     @EnvironmentObject var session: AppSession
     @State private var isShowingActionSheet = false
     
@@ -51,7 +51,7 @@ struct ProfileDetailView: View {
     }
 }
 
-private extension ProfileDetailView {
+private extension UserDetailView {
     
     //MARK: - Computed Vars
     
@@ -70,7 +70,7 @@ private extension ProfileDetailView {
     //MARK: - Subviews
     
     var userInfoView: some View {
-        VStack(alignment: .center, spacing: Constants.ProfileDetailView.vstackSpacing) {
+        VStack(alignment: .center, spacing: Constants.UserDetailView.vstackSpacing) {
             Text("\(user.firstName ?? "") \(user.lastName ?? "")")
                 .font(.title)
                 .fontWeight(.bold)
@@ -96,7 +96,7 @@ private extension ProfileDetailView {
 #Preview {
     if let sampleUser = SampleData.sampleUsers.first {
         NavigationStack {
-            ProfileDetailView(user: sampleUser)
+            UserDetailView(user: sampleUser)
                 .environmentObject(AppSession())
         }
     }

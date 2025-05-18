@@ -91,7 +91,7 @@ private extension FriendsListView {
     private func rowView(for friend: User) -> some View {
         switch mode {
         case .view:
-            NavigationLink(destination: ProfileDetailView(user: friend)) {
+            NavigationLink(destination: UserDetailView(user: friend)) {
                 ProfileRow(user: friend)
             }
         case .select(let binding):

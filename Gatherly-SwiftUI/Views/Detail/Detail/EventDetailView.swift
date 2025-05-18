@@ -236,7 +236,7 @@ private extension EventDetailView {
             if let planner {
                 Text("Planner")
                     .font(.headline)
-                NavigationLink(destination: ProfileDetailView(user: planner)) {
+                NavigationLink(destination: UserDetailView(user: planner)) {
                     ProfileRow(user: planner)
                 }
             }
@@ -244,7 +244,7 @@ private extension EventDetailView {
                 Text("Attendees")
                     .font(.headline)
                 ForEach(members, id: \.id) { user in
-                    NavigationLink(destination: ProfileDetailView(user: user)) {
+                    NavigationLink(destination: UserDetailView(user: user)) {
                         ProfileRow(user: user)
                     }
                 }
