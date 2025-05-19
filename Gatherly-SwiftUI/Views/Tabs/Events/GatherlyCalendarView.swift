@@ -58,6 +58,7 @@ struct GatherlyCalendarView: View {
                     todayTextColor: .white,
                     todayBackgroundColor: Color(Colors.primary)
                 ))
+                .accessibilityIdentifier("gatherlyCalendar")
                 .padding(.top, Constants.GatherlyCalendarView.topPadding)
                 .frame(maxHeight: UIScreen.main.bounds.height * 0.5)
             
@@ -97,6 +98,7 @@ struct GatherlyCalendarView: View {
                     HStack {
                         Image(systemName: "list.bullet")
                         Text("View Events for \(selectedDate.formatted(date: .abbreviated, time: .omitted))")
+                            .accessibilityIdentifier("viewEventsForDateButton")
                     }
                     .font(.headline)
                     .foregroundColor(.white)

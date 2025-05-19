@@ -66,6 +66,7 @@ private extension CalendarView {
             Button(action: { isCalendarView.toggle() }) {
                 Image(systemName: isCalendarView ? "list.bullet" : "calendar")
             }
+            .accessibilityIdentifier("toggleCalendarViewButton")
         }
     }
     
