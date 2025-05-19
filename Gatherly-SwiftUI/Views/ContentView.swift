@@ -26,7 +26,11 @@ struct ContentView: View {
         }
         .task {
             session.loadAllData()
-            session.syncContacts()
+            
+            if !session.didSyncContacts {
+                session.syncContacts()
+                session.didSyncContacts = true
+            }
         }
     }
 }
