@@ -132,8 +132,6 @@ private extension ProfileView {
                 profileRowContent(title: "Profile", icon: "person.fill")
             }
             
-            profileRow(title: "Availability", icon: "calendar.badge.clock")
-            profileRow(title: "Settings", icon: "gearshape.fill")
             profileRow(title: "Logout", icon: "arrow.backward.circle.fill")
             profileRow(title: "Delete Account", icon: "minus.circle.fill", isDestructive: true)
         }
