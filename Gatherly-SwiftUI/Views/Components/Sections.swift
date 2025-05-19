@@ -201,5 +201,6 @@ struct EventRowLink: View {
         } label: {
             EventRow(event: event, showDisclosure: showDisclosure)
         }
+        .accessibilityIdentifier("eventRow-\(event.title ?? "Untitled")")
     }
 }
