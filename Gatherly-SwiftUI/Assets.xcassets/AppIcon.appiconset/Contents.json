@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "Gatherly_AppIcon_Cropped.png",
+      "filename" : "gatherlyappicon.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -13,7 +13,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "Gatherly_AppIcon_Cropped 1.png",
+      "filename" : "gatherlyappicon 1.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
@@ -25,7 +25,7 @@
           "value" : "tinted"
         }
       ],
-      "filename" : "Gatherly_AppIcon_Cropped 2.png",
+      "filename" : "gatherlyappicon 2.png",
       "idiom" : "universal",
       "platform" : "ios",
       "size" : "1024x1024"
