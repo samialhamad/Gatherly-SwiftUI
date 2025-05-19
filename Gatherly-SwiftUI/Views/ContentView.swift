@@ -41,20 +41,20 @@ private extension ContentView {
     
     var calendarTab: some View {
         CalendarView()
-        .environmentObject(session)
-        .addActivityIndicator(
-            isPresented: session.isLoading && session.navigationState.selectedTab == 0,
-            message: Constants.ContentView.calendarViewLoadingString
-        )
-        .tabItem { Image(systemName: "calendar") }
-        .tag(0)
+            .environmentObject(session)
+            .addActivityIndicator(
+                isPresented: session.isLoading && session.navigationState.selectedTab == 0,
+                message: Constants.ContentView.calendarViewLoadingString
+            )
+            .tabItem { Image(systemName: "calendar") }
+            .tag(0)
     }
     
     var createEventTab: some View {
         NavigationStack {
             CreateEventView()
-            .environmentObject(session)
-            .navigationTitle("Create Event")
+                .environmentObject(session)
+                .navigationTitle("Create Event")
         }
         .tabItem { Image(systemName: "plus.app.fill") }
         .tag(1)
@@ -63,11 +63,11 @@ private extension ContentView {
     var friendsTab: some View {
         NavigationStack {
             FriendsView()
-            .environmentObject(session)
-            .addActivityIndicator(
-                isPresented: session.isLoading && session.navigationState.selectedTab == 2,
-                message: Constants.ContentView.friendsViewLoadingString
-            )
+                .environmentObject(session)
+                .addActivityIndicator(
+                    isPresented: session.isLoading && session.navigationState.selectedTab == 2,
+                    message: Constants.ContentView.friendsViewLoadingString
+                )
         }
         .tabItem { Image(systemName: "person.3.fill") }
         .tag(2)
@@ -76,11 +76,11 @@ private extension ContentView {
     var profileTab: some View {
         NavigationStack {
             ProfileView()
-            .environmentObject(session)
-            .addActivityIndicator(
-                isPresented: session.isLoading && session.navigationState.selectedTab == 3,
-                message: Constants.ContentView.profileViewLoadingString
-            )
+                .environmentObject(session)
+                .addActivityIndicator(
+                    isPresented: session.isLoading && session.navigationState.selectedTab == 3,
+                    message: Constants.ContentView.profileViewLoadingString
+                )
         }
         .tabItem { Image(systemName: "person") }
         .tag(3)
