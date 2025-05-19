@@ -46,7 +46,10 @@ private extension ContentView {
                 isPresented: session.isLoading && session.navigationState.selectedTab == 0,
                 message: Constants.ContentView.calendarViewLoadingString
             )
-            .tabItem { Image(systemName: "calendar") }
+            .tabItem {
+                Image(systemName: "calendar")
+                    .accessibilityIdentifier("calendarTab")
+            }
             .tag(0)
     }
     
@@ -56,7 +59,10 @@ private extension ContentView {
                 .environmentObject(session)
                 .navigationTitle("Create Event")
         }
-        .tabItem { Image(systemName: "plus.app.fill") }
+        .tabItem {
+            Image(systemName: "plus.app.fill")
+                .accessibilityIdentifier("createEventTab")
+        }
         .tag(1)
     }
     
@@ -69,7 +75,10 @@ private extension ContentView {
                     message: Constants.ContentView.friendsViewLoadingString
                 )
         }
-        .tabItem { Image(systemName: "person.3.fill") }
+        .tabItem {
+            Image(systemName: "person.3.fill")
+                .accessibilityIdentifier("friendsTab")
+        }
         .tag(2)
     }
     
@@ -82,7 +91,10 @@ private extension ContentView {
                     message: Constants.ContentView.profileViewLoadingString
                 )
         }
-        .tabItem { Image(systemName: "person") }
+        .tabItem {
+            Image(systemName: "person")
+                .accessibilityIdentifier("profileTab")
+        }
         .tag(3)
     }
 }
