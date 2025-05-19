@@ -16,14 +16,9 @@ struct DayEventsView: View {
     
     var body: some View {
         List {
-            if allEventsForDate.isEmpty {
-                Text("Nothing planned for this day!")
-                    .foregroundColor(.gray)
-            } else {
-                finishedEventsSection
-                inProgressEventsSection
-                upcomingEventsSection
-            }
+            finishedEventsSection
+            inProgressEventsSection
+            upcomingEventsSection
         }
         .listStyle(.insetGrouped)
         .navigationTitle(date.formatted(date: .long, time: .omitted))
