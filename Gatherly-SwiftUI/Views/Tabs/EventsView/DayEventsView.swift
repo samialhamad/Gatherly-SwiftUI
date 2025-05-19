@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DayEventsView: View {
     @EnvironmentObject var session: AppSession
+    @Environment(\.dismiss) private var dismiss
     @State private var isShowingCreateEvent = false
     
     let date: Date
@@ -38,6 +39,11 @@ struct DayEventsView: View {
         }
         .navigationDestination(isPresented: $isShowingCreateEvent) {
             CreateEventView(date: date)
+        }
+        .onChange(of: session.events) { _ in
+            if allEventsForDate.isEmpty {
+                dismiss()
+            }
         }
     }
 }
