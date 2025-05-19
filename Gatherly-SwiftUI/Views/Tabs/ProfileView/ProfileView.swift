@@ -132,7 +132,13 @@ private extension ProfileView {
                 profileRowContent(title: "Profile", icon: "person.fill")
             }
             
-            profileRow(title: "Sync Contacts", icon: "arrow.trianglehead.2.clockwise.rotate.90.circle.fill")
+            Button {
+                session.syncContacts()
+            } label: {
+                profileRowContent(
+                    title: "Sync Contacts", icon: "arrow.trianglehead.2.clockwise.rotate.90.circle.fill")
+            }
+            
             profileRow(title: "Logout", icon: "arrow.backward.circle.fill")
             profileRow(title: "Delete Account", icon: "minus.circle.fill", isDestructive: true)
         }
