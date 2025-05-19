@@ -49,6 +49,7 @@ private extension EventsGroupedListView {
                 } header: {
                     Text(dateLabel)
                         .id("header-\(date)")
+                        .accessibilityIdentifier("sectionHeader-\(dateLabel)")
                 }
             }
         }
