@@ -10,6 +10,7 @@ import ComposableArchitecture
 
 struct UserDetailView: View {
     @EnvironmentObject var session: AppSession
+    @Environment(\.dismiss) private var dismiss
     @State private var isShowingActionSheet = false
     @State private var userFormStore: Store<UserFormFeature.State, UserFormFeature.Action>? = nil
     
@@ -61,7 +62,9 @@ struct UserDetailView: View {
                 
                 if isFriend {
                     Button("Remove Friend", role: .destructive) {
-                    // handle remove friend
+                        Task {
+                            await removeFriend()
+                        }
                     }
                 }
                 
@@ -116,6 +119,31 @@ private extension UserDetailView {
         }
         
         userFormStore = nil
+    }
+    
+    private func removeFriend() async {
+        guard let targetID = user.id else {
+            return
+        }
+        guard var currentUser = session.currentUser else {
+            return
+        }
+        
+        currentUser.friendIDs?.removeAll(where: { $0 == targetID })
+        
+        if let index = session.users.firstIndex(where: { $0.id == currentUser.id }) {
+            session.users[index] = currentUser
+        }
+        
+        session.currentUser = currentUser
+        session.saveAllData()
+        
+        let updatedUsers = await GatherlyAPI.deleteUser(user)
+        await MainActor.run {
+            session.users = updatedUsers
+            session.updateLocalFriendsAndGroups()
+            dismiss()
+        }
     }
     
     //MARK: - Subviews
