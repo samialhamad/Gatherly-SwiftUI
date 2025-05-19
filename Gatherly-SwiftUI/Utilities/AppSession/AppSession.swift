@@ -13,6 +13,7 @@ import RxSwift
 final class AppSession: ObservableObject {
     @Published var currentUser: User? = nil
     @AppStorage("didSeedSampleData") private var didSeedSampleData = false
+    @AppStorage("didSyncContacts") var didSyncContacts = false
     @Published var events: [Event] = []
     @Published var friends: [User] = []
     @Published var friendsDict: [Int: User] = [:]
