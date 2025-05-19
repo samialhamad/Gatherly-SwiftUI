@@ -52,5 +52,4 @@ final class DeleteEventTests: XCTestCase {
         XCTAssertTrue(updatedEvents.contains(where: { $0.id == eventToKeep.id }))
         XCTAssertEqual(updatedEvents.count, 1)
     }
-
 }
