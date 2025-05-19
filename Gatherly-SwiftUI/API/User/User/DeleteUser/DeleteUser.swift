@@ -13,7 +13,6 @@ extension GatherlyAPI {
         users.removeAll { $0.id == userToDelete.id }
         UserDefaultsManager.saveUsers(users)
         
-        await simulateNetworkDelay()
         return users
     }
 }

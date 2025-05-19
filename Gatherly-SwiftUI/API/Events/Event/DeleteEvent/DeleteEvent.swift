@@ -14,7 +14,6 @@ extension GatherlyAPI {
         events.removeAll { $0.id == eventToDelete.id }
         UserDefaultsManager.saveEvents(events)
         
-        await simulateNetworkDelay()
         return events
     }
 }

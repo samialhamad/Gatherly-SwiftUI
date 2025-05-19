@@ -13,7 +13,6 @@ extension GatherlyAPI {
         groups.removeAll { $0.id == groupToDelete.id }
         UserDefaultsManager.saveGroups(groups)
         
-        await simulateNetworkDelay()
         return groups
     }
 }
