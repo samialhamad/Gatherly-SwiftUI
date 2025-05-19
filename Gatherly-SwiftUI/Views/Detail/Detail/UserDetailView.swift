@@ -55,11 +55,7 @@ struct UserDetailView: View {
                         reducer: { UserFormFeature() }
                     )
                 }
-                
-                Button("Report", role: .destructive) {
-                    // handle report
-                }
-                
+               
                 if isFriend {
                     Button("Remove Friend", role: .destructive) {
                         Task {
