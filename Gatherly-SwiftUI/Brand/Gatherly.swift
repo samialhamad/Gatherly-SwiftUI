@@ -10,7 +10,7 @@ import UIKit
 
 struct Colors {
     static var primary: UIColor {
-        return UIColor(red: 121.0 / 255.0, green: 147.0 / 255.0, blue: 252.0 / 255.0, alpha: 1.0)
+        return UIColor(red: 69.0 / 255.0, green: 151.0 / 255.0, blue: 255.0 / 255.0, alpha: 1.0)
     }
     static var secondary: UIColor {
         return UIColor(red: 230.0 / 255.0, green: 234.0 / 255.0, blue: 252.0 / 255.0, alpha: 1.0)
