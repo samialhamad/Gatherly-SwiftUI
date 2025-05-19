@@ -47,9 +47,10 @@ private extension ContentView {
                 message: Constants.ContentView.calendarViewLoadingString
             )
             .tabItem {
-                Image(systemName: "calendar")
-                    .accessibilityIdentifier("calendarTab")
+                Label("Calendar", systemImage: "calendar")
+                    .labelStyle(.iconOnly)
             }
+            .accessibilityIdentifier("calendarTab")
             .tag(0)
     }
     
@@ -60,9 +61,10 @@ private extension ContentView {
                 .navigationTitle("Create Event")
         }
         .tabItem {
-            Image(systemName: "plus.app.fill")
-                .accessibilityIdentifier("createEventTab")
+            Label("Create", systemImage: "plus.app.fill")
+                .labelStyle(.iconOnly)
         }
+        .accessibilityIdentifier("createEventTab")
         .tag(1)
     }
     
@@ -76,9 +78,10 @@ private extension ContentView {
                 )
         }
         .tabItem {
-            Image(systemName: "person.3.fill")
-                .accessibilityIdentifier("friendsTab")
+            Label("Friends", systemImage: "person.3.fill")
+                .labelStyle(.iconOnly)
         }
+        .accessibilityIdentifier("friendsTab")
         .tag(2)
     }
     
@@ -92,9 +95,10 @@ private extension ContentView {
                 )
         }
         .tabItem {
-            Image(systemName: "person")
-                .accessibilityIdentifier("profileTab")
+            Label("Profile", systemImage: "person")
+                .labelStyle(.iconOnly)
         }
+        .accessibilityIdentifier("profileTab")
         .tag(3)
     }
 }
