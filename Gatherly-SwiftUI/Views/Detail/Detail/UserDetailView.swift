@@ -55,12 +55,10 @@ struct UserDetailView: View {
                         reducer: { UserFormFeature() }
                     )
                 }
-               
-                if isFriend {
-                    Button("Remove Friend", role: .destructive) {
-                        Task {
-                            await removeFriend()
-                        }
+                
+                Button("Remove Friend", role: .destructive) {
+                    Task {
+                        await removeFriend()
                     }
                 }
                 
@@ -81,14 +79,6 @@ struct UserDetailView: View {
 private extension UserDetailView {
     
     //MARK: - Computed Vars
-    
-    private var isFriend: Bool {
-        guard let userID = user.id else {
-            return false
-        }
-        
-        return currentUser?.friendIDs?.contains(userID) == true
-    }
     
     private var isViewingSelf: Bool {
         currentUser?.id == user.id
@@ -158,7 +148,7 @@ private extension UserDetailView {
                 .font(.title)
                 .fontWeight(.bold)
             
-            if isFriend, let phone = user.phone {
+            if let phone = user.phone {
                 Text(phone)
                     .font(.subheadline)
                     .foregroundColor(.gray)
