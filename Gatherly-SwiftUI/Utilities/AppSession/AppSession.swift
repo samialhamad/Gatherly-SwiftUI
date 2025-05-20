@@ -97,27 +97,28 @@ final class AppSession: ObservableObject {
         self.users.append(contentsOf: newUsers)
         
         if let index = self.users.firstIndex(where: { $0.id == currentUserID }) {
-            let currentUser = self.users[index]
-            var friendIDs = currentUser.friendIDs ?? []
+            let oldCurrentUser = self.users[index]
+            var friendIDs = oldCurrentUser.friendIDs ?? []
             let uniqueNewFriendIDs = newFriendIDs.filter { !friendIDs.contains($0) }
-            
+
             friendIDs.append(contentsOf: uniqueNewFriendIDs)
-            currentUser.friendIDs = Array(Set(friendIDs))
-        } else {
-            let newCurrentUser = User(
-                createdTimestamp: Int(Date().timestamp),
-                deviceToken: nil,
-                email: nil,
-                eventIDs: [],
-                firstName: "You",
-                friendIDs: newFriendIDs,
-                groupIDs: [],
-                id: currentUserID,
-                isEmailEnabled: false,
-                lastName: "",
-                phone: nil
+            let updatedUser = User(
+                avatarImageName: oldCurrentUser.avatarImageName,
+                bannerImageName: oldCurrentUser.bannerImageName,
+                createdTimestamp: oldCurrentUser.createdTimestamp,
+                deviceToken: oldCurrentUser.deviceToken,
+                email: oldCurrentUser.email,
+                eventIDs: oldCurrentUser.eventIDs,
+                firstName: oldCurrentUser.firstName,
+                friendIDs: Array(Set(friendIDs)),
+                groupIDs: oldCurrentUser.groupIDs,
+                id: oldCurrentUser.id,
+                isEmailEnabled: oldCurrentUser.isEmailEnabled,
+                lastName: oldCurrentUser.lastName,
+                phone: oldCurrentUser.phone
             )
-            self.users.insert(newCurrentUser, at: 0)
+            self.users[index] = updatedUser
+            self.currentUser = updatedUser
         }
         
         UserDefaultsManager.saveUsers(self.users)
