@@ -33,6 +33,7 @@ struct FriendsView: View {
                     GroupsListView(searchText: $searchText, mode:. view)
                 }
             }
+            .accessibilityIdentifier("friendsViewRoot")
             .navigationTitle(tabTitles[selectedTab])
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -125,6 +126,7 @@ extension FriendsView {
                 ForEach(tabTitles.indices, id: \.self) { index in
                     Text(tabTitles[index])
                         .tag(index)
+                        .accessibilityIdentifier("friendsTabSegment-\(tabTitles[index])")
                 }
             }
             .pickerStyle(.segmented)
@@ -156,6 +158,8 @@ extension FriendsView {
         } label: {
             Image(systemName: "plus")
         }
+        .labelStyle(.iconOnly)
+        .accessibilityIdentifier("addFriendOrGroupButton")
     }
 }
 
