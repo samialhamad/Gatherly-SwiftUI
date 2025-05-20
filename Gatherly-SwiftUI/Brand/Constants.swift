@@ -49,7 +49,7 @@ struct Constants {
         static let calendarViewLoadingString: String = "Getting your events!"
         static let friendsViewLoadingString: String = "Finding your friends!"
         static let gatheringLoadingString: String = "Gathering!"
-        static let profileViewLoadingString: String = "Trying to find you!"
+        static let profileViewLoadingString: String = "Gathering!"
     }
     
     struct CreateEventView {
