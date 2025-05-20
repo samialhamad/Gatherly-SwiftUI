@@ -9,11 +9,54 @@ import Foundation
 import XCTest
 
 final class CreateEventViewUITests: GatherlyUITestCase {
-        
+    
     override func setUpWithError() throws {
         try super.setUpWithError()
         
         app.tabBars.buttons["Create"].tap()
+    }
+    
+    // MARK: - Create Button
+    
+    func testCreateButtonIsDisabledInitially() {
+        let createButton = app.buttons["createEventButton"]
+        app.swipeUp()
+        XCTAssertTrue(createButton.waitForExistence(timeout: 2))
+        XCTAssertFalse(createButton.isEnabled)
+    }
+    
+    func testEnteringRequiredFieldsEnablesCreateButton() {
+        let titleField = app.textFields["eventTitleTextField"]
+        XCTAssertTrue(titleField.waitForExistence(timeout: 2))
+        titleField.tap()
+        titleField.typeText("UI Test Event")
+        
+        // Dismiss keyboard before trying to swipe
+        app.navigationBars["Create Event"].tap()
+        
+        app.swipeUp()
+        let createButton = app.buttons["createEventButton"]
+        XCTAssertTrue(createButton.waitForExistence(timeout: 2))
+        XCTAssertTrue(createButton.isEnabled)
+    }
+    
+    func testSuccessfulCreateNavigatesAway() {
+        let titleField = app.textFields["eventTitleTextField"]
+        XCTAssertTrue(titleField.waitForExistence(timeout: 2))
+        titleField.tap()
+        titleField.typeText("UI Test Event")
+        
+        app.navigationBars["Create Event"].tap()
+        
+        app.swipeUp()
+        let createButton = app.buttons["createEventButton"]
+        XCTAssertTrue(createButton.waitForExistence(timeout: 2))
+        XCTAssertTrue(createButton.isEnabled)
+        createButton.tap()
+        
+        // Verify that it navigated away to EventDetailView (based on navigation title)
+        let navBar = app.navigationBars["UI Test Event"]
+        XCTAssertTrue(navBar.waitForExistence(timeout: 3))
     }
     
     // MARK: - Text Field Tests
