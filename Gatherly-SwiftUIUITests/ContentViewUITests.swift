@@ -7,13 +7,10 @@
 
 import XCTest
 
-final class ContentViewUITests: XCTestCase {
+final class ContentViewUITests: GatherlyUITestCase {
     
-    let app = XCUIApplication()
-
     override func setUpWithError() throws {
-        continueAfterFailure = false
-        app.launch()
+        try super.setUpWithError()
     }
 
     func testTabBarButtonsExist() {

@@ -7,19 +7,17 @@
 
 import XCTest
 
-final class DayEventsViewUITests: XCTestCase {
-
-    let app = XCUIApplication()
+final class DayEventsViewUITests: GatherlyUITestCase {
 
     override func setUpWithError() throws {
-        continueAfterFailure = false
-        app.launch()
+        try super.setUpWithError()
+        
         app.tabBars.buttons["Calendar"].tap()
         let viewEventsButton = app.buttons["viewEventsForDateButton"]
         XCTAssertTrue(viewEventsButton.waitForExistence(timeout: 3))
         viewEventsButton.tap()
     }
-
+    
     func testDayEventsTitleMatchesExpectedDate() {
         let navBar = app.navigationBars.element
         XCTAssertTrue(navBar.waitForExistence(timeout: 2))

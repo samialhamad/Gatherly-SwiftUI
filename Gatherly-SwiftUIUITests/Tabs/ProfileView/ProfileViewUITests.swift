@@ -7,13 +7,11 @@
 
 import XCTest
 
-final class ProfileViewUITests: XCTestCase {
+final class ProfileViewUITests: GatherlyUITestCase {
     
-    let app = XCUIApplication()
-
     override func setUpWithError() throws {
-        continueAfterFailure = false
-        app.launch()
+        try super.setUpWithError()
+        
         app.tabBars.buttons["Profile"].tap()
     }
 

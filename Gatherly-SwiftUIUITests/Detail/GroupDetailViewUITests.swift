@@ -7,13 +7,10 @@
 
 import XCTest
 
-final class GroupDetailViewUITests: XCTestCase {
-
-    let app = XCUIApplication()
+final class GroupDetailViewUITests: GatherlyUITestCase {
 
     override func setUpWithError() throws {
-        continueAfterFailure = false
-        app.launch()
+        try super.setUpWithError()
 
         app.tabBars.buttons["Friends"].tap()
         app.segmentedControls.buttons["Groups"].tap()

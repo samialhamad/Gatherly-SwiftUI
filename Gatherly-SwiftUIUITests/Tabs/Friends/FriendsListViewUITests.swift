@@ -7,16 +7,14 @@
 
 import XCTest
 
-final class FriendsListViewUITests: XCTestCase {
-
-    let app = XCUIApplication()
+final class FriendsListViewUITests: GatherlyUITestCase {
 
     override func setUpWithError() throws {
-        continueAfterFailure = false
-        app.launch()
+        try super.setUpWithError()
+        
         app.tabBars.buttons["Friends"].tap()
     }
-
+    
     func testFriendsAreListedAlphabetically() {
         // Assuming friends list is in default order with no search applied
         XCTAssertTrue(app.buttons["friendRow-Bob"].waitForExistence(timeout: 2))

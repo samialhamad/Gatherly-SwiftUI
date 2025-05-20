@@ -7,16 +7,14 @@
 
 import XCTest
 
-final class CalendarViewUITests: XCTestCase {
-
-    let app = XCUIApplication()
+final class CalendarViewUITests: GatherlyUITestCase {
 
     override func setUpWithError() throws {
-        continueAfterFailure = false
-        app.launch()
+        try super.setUpWithError()
+        
         app.tabBars.buttons["Calendar"].tap()
     }
-
+    
     func testShowsMyEventsTitleOnLaunch() {
         XCTAssertTrue(app.navigationBars["My Events"].waitForExistence(timeout: 2))
     }

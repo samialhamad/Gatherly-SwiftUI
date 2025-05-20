@@ -7,13 +7,11 @@
 
 import XCTest
 
-final class UserDetailViewUITests: XCTestCase {
-
-    let app = XCUIApplication()
+final class UserDetailViewUITests: GatherlyUITestCase {
 
     override func setUpWithError() throws {
-        continueAfterFailure = false
-        app.launch()
+        try super.setUpWithError()
+        
         app.tabBars.buttons["Friends"].tap()
         app.segmentedControls.buttons["Friends"].tap()
 
@@ -21,7 +19,7 @@ final class UserDetailViewUITests: XCTestCase {
         XCTAssertTrue(bobRow.waitForExistence(timeout: 3))
         bobRow.tap()
     }
-
+    
     func testUserNameAppearsInNavTitleAndBody() {
         let navBar = app.navigationBars["Bob Jones"]
         XCTAssertTrue(navBar.waitForExistence(timeout: 2))

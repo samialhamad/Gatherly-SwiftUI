@@ -7,13 +7,11 @@
 
 import XCTest
 
-final class EventsGroupedListViewUITests: XCTestCase {
-
-    let app = XCUIApplication()
+final class EventsGroupedListViewUITests: GatherlyUITestCase {
 
     override func setUpWithError() throws {
-        continueAfterFailure = false
-        app.launch()
+        try super.setUpWithError()
+        
         app.tabBars.buttons["Calendar"].tap()
         app.buttons["toggleCalendarViewButton"].tap()
     }
