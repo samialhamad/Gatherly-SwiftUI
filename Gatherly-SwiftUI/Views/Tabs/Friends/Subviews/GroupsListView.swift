@@ -75,6 +75,7 @@ private extension GroupsListView {
             NavigationLink(destination: GroupDetailView(group: group)) {
                 GroupRow(group: group)
             }
+            .accessibilityIdentifier("groupRow-\(group.name ?? "")")
         case .select(let binding):
             Button {
                 toggleGroupSelection(group.memberIDs, binding: binding)
