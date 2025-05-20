@@ -178,6 +178,7 @@ private extension EditEventView {
             Button("Delete") {
                 showingDeleteAlert = true
             }
+            .accessibilityIdentifier("deleteEventButton")
             .foregroundColor(.red)
         }
     }
@@ -192,6 +193,7 @@ private extension EditEventView {
                     onSave(updatedEvent)
                 }
             }
+            .accessibilityIdentifier("saveEventButton")
             .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.secondary))
             .disabled(viewModel.isFormEmpty)
         }
