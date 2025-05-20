@@ -17,6 +17,7 @@ final class AppSession: ObservableObject {
     @Published var events: [Event] = []
     @Published var friends: [User] = []
     @Published var friendsDict: [Int: User] = [:]
+    @Published var friendsRefreshID = UUID()
     @Published var groups: [UserGroup] = []
     @Published var isLoading: Bool = true
     @Published var navigationState = NavigationState()
@@ -184,6 +185,7 @@ final class AppSession: ObservableObject {
             group.leaderID == currentUser.id ||
             (group.id != nil && currentUser.groupIDs?.contains(group.id!) == true)
         }
+        self.friendsRefreshID = UUID()
     }
     
     func syncContacts(currentUserID: Int = 1) {
