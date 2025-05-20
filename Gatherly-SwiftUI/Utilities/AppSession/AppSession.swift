@@ -50,6 +50,14 @@ final class AppSession: ObservableObject {
     }
     
     func loadAllData() {
+        // for UI tests to reset UserDefaults
+        if CommandLine.arguments.contains("--uitesting") {
+            print("UI Testing: Resetting UserDefaults and loading SampleData")
+            UserDefaultsManager.resetAll()
+            seedAndApplySampleData()
+            return
+        }
+        
         if !didSeedSampleData {
             self.users = SampleData.sampleUsers
             self.events = SampleData.sampleEvents
