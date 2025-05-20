@@ -140,11 +140,13 @@ private extension UserDetailView {
         }) {
             Image(systemName: "ellipsis")
         }
+        .accessibilityIdentifier("userDetailOptionsButton")
     }
     
     var userInfoView: some View {
         VStack(alignment: .center, spacing: Constants.UserDetailView.vstackSpacing) {
             Text("\(user.firstName ?? "") \(user.lastName ?? "")")
+                .accessibilityIdentifier("userDetailFullName")
                 .font(.title)
                 .fontWeight(.bold)
             
