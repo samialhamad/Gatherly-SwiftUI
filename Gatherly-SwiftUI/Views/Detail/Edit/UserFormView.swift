@@ -53,10 +53,12 @@ private extension UserFormView {
                 get: \.firstName,
                 send: UserFormFeature.Action.setFirstName
             ))
+            .accessibilityIdentifier("userFormFirstName")
             TextField("Last Name", text: viewStore.binding(
                 get: \.lastName,
                 send: UserFormFeature.Action.setLastName
             ))
+            .accessibilityIdentifier("userFormLastName")
         }
     }
     
@@ -107,6 +109,7 @@ private extension UserFormView {
                     onComplete(.delegate(.didSave(viewStore.currentUser)))
                 }
             }
+            .accessibilityIdentifier("userFormSaveButton")
             .disabled(isDisabled)
             .foregroundColor(isDisabled ? .gray : Color(Colors.secondary))
         }
