@@ -30,6 +30,7 @@ struct DayEventsView: View {
                 }) {
                     Image(systemName: "plus")
                 }
+                .accessibilityIdentifier("addEventButton")
             }
         }
         .navigationDestination(isPresented: $isShowingCreateEvent) {
@@ -73,10 +74,13 @@ private extension DayEventsView {
     var finishedEventsSection: some View {
         Group {
             if !finishedEvents.isEmpty {
-                Section(header: Text("Finished")) {
+                Section {
                     ForEach(finishedEvents) { event in
                         EventRowLink(event: event, showDisclosure: false)
                     }
+                } header: {
+                    Text("Finished")
+                        .accessibilityIdentifier("sectionHeader-Finished")
                 }
             }
         }
@@ -85,22 +89,29 @@ private extension DayEventsView {
     var inProgressEventsSection: some View {
         Group {
             if !inProgressEvents.isEmpty {
-                Section(header: Text("In Progress")) {
+                Section {
                     ForEach(inProgressEvents) { event in
                         EventRowLink(event: event, showDisclosure: false)
                     }
+                } header: {
+                    Text("In Progress")
+                        .accessibilityIdentifier("sectionHeader-In Progress")
                 }
             }
         }
     }
     
+    
     var upcomingEventsSection: some View {
         Group {
             if !upcomingEvents.isEmpty {
-                Section(header: Text("Upcoming")) {
+                Section {
                     ForEach(upcomingEvents) { event in
                         EventRowLink(event: event, showDisclosure: false)
                     }
+                } header: {
+                    Text("Upcoming")
+                        .accessibilityIdentifier("sectionHeader-Upcoming")
                 }
             }
         }
