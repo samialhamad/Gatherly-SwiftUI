@@ -29,6 +29,7 @@ struct EditGroupView: View {
                 Form {
                     Section(header: Text("Group Name")) {
                         TextField("Enter group name", text: nameBinding)
+                            .accessibilityIdentifier("editGroupNameTextField")
                     }
                     
                     ImagePicker(
@@ -111,6 +112,7 @@ private extension EditGroupView {
             Button("Delete") {
                 showingDeleteAlert = true
             }
+            .accessibilityIdentifier("deleteGroupButton")
             .foregroundColor(.red)
         }
     }
@@ -125,6 +127,7 @@ private extension EditGroupView {
                     onSave(updatedGroup)
                 }
             }
+            .accessibilityIdentifier("saveGroupButton")
             .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.secondary))
             .disabled(viewModel.isFormEmpty || isSaving)
         }
