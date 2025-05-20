@@ -26,7 +26,6 @@ struct FriendsListView: View {
         ZStack(alignment: .trailing) {
             ScrollViewReader { proxy in
                 friendList(proxy: proxy)
-                    .id(session.friendsRefreshID)
                     .overlay(alphabetOverlay(proxy: proxy), alignment: .trailing)
             }
         }
