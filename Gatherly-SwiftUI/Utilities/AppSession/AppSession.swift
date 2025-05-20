@@ -59,13 +59,7 @@ final class AppSession: ObservableObject {
         }
         
         if !didSeedSampleData {
-            self.users = SampleData.sampleUsers
-            self.events = SampleData.sampleEvents
-            self.groups = SampleData.sampleGroups
-            
-            applySampleDataForSami()
-            saveAllData()
-            didSeedSampleData = true
+            seedAndApplySampleData()
         } else {
             self.users = UserDefaultsManager.loadUsers()
             self.events = UserDefaultsManager.loadEvents()
@@ -81,6 +75,20 @@ final class AppSession: ObservableObject {
         UserDefaultsManager.saveUsers(users)
         UserDefaultsManager.saveEvents(events)
         UserDefaultsManager.saveGroups(groups)
+    }
+    
+    private func seedAndApplySampleData() {
+        self.users = SampleData.sampleUsers
+        self.events = SampleData.sampleEvents
+        self.groups = SampleData.sampleGroups
+        
+        applySampleDataForSami()
+        saveAllData()
+        didSeedSampleData = true
+        
+        self.currentUser = users.first(where: { $0.id == 1 })
+        updateLocalFriendsAndGroups()
+        self.isLoading = false
     }
     
     // MARK: - Users
