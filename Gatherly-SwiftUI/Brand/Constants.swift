@@ -168,5 +168,7 @@ struct Constants {
     
     struct UserFormView {
         static let addingFriendString: String = "Adding your friend!"
+        static let updatingFriendString: String = "Updating your friend!"
+        static let updatingProfileString: String = "Updating your profile!"
     }
 }
