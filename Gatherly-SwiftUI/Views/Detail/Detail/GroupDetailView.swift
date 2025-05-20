@@ -140,6 +140,7 @@ private extension GroupDetailView {
                 NavigationLink(destination: UserDetailView(user: leader)) {
                     ProfileRow(user: leader)
                 }
+                .accessibilityIdentifier("groupMemberRow-\(leader.firstName ?? "")")
             }
             if !memberUsers.isEmpty {
                 Text("Members")
@@ -148,6 +149,7 @@ private extension GroupDetailView {
                     NavigationLink(destination: UserDetailView(user: user)) {
                         ProfileRow(user: user)
                     }
+                    .accessibilityIdentifier("groupMemberRow-\(user.firstName ?? "")")
                 }
             }
         }
@@ -162,6 +164,7 @@ private extension GroupDetailView {
                 Button("Edit") {
                     isShowingEditView = true
                 }
+                    .accessibilityIdentifier("editGroupButton")
             )
         } else {
             AnyView(
@@ -170,6 +173,7 @@ private extension GroupDetailView {
                 }) {
                     Image(systemName: "ellipsis")
                 }
+                    .accessibilityIdentifier("groupOptionsButton")
             )
         }
     }
