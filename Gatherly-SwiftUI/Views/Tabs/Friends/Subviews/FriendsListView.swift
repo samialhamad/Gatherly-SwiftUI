@@ -94,6 +94,7 @@ private extension FriendsListView {
             NavigationLink(destination: UserDetailView(user: friend)) {
                 ProfileRow(user: friend)
             }
+            .accessibilityIdentifier("friendRow-\(friend.firstName ?? "")")
         case .select(let binding):
             Button {
                 toggleSelection(friend.id, binding: binding)
