@@ -18,6 +18,7 @@ struct SearchBarView: View {
             Image(systemName: "magnifyingglass")
                 .foregroundColor(Color(Colors.primary))
             TextField(placeholder, text: $searchText)
+                .accessibilityIdentifier("friendsSearchField")
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .autocorrectionDisabled(true)
                 .textInputAutocapitalization(.never)
