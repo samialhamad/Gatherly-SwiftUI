@@ -95,7 +95,12 @@ private extension ProfileView {
     }
     
     @ViewBuilder
-    private func profileRow(title: String, icon: String, isDestructive: Bool = false) -> some View {
+    private func profileRow(
+        title: String,
+        icon: String,
+        isDestructive: Bool = false,
+        identifier: String? = nil
+    ) -> some View {
         Button {
             // Action placeholder – to be implemented with TCA
         } label: {
@@ -111,6 +116,7 @@ private extension ProfileView {
             }
             .padding()
         }
+        .accessibilityIdentifier(identifier ?? "")
     }
     
     func profileRowsSection(_ currentUser: User) -> some View {
@@ -131,6 +137,7 @@ private extension ProfileView {
             } label: {
                 profileRowContent(title: "Profile", icon: "person.fill")
             }
+            .accessibilityIdentifier("editProfileButton")
             
             Button {
                 session.syncContacts()
@@ -138,9 +145,16 @@ private extension ProfileView {
                 profileRowContent(
                     title: "Sync Contacts", icon: "arrow.trianglehead.2.clockwise.rotate.90.circle.fill")
             }
+            .accessibilityIdentifier("syncContactsButton")
             
-            profileRow(title: "Logout", icon: "arrow.backward.circle.fill")
-            profileRow(title: "Delete Account", icon: "minus.circle.fill", isDestructive: true)
+            profileRow(title: "Logout",
+                       icon: "arrow.backward.circle.fill",
+                       identifier: "logoutButton")
+            
+            profileRow(title: "Delete Account",
+                       icon: "minus.circle.fill",
+                       isDestructive: true,
+                       identifier: "deleteAccountButton")
         }
     }
 }
