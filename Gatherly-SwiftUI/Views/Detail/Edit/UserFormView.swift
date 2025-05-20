@@ -35,7 +35,7 @@ struct UserFormView: View {
                     }
                 }
                 if isSaving {
-                    ActivityIndicator(message: Constants.UserFormView.addingFriendString)
+                    ActivityIndicator(message: activityMessage(for: viewStore))
                 }
             }
             .keyboardDismissable()
@@ -45,7 +45,17 @@ struct UserFormView: View {
 
 private extension UserFormView {
     
-    // MARK: - Form Views
+    // MARK: - Subviews
+    
+    private func activityMessage(for viewStore: ViewStore<UserFormFeature.State, UserFormFeature.Action>) -> String {
+        if viewStore.isCreatingFriend {
+            return Constants.UserFormView.addingFriendString
+        } else if viewStore.currentUser.id != session.currentUser?.id {
+            return Constants.UserFormView.updatingFriendString
+        } else {
+            return Constants.UserFormView.updatingProfileString
+        }
+    }
     
     private func nameSection(_ viewStore: ViewStore<UserFormFeature.State, UserFormFeature.Action>) -> some View {
         Section(header: Text("Name")) {
@@ -100,7 +110,7 @@ private extension UserFormView {
     func saveToolbarButton(_ viewStore: ViewStore<UserFormFeature.State, UserFormFeature.Action>) -> some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
             let isDisabled = viewStore.firstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-
+            
             Button("Save") {
                 isSaving = true
                 viewStore.send(.saveChanges)
