@@ -194,6 +194,7 @@ private extension CreateEventView {
                     .font(.headline)
                     .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.primary))
             }
+            .accessibilityIdentifier("createEventButton")
             .disabled(viewModel.isFormEmpty || isSaving)
         }
     }
