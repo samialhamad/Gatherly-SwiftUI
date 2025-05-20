@@ -16,9 +16,11 @@ struct EventDetailsSection: View {
     var body: some View {
         Section(header: Text(header)) {
             TextField("Title", text: $title)
+                .accessibilityIdentifier("eventTitleTextField")
             
             HStack(alignment: .top) {
                 TextField("Description", text: $description, axis: .vertical)
+                    .accessibilityIdentifier("eventDescriptionTextField")
                     .lineLimit(3, reservesSpace: true)
                     .tint(Color(Colors.primary))
                     .focused($isDescriptionFocused)
@@ -44,12 +46,15 @@ struct EventDateTimeSection: View {
         Section(header: Text(header)) {
             DatePicker("Event Date", selection: eventDate, in: Date()..., displayedComponents: .date)
                 .tint(Color(Colors.primary))
+                .accessibilityIdentifier("eventDatePicker")
             
             DatePicker("Start Time", selection: startTime, in: startTimeRange, displayedComponents: .hourAndMinute)
                 .tint(Color(Colors.primary))
+                .accessibilityIdentifier("startTimePicker")
             
             DatePicker("End Time", selection: endTime, in: endTimeRange, displayedComponents: .hourAndMinute)
                 .tint(Color(Colors.primary))
+                .accessibilityIdentifier("endTimePicker")
         }
     }
 }
@@ -91,6 +96,7 @@ struct EventMembersSection: View {
                 }
                 .addDisclosureIcon()
             }
+            .accessibilityIdentifier("inviteFriendsButton")
             .sheet(isPresented: $isMembersPickerPresented) {
                 FriendsPicker(selectedMemberIDs: $selectedMemberIDs)
             }
@@ -111,6 +117,7 @@ struct EventLocationSection: View {
         Section(header: Text(header)) {
             HStack {
                 TextField("Enter location name", text: $locationName)
+                    .accessibilityIdentifier("eventLocationTextField")
                     .autocapitalization(.words)
                     .disableAutocorrection(true)
                     .onChange(of: locationName) { newValue in
@@ -184,6 +191,7 @@ struct EventCategorySection: View {
                 .addDisclosureIcon()
                 .padding(.vertical, Constants.EventCategorySection.verticalPadding)
             }
+            .accessibilityIdentifier("categoryPickerButton")
             .sheet(isPresented: $isCategoryPickerPresented) {
                 EventCategoryPicker(selectedCategories: $selectedCategories)
             }
