@@ -30,4 +30,75 @@ final class FriendsListViewUITests: GatherlyUITestCase {
         let navTitle = app.navigationBars["Bob Jones"]
         XCTAssertTrue(navTitle.waitForExistence(timeout: 2))
     }
+    
+    // MARK: - Edit Friend
+    
+    func testEditingFriendUpdatesName() {
+        let oldFirstName = "Bob"
+        let oldRow = app.buttons["friendRow-\(oldFirstName)"]
+        let newFirstName = "Chocolate"
+        let newLastName = "Banana"
+        let updatedFullName = "\(newFirstName) \(newLastName)"
+
+        XCTAssertTrue(oldRow.waitForExistence(timeout: 2))
+        oldRow.tap()
+
+        let actionButton = app.buttons["userDetailOptionsButton"]
+        XCTAssertTrue(actionButton.waitForExistence(timeout: 2))
+        actionButton.tap()
+
+        let editButton = app.buttons["Edit"]
+        XCTAssertTrue(editButton.waitForExistence(timeout: 2))
+        editButton.tap()
+
+        let firstNameField = app.textFields["userFormFirstName"]
+        XCTAssertTrue(firstNameField.waitForExistence(timeout: 2))
+        firstNameField.tap()
+        firstNameField.clearAndEnterText(newFirstName)
+
+        let lastNameField = app.textFields["userFormLastName"]
+        XCTAssertTrue(lastNameField.exists)
+        lastNameField.tap()
+        lastNameField.clearAndEnterText(newLastName)
+
+        app.navigationBars["Edit Profile"].tap()
+        let saveButton = app.buttons["userFormSaveButton"]
+        XCTAssertTrue(saveButton.exists)
+        saveButton.tap()
+        
+        let userDetailNavBar = app.navigationBars[updatedFullName]
+        XCTAssertTrue(userDetailNavBar.waitForExistence(timeout: 3))
+        
+        // Tap back to return to Friends list
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+
+        let friendsNavBar = app.navigationBars["Friends"]
+        XCTAssertTrue(friendsNavBar.waitForExistence(timeout: 3))
+
+        let updatedRow = app.staticTexts[updatedFullName]
+        XCTAssertTrue(updatedRow.waitForExistence(timeout: 3))
+    }
+    
+    // MARK: - Remove Friend
+    
+    func testRemovingFriendRemovesFromList() {
+        let friendName = "Bob"
+        let friendRow = app.buttons["friendRow-\(friendName)"]
+
+        XCTAssertTrue(friendRow.waitForExistence(timeout: 2))
+        friendRow.tap()
+
+        let actionButton = app.buttons["userDetailOptionsButton"]
+        XCTAssertTrue(actionButton.waitForExistence(timeout: 2))
+        actionButton.tap()
+
+        let removeButton = app.buttons["Remove Friend"]
+        XCTAssertTrue(removeButton.waitForExistence(timeout: 2))
+        removeButton.tap()
+
+        let navBar = app.navigationBars["Friends"]
+        XCTAssertTrue(navBar.waitForExistence(timeout: 3))
+
+        XCTAssertFalse(friendRow.exists)
+    }
 }
