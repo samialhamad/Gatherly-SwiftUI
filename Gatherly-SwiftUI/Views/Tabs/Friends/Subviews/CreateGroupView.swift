@@ -32,6 +32,7 @@ struct CreateGroupView: View {
                 Form {
                     Section(header: Text("Group Name")) {
                         TextField("Enter group name", text: groupNameBinding)
+                            .accessibilityIdentifier("groupNameTextField")
                     }
                     
                     ImagePicker(
@@ -121,6 +122,7 @@ private extension CreateGroupView {
                     .font(.headline)
                     .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.primary))
             }
+            .accessibilityIdentifier("createGroupButton")
             .disabled(viewModel.isFormEmpty || isSaving)
         }
     }
