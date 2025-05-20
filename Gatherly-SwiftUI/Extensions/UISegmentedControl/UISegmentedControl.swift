@@ -11,9 +11,10 @@ extension UISegmentedControl {
         static func applyGatherlyStyle() {
             let appearance = UISegmentedControl.appearance()
 
-            appearance.backgroundColor = Colors.primary
             appearance.selectedSegmentTintColor = Colors.secondary
             appearance.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
             appearance.setTitleTextAttributes([.foregroundColor: UIColor.black], for: .selected)
         }
+        appearance.backgroundColor = Colors.secondary.withAlphaComponent(0.4)
     }
+}
