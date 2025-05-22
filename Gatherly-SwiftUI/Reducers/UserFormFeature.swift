@@ -5,6 +5,7 @@
 //  Created by Sami Alhamad on 4/21/25.
 //
 
+import Combine
 import ComposableArchitecture
 import SwiftUI
 
@@ -58,24 +59,18 @@ struct UserFormFeature: Reducer {
             let avatarImageName = state.avatarImage.flatMap { ImageUtility.saveImageToDocuments(image: $0) }
             let bannerImageName = state.bannerImage.flatMap { ImageUtility.saveImageToDocuments(image: $0) }
             
-            return .run { [state] send in
-                let user = await MainActor.run {
-                    var user = state.currentUser
-                    user.firstName = state.firstName
-                    user.lastName = state.lastName
-                    user.avatarImageName = avatarImageName
-                    user.bannerImageName = bannerImageName
-                    return user
-                }
-                
-                let savedUser: User
-                if state.isCreatingFriend {
-                    savedUser = await GatherlyAPI.createUser(user)
-                } else {
-                    savedUser = await GatherlyAPI.updateUser(user)
-                }
-                
-                await send(.userSaved(savedUser))
+            var updatedUser = state.currentUser
+            updatedUser.firstName = state.firstName
+            updatedUser.lastName = state.lastName
+            updatedUser.avatarImageName = avatarImageName
+            updatedUser.bannerImageName = bannerImageName
+            
+            let publisher: AnyPublisher<User, Never> = state.isCreatingFriend
+            ? GatherlyAPI.createUser(updatedUser)
+            : GatherlyAPI.updateUser(updatedUser)
+            
+            return .publisher {
+                publisher.map(Action.userSaved)
             }
             
         case .userSaved(let updatedUser):
