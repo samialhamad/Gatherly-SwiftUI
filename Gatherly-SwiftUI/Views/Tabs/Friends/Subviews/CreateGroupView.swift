@@ -5,25 +5,20 @@
 //  Created by Sami Alhamad on 3/31/25.
 //
 
+import Combine
 import SwiftUI
 import PhotosUI
 
 struct CreateGroupView: View {
-    @EnvironmentObject var session: AppSession
+    @State private var allUsers: [User] = []
+    @State private var cancellables = Set<AnyCancellable>()
     @Environment(\.dismiss) private var dismiss
     @State private var isSaving = false
+    @EnvironmentObject var navigationState: NavigationState
     @StateObject private var viewModel: CreateGroupViewModel
     
     init(currentUserID: Int) {
         _viewModel = StateObject(wrappedValue: CreateGroupViewModel(currentUserID: currentUserID))
-    }
-    
-    private var currentUser: User? {
-        session.currentUser
-    }
-    
-    private var friends: [User] {
-        currentUser?.resolvedFriends(from: session.friendsDict) ?? []
     }
     
     var body: some View {
@@ -66,6 +61,12 @@ struct CreateGroupView: View {
             }
         }
         .keyboardDismissable()
+        .onAppear {
+            GatherlyAPI.getUsers()
+                .receive(on: RunLoop.main)
+                .sink { self.allUsers = $0 }
+                .store(in: &cancellables)
+        }
     }
 }
 
@@ -99,20 +100,15 @@ private extension CreateGroupView {
     
     var createButtonSection: some View {
         Section {
-            Button { [weak session] in
+            Button {
                 isSaving = true
                 
                 Task {
                     let newGroup = await viewModel.createGroup()
                     
                     await MainActor.run {
-                        guard let session else {
-                            return
-                        }
-                        
-                        session.groups.append(newGroup)
-                        session.navigationState.navigateToGroup = newGroup
-                        session.navigationState.selectedTab = 2
+                        navigationState.navigateToGroup = newGroup
+                        navigationState.selectedTab = 2
                         isSaving = false
                         dismiss()
                     }
@@ -130,5 +126,4 @@ private extension CreateGroupView {
 
 #Preview {
     CreateGroupView(currentUserID: 1)
-        .environmentObject(AppSession())
 }
