@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct EditEventView: View {
-    @EnvironmentObject var session: AppSession
     @State private var isSaving = false
     @State private var showingDeleteAlert = false
     @StateObject var viewModel: EditEventViewModel
@@ -18,10 +17,6 @@ struct EditEventView: View {
     let onSave: (Event) -> Void
     let onCancel: () -> Void
     let onDelete: (Event) -> Void
-    
-    private var currentUser: User? {
-        session.currentUser
-    }
     
     var body: some View {
         ZStack {
@@ -213,6 +208,5 @@ private extension EditEventView {
             onCancel: {},
             onDelete: { _ in }
         )
-        .environmentObject(AppSession())
     }
 }
