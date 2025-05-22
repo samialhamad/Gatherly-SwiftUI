@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct EditGroupView: View {
-    @EnvironmentObject var session: AppSession
     @State private var showingDeleteAlert = false
     @State private var isSaving = false
     @StateObject var viewModel: EditGroupViewModel
@@ -18,10 +17,6 @@ struct EditGroupView: View {
     let onSave: (UserGroup) -> Void
     let onCancel: () -> Void
     let onDelete: (UserGroup) -> Void
-    
-    private var currentUser: User? {
-        session.currentUser
-    }
     
     var body: some View {
         ZStack {
@@ -147,6 +142,5 @@ private extension EditGroupView {
             onCancel: {},
             onDelete: { _ in }
         )
-        .environmentObject(AppSession())
     }
 }
