@@ -5,17 +5,15 @@
 //  Created by Sami Alhamad on 4/21/25.
 //
 
+import Combine
 import ComposableArchitecture
 import SwiftUI
 
 struct ProfileView: View {
-    @EnvironmentObject var session: AppSession
+    @State private var cancellables = Set<AnyCancellable>()
+    @State private var currentUser: User? = nil
     @State private var userFormStore: Store<UserFormFeature.State, UserFormFeature.Action>? = nil
     @State private var refreshID = UUID()
-    
-    private var currentUser: User? {
-        session.currentUser
-    }
     
     var body: some View {
         NavigationStack {
@@ -49,6 +47,14 @@ struct ProfileView: View {
             }
         }
         .refreshOnAppear()
+        .onAppear {
+            GatherlyAPI.getUsers()
+                .receive(on: RunLoop.main)
+                .sink { users in
+                    self.currentUser = users.first(where: { $0.id == 1 })
+                }
+                .store(in: &cancellables)
+        }
     }
 }
 
@@ -140,7 +146,7 @@ private extension ProfileView {
             .accessibilityIdentifier("editProfileButton")
             
             Button {
-                session.syncContacts()
+                ContactSyncHelper.runIfNeeded(currentUserID: 1)
             } label: {
                 profileRowContent(
                     title: "Sync Contacts", icon: "arrow.trianglehead.2.clockwise.rotate.90.circle.fill")
@@ -161,5 +167,4 @@ private extension ProfileView {
 
 #Preview {
     ProfileView()
-        .environmentObject(AppSession())
 }
