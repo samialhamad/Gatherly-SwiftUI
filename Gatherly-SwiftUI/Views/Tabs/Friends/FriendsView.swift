@@ -5,21 +5,18 @@
 //  Created by Sami Alhamad on 3/24/25.
 //
 
+import Combine
 import ComposableArchitecture
 import SwiftUI
 
 struct FriendsView: View {
-    @EnvironmentObject var session: AppSession
     @State private var createFriendStore: Store<UserFormFeature.State, UserFormFeature.Action>? = nil
     @State private var isShowingCreateGroup = false
+    @EnvironmentObject var navigationState: NavigationState
     @State private var searchText = ""
     @State private var selectedTab = 0
     
     private let tabTitles = ["Friends", "Groups"]
-    
-    private var currentUser: User? {
-        session.currentUser
-    }
     
     var body: some View {
         NavigationStack {
@@ -54,14 +51,14 @@ struct FriendsView: View {
                 createGroupSheet
             }
             .navigationDestination(isPresented: Binding(
-                get: { session.navigationState.navigateToGroup != nil },
+                get: { navigationState.navigateToGroup != nil },
                 set: { newValue in
                     if !newValue {
-                        session.navigationState.navigateToGroup = nil
+                        navigationState.navigateToGroup = nil
                     }
                 }
             )) {
-                if let group = session.navigationState.navigateToGroup {
+                if let group = navigationState.navigateToGroup {
                     GroupDetailView(group: group)
                 } else {
                     EmptyView()
@@ -78,20 +75,37 @@ extension FriendsView {
     //MARK: - Functions
     
     func handleCreateFriendComplete(_ action: UserFormFeature.Action) {
-        guard let currentUserID = currentUser?.id else {
-            return
-        }
+        let currentUserID = 1
         
         switch action {
         case .cancel:
             break
         case .delegate(let delegateAction):
             if case let .didSave(newFriend) = delegateAction {
-                session.appendUsersAndUpdateFriends(
-                    newUsers: [newFriend],
-                    newFriendIDs: [newFriend.id ?? 0],
-                    currentUserID: currentUserID
-                )
+                _ = GatherlyAPI.createUser(newFriend)
+                    .flatMap { createdUser -> AnyPublisher<(User, [User]), Never> in
+                        GatherlyAPI.getUsers()
+                            .map { users in (createdUser, users) }
+                            .eraseToAnyPublisher()
+                    }
+                    .sink { result in
+                        let (createdUser, users) = result
+                        
+                        var updatedUsers = users
+                        
+                        if let index = updatedUsers.firstIndex(where: { $0.id == 1 }) {
+                            var currentUser = updatedUsers[index]
+                            var ids = currentUser.friendIDs ?? []
+                            
+                            if let newID = createdUser.id, !ids.contains(newID) {
+                                ids.append(newID)
+                                currentUser.friendIDs = ids
+                                updatedUsers[index] = currentUser
+                            }
+                            
+                            UserDefaultsManager.saveUsers(updatedUsers)
+                        }
+                    }
             }
         default:
             break
@@ -114,7 +128,7 @@ extension FriendsView {
     }
     
     var createGroupSheet: some View {
-        CreateGroupView(currentUserID: session.currentUser?.id ?? 1)
+        CreateGroupView(currentUserID: 1)
     }
     
     struct pickerView: View {
@@ -165,5 +179,4 @@ extension FriendsView {
 
 #Preview {
     FriendsView()
-        .environmentObject(AppSession())
 }
