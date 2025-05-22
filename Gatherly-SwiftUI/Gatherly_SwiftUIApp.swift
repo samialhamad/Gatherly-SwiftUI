@@ -17,7 +17,7 @@ struct Gatherly_SwiftUIApp: App {
         WindowGroup {
             ContentView()
                 .applyGatherlyToolbarStyle()
-                .environmentObject(AppSession())
+                .environmentObject(NavigationState())
         }
     }
 }
