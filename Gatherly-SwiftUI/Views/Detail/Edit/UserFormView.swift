@@ -5,20 +5,18 @@
 //  Created by Sami Alhamad on 4/21/25.
 //
 
+import Combine
 import ComposableArchitecture
 import SwiftUI
 
 struct UserFormView: View {
-    @EnvironmentObject var session: AppSession
+    @State private var cancellables = Set<AnyCancellable>()
+    @State private var currentUserID: Int? = nil
     @State private var isSaving = false
     @State private var showingDeleteAlert = false
     
     let store: Store<UserFormFeature.State, UserFormFeature.Action>
     let onComplete: (UserFormFeature.Action) -> Void
-    
-    private var currentUser: User? {
-        session.currentUser
-    }
     
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
@@ -39,6 +37,14 @@ struct UserFormView: View {
                 }
             }
             .keyboardDismissable()
+            .onAppear {
+                GatherlyAPI.getUsers()
+                    .receive(on: RunLoop.main)
+                    .sink { users in
+                        currentUserID = users.first(where: { $0.id == 1 })?.id
+                    }
+                    .store(in: &cancellables)
+            }
         }
     }
 }
@@ -50,7 +56,7 @@ private extension UserFormView {
     private func activityMessage(for viewStore: ViewStore<UserFormFeature.State, UserFormFeature.Action>) -> String {
         if viewStore.isCreatingFriend {
             return Constants.UserFormView.addingFriendString
-        } else if viewStore.currentUser.id != session.currentUser?.id {
+        } else if viewStore.currentUser.id != currentUserID {
             return Constants.UserFormView.updatingFriendString
         } else {
             return Constants.UserFormView.updatingProfileString
@@ -140,5 +146,4 @@ private extension UserFormView {
         ),
         onComplete: { _ in }
     )
-    .environmentObject(AppSession())
 }
