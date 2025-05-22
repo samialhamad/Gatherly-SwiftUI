@@ -10,24 +10,24 @@ import ElegantCalendar
 import SwiftUI
 
 final class EventHighlightDelegate: ElegantCalendarDelegate {
+    @Binding var events: [Event]
+    @EnvironmentObject var navigationState: NavigationState
     @Binding var selectedDate: Date
-    
-    let session: AppSession
-    
-    init(selectedDate: Binding<Date>, session: AppSession) {
+        
+    init(selectedDate: Binding<Date>, events: Binding<[Event]>) {
         _selectedDate = selectedDate
-        self.session = session
+        _events = events
     }
     
     func calendar(didSelectDay date: Date) {
         selectedDate = date
         
-        if session.navigationState.hasShownDayEventsView == false {
-            session.navigationState.hasShownDayEventsView = true
+        if navigationState.hasShownDayEventsView == false {
+            navigationState.hasShownDayEventsView = true
             return
         }
         
-        let hasEvents = session.events.contains { event in
+        let hasEvents = events.contains { event in
             guard let eventDate = event.date else {
                 return false
             }
@@ -36,7 +36,7 @@ final class EventHighlightDelegate: ElegantCalendarDelegate {
         }
         
         if hasEvents {
-            session.navigationState.navigateToEventsForDate = date
+            navigationState.navigateToEventsForDate = date
         }
     }
     
@@ -55,7 +55,7 @@ final class EventHighlightDelegate: ElegantCalendarDelegate {
     }
     
     private func hasEvent(on date: Date) -> Bool {
-        session.events.contains { event in
+        events.contains { event in
             if let eventDate = event.date {
                 return Date.isSameDay(date1: eventDate, date2: date)
             }
