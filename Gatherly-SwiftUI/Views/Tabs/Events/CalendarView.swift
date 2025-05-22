@@ -15,10 +15,6 @@ struct CalendarView: View {
     @EnvironmentObject var navigationState: NavigationState
     @StateObject private var viewModel = CalendarViewModel()
     
-    private var currentUser: User? {
-        session.currentUser
-    }
-    
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
