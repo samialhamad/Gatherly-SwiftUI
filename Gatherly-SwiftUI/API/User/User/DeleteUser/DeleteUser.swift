@@ -5,14 +5,18 @@
 //  Created by Sami Alhamad on 5/18/25.
 //
 
+import Combine
 import Foundation
 
 extension GatherlyAPI {
-    static func deleteUser(_ userToDelete: User) async -> [User] {
+    static func deleteUser(_ userToDelete: User) -> AnyPublisher<[User], Never> {
         var users = UserDefaultsManager.loadUsers()
+        
         users.removeAll { $0.id == userToDelete.id }
         UserDefaultsManager.saveUsers(users)
         
-        return users
+        return Just(users)
+            .delay(for: .seconds(1), scheduler: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
 }

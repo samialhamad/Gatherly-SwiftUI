@@ -5,12 +5,12 @@
 //  Created by Sami Alhamad on 4/14/25.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 extension GatherlyAPI {
     static func getUsers() -> AnyPublisher<[User], Never> {
-        Just(SampleData.sampleUsers)
+        Just(UserDefaultsManager.loadUsers())
             .delay(for: .seconds(2), scheduler: DispatchQueue.main)
             .eraseToAnyPublisher()
     }

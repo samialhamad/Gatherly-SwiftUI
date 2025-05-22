@@ -5,12 +5,14 @@
 //  Created by Sami Alhamad on 5/8/25.
 //
 
+import Combine
 import Foundation
 
 extension GatherlyAPI {
+    
     // MARK: - Create Manually
     
-    static func createUser(_ user: User) async -> User {
+    static func createUser(_ user: User) -> AnyPublisher<User, Never> {
         var storedUser = user
         
         if storedUser.id == nil {
@@ -21,8 +23,9 @@ extension GatherlyAPI {
         users.append(storedUser)
         UserDefaultsManager.saveUsers(users)
         
-        await simulateNetworkDelay()
-        return storedUser
+        return Just(storedUser)
+            .delay(for: .seconds(2), scheduler: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
     
     // MARK: - Create from Synced Contact
@@ -41,6 +44,11 @@ extension GatherlyAPI {
             phone: contact.phoneNumber
         )
         
-        return await createUser(user)
+        return await withCheckedContinuation { continuation in
+            _ = createUser(user)
+                .sink { created in
+                    continuation.resume(returning: created)
+                }
+        }
     }
 }
