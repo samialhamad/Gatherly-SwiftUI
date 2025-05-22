@@ -9,18 +9,14 @@ import SwiftUI
 import PhotosUI
 
 struct CreateEventView: View {
-    @EnvironmentObject var session: AppSession
     @State private var isSaving = false
+    @EnvironmentObject var navigationState: NavigationState
     @StateObject private var viewModel = CreateEventViewModel()
-    
-    private var currentUser: User? {
-        session.currentUser
-    }
     
     init() {
         _viewModel = StateObject(wrappedValue: CreateEventViewModel())
     }
-
+    
     // Used for automatic date population from CalendarView
     init(date: Date) {
         let viewModel = CreateEventViewModel()
@@ -167,29 +163,22 @@ private extension CreateEventView {
     
     var createButtonSection: some View {
         Section {
-            Button(action: { [weak session] in
+            Button{
                 isSaving = true
-                guard let plannerID = currentUser?.id else {
-                    return
-                }
+                let plannerID = 1
                 
                 Task {
                     let newEvent = await viewModel.createEvent(plannerID: plannerID)
                     
                     await MainActor.run {
-                        guard let session else {
-                            return
-                        }
-                        
-                        session.events.append(newEvent)
                         viewModel.clearFields()
-                        session.navigationState.calendarSelectedDate = newEvent.date ?? Date()
-                        session.navigationState.navigateToEvent = newEvent
-                        session.navigationState.selectedTab = 0
+                        navigationState.calendarSelectedDate = newEvent.date ?? Date()
+                        navigationState.navigateToEvent = newEvent
+                        navigationState.selectedTab = 0
                         isSaving = false
                     }
                 }
-            }) {
+            } label: {
                 Text("Create")
                     .font(.headline)
                     .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.primary))
@@ -202,5 +191,4 @@ private extension CreateEventView {
 
 #Preview {
     CreateEventView()
-        .environmentObject(AppSession())
 }
