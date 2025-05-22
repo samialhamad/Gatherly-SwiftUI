@@ -5,11 +5,14 @@
 //  Created by Sami Alhamad on 3/4/25.
 //
 
+import Combine
 import SwiftUI
 
 struct CalendarView: View {
-    @EnvironmentObject var session: AppSession
+    @State private var cancellables = Set<AnyCancellable>()
+    @State private var events: [Event] = []
     @State private var isCalendarView = true
+    @EnvironmentObject var navigationState: NavigationState
     @StateObject private var viewModel = CalendarViewModel()
     
     private var currentUser: User? {
@@ -27,31 +30,36 @@ struct CalendarView: View {
                 calendarToolbarButton
             }
             .navigationDestination(isPresented: Binding(
-                get: { session.navigationState.navigateToEvent != nil },
+                get: { navigationState.navigateToEvent != nil },
                 set: { newValue in
-                    if !newValue { session.navigationState.navigateToEvent = nil }
+                    if !newValue { navigationState.navigateToEvent = nil }
                 }
             )) {
-                if let event = session.navigationState.navigateToEvent {
+                if let event = navigationState.navigateToEvent {
                     EventDetailView(event: event)
                 } else {
                     EmptyView()
                 }
             }
             .navigationDestination(isPresented: Binding(
-                get: { session.navigationState.navigateToEventsForDate != nil },
+                get: { navigationState.navigateToEventsForDate != nil },
                 set: { newValue in
-                    if !newValue { session.navigationState.navigateToEventsForDate = nil }
+                    if !newValue { navigationState.navigateToEventsForDate = nil }
                 }
             )) {
-                if let date = session.navigationState.navigateToEventsForDate {
+                if let date = navigationState.navigateToEventsForDate {
                     DayEventsView(date: date)
                 } else {
                     EmptyView()
                 }
             }
             .onAppear {
-                session.navigationState.hasShownDayEventsView = false
+                navigationState.hasShownDayEventsView = false
+                
+                GatherlyAPI.getEvents()
+                    .receive(on: RunLoop.main)
+                    .sink { self.events = $0 }
+                    .store(in: &cancellables)
             }
         }
     }
@@ -75,9 +83,8 @@ private extension CalendarView {
         if isCalendarView {
             VStack(spacing: 0) {
                 GatherlyCalendarView(
-                    selectedDate: $session.navigationState.calendarSelectedDate,
-                    allEvents: $session.events,
-                    session: session
+                    selectedDate: $navigationState.calendarSelectedDate,
+                    allEvents: $events
                 )
             }
             .frame(maxHeight: .infinity)
@@ -89,5 +96,4 @@ private extension CalendarView {
 
 #Preview {
     CalendarView()
-        .environmentObject(AppSession())
 }
