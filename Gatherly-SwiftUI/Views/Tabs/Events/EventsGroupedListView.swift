@@ -5,24 +5,28 @@
 //  Created by Sami Alhamad on 3/12/25.
 //
 
+import Combine
 import SwiftUI
 
 struct EventsGroupedListView: View {
-    @EnvironmentObject var session: AppSession
+    @State private var cancellables = Set<AnyCancellable>()
+    @State private var events: [Event] = []
     @StateObject private var viewModel = EventsGroupedListViewModel()
-    
-    private var currentUser: User? {
-        session.currentUser
-    }
-    
+
     var body: some View {
-        let groupedEvents = session.events.groupEventsByDay
+        let groupedEvents = events.groupEventsByDay
         let keys = groupedEvents.keys.sorted()
         
         ScrollViewReader { proxy in
             groupedEventsList(keys: keys, groupedEvents: groupedEvents, proxy: proxy)
                 .toolbar {
                     scrollToTodayToolbarButton(keys: keys, proxy: proxy)
+                }
+                .onAppear {
+                    GatherlyAPI.getEvents()
+                        .receive(on: RunLoop.main)
+                        .sink { self.events = $0 }
+                        .store(in: &cancellables)
                 }
         }
     }
@@ -80,5 +84,4 @@ private extension EventsGroupedListView {
 
 #Preview {
     EventsGroupedListView()
-        .environmentObject(AppSession())
 }
