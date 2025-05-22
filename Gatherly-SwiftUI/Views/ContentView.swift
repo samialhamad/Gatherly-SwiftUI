@@ -5,32 +5,37 @@
 //  Created by Sami Alhamad on 3/4/25.
 //
 
-import SwiftUI
 import Combine
+import SwiftUI
 
 struct ContentView: View {
-    @EnvironmentObject var session: AppSession
+    @State private var cancellables = Set<AnyCancellable>()
+    @State private var currentUser: User? = nil
+    @State private var isLoading = true
+    @EnvironmentObject var navigationState: NavigationState
     
     var body: some View {
         Group {
-            if let currentUser = session.currentUser {
-                TabView(selection: $session.navigationState.selectedTab) {
+            if let currentUser {
+                TabView(selection: $navigationState.selectedTab) {
                     calendarTab
                     createEventTab
                     friendsTab
                     profileTab
                 }
-            } else {
+            } else if isLoading {
                 ActivityIndicator(message: Constants.ContentView.gatheringLoadingString)
             }
         }
         .task {
-            session.loadAllData()
+            AppInitializer.runIfNeeded()
+            ContactSyncHelper.runIfNeeded(currentUserID: 1)
             
-            if !session.didSyncContacts {
-                session.syncContacts()
-                session.didSyncContacts = true
-            }
+            GatherlyAPI.getUsers()
+                .sink { users in
+                    currentUser = users.first(where: { $0.id == 1 })
+                }
+                .store(in: &cancellables)
         }
     }
 }
@@ -41,9 +46,8 @@ private extension ContentView {
     
     var calendarTab: some View {
         CalendarView()
-            .environmentObject(session)
             .addActivityIndicator(
-                isPresented: session.isLoading && session.navigationState.selectedTab == 0,
+                isPresented: isLoading && navigationState.selectedTab == 0,
                 message: Constants.ContentView.calendarViewLoadingString
             )
             .tabItem {
@@ -57,7 +61,6 @@ private extension ContentView {
     var createEventTab: some View {
         NavigationStack {
             CreateEventView()
-                .environmentObject(session)
                 .navigationTitle("Create Event")
         }
         .tabItem {
@@ -71,9 +74,8 @@ private extension ContentView {
     var friendsTab: some View {
         NavigationStack {
             FriendsView()
-                .environmentObject(session)
                 .addActivityIndicator(
-                    isPresented: session.isLoading && session.navigationState.selectedTab == 2,
+                    isPresented: isLoading && navigationState.selectedTab == 2,
                     message: Constants.ContentView.friendsViewLoadingString
                 )
         }
@@ -88,9 +90,8 @@ private extension ContentView {
     var profileTab: some View {
         NavigationStack {
             ProfileView()
-                .environmentObject(session)
                 .addActivityIndicator(
-                    isPresented: session.isLoading && session.navigationState.selectedTab == 3,
+                    isPresented: isLoading && navigationState.selectedTab == 3,
                     message: Constants.ContentView.profileViewLoadingString
                 )
         }
