@@ -5,20 +5,19 @@
 //  Created by Sami Alhamad on 3/30/25.
 //
 
+import Combine
 import SwiftUI
 
 struct GroupDetailView: View {
-    @EnvironmentObject var session: AppSession
+    @State private var cancellables = Set<AnyCancellable>()
+    @State private var currentUser: User? = nil
     @Environment(\.dismiss) private var dismiss
+    @State private var friendsDict: [Int: User] = [:]
     @State private var isDeleting = false
     @State private var isShowingEditView = false
     @State private var isShowingActionSheet = false
     
     let group: UserGroup
-    
-    private var currentUser: User? {
-        session.currentUser
-    }
     
     var body: some View {
         NavigationStack {
@@ -54,6 +53,18 @@ struct GroupDetailView: View {
                 .refreshOnAppear()
             }
         }
+        .onAppear {
+            GatherlyAPI.getUsers()
+                .receive(on: RunLoop.main)
+                .sink { users in
+                    self.currentUser = users.first(where: { $0.id == 1 })
+                    self.friendsDict = Dictionary(uniqueKeysWithValues: users.compactMap {
+                        guard let id = $0.id else { return nil }
+                        return (id, $0)
+                    })
+                }
+                .store(in: &cancellables)
+        }
     }
 }
 
@@ -62,28 +73,24 @@ private extension GroupDetailView {
     // MARK: - Functions
     
     func leaveGroup() {
-        guard let currentID = currentUser?.id else {
-            return
-        }
+        guard let currentUser else { return }
+        guard let userID = currentUser.id else { return }
+        
+        var updatedUser = currentUser
+        updatedUser.groupIDs?.removeAll(where: { $0 == group.id })
         
         var updatedGroup = group
-        updatedGroup.memberIDs.removeAll { $0 == currentID }
+        updatedGroup.memberIDs.removeAll(where: { $0 == userID })
         
-        if let index = session.groups.firstIndex(where: { $0.id == group.id }) {
-            session.groups[index] = updatedGroup
-        }
-        
-        if var groupIDs = currentUser?.groupIDs {
-            groupIDs.removeAll { $0 == group.id }
-            currentUser?.groupIDs = groupIDs
-        }
-        
-        UserDefaultsManager.saveGroups(session.groups)
-        if let updatedCurrentUser = currentUser {
-            UserDefaultsManager.saveUsers([updatedCurrentUser])
-        }
-        
-        dismiss()
+        GatherlyAPI.updateUser(updatedUser)
+            .flatMap { _ in
+                GatherlyAPI.updateGroup(updatedGroup)
+            }
+            .receive(on: RunLoop.main)
+            .sink { _ in
+                dismiss()
+            }
+            .store(in: &cancellables)
     }
     
     // MARK: - Subviews
@@ -91,43 +98,33 @@ private extension GroupDetailView {
     var editGroupSheet: some View {
         EditGroupView(
             viewModel: EditGroupViewModel(group: group),
-            friendsDict: session.friendsDict,
-            groups: session.groups,
-            onSave: { updatedGroup in
-                if let index = session.groups.firstIndex(where: { $0.id == updatedGroup.id }) {
-                    session.groups[index] = updatedGroup
-                    UserDefaultsManager.saveGroups(session.groups)
-                }
+            friendsDict: friendsDict,
+            groups: [],
+            onSave: { _ in
                 isShowingEditView = false
             },
             onCancel: {
                 isShowingEditView = false
             },
-            onDelete: { [weak session] deletedGroup in
+            onDelete: { deletedGroup in
                 isDeleting = true
                 
-                Task {
-                    let updatedGroups = await GatherlyAPI.deleteGroup(deletedGroup)
-                    
-                    await MainActor.run {
-                        guard let session else {
-                            return
-                        }
-                        
-                        session.groups = updatedGroups
-                        isShowingEditView = false
+                GatherlyAPI.deleteGroup(deletedGroup)
+                    .receive(on: RunLoop.main)
+                    .sink { _ in
                         isDeleting = false
+                        isShowingEditView = false
                         dismiss()
                     }
-                }
+                    .store(in: &cancellables)
             }
         )
     }
     
     var groupLeaderAndMembersView: some View {
-        let friendsDict = session.friendsDict
-        
-        let resolvedLeader: User? = group.leaderID == currentUser?.id ? currentUser : friendsDict[group.leaderID]
+        let resolvedLeader: User? = group.leaderID == currentUser?.id
+        ? currentUser
+        : friendsDict[group.leaderID]
         
         let memberUsers: [User] = group.memberIDs.compactMap { id in
             id == currentUser?.id ? currentUser : friendsDict[id]
@@ -142,6 +139,7 @@ private extension GroupDetailView {
                 }
                 .accessibilityIdentifier("groupMemberRow-\(leader.firstName ?? "")")
             }
+            
             if !memberUsers.isEmpty {
                 Text("Members")
                     .font(.headline)
@@ -181,5 +179,4 @@ private extension GroupDetailView {
 
 #Preview {
     GroupDetailView(group: SampleData.sampleGroups.first!)
-        .environmentObject(AppSession())
 }
