@@ -9,20 +9,11 @@ import ElegantCalendar
 import SwiftUI
 
 struct GatherlyCalendarView: View {
-    @EnvironmentObject var session: AppSession
     @Binding var allEvents: [Event]
     @StateObject private var calendarManager: ElegantCalendarManager
     @Binding var selectedDate: Date
     @State private var isShowingDayEvents = false
     @StateObject private var viewModel = CalendarViewModel()
-    
-    private var currentUser: User? {
-        session.currentUser
-    }
-    
-    private var friendsDict: [Int: User] {
-        session.friendsDict
-    }
     
     private var eventsForSelectedDate: [Event] {
         allEvents.filter { event in
@@ -35,17 +26,13 @@ struct GatherlyCalendarView: View {
         .sorted(by: { ($0.startTimestamp ?? 0) < ($1.startTimestamp ?? 0) })
     }
     
-    init(selectedDate: Binding<Date>,
-         allEvents: Binding<[Event]>,
-         session: AppSession)
-    {
+    init(selectedDate: Binding<Date>, allEvents: Binding<[Event]>) {
         _selectedDate = selectedDate
         _allEvents = allEvents
-        
+
         let manager = ElegantCalendarManager.withEvents(
             selectedDate: selectedDate,
-            events: allEvents.wrappedValue,
-            session: session
+            events: allEvents
         )
         _calendarManager = StateObject(wrappedValue: manager)
     }
