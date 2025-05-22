@@ -5,27 +5,33 @@
 //  Created by Sami Alhamad on 3/24/25.
 //
 
+import Combine
 import SwiftUI
 
 struct GroupsListView: View {
-    @EnvironmentObject var session: AppSession
+    @State private var allGroups: [UserGroup] = []
+    @State private var allUsers: [User] = []
+    @State private var cancellables = Set<AnyCancellable>()
     @Binding var searchText: String
     
     let mode: SelectionMode
-    
-    private var currentUser: User? {
-        session.currentUser
-    }
-    
-    private var groups: [UserGroup] {
-        session.groups
-    }
     
     var body: some View {
         List(filteredGroups, id: \.id) { group in
             rowView(for: group)
         }
         .listStyle(.plain)
+        .onAppear {
+            GatherlyAPI.getGroups()
+                .receive(on: RunLoop.main)
+                .sink { self.allGroups = $0 }
+                .store(in: &cancellables)
+            
+            GatherlyAPI.getUsers()
+                .receive(on: RunLoop.main)
+                .sink { self.allUsers = $0 }
+                .store(in: &cancellables)
+        }
     }
 }
 
@@ -33,14 +39,19 @@ private extension GroupsListView {
     
     //MARK: - Computed var
     
+    var currentUser: User? {
+            allUsers.first(where: { $0.id == 1 })
+        }
+    
     var filteredGroups: [UserGroup] {
         guard let currentUser else {
             return []
         }
         
-        let userGroups = groups.filter { group in
+        let userGroups = allGroups.filter { group in
             let isLeader = (group.leaderID == currentUser.id)
             let isMember = group.id.flatMap { currentUser.groupIDs?.contains($0) } ?? false
+            
             return isLeader || isMember
         }
         
@@ -59,6 +70,7 @@ private extension GroupsListView {
     
     private func toggleGroupSelection(_ memberIDs: [Int], binding: Binding<Set<Int>>) {
         let allSelected = memberIDs.allSatisfy { binding.wrappedValue.contains($0) }
+        
         if allSelected {
             memberIDs.forEach { binding.wrappedValue.remove($0) }
         } else {
@@ -76,6 +88,7 @@ private extension GroupsListView {
                 GroupRow(group: group)
             }
             .accessibilityIdentifier("groupRow-\(group.name ?? "")")
+            
         case .select(let binding):
             Button {
                 toggleGroupSelection(group.memberIDs, binding: binding)
@@ -93,7 +106,6 @@ private extension GroupsListView {
     }
 }
 
-//#Preview {
-//    GroupsListView(searchText: .constant(""))
-//        .environmentObject(AppSession())
-//}
+#Preview {
+    GroupsListView(searchText: .constant(""), mode: .view)
+}
