@@ -5,10 +5,11 @@
 //  Created by Sami Alhamad on 5/8/25.
 //
 
+import Combine
 import Foundation
 
 extension GatherlyAPI {
-    static func createGroup(_ group: UserGroup) async -> UserGroup {
+    static func createGroup(_ group: UserGroup) -> AnyPublisher<UserGroup, Never> {
         var storedGroup = group
         
         if storedGroup.id == nil {
@@ -19,7 +20,8 @@ extension GatherlyAPI {
         groups.append(storedGroup)
         UserDefaultsManager.saveGroups(groups)
         
-        await simulateNetworkDelay()
-        return storedGroup
+        return Just(storedGroup)
+            .delay(for: .seconds(2), scheduler: DispatchQueue.main)
+            .eraseToAnyPublisher()
     }
 }
