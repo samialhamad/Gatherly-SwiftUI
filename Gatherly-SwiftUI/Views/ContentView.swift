@@ -106,5 +106,4 @@ private extension ContentView {
 
 #Preview {
     ContentView()
-        .environmentObject(AppSession())
 }
