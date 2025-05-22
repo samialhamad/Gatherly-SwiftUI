@@ -5,22 +5,16 @@
 //  Created by Sami Alhamad on 3/24/25.
 //
 
+import Combine
 import SwiftUI
 
 struct FriendsListView: View {
-    @EnvironmentObject var session: AppSession
+    @State private var allUsers: [User] = []
+    @State private var cancellables = Set<AnyCancellable>()
     @Binding var searchText: String
     @StateObject private var viewModel = FriendsListViewModel()
     
     let mode: SelectionMode
-    
-    private var currentUser: User? {
-        session.currentUser
-    }
-    
-    private var friends: [User] {
-        currentUser?.resolvedFriends(from: session.friendsDict) ?? []
-    }
     
     var body: some View {
         ZStack(alignment: .trailing) {
@@ -29,12 +23,34 @@ struct FriendsListView: View {
                     .overlay(alphabetOverlay(proxy: proxy), alignment: .trailing)
             }
         }
+        .onAppear {
+            GatherlyAPI.getUsers()
+                .receive(on: RunLoop.main)
+                .sink { self.allUsers = $0 }
+                .store(in: &cancellables)
+        }
     }
 }
 
 private extension FriendsListView {
     
     // MARK: - Computed Vars
+    
+    var friends: [User] {
+        guard let currentUser = allUsers.first(where: { $0.id == 1 }) else {
+            return []
+        }
+        
+        let ids = Set(currentUser.friendIDs ?? [])
+        
+        return allUsers.filter { user in
+            guard let id = user.id else {
+                return false
+            }
+            
+            return ids.contains(id)
+        }
+    }
     
     private var filteredFriends: [User] {
         viewModel.filteredFriends(from: friends, searchText: searchText)
@@ -51,7 +67,10 @@ private extension FriendsListView {
     // MARK: - Functions
     
     private func toggleSelection(_ id: Int?, binding: Binding<Set<Int>>) {
-        guard let id = id else { return }
+        guard let id = id else {
+            return
+        }
+        
         if binding.wrappedValue.contains(id) {
             binding.wrappedValue.remove(id)
         } else {
