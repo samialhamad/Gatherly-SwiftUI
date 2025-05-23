@@ -37,6 +37,7 @@ struct Constants {
     struct CalendarView {
         static let eventListViewSpacing: CGFloat = 10
         static let headerViewSpacing: CGFloat = 4
+        static let loadingString: String = "Getting your events!"
         static let zeroSpacing: CGFloat = 0
     }
 
@@ -46,10 +47,7 @@ struct Constants {
     }
     
     struct ContentView {
-        static let calendarViewLoadingString: String = "Getting your events!"
-        static let friendsViewLoadingString: String = "Finding your friends!"
-        static let gatheringLoadingString: String = "Gathering!"
-        static let profileViewLoadingString: String = "Gathering!"
+        static let loadingString: String = "Gathering!"
     }
     
     struct CreateEventView {
@@ -107,6 +105,7 @@ struct Constants {
     }
         
     struct FriendsListView {
+        static let loadingString: String = "Finding your friends!"
         static let overlayTrailingPadding: CGFloat = 4
     }
     
@@ -135,6 +134,10 @@ struct Constants {
         static let vstackSpacing: CGFloat = 16
     }
     
+    struct GroupsListView {
+        static let loadingString: String = "Searching for your groups!"
+    }
+    
     struct GroupRow {
         static let avatarCircleSize: CGFloat = 40
         static let hstackPadding: CGFloat = 4
@@ -149,6 +152,7 @@ struct Constants {
     }
     
     struct ProfileView {
+        static let loadingString: String = "Fetching profile!"
         static let profileRowIconFrameWidth: CGFloat = 24
         static let profileVStackSpacing: CGFloat = 1
         static let vstackSpacing: CGFloat = 20
