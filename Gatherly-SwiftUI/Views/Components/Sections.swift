@@ -5,6 +5,7 @@
 //  Created by Sami Alhamad on 3/6/25.
 //
 
+import Combine
 import SwiftUI
 
 struct EventDetailsSection: View {
@@ -60,25 +61,14 @@ struct EventDateTimeSection: View {
 }
 
 struct EventMembersSection: View {
-    @EnvironmentObject var session: AppSession
+    @State private var cancellables = Set<AnyCancellable>()
+    @State private var friends: [User] = []
     @State private var isMembersPickerPresented = false
     @Binding var selectedMemberIDs: Set<Int>
     
     let header: String
     
-    private var currentUser: User? {
-        session.currentUser
-    }
-    
-    private var friends: [User] {
-        guard let currentUser else {
-            return []
-        }
-        
-        return currentUser
-            .resolvedFriends(from: session.friendsDict)
-            .filter { $0.id != currentUser.id }
-    }
+    private var currentUserID = 1
     
     var body: some View {
         Section(header: Text(header)) {
@@ -100,6 +90,23 @@ struct EventMembersSection: View {
             .sheet(isPresented: $isMembersPickerPresented) {
                 FriendsPicker(selectedMemberIDs: $selectedMemberIDs)
             }
+        }
+        .onAppear {
+            GatherlyAPI.getUsers()
+                .receive(on: RunLoop.main)
+                .sink { users in
+                    if let currentUser = users.first(where: { $0.id == currentUserID }) {
+                        self.friends = currentUser
+                            .resolvedFriends(from:
+                                                Dictionary(uniqueKeysWithValues: users.compactMap {
+                                guard let id = $0.id else { return nil }
+                                return (id, $0)
+                            })
+                            )
+                            .filter { $0.id != currentUserID }
+                    }
+                }
+                .store(in: &cancellables)
         }
     }
 }
