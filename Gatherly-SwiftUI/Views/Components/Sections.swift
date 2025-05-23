@@ -60,17 +60,17 @@ struct EventDateTimeSection: View {
     }
 }
 
-struct EventMembersSection: View {
-    @State private var cancellables = Set<AnyCancellable>()
-    @State private var friends: [User] = []
-    @State private var isMembersPickerPresented = false
+public struct EventMembersSection: View {
+    @State var cancellables = Set<AnyCancellable>()
+    @State var friends: [User] = []
+    @State var isMembersPickerPresented = false
     @Binding var selectedMemberIDs: Set<Int>
     
     let header: String
     
-    private var currentUserID = 1
+    let currentUserID = 1
     
-    var body: some View {
+    public var body: some View {
         Section(header: Text(header)) {
             Button(action: {
                 isMembersPickerPresented.toggle()
