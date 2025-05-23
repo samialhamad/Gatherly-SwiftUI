@@ -5,25 +5,22 @@
 //  Created by Sami Alhamad on 3/4/25.
 //
 
-import SwiftUI
+import Combine
 import MapKit
+import SwiftUI
 
 struct EventDetailView: View {
-    @EnvironmentObject var session: AppSession
+    @State private var cancellables = Set<AnyCancellable>()
+    @State private var currentUser: User? = nil
     @Environment(\.dismiss) var dismiss
+    @State private var friendsDict: [Int: User] = [:]
     @State private var isShowingEditView = false
     @State private var showMapOptions = false
+    @State private var updatedEvent: Event
     @StateObject private var viewModel = EventDetailViewModel()
     
-    let event: Event
-    var onSave: ((Event) -> Void)? = nil
-    
-    private var currentUser: User? {
-        session.currentUser
-    }
-    
-    private var updatedEvent: Event {
-        session.events.first(where: { $0.id == event.id }) ?? event
+    init(event: Event) {
+        _updatedEvent = State(initialValue: event)
     }
     
     var body: some View {
@@ -52,9 +49,20 @@ struct EventDetailView: View {
             .sheet(isPresented: $isShowingEditView) {
                 editEventSheet
             }
-            
         }
         .refreshOnAppear()
+        .onAppear {
+            GatherlyAPI.getUsers()
+                .receive(on: RunLoop.main)
+                .sink { users in
+                    self.currentUser = users.first(where: { $0.id == 1 })
+                    self.friendsDict = Dictionary(uniqueKeysWithValues: users.compactMap { user in
+                        guard let id = user.id else { return nil }
+                        return (id, user)
+                    })
+                }
+                .store(in: &cancellables)
+        }
     }
 }
 
@@ -63,11 +71,11 @@ private extension EventDetailView {
     // MARK: - Computed Vars
     
     private var planner: User? {
-        guard let currentUser, let plannerID = event.plannerID else {
+        guard let currentUser, let plannerID = updatedEvent.plannerID else {
             return nil
         }
         
-        return plannerID == currentUser.id ? currentUser : session.friendsDict[plannerID]
+        return plannerID == currentUser.id ? currentUser : friendsDict[plannerID]
     }
     
     private var members: [User] {
@@ -78,7 +86,7 @@ private extension EventDetailView {
         return memberIDs
             .filter { $0 != updatedEvent.plannerID }
             .compactMap { id in
-                id == currentUser?.id ? currentUser : session.friendsDict[id]
+                id == currentUser?.id ? currentUser : friendsDict[id]
             }
     }
     
@@ -86,7 +94,7 @@ private extension EventDetailView {
     
     var editButton: some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
-            if updatedEvent.plannerID == session.currentUser?.id {
+            if updatedEvent.plannerID == currentUser?.id {
                 Button("Edit") {
                     isShowingEditView = true
                 }
@@ -98,35 +106,23 @@ private extension EventDetailView {
     var editEventSheet: some View {
         EditEventView(
             viewModel: EditEventViewModel(event: updatedEvent),
-            events: session.events,
-            friendsDict: session.friendsDict,
-            onSave: { updatedEvent in
-                if let index = session.events.firstIndex(where: { $0.id == updatedEvent.id }) {
-                    session.events[index] = updatedEvent
-                }
-                session.navigationState.calendarSelectedDate = updatedEvent.date ?? Date()
-                session.navigationState.navigateToEvent = nil
+            events: [],
+            friendsDict: friendsDict,
+            onSave: { savedEvent in
+                self.updatedEvent = savedEvent
                 isShowingEditView = false
             },
             onCancel: {
                 isShowingEditView = false
             },
-            onDelete: { [weak session] eventToDelete in
-                Task {
-                    let updatedEvents = await GatherlyAPI.deleteEvent(eventToDelete)
-                    
-                    await MainActor.run {
-                        guard let session else {
-                            return
-                        }
-                        
-                        session.events = updatedEvents
-                        session.navigationState.calendarSelectedDate = eventToDelete.date ?? Date()
-                        session.navigationState.navigateToEvent = nil
+            onDelete: { eventToDelete in
+                GatherlyAPI.deleteEvent(eventToDelete)
+                    .receive(on: RunLoop.main)
+                    .sink { _ in
                         isShowingEditView = false
                         dismiss()
                     }
-                }
+                    .store(in: &cancellables)
             }
         )
         .refreshOnDismiss()
@@ -270,5 +266,4 @@ private extension EventDetailView {
 #Preview {
     let sampleEvent = SampleData.sampleEvents[1]
     EventDetailView(event: sampleEvent)
-        .environmentObject(AppSession())
 }
