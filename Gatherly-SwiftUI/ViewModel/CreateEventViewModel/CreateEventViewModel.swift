@@ -52,7 +52,12 @@ class CreateEventViewModel: ObservableObject {
             event.bannerImageName = bannerImageName
         }
         
-        return await GatherlyAPI.createEvent(event)
+        return await withCheckedContinuation { continuation in
+            _ = GatherlyAPI.createEvent(event)
+                .sink { created in
+                    continuation.resume(returning: created)
+                }
+        }
     }
     
     // MARK: - Helpers
