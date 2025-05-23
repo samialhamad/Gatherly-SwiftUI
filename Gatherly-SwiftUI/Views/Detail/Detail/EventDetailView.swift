@@ -57,7 +57,10 @@ struct EventDetailView: View {
                 .sink { users in
                     self.currentUser = users.first(where: { $0.id == 1 })
                     self.friendsDict = Dictionary(uniqueKeysWithValues: users.compactMap { user in
-                        guard let id = user.id else { return nil }
+                        guard let id = user.id else {
+                            return nil
+                        }
+                        
                         return (id, user)
                     })
                 }
