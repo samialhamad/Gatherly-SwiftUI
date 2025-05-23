@@ -80,7 +80,8 @@ private extension CalendarView {
             VStack(spacing: 0) {
                 GatherlyCalendarView(
                     selectedDate: $navigationState.calendarSelectedDate,
-                    allEvents: $events
+                    allEvents: $events,
+                    navigationState: navigationState
                 )
             }
             .frame(maxHeight: .infinity)
