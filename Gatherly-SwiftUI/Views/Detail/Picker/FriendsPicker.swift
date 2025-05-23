@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct FriendsPicker: View {
-    @EnvironmentObject var session: AppSession
     @Environment(\.dismiss) var dismiss
     @Binding var selectedMemberIDs: Set<Int>
     
