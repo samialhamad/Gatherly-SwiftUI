@@ -48,10 +48,6 @@ private extension ContentView {
     
     var calendarTab: some View {
         CalendarView()
-            .addActivityIndicator(
-                isPresented: isLoading && navigationState.selectedTab == 0,
-                message: Constants.ContentView.calendarViewLoadingString
-            )
             .tabItem {
                 Label("Calendar", systemImage: "calendar")
                     .labelStyle(.iconOnly)
@@ -76,10 +72,6 @@ private extension ContentView {
     var friendsTab: some View {
         NavigationStack {
             FriendsView()
-                .addActivityIndicator(
-                    isPresented: isLoading && navigationState.selectedTab == 2,
-                    message: Constants.ContentView.friendsViewLoadingString
-                )
         }
         .tabItem {
             Label("Friends", systemImage: "person.3.fill")
@@ -92,10 +84,6 @@ private extension ContentView {
     var profileTab: some View {
         NavigationStack {
             ProfileView()
-                .addActivityIndicator(
-                    isPresented: isLoading && navigationState.selectedTab == 3,
-                    message: Constants.ContentView.profileViewLoadingString
-                )
         }
         .tabItem {
             Label("Profile", systemImage: "person")
