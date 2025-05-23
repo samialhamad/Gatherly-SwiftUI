@@ -43,7 +43,12 @@ class EditGroupViewModel: ObservableObject {
             }
         }
         
-        return await GatherlyAPI.updateGroup(group)
+        return await withCheckedContinuation { continuation in
+            _ = GatherlyAPI.updateGroup(group)
+                .sink { updatedGroup in
+                    continuation.resume(returning: updatedGroup)
+                }
+        }
     }
     
     // MARK: - Image Removal
