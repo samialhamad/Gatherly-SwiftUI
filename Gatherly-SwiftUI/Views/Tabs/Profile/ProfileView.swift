@@ -12,12 +12,15 @@ import SwiftUI
 struct ProfileView: View {
     @State private var cancellables = Set<AnyCancellable>()
     @State private var currentUser: User? = nil
+    @State private var isLoading = true
     @State private var userFormStore: Store<UserFormFeature.State, UserFormFeature.Action>? = nil
     @State private var refreshID = UUID()
     
     var body: some View {
         NavigationStack {
-            if let currentUser {
+            if isLoading {
+                ActivityIndicator(message: Constants.ContentView.profileViewLoadingString)
+            } else if let currentUser {
                 ScrollView {
                     VStack(spacing: Constants.ProfileView.vstackSpacing) {
                         AvatarHeaderView(
@@ -48,10 +51,13 @@ struct ProfileView: View {
         }
         .refreshOnAppear()
         .onAppear {
+            isLoading = true
+
             GatherlyAPI.getUsers()
                 .receive(on: RunLoop.main)
                 .sink { users in
                     self.currentUser = users.first(where: { $0.id == 1 })
+                    self.isLoading = false
                 }
                 .store(in: &cancellables)
         }
