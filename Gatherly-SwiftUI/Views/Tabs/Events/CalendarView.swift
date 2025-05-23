@@ -12,13 +12,20 @@ struct CalendarView: View {
     @State private var cancellables = Set<AnyCancellable>()
     @State private var events: [Event] = []
     @State private var isCalendarView = true
+    @State private var isLoading = true
     @EnvironmentObject var navigationState: NavigationState
     @StateObject private var viewModel = CalendarViewModel()
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                content
+            Group {
+                if isLoading {
+                    ActivityIndicator(message: Constants.ContentView.calendarViewLoadingString)
+                } else {
+                    VStack(spacing: 0) {
+                        content
+                    }
+                }
             }
             .navigationTitle("My Events")
             .navigationBarTitleDisplayMode(.inline)
@@ -52,9 +59,13 @@ struct CalendarView: View {
             .onAppear {
                 navigationState.hasShownDayEventsView = false
                 
+                isLoading = true
                 GatherlyAPI.getEvents()
                     .receive(on: RunLoop.main)
-                    .sink { self.events = $0 }
+                    .sink { fetchedEvents in
+                        self.events = fetchedEvents
+                        self.isLoading = false
+                    }
                     .store(in: &cancellables)
             }
         }
