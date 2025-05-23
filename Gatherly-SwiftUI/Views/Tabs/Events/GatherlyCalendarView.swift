@@ -15,6 +15,8 @@ struct GatherlyCalendarView: View {
     @State private var isShowingDayEvents = false
     @StateObject private var viewModel = CalendarViewModel()
     
+    let navigationState: NavigationState
+    
     private var eventsForSelectedDate: [Event] {
         allEvents.filter { event in
             guard let eventDate = event.date else {
@@ -26,13 +28,19 @@ struct GatherlyCalendarView: View {
         .sorted(by: { ($0.startTimestamp ?? 0) < ($1.startTimestamp ?? 0) })
     }
     
-    init(selectedDate: Binding<Date>, allEvents: Binding<[Event]>) {
+    init(
+        selectedDate: Binding<Date>,
+        allEvents: Binding<[Event]>,
+        navigationState: NavigationState
+    ) {
         _selectedDate = selectedDate
         _allEvents = allEvents
+        self.navigationState = navigationState
 
         let manager = ElegantCalendarManager.withEvents(
             selectedDate: selectedDate,
-            events: allEvents
+            events: allEvents,
+            navigationState: navigationState
         )
         _calendarManager = StateObject(wrappedValue: manager)
     }
