@@ -12,24 +12,35 @@ struct GroupsListView: View {
     @State private var allGroups: [UserGroup] = []
     @State private var allUsers: [User] = []
     @State private var cancellables = Set<AnyCancellable>()
+    @State private var isLoading = true
     @Binding var searchText: String
     
     let mode: SelectionMode
     
     var body: some View {
-        List(filteredGroups, id: \.id) { group in
-            rowView(for: group)
+        Group {
+            if isLoading {
+                ActivityIndicator(message: Constants.ContentView.friendsViewLoadingString)
+            } else {
+                List(filteredGroups, id: \.id) { group in
+                    rowView(for: group)
+                }
+                .listStyle(.plain)
+            }
         }
-        .listStyle(.plain)
         .onAppear {
-            GatherlyAPI.getGroups()
-                .receive(on: RunLoop.main)
-                .sink { self.allGroups = $0 }
-                .store(in: &cancellables)
+            isLoading = true
             
-            GatherlyAPI.getUsers()
+            let usersPublisher = GatherlyAPI.getUsers()
+            let groupsPublisher = GatherlyAPI.getGroups()
+            
+            Publishers.CombineLatest(usersPublisher, groupsPublisher)
                 .receive(on: RunLoop.main)
-                .sink { self.allUsers = $0 }
+                .sink { users, groups in
+                    self.allUsers = users
+                    self.allGroups = groups
+                    self.isLoading = false
+                }
                 .store(in: &cancellables)
         }
     }
@@ -40,8 +51,8 @@ private extension GroupsListView {
     //MARK: - Computed var
     
     var currentUser: User? {
-            allUsers.first(where: { $0.id == 1 })
-        }
+        allUsers.first(where: { $0.id == 1 })
+    }
     
     var filteredGroups: [UserGroup] {
         guard let currentUser else {
