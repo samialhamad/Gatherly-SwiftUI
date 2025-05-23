@@ -20,7 +20,7 @@ struct GroupsListView: View {
     var body: some View {
         Group {
             if isLoading {
-                ActivityIndicator(message: Constants.ContentView.friendsViewLoadingString)
+                ActivityIndicator(message: Constants.GroupsListView.loadingString)
             } else {
                 List(filteredGroups, id: \.id) { group in
                     rowView(for: group)

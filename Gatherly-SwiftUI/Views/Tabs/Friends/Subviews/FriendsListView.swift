@@ -19,7 +19,7 @@ struct FriendsListView: View {
     
     var body: some View {
         if isLoading {
-            ActivityIndicator(message: Constants.ContentView.friendsViewLoadingString)
+            ActivityIndicator(message: Constants.FriendsListView.loadingString)
         } else {
             ZStack(alignment: .trailing) {
                 ScrollViewReader { proxy in

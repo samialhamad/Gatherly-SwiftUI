@@ -20,7 +20,7 @@ struct CalendarView: View {
         NavigationStack {
             Group {
                 if isLoading {
-                    ActivityIndicator(message: Constants.ContentView.calendarViewLoadingString)
+                    ActivityIndicator(message: Constants.CalendarView.loadingString)
                 } else {
                     VStack(spacing: 0) {
                         content

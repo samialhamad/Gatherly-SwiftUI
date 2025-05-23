@@ -24,7 +24,7 @@ struct ContentView: View {
                     profileTab
                 }
             } else if isLoading {
-                ActivityIndicator(message: Constants.ContentView.gatheringLoadingString)
+                ActivityIndicator(message: Constants.ContentView.loadingString)
             }
         }
         .task {

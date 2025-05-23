@@ -19,7 +19,7 @@ struct ProfileView: View {
     var body: some View {
         NavigationStack {
             if isLoading {
-                ActivityIndicator(message: Constants.ContentView.profileViewLoadingString)
+                ActivityIndicator(message: Constants.ProfileView.loadingString)
             } else if let currentUser {
                 ScrollView {
                     VStack(spacing: Constants.ProfileView.vstackSpacing) {
