@@ -11,12 +11,18 @@ import SwiftUI
 
 final class EventHighlightDelegate: ElegantCalendarDelegate {
     @Binding var events: [Event]
-    @EnvironmentObject var navigationState: NavigationState
     @Binding var selectedDate: Date
-        
-    init(selectedDate: Binding<Date>, events: Binding<[Event]>) {
+    
+    let navigationState: NavigationState
+    
+    init(
+        selectedDate: Binding<Date>,
+        events: Binding<[Event]>,
+        navigationState: NavigationState
+    ) {
         _selectedDate = selectedDate
         _events = events
+        self.navigationState = navigationState
     }
     
     func calendar(didSelectDay date: Date) {
