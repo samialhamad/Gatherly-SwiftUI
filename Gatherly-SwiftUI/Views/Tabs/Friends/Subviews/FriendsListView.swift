@@ -11,23 +11,31 @@ import SwiftUI
 struct FriendsListView: View {
     @State private var allUsers: [User] = []
     @State private var cancellables = Set<AnyCancellable>()
+    @State private var isLoading = true
     @Binding var searchText: String
     @StateObject private var viewModel = FriendsListViewModel()
     
     let mode: SelectionMode
     
     var body: some View {
-        ZStack(alignment: .trailing) {
-            ScrollViewReader { proxy in
-                friendList(proxy: proxy)
-                    .overlay(alphabetOverlay(proxy: proxy), alignment: .trailing)
+        if isLoading {
+            ActivityIndicator(message: Constants.ContentView.friendsViewLoadingString)
+        } else {
+            ZStack(alignment: .trailing) {
+                ScrollViewReader { proxy in
+                    friendList(proxy: proxy)
+                        .overlay(alphabetOverlay(proxy: proxy), alignment: .trailing)
+                }
             }
-        }
-        .onAppear {
-            GatherlyAPI.getUsers()
-                .receive(on: RunLoop.main)
-                .sink { self.allUsers = $0 }
-                .store(in: &cancellables)
+            .onAppear {
+                GatherlyAPI.getUsers()
+                    .receive(on: RunLoop.main)
+                    .sink { users in
+                        self.allUsers = users
+                        self.isLoading = false
+                    }
+                    .store(in: &cancellables)
+            }
         }
     }
 }
