@@ -36,7 +36,12 @@ class CreateGroupViewModel: ObservableObject {
             }
         }
         
-        return await GatherlyAPI.createGroup(group)
+        return await withCheckedContinuation { continuation in
+            _ = GatherlyAPI.createGroup(group)
+                .sink { createdGroup in
+                    continuation.resume(returning: createdGroup)
+                }
+        }
     }
     
     // MARK: - isFormEmpty
