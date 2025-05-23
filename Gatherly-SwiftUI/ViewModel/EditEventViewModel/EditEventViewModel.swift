@@ -38,7 +38,12 @@ class EditEventViewModel: ObservableObject {
             }
         }
         
-        return await GatherlyAPI.updateEvent(event)
+        return await withCheckedContinuation { continuation in
+            _ = GatherlyAPI.updateEvent(event)
+                .sink { updatedEvent in
+                    continuation.resume(returning: updatedEvent)
+                }
+        }
     }
     
     // MARK: - Helpers
