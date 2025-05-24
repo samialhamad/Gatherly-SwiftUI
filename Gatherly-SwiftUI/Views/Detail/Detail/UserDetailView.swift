@@ -73,10 +73,10 @@ struct UserDetailView: View {
             }
         }
         .onAppear {
-            GatherlyAPI.getUser()
+            GatherlyAPI.getCurrentUser()
                 .receive(on: RunLoop.main)
-                .sink { user in
-                    self.currentUser = user
+                .sink { currentUser in
+                    self.currentUser = currentUser
                 }
                 .store(in: &cancellables)
         }
@@ -101,11 +101,11 @@ private extension UserDetailView {
         
         GatherlyAPI.updateUser(updatedUser)
             .flatMap { _ in
-                GatherlyAPI.getUser()
+                GatherlyAPI.getCurrentUser()
             }
             .receive(on: RunLoop.main)
-            .sink { user in
-                self.currentUser = user
+            .sink { currentUser in
+                self.currentUser = currentUser
             }
             .store(in: &cancellables)
         

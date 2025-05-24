@@ -54,13 +54,13 @@ struct GroupDetailView: View {
             }
         }
         .onAppear {
-            let userPublisher = GatherlyAPI.getUser()
+            let currentUserPublisher = GatherlyAPI.getCurrentUser()
             let friendsPublisher = GatherlyAPI.getFriends()
             
-            Publishers.CombineLatest(userPublisher, friendsPublisher)
+            Publishers.CombineLatest(currentUserPublisher, friendsPublisher)
                 .receive(on: RunLoop.main)
-                .sink { user, friends in
-                    self.currentUser = user
+                .sink { currentUser, friends in
+                    self.currentUser = currentUser
                     self.friendsDict = Dictionary(uniqueKeysWithValues: friends.compactMap { friend in
                         guard let id = friend.id else {
                             return nil
