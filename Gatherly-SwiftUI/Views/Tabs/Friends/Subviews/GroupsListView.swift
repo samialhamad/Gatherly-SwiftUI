@@ -31,13 +31,13 @@ struct GroupsListView: View {
         .onAppear {
             isLoading = true
             
-            let usersPublisher = GatherlyAPI.getUsers()
+            let friendsPublisher = GatherlyAPI.getFriends()
             let groupsPublisher = GatherlyAPI.getGroups()
             
-            Publishers.CombineLatest(usersPublisher, groupsPublisher)
+            Publishers.CombineLatest(friendsPublisher, groupsPublisher)
                 .receive(on: RunLoop.main)
-                .sink { users, groups in
-                    self.allUsers = users
+                .sink { friends, groups in
+                    self.allUsers = friends
                     self.allGroups = groups
                     self.isLoading = false
                 }

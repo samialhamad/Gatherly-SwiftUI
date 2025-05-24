@@ -31,10 +31,10 @@ struct ContentView: View {
             AppInitializer.runIfNeeded()
             ContactSyncHelper.runIfNeeded(currentUserID: 1)
             
-            GatherlyAPI.getUsers()
+            GatherlyAPI.getUser()
                 .receive(on: RunLoop.main)
-                .sink { users in
-                    currentUser = users.first(where: { $0.id == 1 })
+                .sink { user in
+                    currentUser = user
                     isLoading = false
                 }
                 .store(in: &cancellables)

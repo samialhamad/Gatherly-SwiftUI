@@ -92,17 +92,19 @@ public struct EventMembersSection: View {
             }
         }
         .onAppear {
-            GatherlyAPI.getUsers()
+            Publishers.CombineLatest(GatherlyAPI.getUser(), GatherlyAPI.getFriends())
                 .receive(on: RunLoop.main)
-                .sink { users in
-                    if let currentUser = users.first(where: { $0.id == currentUserID }) {
+                .sink { currentUser, friendsList in
+                    if let currentUser {
+                        let friendsDict: [Int: User] = Dictionary(uniqueKeysWithValues: friendsList.compactMap {
+                            guard let id = $0.id else {
+                                return nil
+                            }
+                            return (id, $0)
+                        })
+                        
                         self.friends = currentUser
-                            .resolvedFriends(from:
-                                                Dictionary(uniqueKeysWithValues: users.compactMap {
-                                guard let id = $0.id else { return nil }
-                                return (id, $0)
-                            })
-                            )
+                            .resolvedFriends(from: friendsDict)
                             .filter { $0.id != currentUserID }
                     }
                 }

@@ -84,8 +84,12 @@ extension FriendsView {
             if case let .didSave(newFriend) = delegateAction {
                 _ = GatherlyAPI.createUser(newFriend)
                     .flatMap { createdUser -> AnyPublisher<(User, [User]), Never> in
-                        GatherlyAPI.getUsers()
-                            .map { users in (createdUser, users) }
+                        GatherlyAPI.getUser()
+                            .combineLatest(GatherlyAPI.getFriends())
+                            .map { currentUser, friends in
+                                let users = ([currentUser].compactMap { $0 }) + friends
+                                return (createdUser, users)
+                            }
                             .eraseToAnyPublisher()
                     }
                     .sink { result in

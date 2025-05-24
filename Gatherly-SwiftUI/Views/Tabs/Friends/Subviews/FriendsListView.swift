@@ -28,10 +28,10 @@ struct FriendsListView: View {
                 }
             }
             .onAppear {
-                GatherlyAPI.getUsers()
+                GatherlyAPI.getFriends()
                     .receive(on: RunLoop.main)
-                    .sink { users in
-                        self.allUsers = users
+                    .sink { friends in
+                        self.allUsers = friends
                         self.isLoading = false
                     }
                     .store(in: &cancellables)

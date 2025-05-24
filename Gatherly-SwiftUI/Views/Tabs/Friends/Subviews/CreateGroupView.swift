@@ -62,7 +62,7 @@ struct CreateGroupView: View {
         }
         .keyboardDismissable()
         .onAppear {
-            GatherlyAPI.getUsers()
+            GatherlyAPI.getFriends()
                 .receive(on: RunLoop.main)
                 .sink { self.allUsers = $0 }
                 .store(in: &cancellables)

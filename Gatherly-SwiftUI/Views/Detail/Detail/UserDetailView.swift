@@ -73,10 +73,10 @@ struct UserDetailView: View {
             }
         }
         .onAppear {
-            GatherlyAPI.getUsers()
+            GatherlyAPI.getUser()
                 .receive(on: RunLoop.main)
-                .sink { users in
-                    self.currentUser = users.first(where: { $0.id == 1 })
+                .sink { user in
+                    self.currentUser = user
                 }
                 .store(in: &cancellables)
         }
@@ -101,11 +101,11 @@ private extension UserDetailView {
         
         GatherlyAPI.updateUser(updatedUser)
             .flatMap { _ in
-                GatherlyAPI.getUsers()
+                GatherlyAPI.getUser()
             }
             .receive(on: RunLoop.main)
-            .sink { users in
-                self.currentUser = users.first(where: { $0.id == 1 })
+            .sink { user in
+                self.currentUser = user
             }
             .store(in: &cancellables)
         
