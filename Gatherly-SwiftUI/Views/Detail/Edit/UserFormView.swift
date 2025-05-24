@@ -41,7 +41,7 @@ struct UserFormView: View {
                 GatherlyAPI.getUser()
                     .receive(on: RunLoop.main)
                     .sink { user in
-                        currentUserID = user
+                        currentUserID = user?.id
                     }
                     .store(in: &cancellables)
             }
