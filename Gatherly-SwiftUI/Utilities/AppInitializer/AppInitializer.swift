@@ -17,30 +17,35 @@ enum AppInitializer {
             applySampleData()
         }
     }
-
+    
     private static func applySampleData() {
         let users = SampleData.sampleUsers
         let events = SampleData.sampleEvents
         let groups = SampleData.sampleGroups
-
+        
         var updatedUsers = users
-
+        
         if let samiIndex = updatedUsers.firstIndex(where: { $0.id == 1 }) {
             var sami = updatedUsers[samiIndex]
-
+            
             sami.eventIDs = events
                 .filter { $0.plannerID == 1 || ($0.memberIDs?.contains(1) ?? false) }
                 .compactMap { $0.id }
-
+            
             sami.groupIDs = groups
                 .filter { $0.leaderID == 1 || $0.memberIDs.contains(1) }
                 .compactMap { $0.id }
-
+            
             sami.friendIDs = [2, 3, 4]
             updatedUsers[samiIndex] = sami
         }
-
+        
         UserDefaultsManager.saveUsers(updatedUsers)
+        
+        if let currentUser = updatedUsers.first(where: { $0.id == 1 }) {
+            UserDefaultsManager.saveCurrentUser(currentUser)
+        }
+        
         UserDefaultsManager.saveEvents(events)
         UserDefaultsManager.saveGroups(groups)
         UserDefaultsManager.setDidSeedSampleData(true)
