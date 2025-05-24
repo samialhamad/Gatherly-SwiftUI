@@ -65,9 +65,14 @@ struct UserFormFeature: Reducer {
             updatedUser.avatarImageName = avatarImageName
             updatedUser.bannerImageName = bannerImageName
             
-            let publisher: AnyPublisher<User, Never> = state.isCreatingFriend
-            ? GatherlyAPI.createUser(updatedUser)
-            : GatherlyAPI.updateUser(updatedUser)
+            let publisher: AnyPublisher<User, Never>
+            if state.isCreatingFriend {
+                publisher = GatherlyAPI.createUser(updatedUser)
+            } else if updatedUser.id == 1 {
+                publisher = GatherlyAPI.updateCurrentUser(updatedUser)
+            } else {
+                publisher = GatherlyAPI.updateUser(updatedUser)
+            }
             
             return .publisher {
                 publisher.map(Action.userSaved)
