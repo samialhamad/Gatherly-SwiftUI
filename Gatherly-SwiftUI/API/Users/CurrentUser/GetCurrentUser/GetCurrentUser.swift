@@ -9,9 +9,8 @@ import Combine
 import Foundation
 
 extension GatherlyAPI {
-    static func getCurrentUser(withID id: Int = 1) -> AnyPublisher<User?, Never> {
-        let users = UserDefaultsManager.loadUsers()
-        let user = users.first { $0.id == id }
+    static func getCurrentUser() -> AnyPublisher<User?, Never> {
+        let user = UserDefaultsManager.loadCurrentUser()
         
         return Just(user)
             .delay(for: .seconds(2), scheduler: DispatchQueue.main)
