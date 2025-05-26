@@ -15,6 +15,7 @@ struct FriendsView: View {
     @EnvironmentObject var navigationState: NavigationState
     @State private var searchText = ""
     @State private var selectedTab = 0
+    @EnvironmentObject var usersViewModel: UsersViewModel
     
     private let tabTitles = ["Friends", "Groups"]
     
@@ -66,6 +67,9 @@ struct FriendsView: View {
             }
         }
         .refreshOnAppear()
+        .onAppear {
+            usersViewModel.loadIfNeeded()
+        }
         .keyboardDismissable()
     }
 }
@@ -75,47 +79,25 @@ extension FriendsView {
     //MARK: - Functions
     
     func handleCreateFriendComplete(_ action: UserFormFeature.Action) {
-        let currentUserID = 1
-        
-        switch action {
-        case .cancel:
-            break
-        case .delegate(let delegateAction):
-            if case let .didSave(newFriend) = delegateAction {
-                _ = GatherlyAPI.createUser(newFriend)
-                    .flatMap { createdUser -> AnyPublisher<(User, [User]), Never> in
-                        GatherlyAPI.getUser()
-                            .combineLatest(GatherlyAPI.getUsers())
-                            .map { user, users in
-                                let users = ([user].compactMap { $0 }) + users
-                                return (createdUser, users)
-                            }
-                            .eraseToAnyPublisher()
-                    }
-                    .sink { result in
-                        let (createdUser, users) = result
-                        
-                        var updatedUsers = users
-                        
-                        if let index = updatedUsers.firstIndex(where: { $0.id == 1 }) {
-                            var currentUser = updatedUsers[index]
-                            var ids = currentUser.friendIDs ?? []
-                            
-                            if let newID = createdUser.id, !ids.contains(newID) {
-                                ids.append(newID)
-                                currentUser.friendIDs = ids
-                                updatedUsers[index] = currentUser
-                            }
-                            
-                            UserDefaultsManager.saveUsers(updatedUsers)
-                        }
-                    }
-            }
-        default:
-            break
+        guard case let .delegate(.didSave(newFriend)) = action else {
+            createFriendStore = nil
+            return
         }
-        
-        createFriendStore = nil
+
+        usersViewModel.create(newFriend) { createdFriend in
+            guard var currentUser = UserDefaultsManager.loadCurrentUser() else {
+                createFriendStore = nil
+                return
+            }
+
+            if let newID = createdFriend.id, !(currentUser.friendIDs ?? []).contains(newID) {
+                currentUser.friendIDs?.append(newID)
+                currentUser.friendIDs = currentUser.friendIDs?.sorted()
+                UserDefaultsManager.saveCurrentUser(currentUser)
+            }
+
+            createFriendStore = nil
+        }
     }
     
     //MARK: - Subviews
