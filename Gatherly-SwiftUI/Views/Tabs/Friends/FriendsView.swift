@@ -85,9 +85,9 @@ extension FriendsView {
                 _ = GatherlyAPI.createUser(newFriend)
                     .flatMap { createdUser -> AnyPublisher<(User, [User]), Never> in
                         GatherlyAPI.getCurrentUser()
-                            .combineLatest(GatherlyAPI.getFriends())
-                            .map { currentUser, friends in
-                                let users = ([currentUser].compactMap { $0 }) + friends
+                            .combineLatest(GatherlyAPI.getUsers())
+                            .map { currentUser, users in
+                                let users = ([currentUser].compactMap { $0 }) + users
                                 return (createdUser, users)
                             }
                             .eraseToAnyPublisher()
