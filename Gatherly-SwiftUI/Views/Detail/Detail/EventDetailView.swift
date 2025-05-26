@@ -13,11 +13,12 @@ struct EventDetailView: View {
     @State private var cancellables = Set<AnyCancellable>()
     @State private var currentUser: User? = nil
     @Environment(\.dismiss) var dismiss
+    @StateObject private var eventDetailViewModel = EventDetailViewModel()
+    @EnvironmentObject var eventsViewModel: EventsViewModel
     @State private var friendsDict: [Int: User] = [:]
     @State private var isShowingEditView = false
     @State private var showMapOptions = false
     @State private var updatedEvent: Event
-    @StateObject private var viewModel = EventDetailViewModel()
     
     init(event: Event) {
         _updatedEvent = State(initialValue: event)
@@ -111,24 +112,20 @@ private extension EventDetailView {
     
     var editEventSheet: some View {
         EditEventView(
-            viewModel: EditEventViewModel(event: updatedEvent),
-            events: [],
+            editEventViewModel: EditEventViewModel(event: updatedEvent),
             friendsDict: friendsDict,
             onSave: { savedEvent in
                 self.updatedEvent = savedEvent
+                eventsViewModel.update(savedEvent)
                 isShowingEditView = false
             },
             onCancel: {
                 isShowingEditView = false
             },
             onDelete: { eventToDelete in
-                GatherlyAPI.deleteEvent(eventToDelete)
-                    .receive(on: RunLoop.main)
-                    .sink { _ in
-                        isShowingEditView = false
-                        dismiss()
-                    }
-                    .store(in: &cancellables)
+                eventsViewModel.delete(eventToDelete)
+                isShowingEditView = false
+                dismiss()
             }
         )
         .refreshOnDismiss()
@@ -225,7 +222,7 @@ private extension EventDetailView {
                     .actionSheet(isPresented: $showMapOptions) {
                         ActionSheet(
                             title: Text("Open in Maps"),
-                            buttons: viewModel.mapOptions(for: location)
+                            buttons: eventDetailViewModel.mapOptions(for: location)
                         )
                     }
                 }
