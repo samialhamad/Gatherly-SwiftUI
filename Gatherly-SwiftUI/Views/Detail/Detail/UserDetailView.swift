@@ -101,11 +101,11 @@ private extension UserDetailView {
         
         GatherlyAPI.updateUser(updatedUser)
             .flatMap { _ in
-                GatherlyAPI.getCurrentUser()
+                GatherlyAPI.getUser()
             }
             .receive(on: RunLoop.main)
-            .sink { currentUser in
-                self.currentUser = currentUser
+            .sink { user in
+                self.currentUser = user
             }
             .store(in: &cancellables)
         
