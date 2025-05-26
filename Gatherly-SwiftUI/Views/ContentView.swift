@@ -12,8 +12,10 @@ struct ContentView: View {
     @State private var cancellables = Set<AnyCancellable>()
     @State private var currentUser: User? = nil
     @StateObject private var eventsViewModel = EventsViewModel()
+    @StateObject private var groupsViewModel = GroupsViewModel()
     @State private var isLoading = true
     @EnvironmentObject var navigationState: NavigationState
+    @StateObject private var usersViewModel = UsersViewModel()
     
     var body: some View {
         Group {
@@ -25,6 +27,8 @@ struct ContentView: View {
                     profileTab
                 }
                 .environmentObject(eventsViewModel)
+                .environmentObject(groupsViewModel)
+                .environmentObject(usersViewModel)
             } else if isLoading {
                 ActivityIndicator(message: Constants.ContentView.loadingString)
             }
