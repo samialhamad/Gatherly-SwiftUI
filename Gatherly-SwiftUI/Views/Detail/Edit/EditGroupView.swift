@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct EditGroupView: View {
+    @StateObject var editGroupViewModel: EditGroupViewModel
+    @EnvironmentObject var groupsViewModel: GroupsViewModel
     @State private var showingDeleteAlert = false
     @State private var isSaving = false
-    @StateObject var viewModel: EditGroupViewModel
     
     let friendsDict: [Int: User]
-    let groups: [UserGroup]
     let onSave: (UserGroup) -> Void
     let onCancel: () -> Void
     let onDelete: (UserGroup) -> Void
@@ -31,14 +31,14 @@ struct EditGroupView: View {
                         title: "Group Image",
                         imageHeight: Constants.CreateGroupView.groupImageHeight,
                         maskShape: .circle,
-                        selectedImage: $viewModel.groupImage
+                        selectedImage: $editGroupViewModel.groupImage
                     )
                     
                     ImagePicker(
                         title: "Banner Image",
                         imageHeight: Constants.CreateGroupView.groupBannerImageHeight,
                         maskShape: .rectangle,
-                        selectedImage: $viewModel.bannerImage
+                        selectedImage: $editGroupViewModel.bannerImage
                     )
                     
                     EventMembersSection(
@@ -57,7 +57,7 @@ struct EditGroupView: View {
                     Button("Delete", role: .destructive) {
                         isSaving = true
                         Task {
-                            onDelete(viewModel.originalGroup)
+                            onDelete(editGroupViewModel.originalGroup)
                             isSaving = false
                         }
                     }
@@ -80,15 +80,15 @@ private extension EditGroupView {
     
     var nameBinding: Binding<String> {
         Binding<String>(
-            get: { viewModel.group.name ?? "" },
-            set: { viewModel.group.name = $0 }
+            get: { editGroupViewModel.group.name ?? "" },
+            set: { editGroupViewModel.group.name = $0 }
         )
     }
     
     var memberIDsBinding: Binding<Set<Int>> {
         Binding<Set<Int>>(
-            get: { Set(viewModel.group.memberIDs) },
-            set: { viewModel.group.memberIDs = Array($0).sorted() }
+            get: { Set(editGroupViewModel.group.memberIDs) },
+            set: { editGroupViewModel.group.memberIDs = Array($0).sorted() }
         )
     }
     
@@ -117,14 +117,15 @@ private extension EditGroupView {
             Button("Save") {
                 isSaving = true
                 Task {
-                    let updatedGroup = await viewModel.updateGroup()
+                    let updatedGroup = await editGroupViewModel.prepareUpdatedGroup()
+                    groupsViewModel.update(updatedGroup)
                     isSaving = false
                     onSave(updatedGroup)
                 }
             }
             .accessibilityIdentifier("saveGroupButton")
-            .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.secondary))
-            .disabled(viewModel.isFormEmpty || isSaving)
+            .foregroundColor(editGroupViewModel.isFormEmpty ? .gray : Color(Colors.secondary))
+            .disabled(editGroupViewModel.isFormEmpty || isSaving)
         }
     }
 }
@@ -135,9 +136,8 @@ private extension EditGroupView {
     
     NavigationStack {
         EditGroupView(
-            viewModel: EditGroupViewModel(group: SampleData.sampleGroups.first!),
+            editGroupViewModel: EditGroupViewModel(group: SampleData.sampleGroups.first!),
             friendsDict: friendsDict,
-            groups: SampleData.sampleGroups,
             onSave: { _ in },
             onCancel: {},
             onDelete: { _ in }
