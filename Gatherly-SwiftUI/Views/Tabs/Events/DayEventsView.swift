@@ -9,9 +9,8 @@ import Combine
 import SwiftUI
 
 struct DayEventsView: View {
-    @State private var cancellables = Set<AnyCancellable>()
-    @State private var events: [Event] = []
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var eventsViewModel: EventsViewModel
     @State private var isShowingCreateEvent = false
     
     let date: Date
@@ -38,14 +37,8 @@ struct DayEventsView: View {
         .navigationDestination(isPresented: $isShowingCreateEvent) {
             CreateEventView(date: date)
         }
-        .onAppear {
-            GatherlyAPI.getEvents()
-                .receive(on: RunLoop.main)
-                .sink { self.events = $0 }
-                .store(in: &cancellables)
-        }
-        .onChange(of: events) { _ in
-            if allEventsForDate.isEmpty {
+        .onChange(of: allEventsForDate) { newValue in
+            if newValue.isEmpty {
                 dismiss()
             }
         }
@@ -57,12 +50,11 @@ private extension DayEventsView {
     // MARK: - Computed Vars
     
     var allEventsForDate: [Event] {
-        events
+        eventsViewModel.events
             .filter { event in
                 guard let eventDate = event.date else {
                     return false
                 }
-                
                 return Calendar.current.isDate(eventDate, inSameDayAs: date)
             }
             .sorted(by: { ($0.startTimestamp ?? 0) < ($1.startTimestamp ?? 0) })
