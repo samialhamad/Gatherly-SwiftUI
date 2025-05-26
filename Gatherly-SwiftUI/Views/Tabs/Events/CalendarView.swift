@@ -9,17 +9,14 @@ import Combine
 import SwiftUI
 
 struct CalendarView: View {
-    @State private var cancellables = Set<AnyCancellable>()
-    @State private var events: [Event] = []
+    @EnvironmentObject var eventsViewModel: EventsViewModel
     @State private var isCalendarView = true
-    @State private var isLoading = true
     @EnvironmentObject var navigationState: NavigationState
-    @StateObject private var viewModel = CalendarViewModel()
     
     var body: some View {
         NavigationStack {
             Group {
-                if isLoading {
+                if eventsViewModel.isLoading {
                     ActivityIndicator(message: Constants.CalendarView.loadingString)
                 } else {
                     VStack(spacing: 0) {
@@ -58,15 +55,7 @@ struct CalendarView: View {
             }
             .onAppear {
                 navigationState.hasShownDayEventsView = false
-                
-                isLoading = true
-                GatherlyAPI.getEvents()
-                    .receive(on: RunLoop.main)
-                    .sink { fetchedEvents in
-                        self.events = fetchedEvents
-                        self.isLoading = false
-                    }
-                    .store(in: &cancellables)
+                eventsViewModel.loadIfNeeded()
             }
         }
     }
@@ -91,7 +80,7 @@ private extension CalendarView {
             VStack(spacing: 0) {
                 GatherlyCalendarView(
                     selectedDate: $navigationState.calendarSelectedDate,
-                    allEvents: $events,
+                    allEvents: $eventsViewModel.events,
                     navigationState: navigationState
                 )
             }
