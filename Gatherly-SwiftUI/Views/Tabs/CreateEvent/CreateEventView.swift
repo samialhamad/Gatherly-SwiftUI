@@ -9,19 +9,20 @@ import SwiftUI
 import PhotosUI
 
 struct CreateEventView: View {
+    @EnvironmentObject var eventsViewModel: EventsViewModel
     @State private var isSaving = false
     @EnvironmentObject var navigationState: NavigationState
-    @StateObject private var viewModel = CreateEventViewModel()
+    @StateObject private var createEventViewModel = CreateEventViewModel()
     
     init() {
-        _viewModel = StateObject(wrappedValue: CreateEventViewModel())
+        _createEventViewModel = StateObject(wrappedValue: CreateEventViewModel())
     }
     
     // Used for automatic date population from CalendarView
     init(date: Date) {
-        let viewModel = CreateEventViewModel()
-        viewModel.event.date = date
-        _viewModel = StateObject(wrappedValue: viewModel)
+        let createEventViewModel = CreateEventViewModel()
+        createEventViewModel.event.date = date
+        _createEventViewModel = StateObject(wrappedValue: createEventViewModel)
     }
     
     var body: some View {
@@ -39,8 +40,8 @@ struct CreateEventView: View {
                         eventDate: eventDateBinding,
                         startTime: startTimeBinding,
                         endTime: endTimeBinding,
-                        startTimeRange: viewModel.startTimeRange,
-                        endTimeRange: viewModel.endTimeRange
+                        startTimeRange: createEventViewModel.startTimeRange,
+                        endTimeRange: createEventViewModel.endTimeRange
                     )
                     
                     EventMembersSection(
@@ -52,7 +53,7 @@ struct CreateEventView: View {
                         header: "Location",
                         locationName: locationNameBinding,
                         onSetLocation: { location in
-                            viewModel.event.location = location
+                            createEventViewModel.event.location = location
                         }
                     )
                     
@@ -65,7 +66,7 @@ struct CreateEventView: View {
                         title: "Banner Image",
                         imageHeight: Constants.CreateEventView.bannerImageHeight,
                         maskShape: .rectangle,
-                        selectedImage: $viewModel.selectedBannerImage
+                        selectedImage: $createEventViewModel.selectedBannerImage
                     )
                     
                     createButtonSection
@@ -86,49 +87,49 @@ private extension CreateEventView {
     
     var categoriesBinding: Binding<[EventCategory]> {
         Binding(
-            get: { viewModel.event.categories },
-            set: { viewModel.event.categories = $0 }
+            get: { createEventViewModel.event.categories },
+            set: { createEventViewModel.event.categories = $0 }
         )
     }
     
     var descriptionBinding: Binding<String> {
         Binding(
-            get: { viewModel.event.description ?? "" },
-            set: { viewModel.event.description = $0 }
+            get: { createEventViewModel.event.description ?? "" },
+            set: { createEventViewModel.event.description = $0 }
         )
     }
     
     var endTimeBinding: Binding<Date> {
         Binding(
             get: {
-                Date(timeIntervalSince1970: TimeInterval(viewModel.event.endTimestamp ?? Int(Date().timestamp + 3600)))
+                Date(timeIntervalSince1970: TimeInterval(createEventViewModel.event.endTimestamp ?? Int(Date().timestamp + 3600)))
             },
             set: {
-                viewModel.event.endTimestamp = Int($0.timestamp)
+                createEventViewModel.event.endTimestamp = Int($0.timestamp)
             }
         )
     }
     
     var eventDateBinding: Binding<Date> {
         Binding(
-            get: { viewModel.event.date ?? Date() },
-            set: { viewModel.event.date = $0 }
+            get: { createEventViewModel.event.date ?? Date() },
+            set: { createEventViewModel.event.date = $0 }
         )
     }
     
     var locationNameBinding: Binding<String> {
         Binding(
-            get: { viewModel.event.location?.name ?? "" },
+            get: { createEventViewModel.event.location?.name ?? "" },
             set: { name in
-                if viewModel.event.location == nil {
-                    viewModel.event.location = Location(
+                if createEventViewModel.event.location == nil {
+                    createEventViewModel.event.location = Location(
                         address: nil,
                         latitude: 0,
                         longitude: 0,
                         name: name
                     )
                 } else {
-                    viewModel.event.location?.name = name
+                    createEventViewModel.event.location?.name = name
                 }
             }
         )
@@ -136,26 +137,26 @@ private extension CreateEventView {
     
     var memberIDsBinding: Binding<Set<Int>> {
         Binding(
-            get: { Set(viewModel.event.memberIDs ?? []) },
-            set: { viewModel.event.memberIDs = Array($0).sorted() }
+            get: { Set(createEventViewModel.event.memberIDs ?? []) },
+            set: { createEventViewModel.event.memberIDs = Array($0).sorted() }
         )
     }
     
     var startTimeBinding: Binding<Date> {
         Binding(
             get: {
-                Date(timeIntervalSince1970: TimeInterval(viewModel.event.startTimestamp ?? Int(Date().timestamp)))
+                Date(timeIntervalSince1970: TimeInterval(createEventViewModel.event.startTimestamp ?? Int(Date().timestamp)))
             },
             set: {
-                viewModel.event.startTimestamp = Int($0.timestamp)
+                createEventViewModel.event.startTimestamp = Int($0.timestamp)
             }
         )
     }
     
     var titleBinding: Binding<String> {
         Binding(
-            get: { viewModel.event.title ?? "" },
-            set: { viewModel.event.title = $0 }
+            get: { createEventViewModel.event.title ?? "" },
+            set: { createEventViewModel.event.title = $0 }
         )
     }
     
@@ -165,26 +166,22 @@ private extension CreateEventView {
         Section {
             Button{
                 isSaving = true
-                let plannerID = 1
+                let newEvent = createEventViewModel.builtEvent
                 
-                Task {
-                    let newEvent = await viewModel.createEvent(plannerID: plannerID)
-                    
-                    await MainActor.run {
-                        viewModel.clearFields()
-                        navigationState.calendarSelectedDate = newEvent.date ?? Date()
-                        navigationState.navigateToEvent = newEvent
-                        navigationState.selectedTab = 0
-                        isSaving = false
-                    }
+                eventsViewModel.create(newEvent) { created in
+                    createEventViewModel.clearFields()
+                    navigationState.calendarSelectedDate = created.date ?? Date()
+                    navigationState.navigateToEvent = created
+                    navigationState.selectedTab = 0
+                    isSaving = false
                 }
             } label: {
                 Text("Create")
                     .font(.headline)
-                    .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.primary))
+                    .foregroundColor(createEventViewModel.isFormEmpty ? .gray : Color(Colors.primary))
             }
             .accessibilityIdentifier("createEventButton")
-            .disabled(viewModel.isFormEmpty || isSaving)
+            .disabled(createEventViewModel.isFormEmpty || isSaving)
         }
     }
 }
