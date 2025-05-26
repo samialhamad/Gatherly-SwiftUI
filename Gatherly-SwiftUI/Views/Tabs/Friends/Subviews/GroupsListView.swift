@@ -9,17 +9,15 @@ import Combine
 import SwiftUI
 
 struct GroupsListView: View {
-    @State private var allGroups: [UserGroup] = []
-    @State private var allUsers: [User] = []
-    @State private var cancellables = Set<AnyCancellable>()
-    @State private var isLoading = true
+    @EnvironmentObject var groupsViewModel: GroupsViewModel
     @Binding var searchText: String
+    @EnvironmentObject var usersViewModel: UsersViewModel
     
     let mode: SelectionMode
     
     var body: some View {
         Group {
-            if isLoading {
+            if groupsViewModel.isLoading || usersViewModel.isLoading {
                 ActivityIndicator(message: Constants.GroupsListView.loadingString)
             } else {
                 List(filteredGroups, id: \.id) { group in
@@ -29,19 +27,8 @@ struct GroupsListView: View {
             }
         }
         .onAppear {
-            isLoading = true
-            
-            let usersPublisher = GatherlyAPI.getUsers()
-            let groupsPublisher = GatherlyAPI.getGroups()
-            
-            Publishers.CombineLatest(usersPublisher, groupsPublisher)
-                .receive(on: RunLoop.main)
-                .sink { users, groups in
-                    self.allUsers = users
-                    self.allGroups = groups
-                    self.isLoading = false
-                }
-                .store(in: &cancellables)
+            groupsViewModel.loadIfNeeded()
+            usersViewModel.loadIfNeeded()
         }
     }
 }
@@ -51,7 +38,7 @@ private extension GroupsListView {
     //MARK: - Computed var
     
     var currentUser: User? {
-        allUsers.first(where: { $0.id == 1 })
+        UserDefaultsManager.loadCurrentUser()
     }
     
     var filteredGroups: [UserGroup] {
@@ -59,7 +46,7 @@ private extension GroupsListView {
             return []
         }
         
-        let userGroups = allGroups.filter { group in
+        let userGroups = groupsViewModel.groups.filter { group in
             let isLeader = (group.leaderID == currentUser.id)
             let isMember = group.id.flatMap { currentUser.groupIDs?.contains($0) } ?? false
             
