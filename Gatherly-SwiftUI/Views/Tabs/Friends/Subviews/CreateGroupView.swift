@@ -10,15 +10,15 @@ import SwiftUI
 import PhotosUI
 
 struct CreateGroupView: View {
-    @State private var allUsers: [User] = []
-    @State private var cancellables = Set<AnyCancellable>()
+    @StateObject private var createGroupViewModel: CreateGroupViewModel
     @Environment(\.dismiss) private var dismiss
+    @EnvironmentObject var groupsViewModel: GroupsViewModel
     @State private var isSaving = false
     @EnvironmentObject var navigationState: NavigationState
-    @StateObject private var viewModel: CreateGroupViewModel
+    @EnvironmentObject var usersViewModel: UsersViewModel
     
     init(currentUserID: Int) {
-        _viewModel = StateObject(wrappedValue: CreateGroupViewModel(currentUserID: currentUserID))
+        _createGroupViewModel = StateObject(wrappedValue: CreateGroupViewModel(currentUserID: currentUserID))
     }
     
     var body: some View {
@@ -34,14 +34,14 @@ struct CreateGroupView: View {
                         title: "Group Image",
                         imageHeight: Constants.CreateGroupView.groupImageHeight,
                         maskShape: .circle,
-                        selectedImage: $viewModel.groupImage
+                        selectedImage: $createGroupViewModel.groupImage
                     )
                     
                     ImagePicker(
                         title: "Banner Image",
                         imageHeight: Constants.CreateGroupView.groupBannerImageHeight,
                         maskShape: .rectangle,
-                        selectedImage: $viewModel.bannerImage
+                        selectedImage: $createGroupViewModel.bannerImage
                     )
                     
                     EventMembersSection(
@@ -61,12 +61,6 @@ struct CreateGroupView: View {
             }
         }
         .keyboardDismissable()
-        .onAppear {
-            GatherlyAPI.getUsers()
-                .receive(on: RunLoop.main)
-                .sink { self.allUsers = $0 }
-                .store(in: &cancellables)
-        }
     }
 }
 
@@ -76,15 +70,15 @@ private extension CreateGroupView {
     
     var groupNameBinding: Binding<String> {
         Binding(
-            get: { viewModel.group.name ?? "" },
-            set: { viewModel.group.name = $0 }
+            get: { createGroupViewModel.group.name ?? "" },
+            set: { createGroupViewModel.group.name = $0 }
         )
     }
     
     var memberIDsBinding: Binding<Set<Int>> {
         Binding(
-            get: { Set(viewModel.group.memberIDs) },
-            set: { viewModel.group.memberIDs = Array($0).sorted() }
+            get: { Set(createGroupViewModel.group.memberIDs) },
+            set: { createGroupViewModel.group.memberIDs = Array($0).sorted() }
         )
     }
     
@@ -104,22 +98,24 @@ private extension CreateGroupView {
                 isSaving = true
                 
                 Task {
-                    let newGroup = await viewModel.createGroup()
+                    let newGroup = await createGroupViewModel.preparedGroup()
                     
                     await MainActor.run {
-                        navigationState.navigateToGroup = newGroup
-                        navigationState.selectedTab = 2
-                        isSaving = false
-                        dismiss()
+                        groupsViewModel.create(newGroup) { created in
+                            navigationState.navigateToGroup = created
+                            navigationState.selectedTab = 2
+                            isSaving = false
+                            dismiss()
+                        }
                     }
                 }
             } label: {
                 Text("Create")
                     .font(.headline)
-                    .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.primary))
+                    .foregroundColor(createGroupViewModel.isFormEmpty ? .gray : Color(Colors.primary))
             }
             .accessibilityIdentifier("createGroupButton")
-            .disabled(viewModel.isFormEmpty || isSaving)
+            .disabled(createGroupViewModel.isFormEmpty || isSaving)
         }
     }
 }
