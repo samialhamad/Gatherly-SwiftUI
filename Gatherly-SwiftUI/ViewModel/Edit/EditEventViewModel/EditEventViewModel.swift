@@ -29,7 +29,7 @@ class EditEventViewModel: ObservableObject {
     
     // MARK: - Update Logic
     
-    func updateEvent() async -> Event {
+    func prepareUpdatedEvent() async -> Event {
         await MainActor.run {
             if let newImage = selectedBannerImage {
                 event.bannerImageName = ImageUtility.saveImageToDocuments(image: newImage)
@@ -38,12 +38,7 @@ class EditEventViewModel: ObservableObject {
             }
         }
         
-        return await withCheckedContinuation { continuation in
-            _ = GatherlyAPI.updateEvent(event)
-                .sink { updatedEvent in
-                    continuation.resume(returning: updatedEvent)
-                }
-        }
+        return event
     }
     
     // MARK: - Helpers
