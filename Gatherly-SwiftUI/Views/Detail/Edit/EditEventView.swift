@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct EditEventView: View {
+    @StateObject var editEventViewModel: EditEventViewModel
+    @EnvironmentObject var eventsViewModel: EventsViewModel
     @State private var isSaving = false
     @State private var showingDeleteAlert = false
-    @StateObject var viewModel: EditEventViewModel
     
-    let events: [Event]
     let friendsDict: [Int: User]
     let onSave: (Event) -> Void
     let onCancel: () -> Void
@@ -33,8 +33,8 @@ struct EditEventView: View {
                         eventDate: eventDateBinding,
                         startTime: startTimeBinding,
                         endTime: endTimeBinding,
-                        startTimeRange: viewModel.startTimeRange,
-                        endTimeRange: viewModel.endTimeRange
+                        startTimeRange: editEventViewModel.startTimeRange,
+                        endTimeRange: editEventViewModel.endTimeRange
                     )
                     
                     EventMembersSection(
@@ -46,7 +46,7 @@ struct EditEventView: View {
                         header: "Location",
                         locationName: locationNameBinding,
                         onSetLocation: { location in
-                            viewModel.event.location = location
+                            editEventViewModel.event.location = location
                         }
                     )
                     
@@ -59,7 +59,7 @@ struct EditEventView: View {
                         title: "Banner Image",
                         imageHeight: Constants.EditEventView.bannerImageHeight,
                         maskShape: .rectangle,
-                        selectedImage: $viewModel.selectedBannerImage
+                        selectedImage: $editEventViewModel.selectedBannerImage
                     )
                     
                     deleteButton
@@ -71,7 +71,7 @@ struct EditEventView: View {
                 }
                 .alert("Delete Event?", isPresented: $showingDeleteAlert) {
                     Button("Delete", role: .destructive) {
-                        onDelete(viewModel.originalEvent)
+                        onDelete(editEventViewModel.originalEvent)
                     }
                     Button("Cancel", role: .cancel) {}
                 } message: {
@@ -92,69 +92,69 @@ private extension EditEventView {
     
     var categoriesBinding: Binding<[EventCategory]> {
         Binding(
-            get: { viewModel.event.categories },
-            set: { viewModel.event.categories = $0 }
+            get: { editEventViewModel.event.categories },
+            set: { editEventViewModel.event.categories = $0 }
         )
     }
     
     var descriptionBinding: Binding<String> {
         Binding(
-            get: { viewModel.event.description ?? "" },
-            set: { viewModel.event.description = $0 }
+            get: { editEventViewModel.event.description ?? "" },
+            set: { editEventViewModel.event.description = $0 }
         )
     }
     
     var endTimeBinding: Binding<Date> {
         Binding(
             get: {
-                Date(timeIntervalSince1970: TimeInterval(viewModel.event.endTimestamp ?? Int(Date().addingTimeInterval(3600).timestamp)))
+                Date(timeIntervalSince1970: TimeInterval(editEventViewModel.event.endTimestamp ?? Int(Date().addingTimeInterval(3600).timestamp)))
             },
             set: {
-                viewModel.event.endTimestamp = Int($0.timestamp)
+                editEventViewModel.event.endTimestamp = Int($0.timestamp)
             }
         )
     }
     
     var eventDateBinding: Binding<Date> {
         Binding(
-            get: { viewModel.event.date ?? Date() },
-            set: { viewModel.event.date = $0 }
+            get: { editEventViewModel.event.date ?? Date() },
+            set: { editEventViewModel.event.date = $0 }
         )
     }
     
     var locationNameBinding: Binding<String> {
         Binding(
-            get: { viewModel.event.location?.name ?? "" },
+            get: { editEventViewModel.event.location?.name ?? "" },
             set: { newValue in
-                var current = viewModel.event.location ?? Location(address: nil, latitude: 0, longitude: 0)
+                var current = editEventViewModel.event.location ?? Location(address: nil, latitude: 0, longitude: 0)
                 current.name = newValue
-                viewModel.event.location = current
+                editEventViewModel.event.location = current
             }
         )
     }
     
     var memberIDsBinding: Binding<Set<Int>> {
         Binding(
-            get: { Set(viewModel.event.memberIDs ?? []) },
-            set: { viewModel.event.memberIDs = Array($0).sorted() }
+            get: { Set(editEventViewModel.event.memberIDs ?? []) },
+            set: { editEventViewModel.event.memberIDs = Array($0).sorted() }
         )
     }
     
     var startTimeBinding: Binding<Date> {
         Binding(
             get: {
-                Date(timeIntervalSince1970: TimeInterval(viewModel.event.startTimestamp ?? Int(Date().timestamp)))
+                Date(timeIntervalSince1970: TimeInterval(editEventViewModel.event.startTimestamp ?? Int(Date().timestamp)))
             },
             set: {
-                viewModel.event.startTimestamp = Int($0.timestamp)
+                editEventViewModel.event.startTimestamp = Int($0.timestamp)
             }
         )
     }
     
     var titleBinding: Binding<String> {
         Binding(
-            get: { viewModel.event.title ?? "" },
-            set: { viewModel.event.title = $0 }
+            get: { editEventViewModel.event.title ?? "" },
+            set: { editEventViewModel.event.title = $0 }
         )
     }
     
@@ -183,14 +183,15 @@ private extension EditEventView {
             Button("Save") {
                 isSaving = true
                 Task {
-                    let updatedEvent = await viewModel.updateEvent()
+                    let updatedEvent = await editEventViewModel.prepareUpdatedEvent()
+                    eventsViewModel.update(updatedEvent)
                     isSaving = false
                     onSave(updatedEvent)
                 }
             }
             .accessibilityIdentifier("saveEventButton")
-            .foregroundColor(viewModel.isFormEmpty ? .gray : Color(Colors.secondary))
-            .disabled(viewModel.isFormEmpty)
+            .foregroundColor(editEventViewModel.isFormEmpty ? .gray : Color(Colors.secondary))
+            .disabled(editEventViewModel.isFormEmpty)
         }
     }
 }
@@ -201,8 +202,7 @@ private extension EditEventView {
     
     NavigationStack {
         EditEventView(
-            viewModel: EditEventViewModel(event: SampleData.sampleEvents.first!),
-            events: SampleData.sampleEvents,
+            editEventViewModel: EditEventViewModel(event: SampleData.sampleEvents.first!),
             friendsDict: friendsDict,
             onSave: { _ in },
             onCancel: {},
