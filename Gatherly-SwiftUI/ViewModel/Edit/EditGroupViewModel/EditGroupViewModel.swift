@@ -26,16 +26,16 @@ class EditGroupViewModel: ObservableObject {
         self.bannerImage = group.bannerImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) }
     }
     
-    // MARK: - Update Group
+    // MARK: - Preapre Group
     
-    func updateGroup() async -> UserGroup {
+    func prepareUpdatedGroup() async -> UserGroup {
         await MainActor.run {
             if let newGroupImage = groupImage {
                 group.imageName = ImageUtility.saveImageToDocuments(image: newGroupImage)
             } else {
                 group.imageName = nil
             }
-            
+
             if let newBanner = bannerImage {
                 group.bannerImageName = ImageUtility.saveImageToDocuments(image: newBanner)
             } else {
@@ -43,12 +43,7 @@ class EditGroupViewModel: ObservableObject {
             }
         }
         
-        return await withCheckedContinuation { continuation in
-            _ = GatherlyAPI.updateGroup(group)
-                .sink { updatedGroup in
-                    continuation.resume(returning: updatedGroup)
-                }
-        }
+        return group
     }
     
     // MARK: - Image Removal
