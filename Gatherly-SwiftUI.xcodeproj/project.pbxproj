@@ -64,13 +64,12 @@
 				Utilities/ContactSyncManager/ContactSyncManagerTests.swift,
 				Utilities/ImageUtility/ImageUtilityTests.swift,
 				Utilities/UserDefaultsManager/UserDefaultsManagerTests.swift,
-				ViewModel/CalendarViewModel/CalendarViewModelTests.swift,
-				ViewModel/CreateEventViewModel/CreateEventViewModelTests.swift,
-				ViewModel/CreateGroupViewModel/CreateGroupViewModelTests.swift,
-				ViewModel/EditEventViewModel/EditEventViewModelTests.swift,
-				ViewModel/EditGroupViewModel/EditGroupViewModelTests.swift,
-				ViewModel/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
-				ViewModel/FriendsListViewModel/FriendsListViewModelTests.swift,
+				ViewModel/Create/CreateEventViewModel/CreateEventViewModelTests.swift,
+				ViewModel/Create/CreateGroupViewModel/CreateGroupViewModelTests.swift,
+				ViewModel/Edit/EditEventViewModel/EditEventViewModelTests.swift,
+				ViewModel/Edit/EditGroupViewModel/EditGroupViewModelTests.swift,
+				ViewModel/Events/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
+				ViewModel/Friends/FriendsListViewModel/FriendsListViewModelTests.swift,
 			);
 			target = F11CDC2F2D77958B007BC1F1 /* Gatherly-SwiftUITests */;
 		};
@@ -98,13 +97,12 @@
 				Utilities/ContactSyncManager/ContactSyncManagerTests.swift,
 				Utilities/ImageUtility/ImageUtilityTests.swift,
 				Utilities/UserDefaultsManager/UserDefaultsManagerTests.swift,
-				ViewModel/CalendarViewModel/CalendarViewModelTests.swift,
-				ViewModel/CreateEventViewModel/CreateEventViewModelTests.swift,
-				ViewModel/CreateGroupViewModel/CreateGroupViewModelTests.swift,
-				ViewModel/EditEventViewModel/EditEventViewModelTests.swift,
-				ViewModel/EditGroupViewModel/EditGroupViewModelTests.swift,
-				ViewModel/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
-				ViewModel/FriendsListViewModel/FriendsListViewModelTests.swift,
+				ViewModel/Create/CreateEventViewModel/CreateEventViewModelTests.swift,
+				ViewModel/Create/CreateGroupViewModel/CreateGroupViewModelTests.swift,
+				ViewModel/Edit/EditEventViewModel/EditEventViewModelTests.swift,
+				ViewModel/Edit/EditGroupViewModel/EditGroupViewModelTests.swift,
+				ViewModel/Events/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
+				ViewModel/Friends/FriendsListViewModel/FriendsListViewModelTests.swift,
 			);
 			target = F11CDC1F2D77958A007BC1F1 /* Gatherly-SwiftUI */;
 		};
