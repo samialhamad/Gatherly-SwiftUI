@@ -92,7 +92,7 @@ public struct EventMembersSection: View {
             }
         }
         .onAppear {
-            Publishers.CombineLatest(GatherlyAPI.getCurrentUser(), GatherlyAPI.getFriends())
+            Publishers.CombineLatest(GatherlyAPI.getCurrentUser(), GatherlyAPI.getUsers())
                 .receive(on: RunLoop.main)
                 .sink { currentUser, friendsList in
                     if let currentUser {

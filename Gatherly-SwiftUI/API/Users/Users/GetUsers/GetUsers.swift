@@ -1,5 +1,5 @@
 //
-//  GetFriends.swift
+//  GetUsers.swift
 //  Gatherly-SwiftUI
 //
 //  Created by Sami Alhamad on 4/14/25.
@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 extension GatherlyAPI {
-    static func getFriends(forUserID id: Int = 1) -> AnyPublisher<[User], Never> {
+    static func getUsers(forUserID id: Int = 1) -> AnyPublisher<[User], Never> {
         let users = UserDefaultsManager.loadUsers()
         let currentUser = users.first(where: { $0.id == id })
         let friends = users.filter { user in
