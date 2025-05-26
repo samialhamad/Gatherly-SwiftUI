@@ -11,10 +11,10 @@ import SwiftUI
 
 struct UserDetailView: View {
     @State private var cancellables = Set<AnyCancellable>()
-    @State private var currentUser: User? = nil
     @Environment(\.dismiss) private var dismiss
     @State private var isShowingActionSheet = false
     @State private var userFormStore: Store<UserFormFeature.State, UserFormFeature.Action>? = nil
+    @EnvironmentObject var usersViewModel: UsersViewModel
     
     let user: User
     
@@ -72,20 +72,16 @@ struct UserDetailView: View {
                 }
             }
         }
-        .onAppear {
-            GatherlyAPI.getUser()
-                .receive(on: RunLoop.main)
-                .sink { user in
-                    self.currentUser = user
-                }
-                .store(in: &cancellables)
-        }
     }
 }
 
 private extension UserDetailView {
     
     //MARK: - Computed Vars
+    
+    var currentUser: User? {
+        UserDefaultsManager.loadCurrentUser()
+    }
     
     private var isViewingSelf: Bool {
         currentUser?.id == user.id
@@ -99,16 +95,7 @@ private extension UserDetailView {
             return
         }
         
-        GatherlyAPI.updateUser(updatedUser)
-            .flatMap { _ in
-                GatherlyAPI.getUser()
-            }
-            .receive(on: RunLoop.main)
-            .sink { user in
-                self.currentUser = user
-            }
-            .store(in: &cancellables)
-        
+        usersViewModel.update(updatedUser)
         userFormStore = nil
     }
     
@@ -121,16 +108,10 @@ private extension UserDetailView {
         }
         
         currentUser.friendIDs?.removeAll(where: { $0 == targetID })
+        UserDefaultsManager.saveCurrentUser(currentUser)
         
-        GatherlyAPI.updateUser(currentUser)
-            .flatMap { _ in
-                GatherlyAPI.deleteUser(user)
-            }
-            .receive(on: RunLoop.main)
-            .sink { _ in
-                dismiss()
-            }
-            .store(in: &cancellables)
+        usersViewModel.delete(user)
+        dismiss()
     }
     
     //MARK: - Subviews
