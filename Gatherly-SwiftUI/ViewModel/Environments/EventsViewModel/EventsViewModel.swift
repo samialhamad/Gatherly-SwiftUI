@@ -29,8 +29,8 @@ final class EventsViewModel: ObservableObject {
         
         GatherlyAPI.getEvents()
             .receive(on: RunLoop.main)
-            .sink { [weak self] fetched in
-                self?.events = fetched
+            .sink { [weak self] events in
+                self?.events = events
                 self?.isLoading = false
                 self?.hasLoaded = true
             }
@@ -49,10 +49,10 @@ final class EventsViewModel: ObservableObject {
         
         GatherlyAPI.createEvent(event)
             .receive(on: RunLoop.main)
-            .sink { [weak self] created in
-                self?.events.append(created)
+            .sink { [weak self] createdEvent in
+                self?.events.append(createdEvent)
                 self?.isLoading = false
-                completion(created)
+                completion(createdEvent)
             }
             .store(in: &cancellables)
     }
