@@ -11,6 +11,7 @@ import SwiftUI
 struct ContentView: View {
     @State private var cancellables = Set<AnyCancellable>()
     @State private var currentUser: User? = nil
+    @StateObject private var eventsViewModel = EventsViewModel()
     @State private var isLoading = true
     @EnvironmentObject var navigationState: NavigationState
     
@@ -23,6 +24,7 @@ struct ContentView: View {
                     friendsTab
                     profileTab
                 }
+                .environmentObject(eventsViewModel)
             } else if isLoading {
                 ActivityIndicator(message: Constants.ContentView.loadingString)
             }
