@@ -9,13 +9,12 @@ import Combine
 import SwiftUI
 
 struct GroupDetailView: View {
-    @State private var cancellables = Set<AnyCancellable>()
-    @State private var currentUser: User? = nil
     @Environment(\.dismiss) private var dismiss
-    @State private var friendsDict: [Int: User] = [:]
+    @EnvironmentObject var groupsViewModel: GroupsViewModel
     @State private var isDeleting = false
     @State private var isShowingEditView = false
     @State private var isShowingActionSheet = false
+    @EnvironmentObject var usersViewModel: UsersViewModel
     
     let group: UserGroup
     
@@ -54,33 +53,38 @@ struct GroupDetailView: View {
             }
         }
         .onAppear {
-            let currentUserPublisher = GatherlyAPI.getUser()
-            let usersPublisher = GatherlyAPI.getUsers()
-            
-            Publishers.CombineLatest(currentUserPublisher, usersPublisher)
-                .receive(on: RunLoop.main)
-                .sink { currentUser, users in
-                    self.currentUser = currentUser
-                    self.friendsDict = Dictionary(uniqueKeysWithValues: users.compactMap { user in
-                        guard let id = user.id else {
-                            return nil
-                        }
-                        
-                        return (id, user)
-                    })
-                }
-                .store(in: &cancellables)
+            usersViewModel.loadIfNeeded()
         }
     }
 }
 
 private extension GroupDetailView {
     
+    // MARK: - Computed Vars
+    
+    var currentUser: User? {
+        UserDefaultsManager.loadCurrentUser()
+    }
+    
+    var friendsDict: [Int: User] {
+        Dictionary(uniqueKeysWithValues: usersViewModel.users.compactMap { user in
+            guard let id = user.id else {
+                return nil
+            }
+            
+            return (id, user)
+        })
+    }
+    
     // MARK: - Functions
     
     func leaveGroup() {
-        guard let currentUser else { return }
-        guard let userID = currentUser.id else { return }
+        guard let currentUser else {
+            return
+        }
+        guard let userID = currentUser.id else {
+            return
+        }
         
         var updatedUser = currentUser
         updatedUser.groupIDs?.removeAll(where: { $0 == group.id })
@@ -88,24 +92,17 @@ private extension GroupDetailView {
         var updatedGroup = group
         updatedGroup.memberIDs.removeAll(where: { $0 == userID })
         
-        GatherlyAPI.updateUser(updatedUser)
-            .flatMap { _ in
-                GatherlyAPI.updateGroup(updatedGroup)
-            }
-            .receive(on: RunLoop.main)
-            .sink { _ in
-                dismiss()
-            }
-            .store(in: &cancellables)
+        usersViewModel.update(updatedUser)
+        groupsViewModel.update(updatedGroup)
+        dismiss()
     }
     
     // MARK: - Subviews
     
     var editGroupSheet: some View {
         EditGroupView(
-            viewModel: EditGroupViewModel(group: group),
+            editGroupViewModel: EditGroupViewModel(group: group),
             friendsDict: friendsDict,
-            groups: [],
             onSave: { _ in
                 isShowingEditView = false
             },
@@ -113,16 +110,10 @@ private extension GroupDetailView {
                 isShowingEditView = false
             },
             onDelete: { deletedGroup in
-                isDeleting = true
-                
-                GatherlyAPI.deleteGroup(deletedGroup)
-                    .receive(on: RunLoop.main)
-                    .sink { _ in
-                        isDeleting = false
-                        isShowingEditView = false
-                        dismiss()
-                    }
-                    .store(in: &cancellables)
+                groupsViewModel.delete(deletedGroup)
+                isDeleting = false
+                isShowingEditView = false
+                dismiss()
             }
         )
     }
