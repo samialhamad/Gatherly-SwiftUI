@@ -9,12 +9,11 @@ import Combine
 import SwiftUI
 
 struct EventsGroupedListView: View {
-    @State private var cancellables = Set<AnyCancellable>()
-    @State private var events: [Event] = []
-    @StateObject private var viewModel = EventsGroupedListViewModel()
-
+    @EnvironmentObject var eventsViewModel: EventsViewModel
+    @StateObject private var eventsGroupedListViewModel = EventsGroupedListViewModel()
+    
     var body: some View {
-        let groupedEvents = events.groupEventsByDay
+        let groupedEvents = eventsViewModel.events.groupEventsByDay
         let keys = groupedEvents.keys.sorted()
         
         ScrollViewReader { proxy in
@@ -23,10 +22,9 @@ struct EventsGroupedListView: View {
                     scrollToTodayToolbarButton(keys: keys, proxy: proxy)
                 }
                 .onAppear {
-                    GatherlyAPI.getEvents()
-                        .receive(on: RunLoop.main)
-                        .sink { self.events = $0 }
-                        .store(in: &cancellables)
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
+                        eventsGroupedListViewModel.scrollToNearestAvailableDay(keys: keys, proxy: proxy)
+                    }
                 }
         }
     }
@@ -63,16 +61,16 @@ private extension EventsGroupedListView {
         }
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                viewModel.scrollToNearestAvailableDay(keys: keys, proxy: proxy)
+                eventsGroupedListViewModel.scrollToNearestAvailableDay(keys: keys, proxy: proxy)
             }
         }
     }
     
     func scrollToTodayToolbarButton(keys: [Date], proxy: ScrollViewProxy) -> some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
-            if viewModel.shouldShowTodayButton(keys: keys) {
+            if eventsGroupedListViewModel.shouldShowTodayButton(keys: keys) {
                 Button {
-                    viewModel.scrollToNearestAvailableDay(keys: keys, proxy: proxy)
+                    eventsGroupedListViewModel.scrollToNearestAvailableDay(keys: keys, proxy: proxy)
                 } label: {
                     Image(systemName: "calendar.badge.clock.rtl")
                         .font(.headline)
