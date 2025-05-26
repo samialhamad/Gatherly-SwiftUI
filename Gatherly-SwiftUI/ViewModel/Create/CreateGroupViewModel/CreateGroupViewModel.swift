@@ -23,9 +23,9 @@ class CreateGroupViewModel: ObservableObject {
         )
     }
     
-    // MARK: - Create Group
+    // MARK: - Prepare Group
     
-    func createGroup() async -> UserGroup {
+    func preparedGroup() async -> UserGroup {
         await MainActor.run {
             if let image = groupImage {
                 group.imageName = ImageUtility.saveImageToDocuments(image: image)
@@ -36,12 +36,7 @@ class CreateGroupViewModel: ObservableObject {
             }
         }
         
-        return await withCheckedContinuation { continuation in
-            _ = GatherlyAPI.createGroup(group)
-                .sink { createdGroup in
-                    continuation.resume(returning: createdGroup)
-                }
-        }
+        return group
     }
     
     // MARK: - isFormEmpty
