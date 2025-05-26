@@ -45,9 +45,12 @@ extension GatherlyAPI {
         )
         
         return await withCheckedContinuation { continuation in
-            _ = createUser(user)
+            var cancellable: AnyCancellable?
+            
+            cancellable = createUser(user)
                 .sink { created in
                     continuation.resume(returning: created)
+                    cancellable = nil
                 }
         }
     }
