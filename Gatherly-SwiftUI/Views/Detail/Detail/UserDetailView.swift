@@ -73,10 +73,10 @@ struct UserDetailView: View {
             }
         }
         .onAppear {
-            GatherlyAPI.getCurrentUser()
+            GatherlyAPI.getUser()
                 .receive(on: RunLoop.main)
-                .sink { currentUser in
-                    self.currentUser = currentUser
+                .sink { user in
+                    self.currentUser = user
                 }
                 .store(in: &cancellables)
         }

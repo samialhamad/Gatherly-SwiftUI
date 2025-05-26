@@ -33,7 +33,7 @@ struct ContentView: View {
             AppInitializer.runIfNeeded()
             ContactSyncHelper.runIfNeeded(currentUserID: 1)
             
-            GatherlyAPI.getCurrentUser()
+            GatherlyAPI.getUser()
                 .receive(on: RunLoop.main)
                 .sink { user in
                     currentUser = user

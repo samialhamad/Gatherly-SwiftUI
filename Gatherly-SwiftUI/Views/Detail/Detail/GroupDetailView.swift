@@ -54,7 +54,7 @@ struct GroupDetailView: View {
             }
         }
         .onAppear {
-            let currentUserPublisher = GatherlyAPI.getCurrentUser()
+            let currentUserPublisher = GatherlyAPI.getUser()
             let usersPublisher = GatherlyAPI.getUsers()
             
             Publishers.CombineLatest(currentUserPublisher, usersPublisher)

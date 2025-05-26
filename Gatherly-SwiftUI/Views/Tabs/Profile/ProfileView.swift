@@ -53,10 +53,10 @@ struct ProfileView: View {
         .onAppear {
             isLoading = true
 
-            GatherlyAPI.getCurrentUser()
+            GatherlyAPI.getUser()
                 .receive(on: RunLoop.main)
-                .sink { currentUser in
-                    self.currentUser = currentUser
+                .sink { user in
+                    self.currentUser = user
                     self.isLoading = false
                 }
                 .store(in: &cancellables)

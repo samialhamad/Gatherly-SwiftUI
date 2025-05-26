@@ -38,10 +38,10 @@ struct UserFormView: View {
             }
             .keyboardDismissable()
             .onAppear {
-                GatherlyAPI.getCurrentUser()
+                GatherlyAPI.getUser()
                     .receive(on: RunLoop.main)
-                    .sink { currentUser in
-                        currentUserID = currentUser?.id
+                    .sink { user in
+                        currentUserID = user?.id
                     }
                     .store(in: &cancellables)
             }
