@@ -9,16 +9,14 @@ import Combine
 import SwiftUI
 
 struct FriendsListView: View {
-    @State private var allUsers: [User] = []
-    @State private var cancellables = Set<AnyCancellable>()
-    @State private var isLoading = true
     @Binding var searchText: String
-    @StateObject private var viewModel = FriendsListViewModel()
+    @EnvironmentObject var usersViewModel: UsersViewModel
+    @StateObject private var friendsListViewModel = FriendsListViewModel()
     
     let mode: SelectionMode
     
     var body: some View {
-        if isLoading {
+        if usersViewModel.isLoading {
             ActivityIndicator(message: Constants.FriendsListView.loadingString)
         } else {
             ZStack(alignment: .trailing) {
@@ -28,13 +26,7 @@ struct FriendsListView: View {
                 }
             }
             .onAppear {
-                GatherlyAPI.getUsers()
-                    .receive(on: RunLoop.main)
-                    .sink { users in
-                        self.allUsers = users
-                        self.isLoading = false
-                    }
-                    .store(in: &cancellables)
+                usersViewModel.loadIfNeeded()
             }
         }
     }
@@ -45,13 +37,13 @@ private extension FriendsListView {
     // MARK: - Computed Vars
     
     var friends: [User] {
-        guard let currentUser = allUsers.first(where: { $0.id == 1 }) else {
+        guard let currentUser = UserDefaultsManager.loadCurrentUser() else {
             return []
         }
         
         let ids = Set(currentUser.friendIDs ?? [])
         
-        return allUsers.filter { user in
+        return usersViewModel.users.filter { user in
             guard let id = user.id else {
                 return false
             }
@@ -61,15 +53,15 @@ private extension FriendsListView {
     }
     
     private var filteredFriends: [User] {
-        viewModel.filteredFriends(from: friends, searchText: searchText)
+        friendsListViewModel.filteredFriends(from: friends, searchText: searchText)
     }
     
     private var groupedFriends: [String: [User]] {
-        viewModel.groupedFriends(from: filteredFriends)
+        friendsListViewModel.groupedFriends(from: filteredFriends)
     }
     
     private var sortedSectionKeys: [String] {
-        viewModel.sortedSectionKeys(from: filteredFriends)
+        friendsListViewModel.sortedSectionKeys(from: filteredFriends)
     }
     
     // MARK: - Functions
@@ -90,7 +82,7 @@ private extension FriendsListView {
     
     func alphabetOverlay(proxy: ScrollViewProxy) -> some View {
         Group {
-            if viewModel.searchText.isEmpty {
+            if friendsListViewModel.searchText.isEmpty {
                 AlphabetIndexView(letters: sortedSectionKeys) { letter in
                     withAnimation {
                         proxy.scrollTo(letter, anchor: .top)
@@ -103,11 +95,14 @@ private extension FriendsListView {
     
     func friendList(proxy: ScrollViewProxy) -> some View {
         List {
-            ForEach(viewModel.sortedSectionKeys(from: viewModel.filteredFriends(from: friends, searchText: searchText)), id: \.self) { key in
+            ForEach(friendsListViewModel.sortedSectionKeys(from: friendsListViewModel.filteredFriends(from: friends, searchText: searchText)), id: \.self) { key in
                 Section(header: Text(key).id(key)) {
-                    ForEach(viewModel.groupedFriends(from: viewModel.filteredFriends(from: friends, searchText: searchText))[key] ?? []) { friend in
-                        rowView(for: friend)
-                    }
+                    ForEach(friendsListViewModel.groupedFriends(
+                        from: friendsListViewModel.filteredFriends(
+                            from: friends,
+                            searchText: searchText))[key] ?? []) { friend in
+                                rowView(for: friend)
+                            }
                 }
             }
         }
