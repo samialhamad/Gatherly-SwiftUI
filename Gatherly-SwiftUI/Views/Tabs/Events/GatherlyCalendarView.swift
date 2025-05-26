@@ -13,7 +13,6 @@ struct GatherlyCalendarView: View {
     @StateObject private var calendarManager: ElegantCalendarManager
     @Binding var selectedDate: Date
     @State private var isShowingDayEvents = false
-    @StateObject private var viewModel = CalendarViewModel()
     
     let navigationState: NavigationState
     
@@ -80,7 +79,7 @@ struct GatherlyCalendarView: View {
     
     private var dayEventsViewButton: some View {
         VStack(spacing: Constants.GatherlyCalendarView.dayEventsViewButtonSpacing) {
-            Text(viewModel.eventCountLabel(for: selectedDate, events: allEvents))
+            Text(allEvents.eventCountLabel(for: selectedDate))
                 .font(.headline)
                 .foregroundColor(Color(Colors.primary))
                 .multilineTextAlignment(.center)
