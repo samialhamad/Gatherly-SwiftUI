@@ -16,7 +16,6 @@ extension GatherlyAPI {
         UserDefaultsManager.saveGroups(groups)
         
         return Just(groups)
-            .delay(for: .seconds(2), scheduler: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 }
