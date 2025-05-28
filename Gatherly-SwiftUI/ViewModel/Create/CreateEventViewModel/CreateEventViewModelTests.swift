@@ -33,22 +33,17 @@ final class CreateEventViewModelTests: XCTestCase {
         viewModel.event.categories = [.food, .sports]
         viewModel.selectedBannerImage = UIImage(systemName: "photo")!
 
-        let plannerID = 1
-        let event = await viewModel.createEvent(plannerID: plannerID)
+        let built = viewModel.builtEvent
 
-        XCTAssertEqual(event.title, "Test Event")
-        XCTAssertEqual(event.description, "Test description")
-        XCTAssertNotNil(event.id)
-        XCTAssertEqual(event.date, calendar.startOfDay(for: fixedDate))
-        XCTAssertEqual(event.startTimestamp, Int(fixedStartTime.timestamp))
-        XCTAssertEqual(event.endTimestamp, Int(fixedEndTime.timestamp))
-        XCTAssertEqual(event.plannerID, plannerID)
-        XCTAssertEqual(Set(event.memberIDs ?? []), Set([2, 3]))
-        XCTAssertEqual(event.categories, [.food, .sports])
-        XCTAssertNotNil(event.bannerImageName)
-
-        let allEvents = UserDefaultsManager.loadEvents()
-        XCTAssertTrue(allEvents.contains(where: { $0.id == event.id }))
+        XCTAssertEqual(built.title, "Test Event")
+        XCTAssertEqual(built.description, "Test description")
+        XCTAssertEqual(built.date, calendar.startOfDay(for: fixedDate))
+        XCTAssertEqual(built.startTimestamp, Int(fixedStartTime.timestamp))
+        XCTAssertEqual(built.endTimestamp, Int(fixedEndTime.timestamp))
+        XCTAssertEqual(built.plannerID, 1)
+        XCTAssertEqual(built.memberIDs, [2, 3])
+        XCTAssertEqual(built.categories, [.food, .sports])
+        XCTAssertNotNil(built.bannerImageName)
     }
     
     // MARK: - Clear Fields
