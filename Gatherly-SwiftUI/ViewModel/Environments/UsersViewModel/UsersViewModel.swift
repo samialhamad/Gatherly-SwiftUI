@@ -59,8 +59,6 @@ final class UsersViewModel: ObservableObject {
     }
 
     func update(_ updatedUser: User) {
-        isLoading = true
-
         let publisher: AnyPublisher<User, Never>
 
         if updatedUser.id == currentUser?.id {
@@ -78,7 +76,6 @@ final class UsersViewModel: ObservableObject {
                 if user.id == self?.currentUser?.id {
                     self?.currentUser = user
                 }
-                self?.isLoading = false
             }
             .store(in: &cancellables)
     }
