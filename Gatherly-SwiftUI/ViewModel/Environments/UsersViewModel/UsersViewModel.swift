@@ -43,6 +43,11 @@ final class UsersViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
+    func forceReload() {
+        hasLoaded = false
+        fetch()
+    }
+    
     // MARK: - CRUD
 
     func create(_ user: User, completion: @escaping (User) -> Void = { _ in }) {
