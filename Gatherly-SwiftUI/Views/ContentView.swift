@@ -59,7 +59,7 @@ private extension ContentView {
                     .labelStyle(.iconOnly)
             }
             .accessibilityIdentifier("calendarTab")
-            .tag(0)
+            .tag(Tab.calendar.rawValue)
     }
     
     var createEventTab: some View {
@@ -72,7 +72,7 @@ private extension ContentView {
                 .labelStyle(.iconOnly)
         }
         .accessibilityIdentifier("createEventTab")
-        .tag(1)
+        .tag(Tab.create.rawValue)
     }
     
     var friendsTab: some View {
@@ -84,7 +84,7 @@ private extension ContentView {
                 .labelStyle(.iconOnly)
         }
         .accessibilityIdentifier("friendsTab")
-        .tag(2)
+        .tag(Tab.friends.rawValue)
     }
     
     var profileTab: some View {
@@ -96,7 +96,7 @@ private extension ContentView {
                 .labelStyle(.iconOnly)
         }
         .accessibilityIdentifier("profileTab")
-        .tag(3)
+        .tag(Tab.profile.rawValue)
     }
 }
 
