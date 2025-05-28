@@ -9,10 +9,10 @@ import SwiftUI
 import PhotosUI
 
 struct CreateEventView: View {
+    @StateObject private var createEventViewModel = CreateEventViewModel()
     @EnvironmentObject var eventsViewModel: EventsViewModel
     @State private var isSaving = false
     @EnvironmentObject var navigationState: NavigationState
-    @StateObject private var createEventViewModel = CreateEventViewModel()
     
     init() {
         _createEventViewModel = StateObject(wrappedValue: CreateEventViewModel())
