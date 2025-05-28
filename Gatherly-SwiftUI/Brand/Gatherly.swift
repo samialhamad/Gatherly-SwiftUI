@@ -56,3 +56,12 @@ enum SelectionMode {
     case view
     case select(selectedIDs: Binding<Set<Int>>)
 }
+
+// MARK: - Tabs
+
+enum Tab: Int {
+    case calendar = 0
+    case create = 1
+    case friends = 2
+    case profile = 3
+}
