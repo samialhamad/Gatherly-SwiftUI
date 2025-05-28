@@ -5,19 +5,23 @@
 //  Created by Sami Alhamad on 5/8/25.
 //
 
+import Combine
 import XCTest
 @testable import Gatherly_SwiftUI
 
 final class DeleteEventTests: XCTestCase {
     
     let calendar = Calendar.current
+    var cancellables = Set<AnyCancellable>()
     
     override func setUp() {
         super.setUp()
         UserDefaultsManager.removeEvents()
     }
     
-    func testDeleteEvent() async {
+    func testDeleteEvent() {
+        let expectation = XCTestExpectation(description: "Event is deleted and only the correct one remains")
+        
         let sampleDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
         
         var eventToDelete = Event(
@@ -30,10 +34,6 @@ final class DeleteEventTests: XCTestCase {
             startTimestamp: Int(calendar.date(bySettingHour: 10, minute: 0, second: 0, of: sampleDate)!.timestamp)
         )
         
-        eventToDelete = await GatherlyAPI.createEvent(eventToDelete)
-        
-        await GatherlyAPI.simulateNetworkDelay()
-        
         var eventToKeep = Event(
             date: calendar.startOfDay(for: sampleDate),
             description: "Keep this event",
@@ -44,12 +44,25 @@ final class DeleteEventTests: XCTestCase {
             startTimestamp: Int(calendar.date(bySettingHour: 14, minute: 0, second: 0, of: sampleDate)!.timestamp)
         )
         
-        eventToKeep = await GatherlyAPI.createEvent(eventToKeep)
+        var events = [eventToDelete, eventToKeep]
+        events[0].id = 1
+        events[1].id = 2
+        UserDefaultsManager.saveEvents(events)
         
-        let updatedEvents = await GatherlyAPI.deleteEvent(eventToDelete)
+        GatherlyAPI.deleteEvent(events[0])
+            .sink { updatedEvents in
+                XCTAssertFalse(updatedEvents.contains(where: { $0.id == events[0].id }))
+                XCTAssertTrue(updatedEvents.contains(where: { $0.id == events[1].id }))
+                XCTAssertEqual(updatedEvents.count, 1)
+                
+                let storedEvents = UserDefaultsManager.loadEvents()
+                XCTAssertEqual(storedEvents.count, 1)
+                XCTAssertEqual(storedEvents.first?.title, "Keep Me")
+                
+                expectation.fulfill()
+            }
+            .store(in: &cancellables)
         
-        XCTAssertFalse(updatedEvents.contains(where: { $0.id == eventToDelete.id }))
-        XCTAssertTrue(updatedEvents.contains(where: { $0.id == eventToKeep.id }))
-        XCTAssertEqual(updatedEvents.count, 1)
+        wait(for: [expectation], timeout: 2)
     }
 }
