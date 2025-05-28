@@ -11,7 +11,6 @@ import SwiftUI
 
 struct UserFormView: View {
     @State private var cancellables = Set<AnyCancellable>()
-    @State private var currentUserID: Int? = nil
     @State private var isSaving = false
     @State private var showingDeleteAlert = false
     
@@ -37,14 +36,6 @@ struct UserFormView: View {
                 }
             }
             .keyboardDismissable()
-            .onAppear {
-                GatherlyAPI.getUser()
-                    .receive(on: RunLoop.main)
-                    .sink { user in
-                        currentUserID = user?.id
-                    }
-                    .store(in: &cancellables)
-            }
         }
     }
 }
@@ -56,10 +47,10 @@ private extension UserFormView {
     private func activityMessage(for viewStore: ViewStore<UserFormFeature.State, UserFormFeature.Action>) -> String {
         if viewStore.isCreatingFriend {
             return Constants.UserFormView.addingFriendString
-        } else if viewStore.currentUser.id != currentUserID {
-            return Constants.UserFormView.updatingFriendString
-        } else {
+        } else if viewStore.currentUser.id == 1 {
             return Constants.UserFormView.updatingProfileString
+        } else {
+            return Constants.UserFormView.updatingFriendString
         }
     }
     
