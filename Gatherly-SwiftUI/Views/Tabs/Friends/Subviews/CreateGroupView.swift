@@ -103,7 +103,7 @@ private extension CreateGroupView {
                     await MainActor.run {
                         groupsViewModel.create(newGroup) { created in
                             navigationState.navigateToGroup = created
-                            navigationState.selectedTab = 2
+                            navigationState.switchToTab(.friends)
                             isSaving = false
                             dismiss()
                         }

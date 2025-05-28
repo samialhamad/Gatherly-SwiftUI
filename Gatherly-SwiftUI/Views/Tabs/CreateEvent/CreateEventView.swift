@@ -172,7 +172,7 @@ private extension CreateEventView {
                     createEventViewModel.clearFields()
                     navigationState.calendarSelectedDate = createdEvent.date ?? Date()
                     navigationState.navigateToEvent = createdEvent
-                    navigationState.selectedTab = 0
+                    navigationState.switchToTab(.calendar)
                     isSaving = false
                 }
             } label: {
