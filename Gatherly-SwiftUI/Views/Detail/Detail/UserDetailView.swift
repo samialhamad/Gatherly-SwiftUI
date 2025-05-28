@@ -79,12 +79,8 @@ private extension UserDetailView {
     
     // MARK: - Computed Vars
     
-    var currentUser: User? {
-        UserDefaultsManager.loadCurrentUser()
-    }
-    
     private var isViewingSelf: Bool {
-        currentUser?.id == user.id
+        usersViewModel.currentUser?.id == user.id
     }
     
     // MARK: - Functions
@@ -103,14 +99,15 @@ private extension UserDetailView {
         guard let targetID = user.id else {
             return
         }
-        guard let currentUser else {
+        
+        guard var currentUser = usersViewModel.currentUser else {
             return
         }
         
         currentUser.friendIDs?.removeAll(where: { $0 == targetID })
-        UserDefaultsManager.saveCurrentUser(currentUser)
-        
+        usersViewModel.update(currentUser)
         usersViewModel.delete(user)
+        
         dismiss()
     }
     

@@ -20,7 +20,7 @@ struct GroupDetailView: View {
     
     var body: some View {
         NavigationStack {
-            if let currentUser {
+            if let currentUser = usersViewModel.currentUser {
                 ZStack {
                     ScrollView {
                         VStack(spacing: Constants.GroupDetailView.vstackSpacing) {
@@ -62,10 +62,6 @@ private extension GroupDetailView {
     
     // MARK: - Computed Vars
     
-    var currentUser: User? {
-        UserDefaultsManager.loadCurrentUser()
-    }
-    
     var friendsDict: [Int: User] {
         Dictionary(uniqueKeysWithValues: usersViewModel.users.compactMap { user in
             guard let id = user.id else {
@@ -79,21 +75,22 @@ private extension GroupDetailView {
     // MARK: - Functions
     
     func leaveGroup() {
-        guard let currentUser else {
+        guard var currentUser = usersViewModel.currentUser else {
             return
         }
+
         guard let userID = currentUser.id else {
             return
         }
         
-        var updatedUser = currentUser
-        updatedUser.groupIDs?.removeAll(where: { $0 == group.id })
-        
+        currentUser.groupIDs?.removeAll(where: { $0 == group.id })
+
         var updatedGroup = group
-        updatedGroup.memberIDs.removeAll(where: { $0 == userID })
-        
-        usersViewModel.update(updatedUser)
+        updatedGroup.memberIDs.removeAll(where: { $0 == currentUser.id })
+
+        usersViewModel.update(currentUser)
         groupsViewModel.update(updatedGroup)
+        
         dismiss()
     }
     
@@ -119,12 +116,12 @@ private extension GroupDetailView {
     }
     
     var groupLeaderAndMembersView: some View {
-        let resolvedLeader: User? = group.leaderID == currentUser?.id
-        ? currentUser
-        : friendsDict[group.leaderID]
-        
+        let resolvedLeader: User? = group.leaderID == usersViewModel.currentUser?.id
+            ? usersViewModel.currentUser
+            : friendsDict[group.leaderID]
+
         let memberUsers: [User] = group.memberIDs.compactMap { id in
-            id == currentUser?.id ? currentUser : friendsDict[id]
+            id == usersViewModel.currentUser?.id ? usersViewModel.currentUser : friendsDict[id]
         }
         
         return Group {
@@ -154,7 +151,7 @@ private extension GroupDetailView {
     }
     
     var toolbarButton: some View {
-        if group.leaderID == currentUser?.id {
+        if group.leaderID == usersViewModel.currentUser?.id {
             AnyView(
                 Button("Edit") {
                     isShowingEditView = true

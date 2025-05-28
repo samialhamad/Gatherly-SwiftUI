@@ -11,7 +11,6 @@ import SwiftUI
 
 struct EventDetailView: View {
     @State private var cancellables = Set<AnyCancellable>()
-    @State private var currentUser: User? = nil
     @Environment(\.dismiss) var dismiss
     @StateObject private var eventDetailViewModel = EventDetailViewModel()
     @EnvironmentObject var eventsViewModel: EventsViewModel
@@ -21,6 +20,7 @@ struct EventDetailView: View {
     @EnvironmentObject var navigationState: NavigationState
     @State private var showMapOptions = false
     @State private var updatedEvent: Event
+    @EnvironmentObject var usersViewModel: UsersViewModel
     
     init(event: Event) {
         _updatedEvent = State(initialValue: event)
@@ -61,13 +61,9 @@ struct EventDetailView: View {
         }
         .refreshOnAppear()
         .onAppear {
-            let currentUserPublisher = GatherlyAPI.getUser()
-            let usersPublisher = GatherlyAPI.getUsers()
-            
-            Publishers.CombineLatest(currentUserPublisher, usersPublisher)
+            GatherlyAPI.getUsers()
                 .receive(on: RunLoop.main)
-                .sink { currentUser, users in
-                    self.currentUser = currentUser
+                .sink { users in
                     self.friendsDict = Dictionary(uniqueKeysWithValues: users.compactMap { user in
                         guard let id = user.id else {
                             return nil
@@ -87,7 +83,8 @@ private extension EventDetailView {
     // MARK: - Computed Vars
     
     private var planner: User? {
-        guard let currentUser, let plannerID = updatedEvent.plannerID else {
+        guard let currentUser = usersViewModel.currentUser,
+              let plannerID = updatedEvent.plannerID else {
             return nil
         }
         
@@ -102,7 +99,7 @@ private extension EventDetailView {
         return memberIDs
             .filter { $0 != updatedEvent.plannerID }
             .compactMap { id in
-                id == currentUser?.id ? currentUser : friendsDict[id]
+                id == usersViewModel.currentUser?.id ? usersViewModel.currentUser : friendsDict[id]
             }
     }
     
@@ -110,7 +107,7 @@ private extension EventDetailView {
     
     var editButton: some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
-            if updatedEvent.plannerID == currentUser?.id {
+            if updatedEvent.plannerID == usersViewModel.currentUser?.id {
                 Button("Edit") {
                     isShowingEditView = true
                 }
