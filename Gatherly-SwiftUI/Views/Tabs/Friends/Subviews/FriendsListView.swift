@@ -37,7 +37,7 @@ private extension FriendsListView {
     // MARK: - Computed Vars
     
     var friends: [User] {
-        guard let currentUser = UserDefaultsManager.loadCurrentUser() else {
+        guard let currentUser = usersViewModel.currentUser else {
             return []
         }
         
