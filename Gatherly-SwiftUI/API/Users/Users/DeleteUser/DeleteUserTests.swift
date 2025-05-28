@@ -5,17 +5,22 @@
 //  Created by Sami Alhamad on 5/18/25.
 //
 
+import Combine
 import XCTest
 @testable import Gatherly_SwiftUI
 
 final class DeleteUserTests: XCTestCase {
+    
+    var cancellables = Set<AnyCancellable>()
     
     override func setUp() {
         super.setUp()
         UserDefaultsManager.removeUsers()
     }
     
-    func testDeleteUser() async {
+    func testDeleteUser() {
+        let expectation = XCTestExpectation(description: "User is deleted and remaining users are returned")
+        
         let userToDelete = User(
             createdTimestamp: Int(Date().timestamp),
             email: "delete@example.com",
@@ -44,13 +49,20 @@ final class DeleteUserTests: XCTestCase {
         
         UserDefaultsManager.saveUsers([userToDelete, userToKeep])
         
-        let allUsersBefore = UserDefaultsManager.loadUsers()
-        XCTAssertEqual(allUsersBefore.count, 2)
+        GatherlyAPI.deleteUser(userToDelete)
+            .sink { updatedUsers in
+                XCTAssertEqual(updatedUsers.count, 1)
+                XCTAssertFalse(updatedUsers.contains(where: { $0.id == userToDelete.id }))
+                XCTAssertTrue(updatedUsers.contains(where: { $0.id == userToKeep.id }))
+                
+                let storedUsers = UserDefaultsManager.loadUsers()
+                XCTAssertEqual(storedUsers.count, 1)
+                XCTAssertEqual(storedUsers.first?.email, "keep@example.com")
+                
+                expectation.fulfill()
+            }
+            .store(in: &cancellables)
         
-        let updatedUsers = await GatherlyAPI.deleteUser(userToDelete)
-        
-        XCTAssertEqual(updatedUsers.count, 1)
-        XCTAssertFalse(updatedUsers.contains(where: { $0.id == userToDelete.id }))
-        XCTAssertTrue(updatedUsers.contains(where: { $0.id == userToKeep.id }))
+        wait(for: [expectation], timeout: 2)
     }
 }
