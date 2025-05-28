@@ -13,6 +13,7 @@ final class EventHighlightDelegate: ElegantCalendarDelegate {
     @Binding var events: [Event]
     @Binding var selectedDate: Date
     
+    private var didAutoSelectInitialDate = false
     let navigationState: NavigationState
     
     init(
@@ -28,20 +29,18 @@ final class EventHighlightDelegate: ElegantCalendarDelegate {
     func calendar(didSelectDay date: Date) {
         selectedDate = date
         
-        if navigationState.hasShownDayEventsView == false {
+        // Skip the first automatic call to resolve app launch bug
+        if !didAutoSelectInitialDate {
+            didAutoSelectInitialDate = true
+            return
+        }
+        
+        if !navigationState.hasShownDayEventsView {
             navigationState.hasShownDayEventsView = true
             return
         }
         
-        let hasEvents = events.contains { event in
-            guard let eventDate = event.date else {
-                return false
-            }
-            
-            return Date.isSameDay(date1: eventDate, date2: date)
-        }
-        
-        if hasEvents {
+        if hasEvent(on: date) {
             navigationState.navigateToEventsForDate = date
         }
     }
