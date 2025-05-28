@@ -85,7 +85,7 @@ extension FriendsView {
         }
 
         usersViewModel.create(newFriend) { createdFriend in
-            guard var currentUser = UserDefaultsManager.loadCurrentUser() else {
+            guard var currentUser = usersViewModel.currentUser else {
                 createFriendStore = nil
                 return
             }
@@ -93,7 +93,7 @@ extension FriendsView {
             if let newID = createdFriend.id, !(currentUser.friendIDs ?? []).contains(newID) {
                 currentUser.friendIDs?.append(newID)
                 currentUser.friendIDs = currentUser.friendIDs?.sorted()
-                UserDefaultsManager.saveCurrentUser(currentUser)
+                usersViewModel.update(currentUser)
             }
 
             createFriendStore = nil
