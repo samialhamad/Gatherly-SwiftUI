@@ -17,6 +17,7 @@ struct EventDetailView: View {
     @EnvironmentObject var eventsViewModel: EventsViewModel
     @State private var friendsDict: [Int: User] = [:]
     @State private var isShowingEditView = false
+    @State private var isLoading = true
     @State private var showMapOptions = false
     @State private var updatedEvent: Event
     
@@ -25,30 +26,36 @@ struct EventDetailView: View {
     }
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                eventBannerImageView
-                
-                VStack(alignment: .leading, spacing: Constants.EventDetailView.bodyVStackSpacing) {
-                    eventDateView
-                    eventTimeView
-                    eventDescriptionView
-                    eventMapPreview
-                    eventPlannerAndMembersView
-                    eventCategoriesView
-                    Spacer()
+        Group {
+            if isLoading {
+                ActivityIndicator(message: Constants.EventDetailView.loadingString)
+            } else {
+                ScrollView {
+                    VStack(spacing: 0) {
+                        eventBannerImageView
+                        
+                        VStack(alignment: .leading, spacing: Constants.EventDetailView.bodyVStackSpacing) {
+                            eventDateView
+                            eventTimeView
+                            eventDescriptionView
+                            eventMapPreview
+                            eventPlannerAndMembersView
+                            eventCategoriesView
+                            Spacer()
+                        }
+                        .padding()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .navigationTitle(updatedEvent.title ?? "Untitled Event")
+                    .navigationBarTitleDisplayMode(.large)
+                    .toolbar {
+                        editButton
+                    }
+                    .toolbarRole(.editor)
+                    .sheet(isPresented: $isShowingEditView) {
+                        editEventSheet
+                    }
                 }
-                .padding()
-            }
-            .frame(maxWidth: .infinity)
-            .navigationTitle(updatedEvent.title ?? "Untitled Event")
-            .navigationBarTitleDisplayMode(.large)
-            .toolbar {
-                editButton
-            }
-            .toolbarRole(.editor)
-            .sheet(isPresented: $isShowingEditView) {
-                editEventSheet
             }
         }
         .refreshOnAppear()
@@ -67,6 +74,7 @@ struct EventDetailView: View {
                         
                         return (id, user)
                     })
+                    self.isLoading = false
                 }
                 .store(in: &cancellables)
         }
