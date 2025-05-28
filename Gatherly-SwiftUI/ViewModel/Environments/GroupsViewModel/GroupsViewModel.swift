@@ -38,11 +38,6 @@ final class GroupsViewModel: ObservableObject {
             .store(in: &cancellables)
     }
     
-    func forceReload() {
-        hasLoaded = false
-        fetch()
-    }
-    
     // MARK: - CRUD
     
     func create(_ group: UserGroup, completion: @escaping (UserGroup) -> Void = { _ in }) {

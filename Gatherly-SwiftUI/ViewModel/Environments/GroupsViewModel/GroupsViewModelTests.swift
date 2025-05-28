@@ -57,26 +57,6 @@ final class GroupsViewModelTests: XCTestCase {
 //        wait(for: [expectation], timeout: 3)
 //    }
 //    
-//    func testForceReload_ignoresHasLoadedFlag() {
-//        let group = makeSampleGroup(id: 2)
-//        UserDefaultsManager.saveGroups([group])
-//        
-//        let expectation = XCTestExpectation(description: "forceReload reloads regardless of hasLoaded")
-//        
-//        viewModel.forceReload()
-//        
-//        viewModel.$groups
-//            .dropFirst()
-//            .sink { loadedGroups in
-//                XCTAssertEqual(loadedGroups.count, 1)
-//                XCTAssertEqual(loadedGroups.first?.id, 2)
-//                expectation.fulfill()
-//            }
-//            .store(in: &cancellables)
-//        
-//        wait(for: [expectation], timeout: 3)
-//    }
-//    
 //    func testCreateGroup_addsToList() {
 //        let expectation = XCTestExpectation(description: "Group is created and added to list")
 //        

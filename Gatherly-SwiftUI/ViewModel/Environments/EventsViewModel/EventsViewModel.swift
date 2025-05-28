@@ -37,11 +37,6 @@ final class EventsViewModel: ObservableObject {
             .store(in: &cancellables)
     }
 
-    func forceReload() {
-        hasLoaded = false
-        fetch()
-    }
-
     // MARK: - CRUD
 
     func create(_ event: Event, completion: @escaping (Event) -> Void = { _ in }) {

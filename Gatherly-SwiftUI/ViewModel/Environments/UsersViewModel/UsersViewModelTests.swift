@@ -61,26 +61,6 @@ final class UsersViewModelTests: XCTestCase {
 //        wait(for: [expectation], timeout: 3)
 //    }
 //    
-//    func testForceReload_ignoresHasLoadedFlag() {
-//        let user = makeSampleUser(id: 2)
-//        UserDefaultsManager.saveUsers([user])
-//        
-//        let expectation = XCTestExpectation(description: "forceReload reloads regardless of load state")
-//        
-//        viewModel.forceReload()
-//        
-//        viewModel.$users
-//            .dropFirst()
-//            .sink { users in
-//                XCTAssertEqual(users.count, 1)
-//                XCTAssertEqual(users.first?.id, 2)
-//                expectation.fulfill()
-//            }
-//            .store(in: &cancellables)
-//        
-//        wait(for: [expectation], timeout: 3)
-//    }
-//    
 //    func testCreate_addsUserToList() {
 //        let expectation = XCTestExpectation(description: "User is created and appended")
 //        

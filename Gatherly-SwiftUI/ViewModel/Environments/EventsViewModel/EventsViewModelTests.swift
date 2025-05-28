@@ -61,26 +61,6 @@ final class EventsViewModelTests: XCTestCase {
 //        viewModel.loadIfNeeded()
 //        wait(for: [expectation], timeout: 3)
 //    }
-//
-//    
-//    func testForceReload_reloadsEvenIfLoaded() {
-//        let event = makeSampleEvent(id: 2)
-//        UserDefaultsManager.saveEvents([event])
-//        
-//        let expectation = XCTestExpectation(description: "forceReload reloads regardless of flag")
-//                
-//        viewModel.$events
-//            .dropFirst()
-//            .sink { events in
-//                XCTAssertEqual(events.count, 1)
-//                XCTAssertEqual(events.first?.id, 2)
-//                expectation.fulfill()
-//            }
-//            .store(in: &cancellables)
-//        
-//        viewModel.forceReload()
-//        wait(for: [expectation], timeout: 3)
-//    }
 //    
 //    func testCreate_addsEventToList() {
 //        let expectation = XCTestExpectation(description: "Event is created and added")
