@@ -21,7 +21,22 @@ enum ContactSyncHelper {
             }
         }
     }
-
+    
+    static func forceSync(currentUserID: Int = 1, completion: @escaping () -> Void = {}) {
+        ContactSyncManager.shared.fetchContacts { contacts in
+            Task {
+                let (newUsers, newFriendIDs) = await generateUsersFromContacts(contacts)
+                
+                appendUsersAndUpdateFriends(newUsers, newFriendIDs, currentUserID: currentUserID)
+                UserDefaultsManager.setDidSyncContacts(true)
+                
+                DispatchQueue.main.async {
+                    completion()
+                }
+            }
+        }
+    }
+    
     private static func generateUsersFromContacts(_ contacts: [SyncedContact]) async -> ([User], [Int]) {
         let users = UserDefaultsManager.loadUsers()
         let existingPhones = Set(users.compactMap { $0.phone?.filter(\.isWholeNumber) })
