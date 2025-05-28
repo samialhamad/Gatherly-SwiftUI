@@ -9,6 +9,7 @@ import Combine
 import Foundation
 
 final class UsersViewModel: ObservableObject {
+    @Published var currentUser: User?
     @Published var users: [User] = []
     @Published var isLoading = false
 
@@ -27,10 +28,14 @@ final class UsersViewModel: ObservableObject {
 
     func fetch() {
         isLoading = true
-        
-        GatherlyAPI.getUsers()
+
+        let currentUserPublisher = GatherlyAPI.getUser()
+        let usersPublisher = GatherlyAPI.getUsers()
+
+        Publishers.CombineLatest(currentUserPublisher, usersPublisher)
             .receive(on: RunLoop.main)
-            .sink { [weak self] users in
+            .sink { [weak self] currentUser, users in
+                self?.currentUser = currentUser
                 self?.users = users
                 self?.isLoading = false
                 self?.hasLoaded = true
@@ -55,12 +60,23 @@ final class UsersViewModel: ObservableObject {
 
     func update(_ updatedUser: User) {
         isLoading = true
-        
-        GatherlyAPI.updateUser(updatedUser)
+
+        let publisher: AnyPublisher<User, Never>
+
+        if updatedUser.id == currentUser?.id {
+            publisher = GatherlyAPI.updateCurrentUser(updatedUser)
+        } else {
+            publisher = GatherlyAPI.updateUser(updatedUser)
+        }
+
+        publisher
             .receive(on: RunLoop.main)
             .sink { [weak self] user in
                 if let index = self?.users.firstIndex(where: { $0.id == user.id }) {
                     self?.users[index] = user
+                }
+                if user.id == self?.currentUser?.id {
+                    self?.currentUser = user
                 }
                 self?.isLoading = false
             }
