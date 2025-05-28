@@ -45,10 +45,10 @@ final class GroupsViewModel: ObservableObject {
         
         GatherlyAPI.createGroup(group)
             .receive(on: RunLoop.main)
-            .sink { [weak self] createdUser in
-                self?.groups.append(createdUser)
+            .sink { [weak self] createdGroup in
+                self?.groups.append(createdGroup)
                 self?.isLoading = false
-                completion(createdUser)
+                completion(createdGroup)
             }
             .store(in: &cancellables)
     }
@@ -73,8 +73,8 @@ final class GroupsViewModel: ObservableObject {
         
         GatherlyAPI.deleteGroup(group)
             .receive(on: RunLoop.main)
-            .sink { [weak self] newList in
-                self?.groups = newList
+            .sink { [weak self] groups in
+                self?.groups = groups
                 self?.isLoading = false
             }
             .store(in: &cancellables)

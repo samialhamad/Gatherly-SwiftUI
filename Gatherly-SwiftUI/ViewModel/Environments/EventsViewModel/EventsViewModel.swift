@@ -57,9 +57,9 @@ final class EventsViewModel: ObservableObject {
         
         GatherlyAPI.updateEvent(updated)
             .receive(on: RunLoop.main)
-            .sink { [weak self] saved in
-                if let index = self?.events.firstIndex(where: { $0.id == saved.id }) {
-                    self?.events[index] = saved
+            .sink { [weak self] updatedEvent in
+                if let index = self?.events.firstIndex(where: { $0.id == updatedEvent.id }) {
+                    self?.events[index] = updatedEvent
                 }
                 self?.isLoading = false
             }
@@ -71,8 +71,8 @@ final class EventsViewModel: ObservableObject {
         
         GatherlyAPI.deleteEvent(event)
             .receive(on: RunLoop.main)
-            .sink { [weak self] newList in
-                self?.events = newList
+            .sink { [weak self] events in
+                self?.events = events
                 self?.isLoading = false
             }
             .store(in: &cancellables)
