@@ -168,10 +168,10 @@ private extension CreateEventView {
                 isSaving = true
                 let newEvent = createEventViewModel.builtEvent
                 
-                eventsViewModel.create(newEvent) { created in
+                eventsViewModel.create(newEvent) { createdEvent in
                     createEventViewModel.clearFields()
-                    navigationState.calendarSelectedDate = created.date ?? Date()
-                    navigationState.navigateToEvent = created
+                    navigationState.calendarSelectedDate = createdEvent.date ?? Date()
+                    navigationState.navigateToEvent = createdEvent
                     navigationState.selectedTab = 0
                     isSaving = false
                 }
