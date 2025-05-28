@@ -11,16 +11,19 @@ import SwiftUI
 
 struct ProfileView: View {
     @State private var cancellables = Set<AnyCancellable>()
-    @State private var currentUser: User? = nil
-    @State private var isLoading = true
     @State private var userFormStore: Store<UserFormFeature.State, UserFormFeature.Action>? = nil
+    @EnvironmentObject var usersViewModel: UsersViewModel
     @State private var refreshID = UUID()
+    
+    private var isLoading: Bool {
+        usersViewModel.isLoading || usersViewModel.currentUser == nil
+    }
     
     var body: some View {
         NavigationStack {
             if isLoading {
                 ActivityIndicator(message: Constants.ProfileView.loadingString)
-            } else if let currentUser {
+            } else if let currentUser = usersViewModel.currentUser {
                 ScrollView {
                     VStack(spacing: Constants.ProfileView.vstackSpacing) {
                         AvatarHeaderView(
@@ -51,15 +54,7 @@ struct ProfileView: View {
         }
         .refreshOnAppear()
         .onAppear {
-            isLoading = true
-
-            GatherlyAPI.getUser()
-                .receive(on: RunLoop.main)
-                .sink { user in
-                    self.currentUser = user
-                    self.isLoading = false
-                }
-                .store(in: &cancellables)
+            usersViewModel.loadIfNeeded()
         }
     }
 }
@@ -79,7 +74,8 @@ private extension ProfileView {
         case .cancel:
             break
         case .delegate(let delegateAction):
-            if case .didSave = delegateAction {
+            if case let .didSave(updatedUser) = delegateAction {
+                usersViewModel.update(updatedUser)
                 refreshID = UUID()
             }
         default:
