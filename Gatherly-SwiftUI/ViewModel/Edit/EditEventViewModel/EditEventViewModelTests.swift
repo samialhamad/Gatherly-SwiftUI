@@ -37,7 +37,7 @@ final class EditEventViewModelTests: XCTestCase {
         let viewModel = EditEventViewModel(event: event)
         viewModel.event.title = "Updated Title"
         
-        let updatedEvent = await viewModel.updateEvent()
+        let updatedEvent = await viewModel.prepareUpdatedEvent()
         XCTAssertEqual(updatedEvent.title, "Updated Title")
     }
     
@@ -46,7 +46,7 @@ final class EditEventViewModelTests: XCTestCase {
         let viewModel = EditEventViewModel(event: event)
         viewModel.event.description = "Updated description"
         
-        let updatedEvent = await viewModel.updateEvent()
+        let updatedEvent = await viewModel.prepareUpdatedEvent()
         XCTAssertEqual(updatedEvent.description, "Updated description")
     }
     
@@ -66,7 +66,7 @@ final class EditEventViewModelTests: XCTestCase {
         viewModel.event.startTimestamp = Int(expectedStart.timestamp)
         viewModel.event.endTimestamp = Int(expectedEnd.timestamp)
         
-        let updatedEvent = await viewModel.updateEvent()
+        let updatedEvent = await viewModel.prepareUpdatedEvent()
         XCTAssertEqual(updatedEvent.date, calendar.startOfDay(for: fixedDate))
         XCTAssertEqual(updatedEvent.startTimestamp, Int(expectedStart.timestamp))
         XCTAssertEqual(updatedEvent.endTimestamp, Int(expectedEnd.timestamp))
@@ -77,7 +77,7 @@ final class EditEventViewModelTests: XCTestCase {
         let viewModel = EditEventViewModel(event: event)
         viewModel.event.memberIDs = [2, 3, 4]
         
-        let updatedEvent = await viewModel.updateEvent()
+        let updatedEvent = await viewModel.prepareUpdatedEvent()
         XCTAssertEqual(updatedEvent.memberIDs, [2, 3, 4])
     }
     
@@ -88,7 +88,7 @@ final class EditEventViewModelTests: XCTestCase {
         let viewModel = EditEventViewModel(event: event)
         viewModel.event.categories = [.sports, .education]
         
-        let updatedEvent = await viewModel.updateEvent()
+        let updatedEvent = await viewModel.prepareUpdatedEvent()
         XCTAssertEqual(updatedEvent.categories, [.sports, .education])
     }
     
@@ -99,7 +99,7 @@ final class EditEventViewModelTests: XCTestCase {
         let viewModel = EditEventViewModel(event: event)
         viewModel.selectedBannerImage = UIImage(systemName: "star.fill")!
         
-        let updatedEvent = await viewModel.updateEvent()
+        let updatedEvent = await viewModel.prepareUpdatedEvent()
         XCTAssertNotNil(updatedEvent.bannerImageName)
     }
     
