@@ -148,7 +148,9 @@ private extension ProfileView {
             .accessibilityIdentifier("editProfileButton")
             
             Button {
-                ContactSyncHelper.runIfNeeded(currentUserID: 1)
+                ContactSyncHelper.forceSync(currentUserID: 1) {
+                    usersViewModel.forceReload()
+                }
             } label: {
                 profileRowContent(
                     title: "Sync Contacts", icon: "arrow.trianglehead.2.clockwise.rotate.90.circle.fill")
