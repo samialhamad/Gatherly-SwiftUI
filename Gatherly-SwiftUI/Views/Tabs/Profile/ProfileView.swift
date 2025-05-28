@@ -148,6 +148,7 @@ private extension ProfileView {
             .accessibilityIdentifier("editProfileButton")
             
             Button {
+                usersViewModel.isLoading = true
                 ContactSyncHelper.forceSync(currentUserID: 1) {
                     usersViewModel.forceReload()
                 }
