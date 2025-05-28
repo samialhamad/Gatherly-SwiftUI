@@ -38,9 +38,9 @@ private extension GroupsListView {
     // MARK: - Computed var
     
     var currentUser: User? {
-        UserDefaultsManager.loadCurrentUser()
+        usersViewModel.currentUser
     }
-    
+   
     var filteredGroups: [UserGroup] {
         guard let currentUser else {
             return []
