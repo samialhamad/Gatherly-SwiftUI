@@ -25,15 +25,13 @@ final class CreateGroupViewModelTests: XCTestCase {
         viewModel.groupImage = UIImage(systemName: "person.circle")
         viewModel.bannerImage = UIImage(systemName: "photo")
         
-        let createdGroup = await viewModel.createGroup()
+        let group = await viewModel.preparedGroup()
         
-        XCTAssertEqual(createdGroup.name, "Test Group")
-        XCTAssertEqual(createdGroup.leaderID, 1)
-        XCTAssertEqual(createdGroup.memberIDs, [2, 3])
-        XCTAssertNotNil(createdGroup.id)
-        XCTAssertGreaterThan(createdGroup.id ?? 0, 0)
-        XCTAssertNotNil(createdGroup.imageName)
-        XCTAssertNotNil(createdGroup.bannerImageName)
+        XCTAssertEqual(group.name, "Test Group")
+        XCTAssertEqual(group.leaderID, 1)
+        XCTAssertEqual(group.memberIDs, [2, 3])
+        XCTAssertNotNil(group.imageName)
+        XCTAssertNotNil(group.bannerImageName)
     }
     
     //MARK: - isFormEmpty
