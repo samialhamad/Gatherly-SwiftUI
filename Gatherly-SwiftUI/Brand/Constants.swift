@@ -89,6 +89,7 @@ struct Constants {
         static let eventMapPreviewTextPadding: CGFloat = 4
         static let eventMapPreviewCornerRadius: CGFloat = 8
         static let eventMapPreviewShadow: CGFloat = 2
+        static let loadingString: String = "Loading this event!"
     }
     
     struct EventsGroupedListView {
