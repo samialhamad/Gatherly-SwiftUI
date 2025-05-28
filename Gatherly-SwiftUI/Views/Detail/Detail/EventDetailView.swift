@@ -18,6 +18,7 @@ struct EventDetailView: View {
     @State private var friendsDict: [Int: User] = [:]
     @State private var isShowingEditView = false
     @State private var isLoading = true
+    @EnvironmentObject var navigationState: NavigationState
     @State private var showMapOptions = false
     @State private var updatedEvent: Event
     
@@ -125,6 +126,12 @@ private extension EventDetailView {
             onSave: { savedEvent in
                 self.updatedEvent = savedEvent
                 eventsViewModel.update(savedEvent)
+                
+                if let newDate = savedEvent.date {
+                    navigationState.calendarSelectedDate = newDate
+                    navigationState.navigateToEventsForDate = newDate
+                }
+                
                 isShowingEditView = false
             },
             onCancel: {
