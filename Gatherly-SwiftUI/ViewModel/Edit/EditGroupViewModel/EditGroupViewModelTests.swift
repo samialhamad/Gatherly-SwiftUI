@@ -33,7 +33,7 @@ final class EditGroupViewModelTests: XCTestCase {
         let viewModel = EditGroupViewModel(group: originalGroup)
         
         viewModel.group.name = "Updated Group Name"
-        let updatedGroup = await viewModel.updateGroup()
+        let updatedGroup = await viewModel.prepareUpdatedGroup()
         
         XCTAssertEqual(updatedGroup.name, "Updated Group Name")
     }
@@ -43,7 +43,7 @@ final class EditGroupViewModelTests: XCTestCase {
         let viewModel = EditGroupViewModel(group: originalGroup)
         
         viewModel.group.memberIDs = [1, 2, 3]
-        let updatedGroup = await viewModel.updateGroup()
+        let updatedGroup = await viewModel.prepareUpdatedGroup()
         
         XCTAssertEqual(Set(updatedGroup.memberIDs), Set([1, 2, 3]))
     }
@@ -53,7 +53,7 @@ final class EditGroupViewModelTests: XCTestCase {
         let viewModel = EditGroupViewModel(group: originalGroup)
         
         viewModel.groupImage = UIImage(systemName: "person.circle.fill")!
-        let updatedGroup = await viewModel.updateGroup()
+        let updatedGroup = await viewModel.prepareUpdatedGroup()
         
         XCTAssertNotNil(updatedGroup.imageName)
     }
@@ -63,7 +63,7 @@ final class EditGroupViewModelTests: XCTestCase {
         let viewModel = EditGroupViewModel(group: originalGroup)
         
         viewModel.bannerImage = UIImage(systemName: "star.fill")!
-        let updatedGroup = await viewModel.updateGroup()
+        let updatedGroup = await viewModel.prepareUpdatedGroup()
         
         XCTAssertNotNil(updatedGroup.bannerImageName)
     }
@@ -79,6 +79,7 @@ final class EditGroupViewModelTests: XCTestCase {
         viewModel.removeGroupImage()
         
         XCTAssertNil(viewModel.groupImage)
+        XCTAssertNil(viewModel.group.imageName)
     }
     
     func testRemoveBannerImage() {
@@ -90,6 +91,7 @@ final class EditGroupViewModelTests: XCTestCase {
         viewModel.removeBannerImage()
         
         XCTAssertNil(viewModel.bannerImage)
+        XCTAssertNil(viewModel.group.bannerImageName)
     }
     
     //MARK: - isFormEmpty
@@ -117,7 +119,7 @@ final class EditGroupViewModelTests: XCTestCase {
         let viewModel = EditGroupViewModel(group: group)
         
         XCTAssertEqual(viewModel.leaderID, group.leaderID)
-        let updatedGroup = await viewModel.updateGroup()
+        let updatedGroup = await viewModel.prepareUpdatedGroup()
         XCTAssertEqual(updatedGroup.leaderID, group.leaderID)
     }
 }
