@@ -10,7 +10,7 @@ import XCTest
 
 final class UserTests: XCTestCase {
     
-    //MARK: - Equatable
+    // MARK: - Equatable
     
     func testEqualTrue() {
         let user0 = User(firstName: "Sami", id: 0)
@@ -26,7 +26,7 @@ final class UserTests: XCTestCase {
         XCTAssertNotEqual(user0, user1)
     }
     
-    //MARK: - Computed Vars
+    // MARK: - Computed Vars
     
     func testUserHasEventsTrue() {
         let user0 = User(eventIDs: [1], firstName: "Sami", id: 0)
@@ -68,7 +68,7 @@ final class UserTests: XCTestCase {
         XCTAssertFalse(user.hasGroups)
     }
     
-    //MARK: - Functions
+    // MARK: - Functions
     
     func testResolvedFriends_returnsCorrectUsers() {
         let user = User(friendIDs: [2, 3], id: 1)

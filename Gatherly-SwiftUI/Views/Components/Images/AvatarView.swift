@@ -45,7 +45,7 @@ struct AvatarView: View {
 
 private extension AvatarView {
     
-    //MARK: - Computed vars
+    // MARK: - Computed vars
     
     private var initials: String {
         if let user {
@@ -71,7 +71,7 @@ private extension AvatarView {
         return nil
     }
     
-    //MARK: - Subviews
+    // MARK: - Subviews
     
     private func profileImageView(_ image: UIImage) -> some View {
         Image(uiImage: profileImage!)

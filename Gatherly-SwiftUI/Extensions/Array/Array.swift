@@ -7,7 +7,7 @@
 
 import Foundation
 
-//MARK: - Event
+// MARK: - Event
 
 extension Array where Element == Event {
     

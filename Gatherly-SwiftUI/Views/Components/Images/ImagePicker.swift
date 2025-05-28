@@ -38,7 +38,7 @@ struct ImagePicker: View {
 
 private extension ImagePicker {
     
-    //MARK: - Functions
+    // MARK: - Functions
     
     func cropConfig(for shape: MaskShape) -> SwiftyCropConfiguration {
         SwiftyCropConfiguration(
@@ -51,7 +51,7 @@ private extension ImagePicker {
         )
     }
     
-    //MARK: - Subviews
+    // MARK: - Subviews
     
     var selectedImagePreview: some View {
         VStack(alignment: .leading, spacing: Constants.ImagePicker.vstackSpacing) {

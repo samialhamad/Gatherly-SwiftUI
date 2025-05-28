@@ -35,7 +35,7 @@ struct GroupsListView: View {
 
 private extension GroupsListView {
     
-    //MARK: - Computed var
+    // MARK: - Computed var
     
     var currentUser: User? {
         UserDefaultsManager.loadCurrentUser()
@@ -76,7 +76,7 @@ private extension GroupsListView {
         }
     }
     
-    //MARK: - Subviews
+    // MARK: - Subviews
     
     @ViewBuilder
     private func rowView(for group: UserGroup) -> some View {

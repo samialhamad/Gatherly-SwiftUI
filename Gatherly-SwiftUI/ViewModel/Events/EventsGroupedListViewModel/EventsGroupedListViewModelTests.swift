@@ -10,6 +10,6 @@ import XCTest
 
 final class EventsGroupedListViewModelTests: XCTestCase {
 
-    //MARK: - Tests TO DO
+    // MARK: - Tests TO DO
     
 }

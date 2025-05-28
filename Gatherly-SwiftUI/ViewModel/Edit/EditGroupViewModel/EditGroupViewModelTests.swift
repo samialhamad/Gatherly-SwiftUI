@@ -94,7 +94,7 @@ final class EditGroupViewModelTests: XCTestCase {
         XCTAssertNil(viewModel.group.bannerImageName)
     }
     
-    //MARK: - isFormEmpty
+    // MARK: - isFormEmpty
     
     func testIsFormEmptyTrue() {
         let group = makeSampleGroup()
@@ -112,7 +112,7 @@ final class EditGroupViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.isFormEmpty)
     }
     
-    //MARK: - leaderID
+    // MARK: - leaderID
     
     func testLeaderIDRemainsUnchanged() async {
         let group = makeSampleGroup()

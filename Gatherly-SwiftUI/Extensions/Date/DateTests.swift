@@ -10,7 +10,7 @@ import XCTest
 
 final class DateTests: XCTestCase {
     
-    //MARK: - Timestamp
+    // MARK: - Timestamp
     
     func testTimestamp() {
         let timestamp = 780192000
@@ -25,7 +25,7 @@ final class DateTests: XCTestCase {
         XCTAssertEqual(780130800, dayTimestamp)
     }
     
-    //MARK: - startOfDay
+    // MARK: - startOfDay
     
     func testStartOfDay() {
         let calendar = Calendar.current
@@ -41,7 +41,7 @@ final class DateTests: XCTestCase {
         XCTAssertEqual(result, expected)
     }
     
-    //MARK: - Plus / Minus + Between
+    // MARK: - Plus / Minus + Between
     
     //years
     
@@ -155,7 +155,7 @@ final class DateTests: XCTestCase {
         XCTAssertEqual(secondsBetween, 30)
     }
     
-    //MARK: - Same
+    // MARK: - Same
     
     func testIsSameDay() {
         let date1 = Date()
@@ -166,7 +166,7 @@ final class DateTests: XCTestCase {
         XCTAssertFalse(Date.isSameDay(date1: date1, date2: date3))
     }
     
-    //MARK: - Merge
+    // MARK: - Merge
     
     func testMerge() {
         let calendar = Calendar.current
@@ -180,7 +180,7 @@ final class DateTests: XCTestCase {
         XCTAssertEqual(mergedDate, expectedDate)
     }
     
-    //MARK: - Time String
+    // MARK: - Time String
     
     //    func testTimeString10Days() {
     //        let date1 = Date()

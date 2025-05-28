@@ -9,7 +9,7 @@ import Foundation
 
 extension Date {
     
-    //MARK: - Timestamp
+    // MARK: - Timestamp
     
     public init(_ timestamp: Int) {
         self.init(timeIntervalSince1970: TimeInterval(timestamp))
@@ -30,7 +30,7 @@ extension Date {
         return day?.timestamp
     }
     
-    //MARK: - startOfDay
+    // MARK: - startOfDay
     
     public static func startOfDay(_ date: Date?) -> Date {
         guard let date = date else {
@@ -39,7 +39,7 @@ extension Date {
         return Calendar.current.startOfDay(for: date)
     }
     
-    //MARK: - Plus / Minus
+    // MARK: - Plus / Minus
     
     public func plus(
         calendarComponent: Calendar.Component,
@@ -64,7 +64,7 @@ extension Date {
         )
     }
     
-    //MARK: - Between
+    // MARK: - Between
     
     public static func yearsBetween(_ date1: Date, _ date2: Date) -> Int {
         let calendar = Calendar.current
@@ -122,7 +122,7 @@ extension Date {
         return components.second!
     }
     
-    //MARK: - Same
+    // MARK: - Same
     
     public static func isSameDay(date1: Date, date2: Date) -> Bool {
         return Calendar.current.isDate(date1, inSameDayAs:date2)
@@ -181,7 +181,7 @@ extension Date {
         return lowerBound...dayEnd
     }
     
-    //MARK: - Time String
+    // MARK: - Time String
     
     public static func timeString(date1: Date, date2: Date) -> String {
         let secondsBetween = Date.secondsBetween(date1, date2)

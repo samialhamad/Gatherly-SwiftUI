@@ -34,7 +34,7 @@ final class CreateGroupViewModelTests: XCTestCase {
         XCTAssertNotNil(group.bannerImageName)
     }
     
-    //MARK: - isFormEmpty
+    // MARK: - isFormEmpty
     
     func testIsFormEmpty() {
         let viewModel = CreateGroupViewModel(currentUserID: 1)

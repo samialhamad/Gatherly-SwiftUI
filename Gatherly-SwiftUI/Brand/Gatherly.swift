@@ -23,7 +23,7 @@ struct Colors {
     }
 }
 
-//MARK: - Configure
+// MARK: - Configure
 
 struct GatherlyAppearance {
     static func configure() {
@@ -36,7 +36,7 @@ struct GatherlyAppearance {
     }
 }
 
-//MARK: - Categories
+// MARK: - Categories
 
 enum EventCategory: String, Codable, CaseIterable {
     case food = "Food"
@@ -50,7 +50,7 @@ enum EventCategory: String, Codable, CaseIterable {
     static let allCases: [EventCategory] = [.food, .entertainment, .travel, .sports, .education, .networking, .other]
 }
 
-//MARK: - SelectionMode
+// MARK: - SelectionMode
 
 enum SelectionMode {
     case view

@@ -21,7 +21,7 @@ struct Event: Codable, Equatable, Hashable, Identifiable {
     var title: String?
     var startTimestamp: Int?
     
-    //MARK: - Computed Vars
+    // MARK: - Computed Vars
     
     var hasStarted: Bool {
         guard let eventStartTimestamp = startTimestamp else {

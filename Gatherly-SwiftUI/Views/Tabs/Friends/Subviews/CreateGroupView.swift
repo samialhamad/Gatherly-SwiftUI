@@ -82,7 +82,7 @@ private extension CreateGroupView {
         )
     }
     
-    //MARK: - Subviews
+    // MARK: - Subviews
     
     var cancelToolbarButton: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {

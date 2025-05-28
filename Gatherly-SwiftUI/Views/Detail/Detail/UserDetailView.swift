@@ -77,7 +77,7 @@ struct UserDetailView: View {
 
 private extension UserDetailView {
     
-    //MARK: - Computed Vars
+    // MARK: - Computed Vars
     
     var currentUser: User? {
         UserDefaultsManager.loadCurrentUser()
@@ -87,7 +87,7 @@ private extension UserDetailView {
         currentUser?.id == user.id
     }
     
-    //MARK: - Functions
+    // MARK: - Functions
     
     func handleEditComplete(_ action: UserFormFeature.Action) {
         guard case let .delegate(.didSave(updatedUser)) = action else {
@@ -114,7 +114,7 @@ private extension UserDetailView {
         dismiss()
     }
     
-    //MARK: - Subviews
+    // MARK: - Subviews
     
     var actionSheetButton: some View {
         Button(action: {

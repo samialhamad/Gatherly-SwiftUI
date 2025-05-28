@@ -76,7 +76,7 @@ struct FriendsView: View {
 
 extension FriendsView {
     
-    //MARK: - Functions
+    // MARK: - Functions
     
     func handleCreateFriendComplete(_ action: UserFormFeature.Action) {
         guard case let .delegate(.didSave(newFriend)) = action else {
@@ -100,7 +100,7 @@ extension FriendsView {
         }
     }
     
-    //MARK: - Subviews
+    // MARK: - Subviews
     
     var createFriendSheet: some View {
         Group {

@@ -10,7 +10,7 @@ import XCTest
 
 final class MessageTests: XCTestCase {
 
-    //MARK: - Equatable
+    // MARK: - Equatable
     
     func testEqualTrue() {
         let message0 = Message(id: 0, userID: 0, message: "", read: true)

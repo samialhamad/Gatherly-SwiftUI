@@ -24,7 +24,7 @@ struct EventRow: View {
 
 private extension EventRow {
     
-    //MARK: - Functions
+    // MARK: - Functions
     
     func formattedTime(_ timestamp: Int) -> String {
         let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
@@ -33,7 +33,7 @@ private extension EventRow {
         return formatter.string(from: date)
     }
     
-    //MARK: - Subviews
+    // MARK: - Subviews
     
     var iconView: some View {
         Image(systemName: "calendar.circle")

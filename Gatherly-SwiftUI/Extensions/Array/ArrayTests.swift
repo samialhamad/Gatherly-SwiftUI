@@ -90,7 +90,7 @@ final class ArrayTests: XCTestCase {
         XCTAssertEqual(label, "2 upcoming events!")
     }
     
-    //MARK: - groupEventsByDay
+    // MARK: - groupEventsByDay
     
     func testGroupEventsByDay_SingleDay() {
         // two events on the same day ( different times).
@@ -163,7 +163,7 @@ final class ArrayTests: XCTestCase {
         XCTAssertEqual(groupedEvents[key2]?.count, 1)
     }
     
-    //MARK: - filterEvents
+    // MARK: - filterEvents
     
     func testFilterEvents_AllEventsSameDay() {
         // two events on the same day ( different times).

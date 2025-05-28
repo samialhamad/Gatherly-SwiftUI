@@ -22,7 +22,7 @@ class User: Codable, Equatable, Hashable, Identifiable, ObservableObject {
     @Published var lastName: String?
     @Published var phone: String?
     
-    //MARK: - Computed Vars
+    // MARK: - Computed Vars
     
     var hasEvents: Bool {
         return !(eventIDs?.isEmpty ?? true)
@@ -36,7 +36,7 @@ class User: Codable, Equatable, Hashable, Identifiable, ObservableObject {
         return !(groupIDs?.isEmpty ?? true)
     }
     
-    //MARK: - Functions
+    // MARK: - Functions
     
     func resolvedFriends(from lookup: [Int: User]) -> [User] {
         guard let ids = friendIDs else {
