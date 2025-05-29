@@ -50,15 +50,11 @@ final class DeleteUserTests: XCTestCase {
         UserDefaultsManager.saveUsers([userToDelete, userToKeep])
         
         GatherlyAPI.deleteUser(userToDelete)
-            .sink { updatedUsers in
-                XCTAssertEqual(updatedUsers.count, 1)
-                XCTAssertFalse(updatedUsers.contains(where: { $0.id == userToDelete.id }))
-                XCTAssertTrue(updatedUsers.contains(where: { $0.id == userToKeep.id }))
-                
+            .sink { _ in 
                 let storedUsers = UserDefaultsManager.loadUsers()
                 XCTAssertEqual(storedUsers.count, 1)
-                XCTAssertEqual(storedUsers.first?.email, "keep@example.com")
-                
+                XCTAssertFalse(storedUsers.contains { $0.id == userToDelete.id })
+                XCTAssertTrue(storedUsers.contains { $0.id == userToKeep.id })
                 expectation.fulfill()
             }
             .store(in: &cancellables)

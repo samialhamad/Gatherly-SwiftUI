@@ -44,21 +44,16 @@ final class DeleteEventTests: XCTestCase {
             startTimestamp: Int(calendar.date(bySettingHour: 14, minute: 0, second: 0, of: sampleDate)!.timestamp)
         )
         
-        var events = [eventToDelete, eventToKeep]
-        events[0].id = 1
-        events[1].id = 2
-        UserDefaultsManager.saveEvents(events)
+        eventToDelete.id = 1
+        eventToKeep.id = 2
+        UserDefaultsManager.saveEvents([eventToDelete, eventToKeep])
         
-        GatherlyAPI.deleteEvent(events[0])
-            .sink { updatedEvents in
-                XCTAssertFalse(updatedEvents.contains(where: { $0.id == events[0].id }))
-                XCTAssertTrue(updatedEvents.contains(where: { $0.id == events[1].id }))
-                XCTAssertEqual(updatedEvents.count, 1)
-                
+        GatherlyAPI.deleteEvent(eventToDelete)
+            .sink { _ in 
                 let storedEvents = UserDefaultsManager.loadEvents()
                 XCTAssertEqual(storedEvents.count, 1)
-                XCTAssertEqual(storedEvents.first?.title, "Keep Me")
-                
+                XCTAssertFalse(storedEvents.contains { $0.id == eventToDelete.id })
+                XCTAssertTrue(storedEvents.contains { $0.id == eventToKeep.id })
                 expectation.fulfill()
             }
             .store(in: &cancellables)
