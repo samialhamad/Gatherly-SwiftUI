@@ -71,8 +71,8 @@ final class EventsViewModel: ObservableObject {
         
         GatherlyAPI.deleteEvent(event)
             .receive(on: RunLoop.main)
-            .sink { [weak self] events in
-                self?.events = events
+            .sink { [weak self] in
+                self?.events.removeAll { $0.id == event.id }
                 self?.isLoading = false
             }
             .store(in: &cancellables)
