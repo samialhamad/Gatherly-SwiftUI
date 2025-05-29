@@ -59,7 +59,6 @@ struct EventDetailView: View {
                 }
             }
         }
-        .refreshOnAppear()
         .onAppear {
             GatherlyAPI.getUsers()
                 .receive(on: RunLoop.main)
@@ -140,7 +139,6 @@ private extension EventDetailView {
                 dismiss()
             }
         )
-        .refreshOnDismiss()
     }
     
     var eventBannerImageView: some View {

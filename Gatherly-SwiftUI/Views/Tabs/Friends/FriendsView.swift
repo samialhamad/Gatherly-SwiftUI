@@ -66,7 +66,6 @@ struct FriendsView: View {
                 }
             }
         }
-        .refreshOnAppear()
         .onAppear {
             usersViewModel.loadIfNeeded()
         }

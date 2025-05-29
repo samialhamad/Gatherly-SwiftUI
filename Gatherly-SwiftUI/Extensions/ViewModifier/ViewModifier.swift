@@ -24,27 +24,3 @@ struct DisclosureIconModifier: ViewModifier {
         }
     }
 }
-
-struct RefreshOnAppearModifier: ViewModifier {
-    @State private var refreshID = UUID()
-    
-    func body(content: Content) -> some View {
-        content
-            .id(refreshID)
-            .onAppear {
-                refreshID = UUID()
-            }
-    }
-}
-
-struct RefreshOnDismissModifier: ViewModifier {
-    @State private var refreshID = UUID()
-
-    func body(content: Content) -> some View {
-        content
-            .id(refreshID)
-            .onDisappear {
-                refreshID = UUID()
-            }
-    }
-}

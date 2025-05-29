@@ -44,7 +44,6 @@ struct GroupDetailView: View {
                 .sheet(isPresented: $isShowingEditView) {
                     editGroupSheet
                 }
-                .refreshOnAppear()
             }
         }
         .onAppear {

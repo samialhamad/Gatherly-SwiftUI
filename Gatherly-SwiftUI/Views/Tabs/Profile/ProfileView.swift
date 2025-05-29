@@ -52,7 +52,6 @@ struct ProfileView: View {
                 )
             }
         }
-        .refreshOnAppear()
         .onAppear {
             usersViewModel.loadIfNeeded()
         }
