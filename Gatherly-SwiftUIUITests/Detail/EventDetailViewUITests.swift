@@ -35,13 +35,19 @@ final class EventDetailViewUITests: GatherlyUITestCase {
     }
     
     func testDateAndTimeTextExist() {
-        XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label BEGINSWITH 'Date:'")).firstMatch.exists)
-        XCTAssertTrue(app.staticTexts.containing(NSPredicate(format: "label BEGINSWITH 'Time:'")).firstMatch.exists)
+        let dateLabel = app.staticTexts.containing(NSPredicate(format: "label BEGINSWITH 'Date:'")).firstMatch
+        let timeLabel = app.staticTexts.containing(NSPredicate(format: "label BEGINSWITH 'Time:'")).firstMatch
+        
+        XCTAssertTrue(dateLabel.waitForExistence(timeout: 5))
+        XCTAssertTrue(timeLabel.waitForExistence(timeout: 5))
     }
     
     func testPlannerAndAttendeesSectionsExist() {
-        XCTAssertTrue(app.staticTexts["Planner"].exists)
-        XCTAssertTrue(app.staticTexts["Attendees"].exists)
+        let plannerLabel = app.staticTexts["Planner"]
+        let attendeesLabel = app.staticTexts["Attendees"]
+        
+        XCTAssertTrue(plannerLabel.waitForExistence(timeout: 5))
+        XCTAssertTrue(attendeesLabel.waitForExistence(timeout: 5))
     }
     
     func testLocationAppearsOnMap() {
