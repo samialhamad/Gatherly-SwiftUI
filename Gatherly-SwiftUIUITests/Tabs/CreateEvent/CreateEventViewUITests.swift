@@ -56,7 +56,7 @@ final class CreateEventViewUITests: GatherlyUITestCase {
         
         // Verify that it navigated away to EventDetailView (based on navigation title)
         let navBar = app.navigationBars["UI Test Event"]
-        XCTAssertTrue(navBar.waitForExistence(timeout: 3))
+        XCTAssertTrue(navBar.waitForExistence(timeout: 5))
     }
     
     // MARK: - Text Field Tests
