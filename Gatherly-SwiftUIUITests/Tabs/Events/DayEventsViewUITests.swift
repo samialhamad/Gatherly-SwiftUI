@@ -35,7 +35,7 @@ final class DayEventsViewUITests: GatherlyUITestCase {
         let row = app.buttons["eventRow-\(knownTitle)"]
         XCTAssertTrue(row.waitForExistence(timeout: 2))
         row.tap()
-        XCTAssertTrue(app.navigationBars[knownTitle].exists)
+        XCTAssertTrue(app.navigationBars[knownTitle].waitForExistence(timeout: 3))
     }
 
     func testAddEventButtonExists() {
