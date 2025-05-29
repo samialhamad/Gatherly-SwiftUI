@@ -90,8 +90,8 @@ final class UsersViewModel: ObservableObject {
         
         GatherlyAPI.deleteUser(user)
             .receive(on: RunLoop.main)
-            .sink { [weak self] users in
-                self?.users = users
+            .sink { [weak self] in
+                self?.users.removeAll { $0.id == user.id }
                 self?.isLoading = false
             }
             .store(in: &cancellables)
