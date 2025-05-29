@@ -16,11 +16,11 @@ struct GroupDetailView: View {
     @State private var isShowingActionSheet = false
     @EnvironmentObject var usersViewModel: UsersViewModel
     
-    let group: UserGroup
+    let groupID: Int
     
     var body: some View {
         NavigationStack {
-            if let currentUser = usersViewModel.currentUser {
+            if let group, let currentUser = usersViewModel.currentUser {
                 ZStack {
                     ScrollView {
                         VStack(spacing: Constants.GroupDetailView.vstackSpacing) {
@@ -72,22 +72,24 @@ private extension GroupDetailView {
         })
     }
     
+    var group: UserGroup? {
+        groupsViewModel.groups.first { $0.id == groupID }
+    }
+    
     // MARK: - Functions
     
     func leaveGroup() {
-        guard var currentUser = usersViewModel.currentUser else {
-            return
-        }
-
-        guard let userID = currentUser.id else {
+        guard var currentUser = usersViewModel.currentUser,
+              let userID = currentUser.id,
+              let group else {
             return
         }
         
         currentUser.groupIDs?.removeAll(where: { $0 == group.id })
-
+        
         var updatedGroup = group
-        updatedGroup.memberIDs.removeAll(where: { $0 == currentUser.id })
-
+        updatedGroup.memberIDs.removeAll(where: { $0 == userID })
+        
         usersViewModel.update(currentUser)
         groupsViewModel.update(updatedGroup)
         
@@ -97,51 +99,53 @@ private extension GroupDetailView {
     // MARK: - Subviews
     
     var editGroupSheet: some View {
-        EditGroupView(
-            editGroupViewModel: EditGroupViewModel(group: group),
-            friendsDict: friendsDict,
-            onSave: { _ in
-                isShowingEditView = false
-            },
-            onCancel: {
-                isShowingEditView = false
-            },
-            onDelete: { deletedGroup in
-                groupsViewModel.delete(deletedGroup)
-                isDeleting = false
-                isShowingEditView = false
-                dismiss()
-            }
-        )
+        if let group {
+            return AnyView(EditGroupView(
+                editGroupViewModel: EditGroupViewModel(group: group),
+                friendsDict: friendsDict,
+                onSave: { _ in isShowingEditView = false },
+                onCancel: { isShowingEditView = false },
+                onDelete: { deletedGroup in
+                    groupsViewModel.delete(deletedGroup)
+                    isDeleting = false
+                    isShowingEditView = false
+                    dismiss()
+                }
+            ))
+        } else {
+            return AnyView(EmptyView())
+        }
     }
     
     var groupLeaderAndMembersView: some View {
-        let resolvedLeader: User? = group.leaderID == usersViewModel.currentUser?.id
-            ? usersViewModel.currentUser
-            : friendsDict[group.leaderID]
-
-        let memberUsers: [User] = group.memberIDs.compactMap { id in
-            id == usersViewModel.currentUser?.id ? usersViewModel.currentUser : friendsDict[id]
-        }
-        
-        return Group {
-            if let leader = resolvedLeader {
-                Text("Leader")
-                    .font(.headline)
-                NavigationLink(destination: UserDetailView(user: leader)) {
-                    ProfileRow(user: leader)
+        Group {
+            if let group {
+                let resolvedLeader: User? = group.leaderID == usersViewModel.currentUser?.id
+                ? usersViewModel.currentUser
+                : friendsDict[group.leaderID]
+                
+                let memberUsers: [User] = group.memberIDs.compactMap {
+                    $0 == usersViewModel.currentUser?.id ? usersViewModel.currentUser : friendsDict[$0]
                 }
-                .accessibilityIdentifier("groupMemberRow-\(leader.firstName ?? "")")
-            }
-            
-            if !memberUsers.isEmpty {
-                Text("Members")
-                    .font(.headline)
-                ForEach(memberUsers, id: \.id) { user in
-                    NavigationLink(destination: UserDetailView(user: user)) {
-                        ProfileRow(user: user)
+                
+                if let leader = resolvedLeader {
+                    Text("Leader")
+                        .font(.headline)
+                    NavigationLink(destination: UserDetailView(user: leader)) {
+                        ProfileRow(user: leader)
                     }
-                    .accessibilityIdentifier("groupMemberRow-\(user.firstName ?? "")")
+                    .accessibilityIdentifier("groupMemberRow-\(leader.firstName ?? "")")
+                }
+                
+                if !memberUsers.isEmpty {
+                    Text("Members")
+                        .font(.headline)
+                    ForEach(memberUsers, id: \.id) { user in
+                        NavigationLink(destination: UserDetailView(user: user)) {
+                            ProfileRow(user: user)
+                        }
+                        .accessibilityIdentifier("groupMemberRow-\(user.firstName ?? "")")
+                    }
                 }
             }
         }
@@ -151,26 +155,25 @@ private extension GroupDetailView {
     }
     
     var toolbarButton: some View {
-        if group.leaderID == usersViewModel.currentUser?.id {
-            AnyView(
+        Group {
+            if let group,
+               group.leaderID == usersViewModel.currentUser?.id {
                 Button("Edit") {
                     isShowingEditView = true
                 }
-                    .accessibilityIdentifier("editGroupButton")
-            )
-        } else {
-            AnyView(
+                .accessibilityIdentifier("editGroupButton")
+            } else {
                 Button(action: {
                     isShowingActionSheet = true
                 }) {
                     Image(systemName: "ellipsis")
                 }
-                    .accessibilityIdentifier("groupOptionsButton")
-            )
+                .accessibilityIdentifier("groupOptionsButton")
+            }
         }
     }
 }
 
 #Preview {
-    GroupDetailView(group: SampleData.sampleGroups.first!)
+    GroupDetailView(groupID: SampleData.sampleGroups.first!.id!)
 }
