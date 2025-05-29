@@ -12,7 +12,7 @@ enum ContactSyncHelper {
         guard !UserDefaultsManager.getDidSyncContacts() else {
             return
         }
-
+        
         ContactSyncManager.shared.fetchContacts { contacts in
             Task {
                 let (newUsers, newFriendIDs) = await generateUsersFromContacts(contacts)
@@ -38,34 +38,70 @@ enum ContactSyncHelper {
     }
     
     private static func generateUsersFromContacts(_ contacts: [SyncedContact]) async -> ([User], [Int]) {
-        let users = UserDefaultsManager.loadUsers()
+        var users = UserDefaultsManager.loadUsers()
+        
         let existingPhones = Set(users.compactMap { $0.phone?.filter(\.isWholeNumber) })
         let uniqueContacts = contacts.filter { !existingPhones.contains($0.phoneNumber.filter(\.isWholeNumber)) }
-
-        var nextID = (users.map { $0.id ?? 0 }.max() ?? 999) + 1
+        
+        var usedIDs = Set(users.compactMap { $0.id })
+        var nextID = (usedIDs.max() ?? 999) + 1
+        
         let results = await withTaskGroup(of: User.self) { group in
             for contact in uniqueContacts {
+                
+                while usedIDs.contains(nextID) {
+                    nextID += 1
+                }
+                
                 let assignedID = nextID
+                usedIDs.insert(assignedID)
                 nextID += 1
-                group.addTask { await GatherlyAPI.createUser(from: contact, id: assignedID) }
+                                
+                group.addTask {
+                    await GatherlyAPI.createUser(from: contact, id: assignedID)
+                }
             }
             return await group.reduce(into: []) { $0.append($1) }
         }
-
+        
         return (results, results.compactMap { $0.id })
     }
-
+    
     private static func appendUsersAndUpdateFriends(_ newUsers: [User], _ newFriendIDs: [Int], currentUserID: Int) {
         var users = UserDefaultsManager.loadUsers()
-        users.append(contentsOf: newUsers)
-
+        
+        // convert existing and new users to dictionaries keyed by ID
+        var usersDict: [Int: User] = Dictionary(uniqueKeysWithValues: users.compactMap { user in
+            guard let id = user.id else {
+                return nil
+            }
+            return (id, user)
+        })
+        
+        let newUsersDict: [Int: User] = Dictionary(uniqueKeysWithValues: newUsers.compactMap { user in
+            guard let id = user.id else {
+                return nil
+            }
+            
+            return (id, user)
+        })
+                
+        for (id, newUser) in newUsersDict {
+            usersDict[id] = newUser
+        }
+        
+        users = Array(usersDict.values).sorted(by: { ($0.id ?? 0) < ($1.id ?? 0) })
+        
+        // update currentUser's friend list
         if let index = users.firstIndex(where: { $0.id == currentUserID }) {
             var currentUser = users[index]
             let updatedIDs = Set((currentUser.friendIDs ?? []) + newFriendIDs)
             currentUser.friendIDs = Array(updatedIDs).sorted()
             users[index] = currentUser
+            
+            UserDefaultsManager.saveCurrentUser(currentUser)
         }
-
+        
         UserDefaultsManager.saveUsers(users)
     }
 }
