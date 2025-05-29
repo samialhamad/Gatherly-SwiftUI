@@ -11,7 +11,6 @@ import SwiftUI
 struct GroupDetailView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var groupsViewModel: GroupsViewModel
-    @State private var isDeleting = false
     @State private var isShowingEditView = false
     @State private var isShowingActionSheet = false
     @EnvironmentObject var usersViewModel: UsersViewModel
@@ -28,10 +27,6 @@ struct GroupDetailView: View {
                             groupLeaderAndMembersView
                             Spacer()
                         }
-                    }
-                    
-                    if isDeleting {
-                        ActivityIndicator(message: Constants.GroupDetailView.deletingGroupString)
                     }
                 }
                 .navigationTitle(group.name ?? "")
@@ -107,7 +102,6 @@ private extension GroupDetailView {
                 onCancel: { isShowingEditView = false },
                 onDelete: { deletedGroup in
                     groupsViewModel.delete(deletedGroup)
-                    isDeleting = false
                     isShowingEditView = false
                     dismiss()
                 }
