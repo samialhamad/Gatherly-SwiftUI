@@ -10,16 +10,20 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var cancellables = Set<AnyCancellable>()
-    @State private var currentUser: User? = nil
     @StateObject private var eventsViewModel = EventsViewModel()
     @StateObject private var groupsViewModel = GroupsViewModel()
-    @State private var isLoading = true
     @EnvironmentObject var navigationState: NavigationState
     @StateObject private var usersViewModel = UsersViewModel()
     
+    private var isLoading: Bool {
+        usersViewModel.isLoading || usersViewModel.currentUser == nil
+    }
+    
     var body: some View {
         Group {
-            if let currentUser {
+            if isLoading {
+                ActivityIndicator(message: Constants.ContentView.loadingString)
+            } else if let currentUser = usersViewModel.currentUser {
                 TabView(selection: $navigationState.selectedTab) {
                     calendarTab
                     createEventTab
@@ -29,21 +33,12 @@ struct ContentView: View {
                 .environmentObject(eventsViewModel)
                 .environmentObject(groupsViewModel)
                 .environmentObject(usersViewModel)
-            } else if isLoading {
-                ActivityIndicator(message: Constants.ContentView.loadingString)
             }
         }
         .task {
             AppInitializer.runIfNeeded()
             ContactSyncHelper.runIfNeeded(currentUserID: 1)
-            
-            GatherlyAPI.getUser()
-                .receive(on: RunLoop.main)
-                .sink { user in
-                    currentUser = user
-                    isLoading = false
-                }
-                .store(in: &cancellables)
+            usersViewModel.fetch()
         }
     }
 }
