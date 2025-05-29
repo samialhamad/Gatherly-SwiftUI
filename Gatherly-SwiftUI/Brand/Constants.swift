@@ -130,7 +130,6 @@ struct Constants {
     }
     
     struct GroupDetailView {
-        static let deletingGroupString: String = "Deleting your group!"
         static let topPadding: CGFloat = 10
         static let vstackSpacing: CGFloat = 16
     }
