@@ -40,7 +40,7 @@ private extension GroupsListView {
     var currentUser: User? {
         usersViewModel.currentUser
     }
-   
+    
     var filteredGroups: [UserGroup] {
         guard let currentUser else {
             return []
@@ -82,10 +82,12 @@ private extension GroupsListView {
     private func rowView(for group: UserGroup) -> some View {
         switch mode {
         case .view:
-            NavigationLink(destination: GroupDetailView(group: group)) {
-                GroupRow(group: group)
+            if let id = group.id {
+                NavigationLink(destination: GroupDetailView(groupID: id)) {
+                    GroupRow(group: group)
+                }
+                .accessibilityIdentifier("groupRow-\(group.name ?? "")")
             }
-            .accessibilityIdentifier("groupRow-\(group.name ?? "")")
             
         case .select(let binding):
             Button {

@@ -59,8 +59,8 @@ struct FriendsView: View {
                     }
                 }
             )) {
-                if let group = navigationState.navigateToGroup {
-                    GroupDetailView(group: group)
+                if let groupID = navigationState.navigateToGroup?.id {
+                    GroupDetailView(groupID: groupID)
                 } else {
                     EmptyView()
                 }
