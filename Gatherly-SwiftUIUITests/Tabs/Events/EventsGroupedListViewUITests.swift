@@ -17,7 +17,11 @@ final class EventsGroupedListViewUITests: GatherlyUITestCase {
     }
 
     func testEventSectionsExist() {
-        let knownDateLabel = "May 19, 2025" // update based on seeded data
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .none
+        let knownDateLabel = dateFormatter.string(from: Date())
+        
         let sectionHeader = app.staticTexts["sectionHeader-\(knownDateLabel)"]
         XCTAssertTrue(sectionHeader.waitForExistence(timeout: 2))
     }
