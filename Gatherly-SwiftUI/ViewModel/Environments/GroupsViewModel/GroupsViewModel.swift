@@ -73,8 +73,8 @@ final class GroupsViewModel: ObservableObject {
         
         GatherlyAPI.deleteGroup(group)
             .receive(on: RunLoop.main)
-            .sink { [weak self] groups in
-                self?.groups = groups
+            .sink { [weak self] in
+                self?.groups.removeAll { $0.id == group.id }
                 self?.isLoading = false
             }
             .store(in: &cancellables)
