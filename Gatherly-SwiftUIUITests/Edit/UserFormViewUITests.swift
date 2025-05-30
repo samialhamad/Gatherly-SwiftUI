@@ -56,16 +56,16 @@ final class UserFormViewUITests: GatherlyUITestCase {
         let lastNameField = app.textFields["userFormLastName"]
 
         firstNameField.tap()
-        firstNameField.clearAndEnterText("LeBron")
+        firstNameField.clearAndEnterText("AA")
 
         lastNameField.tap()
-        lastNameField.clearAndEnterText("James")
+        lastNameField.clearAndEnterText("BB")
 
         app.navigationBars["New Friend"].tap()
         app.buttons["userFormSaveButton"].tap()
 
         // Verify we're back on Friends tab and new friend appears
-        let newFriendRow = app.staticTexts["LeBron James"]
+        let newFriendRow = app.staticTexts["AA BB"]
         XCTAssertTrue(newFriendRow.waitForExistence(timeout: 3))
     }
 }

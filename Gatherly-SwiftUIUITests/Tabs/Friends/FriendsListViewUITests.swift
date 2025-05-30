@@ -19,6 +19,7 @@ final class FriendsListViewUITests: GatherlyUITestCase {
         // Assuming friends list is in default order with no search applied
         XCTAssertTrue(app.buttons["friendRow-Bob"].waitForExistence(timeout: 2))
         XCTAssertTrue(app.buttons["friendRow-Charlie"].exists)
+        app.swipeUp()
         XCTAssertTrue(app.buttons["friendRow-Zebra"].exists)
     }
 

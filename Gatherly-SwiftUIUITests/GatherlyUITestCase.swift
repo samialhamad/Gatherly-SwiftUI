@@ -17,6 +17,9 @@ class GatherlyUITestCase: XCTestCase {
         app = XCUIApplication()
         app.launchArguments.append("--uitesting")
         app.launch()
+        
+        let calendarTab = app.tabBars.buttons["Calendar"]
+        XCTAssertTrue(calendarTab.waitForExistence(timeout: 7), "Calendar tab failed to appear")
     }
 
     override func tearDownWithError() throws {
