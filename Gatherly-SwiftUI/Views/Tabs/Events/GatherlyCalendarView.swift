@@ -11,33 +11,31 @@ import SwiftUI
 struct GatherlyCalendarView: View {
     @Binding var allEvents: [Event]
     @StateObject private var calendarManager: ElegantCalendarManager
-    @Binding var selectedDate: Date
     @State private var isShowingDayEvents = false
     
     let navigationState: NavigationState
     
     private var eventsForSelectedDate: [Event] {
-        allEvents.filter { event in
+        let selected = calendarManager.selectedDate ?? Date()
+        
+        return allEvents.filter { event in
             guard let eventDate = event.date else {
                 return false
             }
             
-            return Date.isSameDay(date1: eventDate, date2: selectedDate)
+            return Date.isSameDay(date1: eventDate, date2: selected)
         }
         .sorted(by: { ($0.startTimestamp ?? 0) < ($1.startTimestamp ?? 0) })
     }
     
     init(
-        selectedDate: Binding<Date>,
         allEvents: Binding<[Event]>,
         navigationState: NavigationState
     ) {
-        _selectedDate = selectedDate
         _allEvents = allEvents
         self.navigationState = navigationState
-
+        
         let manager = ElegantCalendarManager.withEvents(
-            selectedDate: selectedDate,
             events: allEvents,
             navigationState: navigationState
         )
@@ -60,25 +58,24 @@ struct GatherlyCalendarView: View {
         }
         .background(
             NavigationLink(
-                destination: DayEventsView(date: selectedDate),
+                destination: DayEventsView(date: calendarManager.selectedDate ?? Date()),
                 isActive: $isShowingDayEvents,
                 label: { EmptyView() }
             )
         )
-        .onReceive(calendarManager.$monthlyManager.map(\.selectedDate)) { newDate in
-            if let date = newDate {
-                selectedDate = date
-            }
-        }
         .background(Color.white)
         .onAppear {
             calendarManager.datasource = self
-            calendarManager.scrollToDay(selectedDate, animated: true)
+            if let selected = calendarManager.selectedDate {
+                calendarManager.scrollToDay(selected, animated: true)
+            }
         }
     }
     
     private var dayEventsViewButton: some View {
         VStack(spacing: Constants.GatherlyCalendarView.dayEventsViewButtonSpacing) {
+            let selectedDate = calendarManager.selectedDate ?? Date()
+            
             Text(allEvents.eventCountLabel(for: selectedDate))
                 .font(.headline)
                 .foregroundColor(Color(Colors.primary))
