@@ -12,7 +12,6 @@ import SwiftUI
 final class EventHighlightDelegate: ElegantCalendarDelegate {
     @Binding var events: [Event]
     
-    private var didSuppressInitialSelection = false
     private var lastNavigatedDate: Date? = nil
     let navigationState: NavigationState
     private var selectedDate: Date?
@@ -27,16 +26,6 @@ final class EventHighlightDelegate: ElegantCalendarDelegate {
     
     func calendar(didSelectDay date: Date) {
         selectedDate = date
-        
-        if navigationState.suppressNextCalendarSelection {
-            navigationState.suppressNextCalendarSelection = false
-            return
-        }
-        
-        if !didSuppressInitialSelection {
-            didSuppressInitialSelection = true
-            return
-        }
         
         if let lastDate = lastNavigatedDate,
            Date.isSameDay(date1: date, date2: lastDate) {
