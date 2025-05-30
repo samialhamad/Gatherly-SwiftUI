@@ -37,6 +37,7 @@
 		F11CDC202D77958A007BC1F1 /* Gatherly-SwiftUI.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Gatherly-SwiftUI.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F11CDC302D77958B007BC1F1 /* Gatherly-SwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Gatherly-SwiftUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F11CDC3A2D77958B007BC1F1 /* Gatherly-SwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Gatherly-SwiftUIUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F18F7D0C2DEA5CB400337A3E /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
 		F1D79C172DCAA7A100636C21 /* ElegantCalendar.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = ElegantCalendar.xcassets; path = "../../../../../../../../Documents/GitHub/Gatherly-SwiftUI/ElegantCalendar.xcassets"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -69,15 +70,11 @@
 				Utilities/ContactSyncManager/ContactSyncManagerTests.swift,
 				Utilities/ImageUtility/ImageUtilityTests.swift,
 				Utilities/UserDefaultsManager/UserDefaultsManagerTests.swift,
-				ViewModel/Create/CreateEventViewModel/CreateEventViewModelTests.swift,
-				ViewModel/Create/CreateGroupViewModel/CreateGroupViewModelTests.swift,
 				ViewModel/Edit/EditEventViewModel/EditEventViewModelTests.swift,
 				ViewModel/Edit/EditGroupViewModel/EditGroupViewModelTests.swift,
 				ViewModel/Environments/EventsViewModel/EventsViewModelTests.swift,
 				ViewModel/Environments/GroupsViewModel/GroupsViewModelTests.swift,
 				ViewModel/Environments/UsersViewModel/UsersViewModelTests.swift,
-				ViewModel/Events/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
-				ViewModel/Friends/FriendsListViewModel/FriendsListViewModelTests.swift,
 			);
 			target = F11CDC2F2D77958B007BC1F1 /* Gatherly-SwiftUITests */;
 		};
@@ -184,6 +181,7 @@
 				F11CDC3D2D77958B007BC1F1 /* Gatherly-SwiftUIUITests */,
 				F11CDC212D77958A007BC1F1 /* Products */,
 				F1D79C172DCAA7A100636C21 /* ElegantCalendar.xcassets */,
+				F18F7D0B2DEA5CB300337A3E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -195,6 +193,14 @@
 				F11CDC3A2D77958B007BC1F1 /* Gatherly-SwiftUIUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		F18F7D0B2DEA5CB300337A3E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F18F7D0C2DEA5CB400337A3E /* XCTest.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
