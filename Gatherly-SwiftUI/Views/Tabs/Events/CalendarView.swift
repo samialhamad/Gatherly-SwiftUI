@@ -54,7 +54,6 @@ struct CalendarView: View {
                 }
             }
             .onAppear {
-                navigationState.hasShownDayEventsView = false
                 eventsViewModel.loadIfNeeded()
             }
         }
