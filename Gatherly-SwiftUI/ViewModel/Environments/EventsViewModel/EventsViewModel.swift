@@ -9,21 +9,22 @@ import Combine
 import Foundation
 
 final class EventsViewModel: ObservableObject {
+    @Published var deletionFailed = false
     @Published var events: [Event] = []
     @Published var isLoading: Bool = false
-
+    
     private var hasLoaded = false
     private var cancellables = Set<AnyCancellable>()
-
+    
     // MARK: - Loaders
-
+    
     func loadIfNeeded() {
         guard !hasLoaded else {
             return
         }
         fetch()
     }
-
+    
     func fetch() {
         isLoading = true
         
@@ -36,9 +37,9 @@ final class EventsViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-
+    
     // MARK: - CRUD
-
+    
     func create(_ event: Event, completion: @escaping (Event) -> Void = { _ in }) {
         isLoading = true
         
@@ -51,7 +52,7 @@ final class EventsViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-
+    
     func update(_ updated: Event) {
         isLoading = true
         
@@ -65,16 +66,21 @@ final class EventsViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-
+    
     func delete(_ event: Event) {
-        isLoading = true
-        
-        GatherlyAPI.deleteEvent(event)
-            .receive(on: RunLoop.main)
-            .sink { [weak self] in
-                self?.events.removeAll { $0.id == event.id }
-                self?.isLoading = false
-            }
-            .store(in: &cancellables)
+        let index = events.firstIndex { $0.id == event.id }
+        if let index {
+            let removed = events.remove(at: index)
+            
+            GatherlyAPI.deleteEvent(event)
+                .receive(on: RunLoop.main)
+                .sink { [weak self] success in
+                    if !success {
+                        self?.events.insert(removed, at: index)
+                        self?.deletionFailed = true
+                    }
+                }
+                .store(in: &cancellables)
+        }
     }
 }

@@ -10,14 +10,15 @@ import Foundation
 
 final class UsersViewModel: ObservableObject {
     @Published var currentUser: User?
+    @Published var deletionFailed = false
     @Published var users: [User] = []
     @Published var isLoading = false
-
+    
     private var cancellables = Set<AnyCancellable>()
     private var hasLoaded = false
-
+    
     // MARK: - Loaders
-
+    
     func loadIfNeeded() {
         guard !hasLoaded else {
             return
@@ -25,13 +26,13 @@ final class UsersViewModel: ObservableObject {
         
         fetch()
     }
-
+    
     func fetch() {
         isLoading = true
-
+        
         let currentUserPublisher = GatherlyAPI.getUser()
         let usersPublisher = GatherlyAPI.getUsers()
-
+        
         Publishers.CombineLatest(currentUserPublisher, usersPublisher)
             .receive(on: RunLoop.main)
             .sink { [weak self] currentUser, users in
@@ -49,7 +50,7 @@ final class UsersViewModel: ObservableObject {
     }
     
     // MARK: - CRUD
-
+    
     func create(_ user: User, completion: @escaping (User) -> Void = { _ in }) {
         isLoading = true
         
@@ -62,16 +63,16 @@ final class UsersViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-
+    
     func update(_ updatedUser: User) {
         let publisher: AnyPublisher<User, Never>
-
+        
         if updatedUser.id == currentUser?.id {
             publisher = GatherlyAPI.updateCurrentUser(updatedUser)
         } else {
             publisher = GatherlyAPI.updateUser(updatedUser)
         }
-
+        
         publisher
             .receive(on: RunLoop.main)
             .sink { [weak self] user in
@@ -84,16 +85,21 @@ final class UsersViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
-
+    
     func delete(_ user: User) {
-        isLoading = true
-        
-        GatherlyAPI.deleteUser(user)
-            .receive(on: RunLoop.main)
-            .sink { [weak self] in
-                self?.users.removeAll { $0.id == user.id }
-                self?.isLoading = false
-            }
-            .store(in: &cancellables)
+        let index = users.firstIndex { $0.id == user.id }
+        if let index {
+            let removed = users.remove(at: index)
+            
+            GatherlyAPI.deleteUser(user)
+                .receive(on: RunLoop.main)
+                .sink { [weak self] success in
+                    if !success {
+                        self?.users.insert(removed, at: index)
+                        self?.deletionFailed = true
+                    }
+                }
+                .store(in: &cancellables)
+        }
     }
 }

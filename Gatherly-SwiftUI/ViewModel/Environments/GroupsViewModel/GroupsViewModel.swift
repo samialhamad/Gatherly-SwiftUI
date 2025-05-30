@@ -9,6 +9,7 @@ import Combine
 import Foundation
 
 final class GroupsViewModel: ObservableObject {
+    @Published var deletionFailed = false
     @Published var groups: [UserGroup] = []
     @Published var isLoading = false
     
@@ -69,14 +70,19 @@ final class GroupsViewModel: ObservableObject {
     }
     
     func delete(_ group: UserGroup) {
-        isLoading = true
-        
-        GatherlyAPI.deleteGroup(group)
-            .receive(on: RunLoop.main)
-            .sink { [weak self] in
-                self?.groups.removeAll { $0.id == group.id }
-                self?.isLoading = false
-            }
-            .store(in: &cancellables)
+        let index = groups.firstIndex { $0.id == group.id }
+        if let index {
+            let removed = groups.remove(at: index)
+            
+            GatherlyAPI.deleteGroup(group)
+                .receive(on: RunLoop.main)
+                .sink { [weak self] success in
+                    if !success {
+                        self?.groups.insert(removed, at: index)
+                        self?.deletionFailed = true
+                    }
+                }
+                .store(in: &cancellables)
+        }
     }
 }
