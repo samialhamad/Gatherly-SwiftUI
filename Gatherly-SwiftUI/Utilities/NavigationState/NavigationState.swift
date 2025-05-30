@@ -15,6 +15,7 @@ class NavigationState: ObservableObject {
     @Published var navigateToEventsForDate: Date? = nil
     @Published var navigateToGroup: UserGroup? = nil
     @Published var selectedTab: Int = Tab.calendar.rawValue
+    @Published var suppressNextCalendarSelection: Bool = false
     
     func switchToTab(_ tab: Tab) {
         selectedTab = tab.rawValue
