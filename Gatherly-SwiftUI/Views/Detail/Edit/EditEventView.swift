@@ -185,8 +185,11 @@ private extension EditEventView {
                 Task {
                     let updatedEvent = await editEventViewModel.prepareUpdatedEvent()
                     eventsViewModel.update(updatedEvent)
-                    isSaving = false
-                    onSave(updatedEvent)
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        isSaving = false
+                        onSave(updatedEvent)
+                    }
                 }
             }
             .accessibilityIdentifier("saveEventButton")
