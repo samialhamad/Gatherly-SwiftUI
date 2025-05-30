@@ -11,18 +11,16 @@ import SwiftUI
 
 final class EventHighlightDelegate: ElegantCalendarDelegate {
     @Binding var events: [Event]
-    @Binding var selectedDate: Date
     
     private var didSuppressInitialSelection = false
     private var lastNavigatedDate: Date? = nil
     let navigationState: NavigationState
+    private var selectedDate: Date?
     
     init(
-        selectedDate: Binding<Date>,
         events: Binding<[Event]>,
         navigationState: NavigationState
     ) {
-        _selectedDate = selectedDate
         _events = events
         self.navigationState = navigationState
     }
@@ -52,7 +50,7 @@ final class EventHighlightDelegate: ElegantCalendarDelegate {
     }
     
     func backgroundColor(for date: Date) -> Color {
-        if Date.isSameDay(date1: date, date2: selectedDate) {
+        if let selectedDate, Date.isSameDay(date1: date, date2: selectedDate) {
             return Color(Colors.primary)
         } else if hasEvent(on: date) {
             return Color(Colors.primary).opacity(0.2)
