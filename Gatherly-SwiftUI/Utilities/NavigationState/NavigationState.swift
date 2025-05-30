@@ -9,13 +9,11 @@ import Foundation
 import SwiftUI
 
 class NavigationState: ObservableObject {
-    @Published var calendarSelectedDate: Date = Date()
     @Published var hasShownDayEventsView = false
     @Published var navigateToEvent: Event? = nil
     @Published var navigateToEventsForDate: Date? = nil
     @Published var navigateToGroup: UserGroup? = nil
     @Published var selectedTab: Int = Tab.calendar.rawValue
-    @Published var suppressNextCalendarSelection: Bool = false
     
     func switchToTab(_ tab: Tab) {
         selectedTab = tab.rawValue
