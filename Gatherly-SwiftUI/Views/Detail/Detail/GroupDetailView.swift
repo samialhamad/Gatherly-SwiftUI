@@ -98,7 +98,9 @@ private extension GroupDetailView {
             return AnyView(EditGroupView(
                 editGroupViewModel: EditGroupViewModel(group: group),
                 friendsDict: friendsDict,
-                onSave: { _ in isShowingEditView = false },
+                onSave: { _ in
+                    isShowingEditView = false
+                },
                 onCancel: { isShowingEditView = false },
                 onDelete: { deletedGroup in
                     groupsViewModel.delete(deletedGroup)
