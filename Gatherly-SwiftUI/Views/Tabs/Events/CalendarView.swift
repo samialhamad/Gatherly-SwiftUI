@@ -78,7 +78,6 @@ private extension CalendarView {
         if isCalendarView {
             VStack(spacing: 0) {
                 GatherlyCalendarView(
-                    selectedDate: $navigationState.calendarSelectedDate,
                     allEvents: $eventsViewModel.events,
                     navigationState: navigationState
                 )

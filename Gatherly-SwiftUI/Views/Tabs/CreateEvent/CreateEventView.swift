@@ -170,8 +170,6 @@ private extension CreateEventView {
                 
                 eventsViewModel.create(newEvent) { createdEvent in
                     createEventViewModel.clearFields()
-                    navigationState.calendarSelectedDate = createdEvent.date ?? Date()
-                    navigationState.suppressNextCalendarSelection = true
                     navigationState.navigateToEvent = createdEvent
                     navigationState.switchToTab(.calendar)
                     isSaving = false

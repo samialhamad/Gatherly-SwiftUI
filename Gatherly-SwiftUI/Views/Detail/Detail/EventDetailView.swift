@@ -129,8 +129,6 @@ private extension EventDetailView {
                 if let newDate = savedEvent.date,
                    let oldDate = oldDate,
                    !Date.isSameDay(date1: newDate, date2: oldDate) {
-                    navigationState.suppressNextCalendarSelection = true
-                    navigationState.calendarSelectedDate = newDate
                     navigationState.navigateToEventsForDate = newDate
                 }
                 
