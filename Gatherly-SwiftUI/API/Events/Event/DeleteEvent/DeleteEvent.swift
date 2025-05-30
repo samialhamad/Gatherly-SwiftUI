@@ -9,13 +9,14 @@ import Combine
 import Foundation
 
 extension GatherlyAPI {
-    static func deleteEvent(_ eventToDelete: Event) -> AnyPublisher<Void, Never> {
+    static func deleteEvent(_ eventToDelete: Event) -> AnyPublisher<Bool, Never> {
         var events = UserDefaultsManager.loadEvents()
+        let originalCount = events.count
         
         events.removeAll { $0.id == eventToDelete.id }
         UserDefaultsManager.saveEvents(events)
         
-        return Just(())
+        return Just(events.count < originalCount)
             .eraseToAnyPublisher()
     }
 }

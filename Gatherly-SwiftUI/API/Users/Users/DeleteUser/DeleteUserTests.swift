@@ -50,11 +50,43 @@ final class DeleteUserTests: XCTestCase {
         UserDefaultsManager.saveUsers([userToDelete, userToKeep])
         
         GatherlyAPI.deleteUser(userToDelete)
-            .sink { _ in 
+            .sink { success in
+                XCTAssertTrue(success, "Expected deleteUser to return true")
+                
                 let storedUsers = UserDefaultsManager.loadUsers()
+                
                 XCTAssertEqual(storedUsers.count, 1)
                 XCTAssertFalse(storedUsers.contains { $0.id == userToDelete.id })
                 XCTAssertTrue(storedUsers.contains { $0.id == userToKeep.id })
+                expectation.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        wait(for: [expectation], timeout: 2)
+    }
+    
+    func testDeleteUserFailsForNonexistentUser() {
+        let expectation = XCTestExpectation(description: "Deletion should fail for nonexistent user")
+        
+        let fakeUser = User(
+            createdTimestamp: Int(Date().timestamp),
+            email: "ghost@example.com",
+            eventIDs: [],
+            firstName: "Ghost",
+            friendIDs: [],
+            groupIDs: [],
+            id: 999,
+            isEmailEnabled: false,
+            lastName: "User",
+            phone: nil
+        )
+        
+        UserDefaultsManager.saveUsers([])
+        
+        GatherlyAPI.deleteUser(fakeUser)
+            .sink { success in
+                XCTAssertFalse(success, "Expected deleteUser to return false for nonexistent user")
+                
                 expectation.fulfill()
             }
             .store(in: &cancellables)
