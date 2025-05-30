@@ -70,6 +70,7 @@ struct UserDetailView: View {
                         UserFormView(store: store, onComplete: handleEditComplete)
                     }
                 }
+                .deletionFailedAlert(for: $usersViewModel.deletionFailed, message: "Failed to delete user")
             }
         }
     }
