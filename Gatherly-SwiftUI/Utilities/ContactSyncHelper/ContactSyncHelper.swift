@@ -9,7 +9,9 @@ import Foundation
 
 enum ContactSyncHelper {
     static func runIfNeeded(currentUserID: Int = 1) async {
-        guard !UserDefaultsManager.getDidSyncContacts() else { return }
+        guard !UserDefaultsManager.getDidSyncContacts() else {
+            return
+        }
 
         let contacts = await withCheckedContinuation { continuation in
             ContactSyncManager.shared.fetchContacts { contacts in
