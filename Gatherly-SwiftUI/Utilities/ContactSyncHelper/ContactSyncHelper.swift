@@ -8,18 +8,18 @@
 import Foundation
 
 enum ContactSyncHelper {
-    static func runIfNeeded(currentUserID: Int = 1) {
-        guard !UserDefaultsManager.getDidSyncContacts() else {
-            return
-        }
-        
-        ContactSyncManager.shared.fetchContacts { contacts in
-            Task {
-                let (newUsers, newFriendIDs) = await generateUsersFromContacts(contacts)
-                appendUsersAndUpdateFriends(newUsers, newFriendIDs, currentUserID: currentUserID)
-                UserDefaultsManager.setDidSyncContacts(true)
+    static func runIfNeeded(currentUserID: Int = 1) async {
+        guard !UserDefaultsManager.getDidSyncContacts() else { return }
+
+        let contacts = await withCheckedContinuation { continuation in
+            ContactSyncManager.shared.fetchContacts { contacts in
+                continuation.resume(returning: contacts)
             }
         }
+
+        let (newUsers, newFriendIDs) = await generateUsersFromContacts(contacts)
+        appendUsersAndUpdateFriends(newUsers, newFriendIDs, currentUserID: currentUserID)
+        UserDefaultsManager.setDidSyncContacts(true)
     }
     
     static func forceSync(currentUserID: Int = 1, completion: @escaping () -> Void = {}) {
