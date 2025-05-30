@@ -119,8 +119,11 @@ private extension EditGroupView {
                 Task {
                     let updatedGroup = await editGroupViewModel.prepareUpdatedGroup()
                     groupsViewModel.update(updatedGroup)
-                    isSaving = false
-                    onSave(updatedGroup)
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                        isSaving = false
+                        onSave(updatedGroup)
+                    }
                 }
             }
             .accessibilityIdentifier("saveGroupButton")
