@@ -130,6 +130,7 @@ private extension EventDetailView {
                    let oldDate = oldDate,
                    !Date.isSameDay(date1: newDate, date2: oldDate) {
                     navigationState.navigateToEventsForDate = newDate
+                    navigationState.calendarSelectedDate = savedEvent.date
                 }
                 
                 isShowingEditView = false
