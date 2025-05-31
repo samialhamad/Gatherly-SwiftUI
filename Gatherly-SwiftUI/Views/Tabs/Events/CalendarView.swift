@@ -78,6 +78,7 @@ private extension CalendarView {
         if isCalendarView {
             GatherlyCalendarView(
                 allEvents: $eventsViewModel.events,
+                selectedDate: $navigationState.calendarSelectedDate,
                 navigationState: navigationState
             )
             .frame(maxHeight: .infinity)

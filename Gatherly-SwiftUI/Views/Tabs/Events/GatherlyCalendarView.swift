@@ -8,11 +8,11 @@ import SwiftUI
 
 struct GatherlyCalendarView: View {
     @Binding var allEvents: [Event]
-    @State private var selectedDate: Date? = Date()
     @State private var isShowingDayEvents = false
+    @Binding var selectedDate: Date?
     
     let navigationState: NavigationState
-    
+
     private var eventsForSelectedDate: [Event] {
         guard let selected = selectedDate else {
             return []
