@@ -9,6 +9,7 @@ import Foundation
 import SwiftUI
 
 class NavigationState: ObservableObject {
+    @Published var calendarSelectedDate: Date? = Date()
     @Published var navigateToEvent: Event? = nil
     @Published var navigateToEventsForDate: Date? = nil
     @Published var navigateToGroup: UserGroup? = nil
