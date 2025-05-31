@@ -33,6 +33,8 @@ struct GatherlyAppearance {
         
         UITextField.appearance().tintColor = Colors.primary
         UITextField.appearance().clearButtonMode = .whileEditing
+        
+        UIButton.appearance(whenContainedInInstancesOf: [UICalendarView.self]).tintColor = Colors.primary // buttons in Calendar
     }
 }
 

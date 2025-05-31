@@ -76,12 +76,10 @@ private extension CalendarView {
     @ViewBuilder
     var content: some View {
         if isCalendarView {
-            VStack(spacing: 0) {
-                GatherlyCalendarView(
-                    allEvents: $eventsViewModel.events,
-                    navigationState: navigationState
-                )
-            }
+            GatherlyCalendarView(
+                allEvents: $eventsViewModel.events,
+                navigationState: navigationState
+            )
             .frame(maxHeight: .infinity)
         } else {
             EventsGroupedListView()

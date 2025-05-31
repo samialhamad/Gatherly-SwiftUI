@@ -1,5 +1,5 @@
 {
-  "originHash" : "75c168eea311873b2d3d5868abe201129afefcf25b6ab9e5c8ee5d5f83a90107",
+  "originHash" : "1b9a4918bd7c3b40eca6d66cf24d12f94fda6f9961d04880357a09285f6d140c",
   "pins" : [
     {
       "identity" : "combine-schedulers",
@@ -8,24 +8,6 @@
       "state" : {
         "revision" : "5928286acce13def418ec36d05a001a9641086f2",
         "version" : "1.0.3"
-      }
-    },
-    {
-      "identity" : "elegantcalendar",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ThasianX/ElegantCalendar",
-      "state" : {
-        "revision" : "d446234f27e60f5bef15f91c35d384f388ff2c7d",
-        "version" : "4.3.2"
-      }
-    },
-    {
-      "identity" : "elegantpages",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ThasianX/ElegantPages",
-      "state" : {
-        "revision" : "d598ce4824c40296decc84eae5b3c042d3dff842",
-        "version" : "1.4.2"
       }
     },
     {
