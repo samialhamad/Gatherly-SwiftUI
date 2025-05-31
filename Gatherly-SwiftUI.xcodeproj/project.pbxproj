@@ -11,7 +11,6 @@
 		F16B31A12D9DD41700C17188 /* SwiftyCrop in Frameworks */ = {isa = PBXBuildFile; productRef = F16B31A02D9DD41700C17188 /* SwiftyCrop */; };
 		F1BF19442DB1D40B005F18F7 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = F1BF19432DB1D40B005F18F7 /* RxSwift */; };
 		F1BF19552DB6F40B005F18F7 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = F1BF19542DB6F40B005F18F7 /* ComposableArchitecture */; };
-		F1D79C182DCAA7A100636C21 /* ElegantCalendar.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F1D79C172DCAA7A100636C21 /* ElegantCalendar.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -37,7 +36,6 @@
 		F11CDC302D77958B007BC1F1 /* Gatherly-SwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Gatherly-SwiftUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F11CDC3A2D77958B007BC1F1 /* Gatherly-SwiftUIUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Gatherly-SwiftUIUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F18F7D0C2DEA5CB400337A3E /* XCTest.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = XCTest.framework; path = Platforms/iPhoneOS.platform/Developer/Library/Frameworks/XCTest.framework; sourceTree = DEVELOPER_DIR; };
-		F1D79C172DCAA7A100636C21 /* ElegantCalendar.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = ElegantCalendar.xcassets; path = "../../../../../../../../Documents/GitHub/Gatherly-SwiftUI/ElegantCalendar.xcassets"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -182,7 +180,6 @@
 				F11CDC332D77958B007BC1F1 /* Gatherly-SwiftUITests */,
 				F11CDC3D2D77958B007BC1F1 /* Gatherly-SwiftUIUITests */,
 				F11CDC212D77958A007BC1F1 /* Products */,
-				F1D79C172DCAA7A100636C21 /* ElegantCalendar.xcassets */,
 				F18F7D0B2DEA5CB300337A3E /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -334,7 +331,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F1105EC62DD41CB5000F7752 /* LaunchScreen.storyboard in Resources */,
-				F1D79C182DCAA7A100636C21 /* ElegantCalendar.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
