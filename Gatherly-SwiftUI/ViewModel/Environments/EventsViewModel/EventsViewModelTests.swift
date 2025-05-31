@@ -32,7 +32,7 @@ final class EventsViewModelTests: XCTestCase {
         UserDefaultsManager.saveEvents(events)
     }
     
-    private func makeSampleEvent(id: Int) -> Event {
+    private func makeSampleEvent(id: Int?) -> Event {
         return Event(
             categories: [],
             date: Date(),
@@ -85,7 +85,7 @@ final class EventsViewModelTests: XCTestCase {
         XCTAssertTrue(UserDefaultsManager.loadEvents().isEmpty)
         XCTAssertTrue(viewModel.events.isEmpty)
         
-        let newEvent = makeSampleEvent(id: 1)
+        let newEvent = makeSampleEvent(id: nil) // API will make one if needed
         let creationExpectation = expectation(description: "create() should append a new event")
         
         viewModel.$events
