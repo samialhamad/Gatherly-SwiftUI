@@ -70,6 +70,12 @@ struct GatherlyCalendarView: View {
                 calendarManager.scrollToDay(selected, animated: true)
             }
         }
+        .onChange(of: navigationState.navigateToEventsForDate) { newDate in
+            guard let date = newDate else {
+                return
+            }
+            calendarManager.scrollToDay(date, animated: true)
+        }
     }
     
     private var dayEventsViewButton: some View {
