@@ -15,23 +15,6 @@ class NavigationState: ObservableObject {
     @Published var navigateToGroup: UserGroup? = nil
     @Published var selectedTab: Int = Tab.calendar.rawValue
     
-    func pushToEventDetail(_ event: Event) {
-        switchToTab(.calendar)
-        
-        // Clear state to trigger re-navigation
-        navigateToEvent = nil
-        navigateToEventsForDate = nil
-        
-        // Schedule in order
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.navigateToEventsForDate = event.date
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.navigateToEvent = event
-            }
-        }
-    }
-    
     func switchToTab(_ tab: Tab) {
         selectedTab = tab.rawValue
     }
