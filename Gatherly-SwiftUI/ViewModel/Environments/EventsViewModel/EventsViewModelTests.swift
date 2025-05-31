@@ -11,119 +11,234 @@ import XCTest
 
 final class EventsViewModelTests: XCTestCase {
     
-//    var viewModel: EventsViewModel!
-//    var cancellables: Set<AnyCancellable> = []
-//    
-//    override func setUp() {
-//        super.setUp()
-//        UserDefaultsManager.removeEvents()
-//        viewModel = EventsViewModel()
-//    }
-//    
-//    func makeSampleEvent(id: Int = 1, title: String = "Test Event") -> Event {
-//        Event(
-//            categories: [.entertainment],
-//            date: Date(),
-//            description: "Details",
-//            endTimestamp: Int(Date().addingTimeInterval(3600).timestamp),
-//            id: id,
-//            plannerID: 1,
-//            memberIDs: [2],
-//            title: title,
-//            startTimestamp: Int(Date().timestamp)
-//        )
-//    }
-//    
-//    func testLoadIfNeeded_onlyLoadsOnce() {
-//        let event = makeSampleEvent(id: 1)
-//        UserDefaultsManager.saveEvents([event])
-//
-//        let expectation = XCTestExpectation(description: "loadIfNeeded loads once")
-//        var callCount = 0
-//
-//        viewModel.$events
-//            .dropFirst()
-//            .sink { loadedEvents in
-//                callCount += 1
-//                XCTAssertEqual(loadedEvents.count, 1)
-//                XCTAssertEqual(loadedEvents.first?.id, 1)
-//
-//                // Trigger loadIfNeeded again — should not change anything
-//                self.viewModel.loadIfNeeded()
-//
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-//                    XCTAssertEqual(callCount, 1, "Should only load once")
-//                    expectation.fulfill()
-//                }
-//            }
-//            .store(in: &cancellables)
-//
-//        viewModel.loadIfNeeded()
-//        wait(for: [expectation], timeout: 3)
-//    }
-//    
-//    func testCreate_addsEventToList() {
-//        let expectation = XCTestExpectation(description: "Event is created and added")
-//        
-//        let event = makeSampleEvent(id: 345, title: "New Event")
-//        viewModel.create(event) { created in
-//            XCTAssertNotNil(created.id)
-//            XCTAssertEqual(self.viewModel.events.count, 1)
-//            XCTAssertEqual(self.viewModel.events.first?.title, "New Event")
-//            expectation.fulfill()
-//        }
-//        
-//        wait(for: [expectation], timeout: 3)
-//    }
-//    
-//    func testUpdate_modifiesEventInList() {
-//        let original = makeSampleEvent(id: 10, title: "Old Title")
-//        UserDefaultsManager.saveEvents([original])
-//        
-//        let expectation = XCTestExpectation(description: "Event is updated in-place")
-//        
-//        viewModel.fetch()
-//        
-//        viewModel.$events
-//            .dropFirst()
-//            .sink { _ in
-//                var updated = original
-//                updated.title = "Updated Title"
-//                self.viewModel.update(updated)
-//                
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-//                    XCTAssertEqual(self.viewModel.events.count, 1)
-//                    XCTAssertEqual(self.viewModel.events.first?.title, "Updated Title")
-//                    expectation.fulfill()
-//                }
-//            }
-//            .store(in: &cancellables)
-//        
-//        wait(for: [expectation], timeout: 4)
-//    }
-//    
-//    func testDelete_removesEventFromList() {
-//        let event1 = makeSampleEvent(id: 20)
-//        let event2 = makeSampleEvent(id: 21)
-//        UserDefaultsManager.saveEvents([event1, event2])
-//        
-//        let expectation = XCTestExpectation(description: "Event is deleted")
-//        
-//        viewModel.fetch()
-//        
-//        viewModel.$events
-//            .dropFirst()
-//            .sink { _ in
-//                self.viewModel.delete(event1)
-//                
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-//                    XCTAssertEqual(self.viewModel.events.count, 1)
-//                    XCTAssertEqual(self.viewModel.events.first?.id, 21)
-//                    expectation.fulfill()
-//                }
-//            }
-//            .store(in: &cancellables)
-//        
-//        wait(for: [expectation], timeout: 4)
-//    }
+    var viewModel: EventsViewModel!
+    var cancellables: Set<AnyCancellable> = []
+    
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        UserDefaultsManager.removeEvents()
+        viewModel = EventsViewModel()
+        cancellables = []
+    }
+    
+    override func tearDownWithError() throws {
+        viewModel = nil
+        cancellables = []
+        
+        try super.tearDownWithError()
+    }
+    
+    private func saveSampleEventsToDefaults(_ events: [Event]) {
+        UserDefaultsManager.saveEvents(events)
+    }
+    
+    private func makeSampleEvent(id: Int) -> Event {
+        return Event(
+            categories: [],
+            date: Date(),
+            description: "Sample Event \(id)",
+            endTimestamp: Int(Date().addingTimeInterval(3600).timestamp),
+            id: id,
+            plannerID: 1,
+            memberIDs: [],
+            title: "Event \(id)",
+            startTimestamp: Int(Date().timestamp)
+        )
+    }
+    
+    func testFetch() {
+        let event1 = makeSampleEvent(id: 11)
+        let event2 = makeSampleEvent(id: 99)
+        saveSampleEventsToDefaults([event1, event2])
+        
+        let eventsLoaded = expectation(description: "fetch() should populate viewModel.events")
+        
+        var didSeeLoading = false
+        
+        viewModel.$isLoading
+            .sink { isLoading in
+                if isLoading {
+                    didSeeLoading = true
+                } else if didSeeLoading {
+                    eventsLoaded.fulfill()
+                }
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$events
+            .dropFirst()
+            .sink { loadedEvents in
+                XCTAssertEqual(loadedEvents.count, 2)
+                XCTAssertTrue(loadedEvents.contains(where: { $0.id == 11 }))
+                XCTAssertTrue(loadedEvents.contains(where: { $0.id == 99 }))
+            }
+            .store(in: &cancellables)
+        
+        XCTAssertFalse(viewModel.isLoading)
+        viewModel.fetch()
+        
+        wait(for: [eventsLoaded], timeout: 3.0)
+        XCTAssertFalse(viewModel.isLoading)
+    }
+    
+    func testCreate() {
+        XCTAssertTrue(UserDefaultsManager.loadEvents().isEmpty)
+        XCTAssertTrue(viewModel.events.isEmpty)
+        
+        let newEvent = makeSampleEvent(id: 1)
+        let creationExpectation = expectation(description: "create() should append a new event")
+        
+        viewModel.$events
+            .dropFirst()
+            .sink { loadedEvents in
+                XCTAssertEqual(loadedEvents.count, 1)
+                XCTAssertEqual(loadedEvents.first?.title, newEvent.title)
+                creationExpectation.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        let loadingExpectation = expectation(description: "create() should toggle isLoading to false after creation")
+        var didSeeLoadingOnCreate = false
+        
+        viewModel.$isLoading
+            .sink { isLoading in
+                if isLoading {
+                    didSeeLoadingOnCreate = true
+                } else if didSeeLoadingOnCreate {
+                    loadingExpectation.fulfill()
+                }
+            }
+            .store(in: &cancellables)
+        
+        XCTAssertFalse(viewModel.isLoading)
+        viewModel.create(newEvent) { returnedEvent in
+            let stored = UserDefaultsManager.loadEvents()
+            XCTAssertEqual(stored.count, 1)
+            XCTAssertEqual(stored.first?.title, newEvent.title)
+        }
+        
+        wait(for: [creationExpectation, loadingExpectation], timeout: 3.0, enforceOrder: true)
+        XCTAssertFalse(viewModel.isLoading)
+    }
+    
+    func testUpdate() {
+        let originalEvent = makeSampleEvent(id: 123)
+        saveSampleEventsToDefaults([originalEvent])
+        
+        let fetchExpectation = expectation(description: "Initial fetch() to load the original event")
+        viewModel.$events
+            .dropFirst()
+            .first(where: { loadedEvents in
+                return loadedEvents.contains(where: { $0.id == 123 })
+            })
+            .sink { _ in
+                fetchExpectation.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        viewModel.fetch()
+        wait(for: [fetchExpectation], timeout: 3.0)
+        
+        XCTAssertEqual(viewModel.events.count, 1)
+        XCTAssertEqual(viewModel.events.first?.id, 123)
+        
+        var editedEvent = originalEvent
+        editedEvent.title = "Updated Title"
+        editedEvent.description = "Updated Description"
+        
+        let updateExpectation = expectation(description: "update() should replace the existing event in viewModel.events")
+        
+        viewModel.$events
+            .dropFirst()
+            .first(where: { loadedEvents in
+                return
+                loadedEvents.count == 1 &&
+                loadedEvents.first?.title == "Updated Title" &&
+                loadedEvents.first?.description == "Updated Description"
+            })
+            .sink { _ in
+                updateExpectation.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        XCTAssertFalse(viewModel.isLoading)
+        viewModel.update(editedEvent)
+        
+        wait(for: [updateExpectation], timeout: 2.0)
+        XCTAssertFalse(viewModel.isLoading)
+        
+        let persisted = UserDefaultsManager.loadEvents()
+        XCTAssertEqual(persisted.count, 1)
+        XCTAssertEqual(persisted.first?.title, "Updated Title")
+    }
+    
+    func testDeleteRemovesEvent() {
+        let eventToDelete = makeSampleEvent(id: 555)
+        saveSampleEventsToDefaults([eventToDelete])
+        
+        let fetchExpectation = expectation(description: "fetch() should load the event to delete")
+        viewModel.$events
+            .dropFirst()
+            .sink { loadedEvents in
+                if loadedEvents.contains(where: { $0.id == 555 }) {
+                    fetchExpectation.fulfill()
+                }
+            }
+            .store(in: &cancellables)
+        
+        viewModel.fetch()
+        wait(for: [fetchExpectation], timeout: 3.0)
+        XCTAssertEqual(viewModel.events.count, 1)
+        
+        let deleteExpectation = expectation(description: "delete() success should remove the event from viewModel.events")
+        
+        viewModel.$events
+            .dropFirst()
+            .sink { loadedEvents in
+                XCTAssertTrue(loadedEvents.isEmpty)
+                deleteExpectation.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        XCTAssertFalse(viewModel.deletionFailed)
+        
+        viewModel.delete(eventToDelete)
+        
+        wait(for: [deleteExpectation], timeout: 2.0)
+        XCTAssertFalse(viewModel.deletionFailed)
+        
+        let persistedAfterDelete = UserDefaultsManager.loadEvents()
+        XCTAssertTrue(persistedAfterDelete.isEmpty)
+    }
+    
+    func testDeleteReinsertsEvent_andSetsDeletionFailed() {
+        let orphanEvent = makeSampleEvent(id: 123)
+        viewModel.events = [orphanEvent]
+        XCTAssertTrue(UserDefaultsManager.loadEvents().isEmpty)
+        
+        var seenEvents: [[Event]] = []
+        let removalAndReinsert = expectation(
+            description: "First emission: [] (removed), Second emission: [orphanEvent] reinserted"
+        )
+        removalAndReinsert.expectedFulfillmentCount = 2
+        
+        viewModel.$events
+            .dropFirst()
+            .sink { loadedEvents in
+                seenEvents.append(loadedEvents)
+                removalAndReinsert.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        viewModel.delete(orphanEvent)
+        
+        wait(for: [removalAndReinsert], timeout: 1.0)
+        
+        XCTAssertEqual(seenEvents.count, 2)
+        XCTAssertTrue(seenEvents[0].isEmpty)
+        
+        XCTAssertEqual(seenEvents[1].count, 1)
+        XCTAssertEqual(seenEvents[1].first?.id, 123)
+        XCTAssertTrue(viewModel.deletionFailed)
+    }
 }
