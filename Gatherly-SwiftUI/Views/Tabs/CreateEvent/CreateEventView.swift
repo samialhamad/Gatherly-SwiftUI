@@ -170,9 +170,8 @@ private extension CreateEventView {
                 
                 eventsViewModel.create(newEvent) { createdEvent in
                     createEventViewModel.clearFields()
-                    navigationState.navigateToEvent = createdEvent
-                    navigationState.switchToTab(.calendar)
                     isSaving = false
+                    navigationState.pushToEventDetail(createdEvent)
                 }
             } label: {
                 Text("Create")
