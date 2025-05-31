@@ -29,6 +29,11 @@ struct SwiftUICalendarView: UIViewRepresentable {
     func updateUIView(_ uiView: UICalendarView, context: Context) {
         // Redraw event highlights
         uiView.reloadDecorations(forDateComponents: [], animated: true)
+        
+        if let selectedDate {
+            let components = Calendar.current.dateComponents([.year, .month, .day], from: selectedDate)
+            (uiView.selectionBehavior as? UICalendarSelectionSingleDate)?.setSelected(components, animated: true)
+        }
     }
     
     class Coordinator: NSObject, UICalendarSelectionSingleDateDelegate, UICalendarViewDelegate {
