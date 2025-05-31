@@ -11,114 +11,229 @@ import XCTest
 
 final class GroupsViewModelTests: XCTestCase {
     
-//    var viewModel: GroupsViewModel!
-//    var cancellables: Set<AnyCancellable> = []
-//    
-//    override func setUp() {
-//        super.setUp()
-//        UserDefaultsManager.removeGroups()
-//        viewModel = GroupsViewModel()
-//    }
-//    
-//    func makeSampleGroup(id: Int = 100, name: String = "Test Group") -> UserGroup {
-//        UserGroup(
-//            bannerImageName: "banner.png",
-//            id: id,
-//            imageName: "img.png",
-//            leaderID: 1,
-//            memberIDs: [2, 3],
-//            messages: [],
-//            name: name
-//        )
-//    }
-//    
-//    func testLoadIfNeeded_loadsOnlyOnce() {
-//        let group = makeSampleGroup(id: 1)
-//        UserDefaultsManager.saveGroups([group])
-//        
-//        let expectation = XCTestExpectation(description: "loadIfNeeded loads once")
-//        
-//        viewModel.loadIfNeeded()
-//        
-//        viewModel.$groups
-//            .dropFirst()
-//            .sink { loadedGroups in
-//                XCTAssertEqual(loadedGroups.count, 1)
-//                XCTAssertEqual(loadedGroups.first?.id, 1)
-//                
-//                // Second call shouldn't reload
-//                self.viewModel.groups = [] // simulate wipe
-//                self.viewModel.loadIfNeeded()
-//                XCTAssertEqual(self.viewModel.groups.count, 0, "Should not reload on second call")
-//                expectation.fulfill()
-//            }
-//            .store(in: &cancellables)
-//        
-//        wait(for: [expectation], timeout: 3)
-//    }
-//    
-//    func testCreateGroup_addsToList() {
-//        let expectation = XCTestExpectation(description: "Group is created and added to list")
-//        
-//        let group = makeSampleGroup(id: 102, name: "New Group")
-//        viewModel.create(group) { createdGroup in
-//            XCTAssertNotNil(createdGroup.id)
-//            XCTAssertEqual(self.viewModel.groups.count, 1)
-//            XCTAssertEqual(self.viewModel.groups.first?.name, "New Group")
-//            expectation.fulfill()
-//        }
-//        
-//        wait(for: [expectation], timeout: 3)
-//    }
-//    
-//    func testUpdateGroup_replacesCorrectly() {
-//        let original = makeSampleGroup(id: 10, name: "Original")
-//        UserDefaultsManager.saveGroups([original])
-//        
-//        let expectation = XCTestExpectation(description: "Group is updated in list")
-//        
-//        viewModel.fetch()
-//        
-//        viewModel.$groups
-//            .dropFirst()
-//            .sink { _ in
-//                var updated = original
-//                updated.name = "Updated Name"
-//                
-//                self.viewModel.update(updated)
-//                
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-//                    XCTAssertEqual(self.viewModel.groups.first?.name, "Updated Name")
-//                    expectation.fulfill()
-//                }
-//            }
-//            .store(in: &cancellables)
-//        
-//        wait(for: [expectation], timeout: 4)
-//    }
-//    
-//    func testDeleteGroup_removesFromList() {
-//        let group1 = makeSampleGroup(id: 20)
-//        let group2 = makeSampleGroup(id: 21)
-//        UserDefaultsManager.saveGroups([group1, group2])
-//        
-//        let expectation = XCTestExpectation(description: "Group is deleted from list")
-//        
-//        viewModel.fetch()
-//        
-//        viewModel.$groups
-//            .dropFirst()
-//            .sink { _ in
-//                self.viewModel.delete(group1)
-//                
-//                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-//                    XCTAssertEqual(self.viewModel.groups.count, 1)
-//                    XCTAssertEqual(self.viewModel.groups.first?.id, 21)
-//                    expectation.fulfill()
-//                }
-//            }
-//            .store(in: &cancellables)
-//        
-//        wait(for: [expectation], timeout: 4)
-//    }
+    var viewModel: GroupsViewModel!
+    var cancellables: Set<AnyCancellable> = []
+    
+    override func setUpWithError() throws {
+        try super.setUpWithError()
+        UserDefaultsManager.removeGroups()
+        viewModel = GroupsViewModel()
+        cancellables = []
+    }
+    
+    override func tearDownWithError() throws {
+        viewModel = nil
+        cancellables = []
+        try super.tearDownWithError()
+    }
+    
+    private func saveSampleGroupsToDefaults(_ groups: [UserGroup]) {
+        UserDefaultsManager.saveGroups(groups)
+    }
+    
+    private func makeSampleGroup(id: Int?) -> UserGroup {
+        return UserGroup(
+            id: id,
+            leaderID: 1,
+            memberIDs: [],
+            messages: [],
+            name: "Group \(id ?? -1)"
+        )
+    }
+    
+    func testFetch() {
+        let groupA = makeSampleGroup(id: 10)
+        let groupB = makeSampleGroup(id: 20)
+        saveSampleGroupsToDefaults([groupA, groupB])
+        
+        let fetchExpectation = expectation(description: "fetch() should populate viewModel.groups")
+        
+        var didSeeLoading = false
+        
+        viewModel.$isLoading
+            .sink { isLoading in
+                if isLoading {
+                    didSeeLoading = true
+                } else if didSeeLoading {
+                    fetchExpectation.fulfill()
+                }
+            }
+            .store(in: &cancellables)
+        
+        viewModel.$groups
+            .dropFirst()
+            .sink { loadedGroups in
+                XCTAssertEqual(loadedGroups.count, 2)
+                XCTAssertTrue(loadedGroups.contains(where: { $0.id == 10 }))
+                XCTAssertTrue(loadedGroups.contains(where: { $0.id == 20 }))
+            }
+            .store(in: &cancellables)
+        
+        XCTAssertFalse(viewModel.isLoading)
+        
+        viewModel.fetch()
+        
+        wait(for: [fetchExpectation], timeout: 3.0)
+        XCTAssertFalse(viewModel.isLoading)
+    }
+    
+    func testCreate() {
+        XCTAssertTrue(UserDefaultsManager.loadGroups().isEmpty)
+        XCTAssertTrue(viewModel.groups.isEmpty)
+        
+        let newGroup = makeSampleGroup(id: nil) // API will generate one if needed
+        let createExpectation = expectation(description: "create() should append a new group")
+        
+        viewModel.$groups
+            .dropFirst()
+            .sink { loadedGroups in
+                XCTAssertEqual(loadedGroups.count, 1)
+                XCTAssertEqual(loadedGroups.first?.name, newGroup.name)
+                createExpectation.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        let loadingExpectation = expectation(description: "create() toggles isLoading back to false")
+        var sawLoading = false
+        
+        viewModel.$isLoading
+            .sink { isLoading in
+                if isLoading {
+                    sawLoading = true
+                } else if sawLoading {
+                    loadingExpectation.fulfill()
+                }
+            }
+            .store(in: &cancellables)
+        
+        XCTAssertFalse(viewModel.isLoading)
+        viewModel.create(newGroup) { returnedGroup in
+            let stored = UserDefaultsManager.loadGroups()
+            XCTAssertEqual(stored.count, 1)
+            XCTAssertEqual(stored.first?.name, newGroup.name)
+            XCTAssertNotNil(stored.first?.id)
+        }
+        
+        wait(for: [createExpectation, loadingExpectation], timeout: 3.0, enforceOrder: true)
+        XCTAssertFalse(viewModel.isLoading)
+    }
+    
+    func testUpdate() {
+        let originalGroup = makeSampleGroup(id: 10)
+        saveSampleGroupsToDefaults([originalGroup])
+        
+        let fetchExpectation = expectation(description: "Initial fetch() loads the original group")
+        viewModel.$groups
+            .dropFirst()
+            .first(where: { loadedGroups in
+                return loadedGroups.contains(where: { $0.id == 10 })
+            })
+            .sink { _ in
+                fetchExpectation.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        viewModel.fetch()
+        wait(for: [fetchExpectation], timeout: 3.0)
+        
+        XCTAssertEqual(viewModel.groups.count, 1)
+        XCTAssertEqual(viewModel.groups.first?.id, 10)
+        
+        var editedGroup = originalGroup
+        editedGroup.name = "Updated Group Name"
+        
+        let updateExpectation = expectation(description: "update() should replace the existing group")
+        viewModel.$groups
+            .dropFirst()
+            .first(where: { loadedGroups in
+                
+                return loadedGroups.count == 1 &&
+                loadedGroups.first?.name == "Updated Group Name"
+            })
+            .sink { _ in
+                updateExpectation.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        XCTAssertFalse(viewModel.isLoading)
+        viewModel.update(editedGroup)
+        
+        wait(for: [updateExpectation], timeout: 2.0)
+        XCTAssertFalse(viewModel.isLoading)
+        
+        let persisted = UserDefaultsManager.loadGroups()
+        XCTAssertEqual(persisted.count, 1)
+        XCTAssertEqual(persisted.first?.name, "Updated Group Name")
+    }
+    
+    func testDelete() {
+        let groupToDelete = makeSampleGroup(id: 123)
+        saveSampleGroupsToDefaults([groupToDelete])
+        
+        let fetchExpectation = expectation(description: "fetch() loads groupToDelete")
+        viewModel.$groups
+            .dropFirst()
+            .first(where: { loadedGroups in
+                loadedGroups.contains(where: { $0.id == 123 })
+            })
+            .sink { _ in
+                fetchExpectation.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        viewModel.fetch()
+        wait(for: [fetchExpectation], timeout: 3.0)
+        XCTAssertEqual(viewModel.groups.count, 1)
+        
+        let deleteExpectation = expectation(description: "delete() removes the group from viewModel.groups")
+        viewModel.$groups
+            .dropFirst()
+            .sink { loadedGroups in
+                XCTAssertTrue(loadedGroups.isEmpty)
+                deleteExpectation.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        XCTAssertFalse(viewModel.deletionFailed)
+        viewModel.delete(groupToDelete)
+        
+        wait(for: [deleteExpectation], timeout: 2.0)
+        XCTAssertFalse(viewModel.deletionFailed)
+        
+        let persistedAfterDelete = UserDefaultsManager.loadGroups()
+        XCTAssertTrue(persistedAfterDelete.isEmpty)
+    }
+    
+    func testDeleteReinsertsGroup_andSetsDeletionFailed() {
+        let orphanGroup = makeSampleGroup(id: 23)
+        viewModel.groups = [orphanGroup]
+        XCTAssertTrue(UserDefaultsManager.loadGroups().isEmpty)
+        
+        
+        var seenGroups: [[UserGroup]] = []
+        let removalAndReinsert = expectation(
+            description: "First emission: [] (removed), Second emission: orphanGroup reinserted"
+        )
+        removalAndReinsert.expectedFulfillmentCount = 2
+        
+        viewModel.$groups
+            .dropFirst()
+            .sink { loadedGroups in
+                seenGroups.append(loadedGroups)
+                removalAndReinsert.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        viewModel.delete(orphanGroup)
+        
+        wait(for: [removalAndReinsert], timeout: 1.0)
+        
+        XCTAssertEqual(seenGroups.count, 2)
+        XCTAssertTrue(seenGroups[0].isEmpty)
+        
+        XCTAssertEqual(seenGroups[1].count, 1)
+        XCTAssertEqual(seenGroups[1].first?.id, 23)
+        
+        XCTAssertTrue(viewModel.deletionFailed)
+    }
 }
