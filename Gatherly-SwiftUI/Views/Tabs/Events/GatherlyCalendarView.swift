@@ -68,9 +68,9 @@ struct GatherlyCalendarView: View {
         Group {
             if let selectedDate {
                 Text(selectedDate.formatted(.dateTime.weekday(.wide).month(.wide).day()))
+                    .accessibilityIdentifier("calendarMonthHeader")
                     .font(.title2.bold())
                     .foregroundColor(.primary)
-                    .accessibilityIdentifier("calendarMonthHeader")
                     .padding(.top)
                     .padding(.bottom)
             }
@@ -83,7 +83,7 @@ struct GatherlyCalendarView: View {
             
             Text(allEvents.eventCountLabel(for: selected))
                 .font(.title3.weight(.semibold))
-                .foregroundColor(Color(Colors.primary))
+                .foregroundColor(.primary)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal)
             

@@ -69,7 +69,7 @@ struct SwiftUICalendarView: UIViewRepresentable {
             }
             
             if hasEvent {
-                return .default(color: UIColor(named: "PrimaryColor") ?? .systemBlue, size: .medium)
+                return .default(color: Colors.primary)
             }
             
             return nil
