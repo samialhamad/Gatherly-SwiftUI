@@ -22,6 +22,7 @@ struct SwiftUICalendarView: UIViewRepresentable {
         calendarView.calendar = Calendar.current
         calendarView.delegate = context.coordinator
         calendarView.selectionBehavior = UICalendarSelectionSingleDate(delegate: context.coordinator)
+        calendarView.tintColor = Colors.primary
         return calendarView
     }
     
