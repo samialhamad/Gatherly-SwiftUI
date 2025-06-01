@@ -12,8 +12,13 @@ struct DayEventsView: View {
     @Environment(\.dismiss) private var dismiss
     @EnvironmentObject var eventsViewModel: EventsViewModel
     @State private var isShowingCreateEvent = false
+    @EnvironmentObject var navigationState: NavigationState
     
     let date: Date
+
+    private var selectedDate: Date {
+        navigationState.calendarSelectedDate ?? date
+    }
     
     var body: some View {
         List {
@@ -22,7 +27,7 @@ struct DayEventsView: View {
             upcomingEventsSection
         }
         .listStyle(.insetGrouped)
-        .navigationTitle(date.formatted(date: .long, time: .omitted))
+        .navigationTitle(selectedDate.formatted(date: .long, time: .omitted))
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -35,7 +40,7 @@ struct DayEventsView: View {
             }
         }
         .navigationDestination(isPresented: $isShowingCreateEvent) {
-            CreateEventView(date: date)
+            CreateEventView(date: selectedDate)
         }
         .onChange(of: allEventsForDate) { newValue in
             if newValue.isEmpty {
@@ -55,7 +60,7 @@ private extension DayEventsView {
                 guard let eventDate = event.date else {
                     return false
                 }
-                return Calendar.current.isDate(eventDate, inSameDayAs: date)
+                return Calendar.current.isDate(eventDate, inSameDayAs: selectedDate)
             }
             .sorted(by: { ($0.startTimestamp ?? 0) < ($1.startTimestamp ?? 0) })
     }
