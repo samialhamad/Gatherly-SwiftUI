@@ -122,17 +122,9 @@ private extension EventDetailView {
             editEventViewModel: EditEventViewModel(event: updatedEvent),
             friendsDict: friendsDict,
             onSave: { savedEvent in
-                let oldDate = updatedEvent.date
                 self.updatedEvent = savedEvent
                 eventsViewModel.update(savedEvent)
-                
-                if let newDate = savedEvent.date,
-                   let oldDate = oldDate,
-                   !Date.isSameDay(date1: newDate, date2: oldDate) {
-                    navigationState.navigateToEventsForDate = newDate
-                    navigationState.calendarSelectedDate = savedEvent.date
-                }
-                
+                navigationState.calendarSelectedDate = savedEvent.date
                 isShowingEditView = false
             },
             onCancel: {
