@@ -14,10 +14,8 @@ struct DayEventsView: View {
     @State private var isShowingCreateEvent = false
     @EnvironmentObject var navigationState: NavigationState
     
-    let date: Date
-
     private var selectedDate: Date {
-        navigationState.calendarSelectedDate ?? date
+        navigationState.calendarSelectedDate ?? Date()
     }
     
     var body: some View {

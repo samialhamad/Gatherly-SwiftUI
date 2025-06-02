@@ -48,11 +48,7 @@ struct CalendarView: View {
                     if !newValue { navigationState.navigateToEventsForDate = nil }
                 }
             )) {
-                if let date = navigationState.navigateToEventsForDate {
-                    DayEventsView(date: date)
-                } else {
-                    EmptyView()
-                }
+                DayEventsView()
             }
             .onAppear {
                 eventsViewModel.loadIfNeeded()

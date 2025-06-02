@@ -45,12 +45,11 @@ struct GatherlyCalendarView: View {
             
             dayEventsViewButton
                 .frame(height: Constants.GatherlyCalendarView.dayEventsViewButtonFrameHeight)
-            
         }
         .padding(.horizontal)
         .background(
             NavigationLink(
-                destination: DayEventsView(date: selectedDate ?? Date()),
+                destination: DayEventsView(),
                 isActive: $isShowingDayEvents,
                 label: { EmptyView() }
             )
