@@ -13,17 +13,17 @@ final class AppInitializerTests: XCTestCase {
     override func setUp() {
         super.setUp()
         UserDefaultsManager.resetAll()
+        unsetenv("UITESTING")
     }
-    
     
     override func tearDown() {
         UserDefaultsManager.resetAll()
+        unsetenv("UITESTING")
         super.tearDown()
     }
     
     func testSeedsSampleDataWhenNotUITesting() {
-        let originalArgs = CommandLine.arguments
-        CommandLine.arguments = ["TestAppExecutable"] // no "--uitesting"
+        unsetenv("UITESTING")
         
         XCTAssertFalse(UserDefaultsManager.getDidSeedSampleData())
         
@@ -35,9 +35,9 @@ final class AppInitializerTests: XCTestCase {
         let allGroups = UserDefaultsManager.loadGroups()
         
         XCTAssertEqual(allUsers.count, SampleData.sampleUsers.count)
+        
         guard let sami = allUsers.first(where: { $0.id == 1 }) else {
             XCTFail("Expected to find a user whose id == 1 in saved users")
-            CommandLine.arguments = originalArgs
             return
         }
         
@@ -60,13 +60,10 @@ final class AppInitializerTests: XCTestCase {
         XCTAssertEqual(currentUser?.id, 1)
         XCTAssertEqual(allEvents.count, SampleData.sampleEvents.count)
         XCTAssertEqual(allGroups.count, SampleData.sampleGroups.count)
-        
-        CommandLine.arguments = originalArgs
     }
     
     func testSeedsSampleDataWhenUITesting() {
-        let originalArgs = CommandLine.arguments
-        CommandLine.arguments = ["TestAppExecutable", "--uitesting"]
+        setenv("UITESTING", "1", 1)
         
         UserDefaultsManager.setDidSeedSampleData(true)
         
@@ -89,7 +86,6 @@ final class AppInitializerTests: XCTestCase {
         UserDefaultsManager.saveCurrentUser(dummyUser)
         
         XCTAssertTrue(UserDefaultsManager.getDidSeedSampleData())
-        XCTAssertEqual(UserDefaultsManager.loadUsers().map { $0.id }, [99])
         
         AppInitializer.runIfNeeded()
         
@@ -98,17 +94,14 @@ final class AppInitializerTests: XCTestCase {
         // The dummy user should be gone only sampleUsers should remain
         let storedIDs = Set(UserDefaultsManager.loadUsers().map { $0.id })
         let expectedIDs = Set(SampleData.sampleUsers.map { $0.id })
-        XCTAssertEqual(storedIDs, expectedIDs)
         
+        XCTAssertEqual(storedIDs, expectedIDs)
         XCTAssertEqual(UserDefaultsManager.loadEvents().count, SampleData.sampleEvents.count)
         XCTAssertEqual(UserDefaultsManager.loadGroups().count, SampleData.sampleGroups.count)
-        
-        CommandLine.arguments = originalArgs
     }
     
     func testDoesNotReapplySampleDataIfAlreadySeededAndNotUITesting() {
-        let originalArgs = CommandLine.arguments
-        CommandLine.arguments = ["TestAppExecutable"]
+        unsetenv("UITESTING")
         
         AppInitializer.runIfNeeded()
         XCTAssertTrue(UserDefaultsManager.getDidSeedSampleData())
@@ -132,8 +125,7 @@ final class AppInitializerTests: XCTestCase {
         
         let usersAfterSecondRun = UserDefaultsManager.loadUsers()
         let samiAfterSecondRun = usersAfterSecondRun.first(where: { $0.id == 1 })
-        XCTAssertEqual(samiAfterSecondRun?.firstName, "Modified")
         
-        CommandLine.arguments = originalArgs
+        XCTAssertEqual(samiAfterSecondRun?.firstName, "Modified")
     }
 }

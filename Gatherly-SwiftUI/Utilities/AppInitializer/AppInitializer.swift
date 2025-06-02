@@ -9,8 +9,7 @@ import Foundation
 
 enum AppInitializer {
     static func runIfNeeded() {
-        if CommandLine.arguments.contains("--uitesting") {
-            print("UI Testing: Resetting UserDefaults and loading SampleData")
+        if ProcessInfo.processInfo.environment["UITESTING"] == "1" {
             UserDefaultsManager.resetAll()
             applySampleData()
         } else if !UserDefaultsManager.getDidSeedSampleData() {
