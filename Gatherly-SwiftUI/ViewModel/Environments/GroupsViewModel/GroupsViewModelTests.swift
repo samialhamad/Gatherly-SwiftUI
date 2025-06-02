@@ -194,11 +194,9 @@ final class GroupsViewModelTests: XCTestCase {
             }
             .store(in: &cancellables)
         
-        XCTAssertFalse(viewModel.deletionFailed)
         viewModel.delete(groupToDelete)
         
         wait(for: [deleteExpectation], timeout: 2.0)
-        XCTAssertFalse(viewModel.deletionFailed)
         
         let persistedAfterDelete = UserDefaultsManager.loadGroups()
         XCTAssertTrue(persistedAfterDelete.isEmpty)

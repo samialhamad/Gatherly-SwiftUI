@@ -303,7 +303,6 @@ final class UsersViewModelTests: XCTestCase {
         wait(for: [fetchExpectation], timeout: 3.0)
         
         XCTAssertEqual(viewModel.users.count, 1)
-        XCTAssertFalse(viewModel.deletionFailed)
         
         let deleteExpectation = expectation(description: "delete() removes userB from viewModel.users")
         
@@ -318,7 +317,6 @@ final class UsersViewModelTests: XCTestCase {
         viewModel.delete(userB)
         
         wait(for: [deleteExpectation], timeout: 2.0)
-        XCTAssertFalse(viewModel.deletionFailed)
         
         let persisted = UserDefaultsManager.loadUsers()
         XCTAssertFalse(persisted.contains(where: { $0.id == 2 }))

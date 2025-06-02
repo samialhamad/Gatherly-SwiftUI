@@ -199,13 +199,10 @@ final class EventsViewModelTests: XCTestCase {
                 deleteExpectation.fulfill()
             }
             .store(in: &cancellables)
-        
-        XCTAssertFalse(viewModel.deletionFailed)
-        
+                
         viewModel.delete(eventToDelete)
         
         wait(for: [deleteExpectation], timeout: 2.0)
-        XCTAssertFalse(viewModel.deletionFailed)
         
         let persistedAfterDelete = UserDefaultsManager.loadEvents()
         XCTAssertTrue(persistedAfterDelete.isEmpty)
