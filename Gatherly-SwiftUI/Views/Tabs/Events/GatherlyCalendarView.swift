@@ -71,8 +71,9 @@ struct GatherlyCalendarView: View {
                     .accessibilityIdentifier("calendarMonthHeader")
                     .font(.title2.bold())
                     .foregroundColor(.primary)
-                    .padding(.top)
-                    .padding(.bottom)
+                    .padding(.vertical)
+                    .padding(.horizontal)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
     }
