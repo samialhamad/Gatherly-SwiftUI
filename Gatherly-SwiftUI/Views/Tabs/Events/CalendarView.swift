@@ -31,18 +31,6 @@ struct CalendarView: View {
                 toggleCalendarViewButton
             }
             .navigationDestination(isPresented: Binding(
-                get: { navigationState.navigateToEvent != nil },
-                set: { newValue in
-                    if !newValue { navigationState.navigateToEvent = nil }
-                }
-            )) {
-                if let event = navigationState.navigateToEvent {
-                    EventDetailView(event: event)
-                } else {
-                    EmptyView()
-                }
-            }
-            .navigationDestination(isPresented: Binding(
                 get: { navigationState.navigateToEventsForDate != nil },
                 set: { newValue in
                     if !newValue { navigationState.navigateToEventsForDate = nil }

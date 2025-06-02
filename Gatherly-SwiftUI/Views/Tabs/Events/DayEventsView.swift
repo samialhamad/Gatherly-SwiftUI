@@ -40,6 +40,18 @@ struct DayEventsView: View {
         .navigationDestination(isPresented: $isShowingCreateEvent) {
             CreateEventView(date: selectedDate)
         }
+        .navigationDestination(isPresented: Binding(
+            get: { navigationState.navigateToEvent != nil },
+            set: { newValue in
+                if !newValue { navigationState.navigateToEvent = nil }
+            }
+        )) {
+            if let event = navigationState.navigateToEvent {
+                EventDetailView(event: event)
+            } else {
+                EmptyView()
+            }
+        }
         .onChange(of: allEventsForDate) { newValue in
             if newValue.isEmpty {
                 dismiss()
