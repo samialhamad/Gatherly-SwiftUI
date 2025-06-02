@@ -190,7 +190,10 @@ private extension EventDetailView {
     var eventMapPreview: some View {
         Group {
             if let location = updatedEvent.location {
-                let coordinate = CLLocationCoordinate2D(latitude: location.latitude, longitude: location.longitude)
+                let coordinate = CLLocationCoordinate2D(
+                    latitude: location.latitude,
+                    longitude: location.longitude
+                )
                 let region = MKCoordinateRegion(
                     center: coordinate,
                     span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
