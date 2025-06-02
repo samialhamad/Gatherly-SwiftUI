@@ -54,7 +54,7 @@ struct SwiftUICalendarView: UIViewRepresentable {
                     return false
                 }
                 
-                return Calendar.current.isDate(date, inSameDayAs: selected)
+                return Date.isSameDay(date1: date, date2: selected)
             }
             
             if hasEvent {
@@ -71,7 +71,8 @@ struct SwiftUICalendarView: UIViewRepresentable {
                 guard let eventDate = $0.date else {
                     return false
                 }
-                return Calendar.current.isDate(eventDate, inSameDayAs: date)
+                
+                return Date.isSameDay(date1: eventDate, date2: date)
             }
             
             if hasEvent {

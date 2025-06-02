@@ -60,7 +60,8 @@ private extension DayEventsView {
                 guard let eventDate = event.date else {
                     return false
                 }
-                return Calendar.current.isDate(eventDate, inSameDayAs: selectedDate)
+                
+                return Date.isSameDay(date1: eventDate, date2: selectedDate)
             }
             .sorted(by: { ($0.startTimestamp ?? 0) < ($1.startTimestamp ?? 0) })
     }

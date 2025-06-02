@@ -14,7 +14,7 @@ struct GatherlyCalendarView: View {
     let navigationState: NavigationState
 
     private var eventsForSelectedDate: [Event] {
-        guard let selected = selectedDate else {
+        guard let selectedDate else {
             return []
         }
         
@@ -22,7 +22,8 @@ struct GatherlyCalendarView: View {
             guard let eventDate = event.date else {
                 return false
             }
-            return Calendar.current.isDate(eventDate, inSameDayAs: selected)
+            
+            return Date.isSameDay(date1: eventDate, date2: selectedDate)
         }
         .sorted { ($0.startTimestamp ?? 0) < ($1.startTimestamp ?? 0) }
     }
