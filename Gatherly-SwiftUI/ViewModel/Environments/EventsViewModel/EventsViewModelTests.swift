@@ -33,15 +33,16 @@ final class EventsViewModelTests: XCTestCase {
     }
     
     private func makeSampleEvent(id: Int?) -> Event {
+        let eventID = id ?? 0
         return Event(
             categories: [],
             date: Date(),
-            description: "Sample Event \(id)",
+            description: "Sample Event \(eventID)",
             endTimestamp: Int(Date().addingTimeInterval(3600).timestamp),
             id: id,
             plannerID: 1,
             memberIDs: [],
-            title: "Event \(id)",
+            title: "Event \(eventID)",
             startTimestamp: Int(Date().timestamp)
         )
     }
@@ -151,8 +152,7 @@ final class EventsViewModelTests: XCTestCase {
         viewModel.$events
             .dropFirst()
             .first(where: { loadedEvents in
-                return
-                loadedEvents.count == 1 &&
+                return loadedEvents.count == 1 &&
                 loadedEvents.first?.title == "Updated Title" &&
                 loadedEvents.first?.description == "Updated Description"
             })
