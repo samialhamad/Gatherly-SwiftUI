@@ -59,6 +59,44 @@ final class CreateEventViewUITests: GatherlyUITestCase {
         XCTAssertTrue(navBar.waitForExistence(timeout: 5))
     }
     
+    func testSuccessfulCreateNavigatesAway_backNavigatesToDayEventsView_andBackToCalendarView() {
+        let titleField = app.textFields["eventTitleTextField"]
+        XCTAssertTrue(titleField.waitForExistence(timeout: 2))
+        titleField.tap()
+        titleField.typeText("UI Test Event")
+        
+        app.navigationBars["Create Event"].tap()
+        
+        app.swipeUp()
+        let createButton = app.buttons["createEventButton"]
+        XCTAssertTrue(createButton.waitForExistence(timeout: 2))
+        XCTAssertTrue(createButton.isEnabled)
+        createButton.tap()
+        
+        let detailNavBar = app.navigationBars["UI Test Event"]
+        XCTAssertTrue(detailNavBar.waitForExistence(timeout: 5))
+        
+        let backButton = detailNavBar.buttons.firstMatch
+        XCTAssertTrue(backButton.exists)
+        backButton.tap()
+        
+        let formatter = DateFormatter()
+        formatter.dateStyle = .long
+        formatter.timeStyle = .none
+        let todayString = formatter.string(from: Date())
+        
+        let dayNavBar = app.navigationBars[todayString]
+        XCTAssertTrue(dayNavBar.waitForExistence(timeout: 2))
+        
+        let dayBackButton = dayNavBar.buttons.firstMatch
+        XCTAssertTrue(dayBackButton.exists)
+        dayBackButton.tap()
+        
+        let calendarNavBar = app.navigationBars["My Events"]
+        XCTAssertTrue(calendarNavBar.waitForExistence(timeout: 2))
+        XCTAssertFalse(app.buttons["resetToTodayButton"].exists)
+    }
+    
     // MARK: - Text Field Tests
     
     func testTitleFieldAcceptsInput() {
