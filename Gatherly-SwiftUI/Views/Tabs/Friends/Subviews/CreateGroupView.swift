@@ -101,8 +101,8 @@ private extension CreateGroupView {
                     let newGroup = await createGroupViewModel.preparedGroup()
                     
                     await MainActor.run {
-                        groupsViewModel.create(newGroup) { created in
-                            navigationState.navigateToGroup = created
+                        groupsViewModel.create(newGroup) { createdGroup in
+                            navigationState.navigateToGroup = createdGroup
                             navigationState.switchToTab(.friends)
                             isSaving = false
                             dismiss()
