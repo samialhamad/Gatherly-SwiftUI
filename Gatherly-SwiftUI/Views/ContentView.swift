@@ -23,7 +23,7 @@ struct ContentView: View {
         Group {
             if isLoading {
                 ActivityIndicator(message: Constants.ContentView.loadingString)
-            } else if let currentUser = usersViewModel.currentUser {
+            } else {
                 TabView(selection: $navigationState.selectedTab) {
                     calendarTab
                     createEventTab
