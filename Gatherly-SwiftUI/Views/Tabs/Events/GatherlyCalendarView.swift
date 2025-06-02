@@ -47,13 +47,9 @@ struct GatherlyCalendarView: View {
                 .frame(height: Constants.GatherlyCalendarView.dayEventsViewButtonFrameHeight)
         }
         .padding(.horizontal)
-        .background(
-            NavigationLink(
-                destination: DayEventsView(),
-                isActive: $isShowingDayEvents,
-                label: { EmptyView() }
-            )
-        )
+        .navigationDestination(isPresented: $isShowingDayEvents) {
+            DayEventsView()
+        }
         .onChange(of: navigationState.navigateToEventsForDate) { _oldItem, newDate in
             guard let date = newDate else {
                 return
