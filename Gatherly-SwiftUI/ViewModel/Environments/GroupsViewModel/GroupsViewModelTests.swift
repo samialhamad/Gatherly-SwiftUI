@@ -203,37 +203,4 @@ final class GroupsViewModelTests: XCTestCase {
         let persistedAfterDelete = UserDefaultsManager.loadGroups()
         XCTAssertTrue(persistedAfterDelete.isEmpty)
     }
-    
-    func testDeleteReinsertsGroup_andSetsDeletionFailed() {
-        let orphanGroup = makeSampleGroup(id: 23)
-        viewModel.groups = [orphanGroup]
-        XCTAssertTrue(UserDefaultsManager.loadGroups().isEmpty)
-        
-        
-        var seenGroups: [[UserGroup]] = []
-        let removalAndReinsert = expectation(
-            description: "First emission: [] (removed), Second emission: orphanGroup reinserted"
-        )
-        removalAndReinsert.expectedFulfillmentCount = 2
-        
-        viewModel.$groups
-            .dropFirst()
-            .sink { loadedGroups in
-                seenGroups.append(loadedGroups)
-                removalAndReinsert.fulfill()
-            }
-            .store(in: &cancellables)
-        
-        viewModel.delete(orphanGroup)
-        
-        wait(for: [removalAndReinsert], timeout: 1.0)
-        
-        XCTAssertEqual(seenGroups.count, 2)
-        XCTAssertTrue(seenGroups[0].isEmpty)
-        
-        XCTAssertEqual(seenGroups[1].count, 1)
-        XCTAssertEqual(seenGroups[1].first?.id, 23)
-        
-        XCTAssertTrue(viewModel.deletionFailed)
-    }
 }

@@ -56,7 +56,6 @@ struct EventDetailView: View {
                     .sheet(isPresented: $isShowingEditView) {
                         editEventSheet
                     }
-                    .deletionFailedAlert(for: $eventsViewModel.deletionFailed, message: "Failed to delete event")
                 }
             }
         }

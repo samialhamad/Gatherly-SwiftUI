@@ -44,7 +44,6 @@ struct GroupDetailView: View {
                 .sheet(isPresented: $isShowingEditView) {
                     editGroupSheet
                 }
-                .deletionFailedAlert(for: $groupsViewModel.deletionFailed, message: "Failed to delete group")
                 .refreshOnAppear()
             }
         }

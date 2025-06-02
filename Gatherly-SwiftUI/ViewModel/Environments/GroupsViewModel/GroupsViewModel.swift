@@ -9,7 +9,6 @@ import Combine
 import Foundation
 
 final class GroupsViewModel: ObservableObject {
-    @Published var deletionFailed = false
     @Published var groups: [UserGroup] = []
     @Published var isLoading = false
     
@@ -79,7 +78,6 @@ final class GroupsViewModel: ObservableObject {
                 .sink { [weak self] success in
                     if !success {
                         self?.groups.insert(removed, at: index)
-                        self?.deletionFailed = true
                     }
                 }
                 .store(in: &cancellables)

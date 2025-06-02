@@ -36,16 +36,6 @@ extension View {
         self.modifier(CenteredTextModifier())
     }
     
-    // MARK: - Deletion Failed
-    
-    func deletionFailedAlert(for binding: Binding<Bool>, message: String) -> some View {
-        self.alert("Failed to Delete", isPresented: binding) {
-            Button("OK", role: .cancel) {}
-        } message: {
-            Text(message)
-        }
-    }
-    
     // MARK: - Disclosure Icon
     
     func addDisclosureIcon(color: Color = .gray) -> some View {

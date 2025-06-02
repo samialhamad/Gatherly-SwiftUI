@@ -323,31 +323,4 @@ final class UsersViewModelTests: XCTestCase {
         let persisted = UserDefaultsManager.loadUsers()
         XCTAssertFalse(persisted.contains(where: { $0.id == 2 }))
     }
-    
-    func testDeleteReinsertsUser_andSetsDeletionFailed() {
-        let orphanUser = makeUser(id: 99, friendIDs: nil)
-        viewModel.users = [orphanUser]
-        XCTAssertTrue(UserDefaultsManager.loadUsers().isEmpty)
-        
-        var seenUsers: [[User]] = []
-        let removalAndReinsert = expectation(description: "two emissions: first [], then [orphanUser]")
-        removalAndReinsert.expectedFulfillmentCount = 2
-        
-        viewModel.$users
-            .dropFirst()
-            .sink { publishedUsers in
-                seenUsers.append(publishedUsers)
-                removalAndReinsert.fulfill()
-            }
-            .store(in: &cancellables)
-        
-        viewModel.delete(orphanUser)
-        
-        wait(for: [removalAndReinsert], timeout: 1.0)
-        XCTAssertEqual(seenUsers.count, 2)
-        XCTAssertTrue(seenUsers[0].isEmpty)
-        XCTAssertEqual(seenUsers[1].count, 1)
-        XCTAssertEqual(seenUsers[1].first?.id, 99)
-        XCTAssertTrue(viewModel.deletionFailed)
-    }
 }

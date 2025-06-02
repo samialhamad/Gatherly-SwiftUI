@@ -10,7 +10,6 @@ import Foundation
 
 final class UsersViewModel: ObservableObject {
     @Published var currentUser: User?
-    @Published var deletionFailed = false
     @Published var users: [User] = []
     @Published var isLoading = false
     
@@ -96,7 +95,6 @@ final class UsersViewModel: ObservableObject {
                 .sink { [weak self] success in
                     if !success {
                         self?.users.insert(removed, at: index)
-                        self?.deletionFailed = true
                     }
                 }
                 .store(in: &cancellables)

@@ -9,7 +9,6 @@ import Combine
 import Foundation
 
 final class EventsViewModel: ObservableObject {
-    @Published var deletionFailed = false
     @Published var events: [Event] = []
     @Published var isLoading: Bool = false
     
@@ -77,7 +76,6 @@ final class EventsViewModel: ObservableObject {
                 .sink { [weak self] success in
                     if !success {
                         self?.events.insert(removed, at: index)
-                        self?.deletionFailed = true
                     }
                 }
                 .store(in: &cancellables)

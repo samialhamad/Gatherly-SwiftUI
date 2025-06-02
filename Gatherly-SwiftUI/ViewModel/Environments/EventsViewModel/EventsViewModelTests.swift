@@ -210,35 +210,4 @@ final class EventsViewModelTests: XCTestCase {
         let persistedAfterDelete = UserDefaultsManager.loadEvents()
         XCTAssertTrue(persistedAfterDelete.isEmpty)
     }
-    
-    func testDeleteReinsertsEvent_andSetsDeletionFailed() {
-        let orphanEvent = makeSampleEvent(id: 123)
-        viewModel.events = [orphanEvent]
-        XCTAssertTrue(UserDefaultsManager.loadEvents().isEmpty)
-        
-        var seenEvents: [[Event]] = []
-        let removalAndReinsert = expectation(
-            description: "First emission: [] (removed), Second emission: [orphanEvent] reinserted"
-        )
-        removalAndReinsert.expectedFulfillmentCount = 2
-        
-        viewModel.$events
-            .dropFirst()
-            .sink { loadedEvents in
-                seenEvents.append(loadedEvents)
-                removalAndReinsert.fulfill()
-            }
-            .store(in: &cancellables)
-        
-        viewModel.delete(orphanEvent)
-        
-        wait(for: [removalAndReinsert], timeout: 1.0)
-        
-        XCTAssertEqual(seenEvents.count, 2)
-        XCTAssertTrue(seenEvents[0].isEmpty)
-        
-        XCTAssertEqual(seenEvents[1].count, 1)
-        XCTAssertEqual(seenEvents[1].first?.id, 123)
-        XCTAssertTrue(viewModel.deletionFailed)
-    }
 }
