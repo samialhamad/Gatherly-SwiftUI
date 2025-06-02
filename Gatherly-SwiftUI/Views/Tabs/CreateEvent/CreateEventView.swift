@@ -170,13 +170,7 @@ private extension CreateEventView {
                 
                 eventsViewModel.create(newEvent) { createdEvent in
                     createEventViewModel.clearFields()
-                    navigationState.switchToTab(.calendar)
-                    let eventDate = createdEvent.date ?? Date()
-                    navigationState.calendarSelectedDate = eventDate
-                    navigationState.navigateToEventsForDate = eventDate
-                    DispatchQueue.main.async {
-                        navigationState.navigateToEvent = createdEvent
-                    }
+                    navigationState.pushToEventDetailView(createdEvent)
                     isSaving = false
                 }
             } label: {

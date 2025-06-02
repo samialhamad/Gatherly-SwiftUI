@@ -18,4 +18,17 @@ class NavigationState: ObservableObject {
     func switchToTab(_ tab: Tab) {
         selectedTab = tab.rawValue
     }
+    
+    func pushToEventDetailView(_ event: Event) {
+        switchToTab(.calendar)
+        
+        let eventDate = event.date ?? Date()
+        
+        calendarSelectedDate = eventDate
+        navigateToEventsForDate = eventDate
+        
+        DispatchQueue.main.async {
+            self.navigateToEvent = event
+        }
+    }
 }
