@@ -27,7 +27,8 @@ struct CalendarView: View {
             .navigationTitle("My Events")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                calendarToolbarButton
+                resetDateButton
+                toggleCalendarViewButton
             }
             .navigationDestination(isPresented: Binding(
                 get: { navigationState.navigateToEvent != nil },
@@ -64,7 +65,26 @@ private extension CalendarView {
     
     // MARK: - Subviews
     
-    var calendarToolbarButton: some ToolbarContent {
+    var resetDateButton: some ToolbarContent {
+        Group {
+            if isCalendarView,
+               let selectedDate = navigationState.calendarSelectedDate,
+               !Date.isSameDay(date1: selectedDate, date2: Date())
+            {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        navigationState.calendarSelectedDate = Date()
+                    } label: {
+                        Image(systemName: "calendar.badge.clock.rtl")
+                            .font(.headline)
+                    }
+                    .accessibilityIdentifier("resetToTodayButton")
+                }
+            }
+        }
+    }
+    
+    var toggleCalendarViewButton: some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
             Button(action: { isCalendarView.toggle() }) {
                 Image(systemName: isCalendarView ? "list.bullet" : "calendar")
