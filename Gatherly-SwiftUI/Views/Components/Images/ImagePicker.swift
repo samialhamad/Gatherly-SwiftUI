@@ -86,7 +86,7 @@ private extension ImagePicker {
     
     var photoPickerButton: some View {
         PhotosPicker("Select Image", selection: $selectedPhotoItem, matching: .images)
-            .onChange(of: selectedPhotoItem) { newItem in
+            .onChange(of: selectedPhotoItem) { _oldItem, newItem in
                 Task {
                     if let data = try? await newItem?.loadTransferable(type: Data.self),
                        let uiImage = UIImage(data: data) {
