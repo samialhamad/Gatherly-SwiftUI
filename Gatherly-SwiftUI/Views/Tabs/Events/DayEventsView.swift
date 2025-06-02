@@ -52,7 +52,7 @@ struct DayEventsView: View {
                 EmptyView()
             }
         }
-        .onChange(of: allEventsForDate) { newValue in
+        .onChange(of: allEventsForDate) { _oldItem, newValue in
             if newValue.isEmpty {
                 dismiss()
             }
