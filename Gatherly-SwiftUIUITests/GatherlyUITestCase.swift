@@ -15,7 +15,7 @@ class GatherlyUITestCase: XCTestCase {
         continueAfterFailure = false
 
         app = XCUIApplication()
-        app.launchArguments.append("--uitesting")
+        app.launchEnvironment["UITESTING"] = "1"
         app.launch()
         
         let calendarTab = app.tabBars.buttons["Calendar"]
