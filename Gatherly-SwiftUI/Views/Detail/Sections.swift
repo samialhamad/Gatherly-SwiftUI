@@ -96,12 +96,7 @@ public struct EventMembersSection: View {
                 .receive(on: RunLoop.main)
                 .sink { user, friendsList in
                     if let user {
-                        let friendsDict: [Int: User] = Dictionary(uniqueKeysWithValues: friendsList.compactMap {
-                            guard let id = $0.id else {
-                                return nil
-                            }
-                            return (id, $0)
-                        })
+                        let friendsDict = friendsList.keyedBy(\.id)
                         
                         self.friends = user
                             .resolvedFriends(from: friendsDict)

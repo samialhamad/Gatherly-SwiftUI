@@ -58,13 +58,7 @@ private extension GroupDetailView {
     // MARK: - Computed Vars
     
     var friendsDict: [Int: User] {
-        Dictionary(uniqueKeysWithValues: usersViewModel.users.compactMap { user in
-            guard let id = user.id else {
-                return nil
-            }
-            
-            return (id, user)
-        })
+        usersViewModel.users.keyedBy(\.id)
     }
     
     var group: UserGroup? {

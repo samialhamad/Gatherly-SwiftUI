@@ -79,13 +79,7 @@ enum ContactSyncHelper {
     private static func appendUsersAndUpdateFriends(_ newUsers: [User], _ newFriendIDs: [Int], currentUserID: Int) {
         var usersDict = UserDefaultsManager.loadUsers()
         
-        let newUsersDict: [Int: User] = Dictionary(uniqueKeysWithValues: newUsers.compactMap { user in
-            guard let id = user.id else {
-                return nil
-            }
-            
-            return (id, user)
-        })
+        let newUsersDict = newUsers.keyedBy(\.id)
                 
         for (id, newUser) in newUsersDict {
             usersDict[id] = newUser

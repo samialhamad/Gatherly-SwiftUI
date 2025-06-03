@@ -64,13 +64,7 @@ struct EventDetailView: View {
             GatherlyAPI.getUsers()
                 .receive(on: RunLoop.main)
                 .sink { users in
-                    self.friendsDict = Dictionary(uniqueKeysWithValues: users.compactMap { user in
-                        guard let id = user.id else {
-                            return nil
-                        }
-                        
-                        return (id, user)
-                    })
+                    self.friendsDict = users.keyedBy(\.id)
                     self.isLoading = false
                 }
                 .store(in: &cancellables)

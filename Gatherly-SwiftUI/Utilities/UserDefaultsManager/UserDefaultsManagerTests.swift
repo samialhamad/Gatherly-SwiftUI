@@ -26,11 +26,7 @@ final class UserDefaultsManagerTests: XCTestCase {
             User(firstName: "Bob", id: 2)
         ]
         
-        let sampleUsersDict: [Int: User] = Dictionary(
-            uniqueKeysWithValues: sampleUsers.map { user in
-                (user.id!, user)
-            }
-        )
+        let sampleUsersDict = sampleUsers.keyedBy(\.id)
         
         UserDefaultsManager.saveUsers(sampleUsersDict)
         let loadedUsersDict = UserDefaultsManager.loadUsers()
@@ -44,11 +40,7 @@ final class UserDefaultsManagerTests: XCTestCase {
             Event(date: Date(), id: 2, title: "Two")
         ]
         
-        let sampleEventsDict: [Int: Event] = Dictionary(
-            uniqueKeysWithValues: sampleEvents.map { event in
-                (event.id!, event)
-            }
-        )
+        let sampleEventsDict = sampleEvents.keyedBy(\.id)
         
         UserDefaultsManager.saveEvents(sampleEventsDict)
         let loadedEventsDict = UserDefaultsManager.loadEvents()
@@ -62,11 +54,7 @@ final class UserDefaultsManagerTests: XCTestCase {
             UserGroup(id: 2, leaderID: 2, memberIDs: [2, 3], name: "Two")
         ]
         
-        let sampleGroupsDict: [Int: UserGroup] = Dictionary(
-            uniqueKeysWithValues: sampleGroups.map { group in
-                (group.id!, group)
-            }
-        )
+        let sampleGroupsDict = sampleGroups.keyedBy(\.id)
         
         UserDefaultsManager.saveGroups(sampleGroupsDict)
         let loadedGroupsDict = UserDefaultsManager.loadGroups()
