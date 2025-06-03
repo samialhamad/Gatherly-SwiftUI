@@ -9,11 +9,11 @@ import Combine
 import Foundation
 
 extension GatherlyAPI {
-    static func deleteUser(_ userToDelete: User) -> AnyPublisher<Bool, Never> {
+    static func deleteUser(_ user: User) -> AnyPublisher<Bool, Never> {
         var users = UserDefaultsManager.loadUsers()
         let originalCount = users.count
         
-        users.removeAll { $0.id == userToDelete.id }
+        users.removeAll { $0.id == user.id }
         UserDefaultsManager.saveUsers(users)
         
         return Just(users.count < originalCount)
