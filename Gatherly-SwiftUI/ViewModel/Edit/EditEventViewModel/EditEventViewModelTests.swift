@@ -18,15 +18,18 @@ final class EditEventViewModelTests: XCTestCase {
     // Helper
     func makeSampleEvent() -> Event {
         let now = Date()
+        let start = (now.plus(calendarComponent: .hour, value: 1) ?? now).timestamp
+        let end   = (now.plus(calendarComponent: .hour, value: 2) ?? now).timestamp
+        
         return Event(
             date: Calendar.current.startOfDay(for: now),
             description: "Initial description",
-            endTimestamp: Int(now.addingTimeInterval(7200).timestamp),
+            endTimestamp: Int(end),
             id: 123,
             plannerID: 1,
             memberIDs: [2, 3],
             title: "Initial Title",
-            startTimestamp: Int(now.addingTimeInterval(3600).timestamp)
+            startTimestamp: Int(start)
         )
     }
     

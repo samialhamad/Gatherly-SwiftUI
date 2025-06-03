@@ -107,7 +107,7 @@ private extension EditEventView {
     var endTimeBinding: Binding<Date> {
         Binding(
             get: {
-                Date(timeIntervalSince1970: TimeInterval(editEventViewModel.event.endTimestamp ?? Int(Date().addingTimeInterval(3600).timestamp)))
+                Date(timeIntervalSince1970: TimeInterval(editEventViewModel.event.endTimestamp ?? Int((Date().plus(calendarComponent: .hour, value: 1) ?? Date()).timestamp)))
             },
             set: {
                 editEventViewModel.event.endTimestamp = Int($0.timestamp)

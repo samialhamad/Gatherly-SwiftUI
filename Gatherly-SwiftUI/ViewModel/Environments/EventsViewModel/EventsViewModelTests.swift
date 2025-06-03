@@ -39,7 +39,7 @@ final class EventsViewModelTests: XCTestCase {
             categories: [],
             date: Date(),
             description: "Sample Event \(eventID)",
-            endTimestamp: Int(Date().addingTimeInterval(3600).timestamp),
+            endTimestamp: Int((Date().plus(calendarComponent: .hour, value: 1) ?? Date()).timestamp),
             id: id,
             plannerID: 1,
             memberIDs: [],

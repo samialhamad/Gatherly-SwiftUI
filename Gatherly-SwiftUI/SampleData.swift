@@ -63,63 +63,63 @@ struct SampleData {
     static let sampleEvents: [Event] = [
         Event(
             categories: randomCategories(),
-            date: Calendar.current.date(byAdding: .day, value: -1, to: Date()),
+            date: Date().minus(calendarComponent: .day, value: 1),
             description: "Event from yesterday",
-            endTimestamp: Int(Date().addingTimeInterval(-3600).timestamp),
+            endTimestamp: Int((Date().minus(calendarComponent: .hour, value: 1) ?? Date()).timestamp),
             id: 1,
             plannerID: 1,
             location: Location(latitude: 37.7749, longitude: -122.4194, name: "San Francisco"),
             memberIDs: [2, 3],
             title: "Event Yesterday",
-            startTimestamp: Int(Date().addingTimeInterval(-7200).timestamp)
+            startTimestamp: Int((Date().minus(calendarComponent: .hour, value: 2) ?? Date()).timestamp)
         ),
         Event(
             categories: randomCategories(),
             date: Date(),
             description: "Event 1 for today, finished, test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test",
-            endTimestamp: Int(Date().addingTimeInterval(-3600).timestamp),
+            endTimestamp: Int((Date().minus(calendarComponent: .hour, value: 1) ?? Date()).timestamp),
             id: 2,
             plannerID: 1,
             location: Location(latitude: 34.0522, longitude: -118.2437, name: "Los Angeles"),
             memberIDs: [2, 3],
             title: "Event 1 Today",
-            startTimestamp: Int(Date().addingTimeInterval(-7200).timestamp)
+            startTimestamp: Int((Date().minus(calendarComponent: .hour, value: 2) ?? Date()).timestamp)
         ),
         Event(
             categories: randomCategories(),
             date: Date(),
             description: "Event 2 for today, ongoing",
-            endTimestamp: Int(Date().addingTimeInterval(3600).timestamp),
+            endTimestamp: Int((Date().plus(calendarComponent: .hour, value: 1) ?? Date()).timestamp),
             id: 3,
             plannerID: 1,
             location: Location(latitude: 40.7128, longitude: -74.0060, name: "New York"),
             memberIDs: [2, 3],
             title: "Event 2 Today",
-            startTimestamp: Int(Date().addingTimeInterval(-3600).timestamp)
+            startTimestamp: Int((Date().minus(calendarComponent: .hour, value: 1) ?? Date()).timestamp)
         ),
         Event(
             categories: randomCategories(),
             date: Date(),
             description: "Event 3 for today, in an hour",
-            endTimestamp: Int(Date().addingTimeInterval(7200).timestamp),
+            endTimestamp: Int((Date().plus(calendarComponent: .hour, value: 2) ?? Date()).timestamp),
             id: 4,
             plannerID: 1,
             location: Location(latitude: 51.5074, longitude: -0.1278, name: "London"),
             memberIDs: [2, 3],
             title: "Event 3 Today",
-            startTimestamp: Int(Date().addingTimeInterval(3600).timestamp)
+            startTimestamp: Int((Date().plus(calendarComponent: .hour, value: 1) ?? Date()).timestamp)
         ),
         Event(
             categories: randomCategories(),
-            date: Calendar.current.date(byAdding: .day, value: 1, to: Date()),
+            date: Date().plus(calendarComponent: .day, value: 1),
             description: "Event planned for tomorrow, hope to see you there!",
-            endTimestamp: Int(Date().addingTimeInterval(90000).timestamp),
+            endTimestamp: Int((Date().plus(calendarComponent: .hour, value: 25) ?? Date()).timestamp),
             id: 5,
             plannerID: 2,
             location: Location(latitude: 48.8566, longitude: 2.3522, name: "Paris"),
             memberIDs: [1, 3],
             title: "Event Tomorrow",
-            startTimestamp: Int(Date().addingTimeInterval(86400).timestamp)
+            startTimestamp: Int((Date().plus(calendarComponent: .hour, value: 24) ?? Date()).timestamp)
         )
     ]
     
