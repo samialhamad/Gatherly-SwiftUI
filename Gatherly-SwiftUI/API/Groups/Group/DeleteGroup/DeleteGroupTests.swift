@@ -35,17 +35,21 @@ final class DeleteGroupTests: XCTestCase {
             name: "Keep Me"
         )
         
-        UserDefaultsManager.saveGroups([groupToDelete, groupToKeep])
+        UserDefaultsManager.saveGroups([
+            groupToDelete.id!: groupToDelete,
+            groupToKeep.id!: groupToKeep
+        ])
         
         GatherlyAPI.deleteGroup(groupToDelete)
             .sink { success in
                 XCTAssertTrue(success, "Expected deleteGroup to return true")
                 
-                let storedGroups = UserDefaultsManager.loadGroups()
+                let storedDict = UserDefaultsManager.loadGroups()
                 
-                XCTAssertEqual(storedGroups.count, 1)
-                XCTAssertFalse(storedGroups.contains { $0.id == groupToDelete.id })
-                XCTAssertTrue(storedGroups.contains { $0.id == groupToKeep.id })
+                XCTAssertEqual(storedDict.count, 1)
+                XCTAssertFalse(storedDict.keys.contains(groupToDelete.id!))
+                XCTAssertTrue(storedDict.keys.contains(groupToKeep.id!))
+                
                 expectation.fulfill()
             }
             .store(in: &cancellables)
@@ -63,11 +67,12 @@ final class DeleteGroupTests: XCTestCase {
             name: "Ghost Group"
         )
         
-        UserDefaultsManager.saveGroups([])
+        UserDefaultsManager.saveGroups([:])
         
         GatherlyAPI.deleteGroup(fakeGroup)
             .sink { success in
-                XCTAssertFalse(success, "Expected deletion to fail for non-existent group")
+                XCTAssertFalse(success)
+                
                 expectation.fulfill()
             }
             .store(in: &cancellables)

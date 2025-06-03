@@ -10,17 +10,21 @@ import Foundation
 
 extension GatherlyAPI {
     static func createGroup(_ group: UserGroup) -> AnyPublisher<UserGroup, Never> {
-        var storedGroup = group
+        var newGroup = group
         
-        if storedGroup.id == nil {
-            storedGroup.id = generateID()
+        if newGroup.id == nil {
+            newGroup.id = generateID()
         }
         
         var groups = UserDefaultsManager.loadGroups()
-        groups.append(storedGroup)
+        
+        if let id = newGroup.id {
+            groups[id] = newGroup
+        }
+        
         UserDefaultsManager.saveGroups(groups)
         
-        return Just(storedGroup)
+        return Just(newGroup)
             .delay(for: .seconds(2), scheduler: DispatchQueue.main)
             .eraseToAnyPublisher()
     }

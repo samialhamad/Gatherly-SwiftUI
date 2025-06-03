@@ -12,14 +12,13 @@ extension GatherlyAPI {
     static func updateGroup(_ group: UserGroup) -> AnyPublisher<UserGroup, Never> {
         var groups = UserDefaultsManager.loadGroups()
         
-        if let id = group.id,
-           let index = groups.firstIndex(where: { $0.id == id }) {
-            groups[index] = group
+        if let id = group.id {
+            groups[id] = group
             UserDefaultsManager.saveGroups(groups)
         }
         
         return Just(group)
-            .delay(for: .seconds(1), scheduler: DispatchQueue.main)
+            .delay(for: .seconds(2), scheduler: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 }

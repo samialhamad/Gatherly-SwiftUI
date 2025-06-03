@@ -10,7 +10,10 @@ import Foundation
 
 extension GatherlyAPI {
     static func getGroups() -> AnyPublisher<[UserGroup], Never> {
-        Just(UserDefaultsManager.loadGroups())
+        let groups = UserDefaultsManager.loadGroups()
+        let groupsArray = Array(groups.values)
+
+        return Just(groupsArray)
             .delay(for: .seconds(2), scheduler: DispatchQueue.main)
             .eraseToAnyPublisher()
     }

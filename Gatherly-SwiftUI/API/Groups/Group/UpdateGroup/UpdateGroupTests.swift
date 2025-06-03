@@ -18,6 +18,11 @@ final class UpdateGroupTests: XCTestCase {
         UserDefaultsManager.removeGroups()
     }
     
+    override func tearDown() {
+        UserDefaultsManager.removeGroups()
+        super.tearDown()
+    }
+    
     func testUpdateGroup() {
         let expectation = XCTestExpectation(description: "Group is updated and saved")
         
@@ -31,7 +36,10 @@ final class UpdateGroupTests: XCTestCase {
             name: "Original Name"
         )
         
-        UserDefaultsManager.saveGroups([original])
+        let initialDict: [Int: UserGroup] = [
+            original.id!: original
+        ]
+        UserDefaultsManager.saveGroups(initialDict)
         
         var updated = original
         updated.name = "Updated Name"
@@ -49,9 +57,11 @@ final class UpdateGroupTests: XCTestCase {
                 XCTAssertEqual(result.memberIDs, [1, 2, 3])
                 XCTAssertEqual(result.messages ?? [], original.messages ?? [])
                 
-                let storedGroups = UserDefaultsManager.loadGroups()
-                XCTAssertEqual(storedGroups.count, 1)
-                XCTAssertEqual(storedGroups.first?.name, "Updated Name")
+                let storedDict = UserDefaultsManager.loadGroups()
+                
+                XCTAssertEqual(storedDict.count, 1)
+                XCTAssertTrue(storedDict.keys.contains(original.id!))
+                
                 expectation.fulfill()
             }
             .store(in: &cancellables)

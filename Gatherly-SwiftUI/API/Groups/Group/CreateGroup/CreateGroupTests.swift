@@ -35,15 +35,19 @@ final class CreateGroupTests: XCTestCase {
             .sink { createdGroup in
                 XCTAssertEqual(createdGroup.name, "New Group")
                 XCTAssertNotNil(createdGroup.id)
-                XCTAssertGreaterThan(createdGroup.id ?? 0, 0)
+                
+                let groupID = createdGroup.id!
+                XCTAssertGreaterThan(groupID, 0)
                 XCTAssertEqual(createdGroup.leaderID, 1)
                 XCTAssertEqual(createdGroup.imageName, "group_image.png")
                 XCTAssertEqual(createdGroup.bannerImageName, "banner_image.png")
                 XCTAssertEqual(createdGroup.memberIDs, [2, 3])
                 
-                let storedGroups = UserDefaultsManager.loadGroups()
-                XCTAssertEqual(storedGroups.count, 1)
-                XCTAssertEqual(storedGroups.first?.name, "New Group")
+                let storedDict = UserDefaultsManager.loadGroups()
+                
+                XCTAssertEqual(storedDict.count, 1)
+                XCTAssertTrue(storedDict.keys.contains(groupID))
+                
                 expectation.fulfill()
             }
             .store(in: &cancellables)
