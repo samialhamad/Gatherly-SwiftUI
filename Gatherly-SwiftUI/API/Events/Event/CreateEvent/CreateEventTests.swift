@@ -19,6 +19,11 @@ final class CreateEventTests: XCTestCase {
         UserDefaultsManager.removeEvents()
     }
     
+    override func tearDown() {
+        UserDefaultsManager.removeEvents()
+        super.tearDown()
+    }
+    
     func testCreateEvent() {
         let expectation = XCTestExpectation(description: "Event creation completes")
         
@@ -43,17 +48,21 @@ final class CreateEventTests: XCTestCase {
                 XCTAssertEqual(createdEvent.description, "Description")
                 XCTAssertEqual(createdEvent.date, self.calendar.startOfDay(for: fixedDate))
                 XCTAssertEqual(createdEvent.bannerImageName, "test_banner.jpg")
-                XCTAssertGreaterThan(createdEvent.id ?? 0, 0)
-                XCTAssertLessThanOrEqual(createdEvent.id ?? 0, Int(Date().timestamp))
+                
+                let generatedID = createdEvent.id ?? 0
+                XCTAssertGreaterThan(generatedID, 0)
+                XCTAssertLessThanOrEqual(generatedID, Int(Date().timestamp))
+                
                 XCTAssertEqual(createdEvent.startTimestamp, Int(startTime.timestamp))
                 XCTAssertEqual(createdEvent.endTimestamp, Int(endTime.timestamp))
                 XCTAssertEqual(createdEvent.plannerID, 1)
                 XCTAssertEqual(Set(createdEvent.memberIDs ?? []), Set([2, 3]))
                 XCTAssertEqual(createdEvent.categories, [.entertainment])
                 
-                let events = UserDefaultsManager.loadEvents()
-                XCTAssertEqual(events.count, 1)
-                XCTAssertEqual(events.first?.title, "New Event")
+                let loadedDict = UserDefaultsManager.loadEvents()
+                
+                XCTAssertEqual(loadedDict.count, 1)
+                XCTAssertTrue(loadedDict.keys.contains(generatedID))
                 
                 expectation.fulfill()
             }

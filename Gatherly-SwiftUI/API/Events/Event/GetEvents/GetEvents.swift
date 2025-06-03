@@ -10,7 +10,10 @@ import Combine
 
 extension GatherlyAPI {
     static func getEvents() -> AnyPublisher<[Event], Never> {
-        Just(UserDefaultsManager.loadEvents())
+        let events = UserDefaultsManager.loadEvents()
+        let eventsArray = Array(events.values)
+        
+        return Just(eventsArray)
             .delay(for: .seconds(2), scheduler: DispatchQueue.main)
             .eraseToAnyPublisher()
     }

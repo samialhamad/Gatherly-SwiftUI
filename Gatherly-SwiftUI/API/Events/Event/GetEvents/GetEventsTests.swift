@@ -19,6 +19,11 @@ final class GetEventsTests: XCTestCase {
         UserDefaultsManager.removeEvents()
     }
     
+    override func tearDown() {
+        UserDefaultsManager.removeEvents()
+        super.tearDown()
+    }
+    
     private func makeEvent(
         id: Int,
         title: String,
@@ -63,7 +68,7 @@ final class GetEventsTests: XCTestCase {
             description: "Event from UserDefaults"
         )
         
-        UserDefaultsManager.saveEvents([event])
+        UserDefaultsManager.saveEvents([event.id!: event])
         
         GatherlyAPI.getEvents()
             .sink { events in
@@ -94,22 +99,30 @@ final class GetEventsTests: XCTestCase {
             description: "Event 2 from UserDefaults"
         )
         
-        UserDefaultsManager.saveEvents([event1, event2])
+        UserDefaultsManager.saveEvents([
+            event1.id!: event1,
+            event2.id!: event2
+        ])
         
         GatherlyAPI.getEvents()
             .sink { events in
-                XCTAssertEqual(events.count, 2)
+                let sortedEvents = events.sorted { ($0.id ?? 0) < ($1.id ?? 0) }
                 
-                if events.count >= 2 {
-                    let second = events[1]
-                    XCTAssertEqual(second.title, "Loaded Event 2")
-                    XCTAssertEqual(second.id, 333)
-                    XCTAssertEqual(second.plannerID, 1)
-                    XCTAssertEqual(Set(second.memberIDs ?? []), Set([2, 3]))
-                    XCTAssertEqual(second.categories, [.entertainment])
-                } else {
-                    XCTFail("Expected at least two events")
-                }
+                XCTAssertEqual(sortedEvents.count, 2)
+                
+                let first = sortedEvents[0]
+                XCTAssertEqual(first.title, "Loaded Event 1")
+                XCTAssertEqual(first.id, 123)
+                XCTAssertEqual(first.plannerID, 1)
+                XCTAssertEqual(Set(first.memberIDs ?? []), Set([2, 3]))
+                XCTAssertEqual(first.categories, [.entertainment])
+                
+                let second = sortedEvents[1]
+                XCTAssertEqual(second.title, "Loaded Event 2")
+                XCTAssertEqual(second.id, 333)
+                XCTAssertEqual(second.plannerID, 1)
+                XCTAssertEqual(Set(second.memberIDs ?? []), Set([2, 3]))
+                XCTAssertEqual(second.categories, [.entertainment])
                 
                 expectation.fulfill()
             }

@@ -11,7 +11,6 @@ import XCTest
 
 final class DeleteEventTests: XCTestCase {
     
-    let calendar = Calendar.current
     var cancellables = Set<AnyCancellable>()
     
     override func setUp() {
@@ -19,23 +18,36 @@ final class DeleteEventTests: XCTestCase {
         UserDefaultsManager.removeEvents()
     }
     
+    override func tearDown() {
+        UserDefaultsManager.removeEvents()
+        super.tearDown()
+    }
+    
     func testDeleteEvent() {
         let expectation = XCTestExpectation(description: "Event is deleted and only the correct one remains")
-                
+        
         var eventToDelete = Event(id: 1, plannerID: 1, title: "Delete Me")
         var eventToKeep = Event(id: 2, plannerID: 1, title: "Keep Me")
         
-        UserDefaultsManager.saveEvents([eventToDelete, eventToKeep])
+        let initialDict: [Int: Event] = [
+            eventToDelete.id!: eventToDelete,
+            eventToKeep.id!: eventToKeep
+        ]
+        UserDefaultsManager.saveEvents(initialDict)
         
         GatherlyAPI.deleteEvent(eventToDelete)
             .sink { success in
                 XCTAssertTrue(success, "Expected deleteEvent to return true")
-
-                let storedEvents = UserDefaultsManager.loadEvents()
                 
-                XCTAssertEqual(storedEvents.count, 1)
-                XCTAssertFalse(storedEvents.contains { $0.id == eventToDelete.id })
-                XCTAssertTrue(storedEvents.contains { $0.id == eventToKeep.id })
+                let loadedDict = UserDefaultsManager.loadEvents()
+                
+                XCTAssertEqual(loadedDict.count, 1)
+                XCTAssertFalse(loadedDict.keys.contains(eventToDelete.id!))
+                XCTAssertTrue(loadedDict.keys.contains(eventToKeep.id!))
+                
+                let keptEvent = loadedDict[eventToKeep.id!]
+                XCTAssertEqual(keptEvent, eventToKeep)
+                
                 expectation.fulfill()
             }
             .store(in: &cancellables)
@@ -45,17 +57,18 @@ final class DeleteEventTests: XCTestCase {
     
     func testDeleteEventFailsForNonexistentEvent() {
         let expectation = XCTestExpectation(description: "Deletion should fail if event doesn't exist")
-
+        
         let fakeEvent = Event(id: 999, plannerID: 1, title: "Fake")
-        UserDefaultsManager.saveEvents([])
-
+        
+        UserDefaultsManager.saveEvents([:])
+        
         GatherlyAPI.deleteEvent(fakeEvent)
             .sink { success in
                 XCTAssertFalse(success, "Expected deletion to fail")
                 expectation.fulfill()
             }
             .store(in: &cancellables)
-
+        
         wait(for: [expectation], timeout: 1)
     }
 }

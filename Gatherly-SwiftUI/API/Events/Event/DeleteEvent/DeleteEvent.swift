@@ -11,12 +11,15 @@ import Foundation
 extension GatherlyAPI {
     static func deleteEvent(_ event: Event) -> AnyPublisher<Bool, Never> {
         var events = UserDefaultsManager.loadEvents()
-        let originalCount = events.count
         
-        events.removeAll { $0.id == event.id }
-        UserDefaultsManager.saveEvents(events)
+        let existed = (event.id != nil && events.keys.contains(event.id!))
         
-        return Just(events.count < originalCount)
+        if let id = event.id {
+            events.removeValue(forKey: id)
+            UserDefaultsManager.saveEvents(events)
+        }
+        
+        return Just(existed)
             .eraseToAnyPublisher()
     }
 }

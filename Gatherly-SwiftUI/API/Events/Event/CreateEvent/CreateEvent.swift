@@ -10,17 +10,20 @@ import Foundation
 
 extension GatherlyAPI {
     static func createEvent(_ event: Event) -> AnyPublisher<Event, Never> {
-        var storedEvent = event
+        var newEvent = event
         
-        if storedEvent.id == nil {
-            storedEvent.id = generateID()
+        if newEvent.id == nil {
+            newEvent.id = generateID()
         }
         
         var events = UserDefaultsManager.loadEvents()
-        events.append(storedEvent)
+        if let id = newEvent.id {
+            events[id] = newEvent
+        }
+        
         UserDefaultsManager.saveEvents(events)
         
-        return Just(storedEvent)
+        return Just(newEvent)
             .delay(for: .seconds(2), scheduler: DispatchQueue.main)
             .eraseToAnyPublisher()
     }

@@ -12,8 +12,8 @@ extension GatherlyAPI {
     static func updateEvent(_ updatedEvent: Event) -> AnyPublisher<Event, Never> {
         var events = UserDefaultsManager.loadEvents()
         
-        if let index = events.firstIndex(where: { $0.id == updatedEvent.id }) {
-            events[index] = updatedEvent
+        if let id = updatedEvent.id {
+            events[id] = updatedEvent
             UserDefaultsManager.saveEvents(events)
         }
         
