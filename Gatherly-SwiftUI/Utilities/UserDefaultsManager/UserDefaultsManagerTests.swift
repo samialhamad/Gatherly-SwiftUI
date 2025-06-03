@@ -26,45 +26,71 @@ final class UserDefaultsManagerTests: XCTestCase {
             User(firstName: "Bob", id: 2)
         ]
         
-        UserDefaultsManager.saveUsers(sampleUsers)
-        let loadedUsers = UserDefaultsManager.loadUsers()
+        let sampleUsersDict: [Int: User] = Dictionary(
+            uniqueKeysWithValues: sampleUsers.map { user in
+                (user.id!, user)
+            }
+        )
         
-        XCTAssertEqual(loadedUsers, sampleUsers)
+        UserDefaultsManager.saveUsers(sampleUsersDict)
+        let loadedUsersDict = UserDefaultsManager.loadUsers()
+        
+        XCTAssertEqual(sampleUsersDict, loadedUsersDict)
     }
     
     func testSaveAndLoadEvents() {
         let sampleEvents = [
-            Event(date: Date(), id: 1, title: "Lunch"),
-            Event(date: Date(), id: 2, title: "Meeting")
+            Event(date: Date(), id: 1, title: "One"),
+            Event(date: Date(), id: 2, title: "Two")
         ]
         
-        UserDefaultsManager.saveEvents(sampleEvents)
-        let loadedEvents = UserDefaultsManager.loadEvents()
+        let sampleEventsDict: [Int: Event] = Dictionary(
+            uniqueKeysWithValues: sampleEvents.map { event in
+                (event.id!, event)
+            }
+        )
         
-        XCTAssertEqual(loadedEvents, sampleEvents)
+        UserDefaultsManager.saveEvents(sampleEventsDict)
+        let loadedEventsDict = UserDefaultsManager.loadEvents()
+        
+        XCTAssertEqual(sampleEventsDict, loadedEventsDict)
     }
     
     func testSaveAndLoadGroups() {
         let sampleGroups = [
-            UserGroup(id: 1, leaderID: 1, memberIDs: [1, 2], name: "Team"),
-            UserGroup(id: 2, leaderID: 2, memberIDs: [2, 3], name: "Friends")
+            UserGroup(id: 1, leaderID: 1, memberIDs: [1, 2], name: "One"),
+            UserGroup(id: 2, leaderID: 2, memberIDs: [2, 3], name: "Two")
         ]
         
-        UserDefaultsManager.saveGroups(sampleGroups)
-        let loadedGroups = UserDefaultsManager.loadGroups()
+        let sampleGroupsDict: [Int: UserGroup] = Dictionary(
+            uniqueKeysWithValues: sampleGroups.map { group in
+                (group.id!, group)
+            }
+        )
         
-        XCTAssertEqual(loadedGroups, sampleGroups)
+        UserDefaultsManager.saveGroups(sampleGroupsDict)
+        let loadedGroupsDict = UserDefaultsManager.loadGroups()
+        
+        XCTAssertEqual(loadedGroupsDict, sampleGroupsDict)
     }
     
     func testResetAllClearsData() {
-        UserDefaultsManager.saveUsers([User(id: 1)])
-        UserDefaultsManager.saveEvents([Event(id: 1)])
-        UserDefaultsManager.saveGroups([UserGroup(id: 1, leaderID: 1, memberIDs: [1], name: "Group")])
+        let dummyUser   = User(id: 1)
+        let dummyEvent  = Event(id: 1)
+        let dummyGroup  = UserGroup(id: 1, leaderID: 1, memberIDs: [1], name: "Group")
+        
+        UserDefaultsManager.saveUsers([1: dummyUser])
+        UserDefaultsManager.saveEvents([1: dummyEvent])
+        UserDefaultsManager.saveGroups([1: dummyGroup])
         
         UserDefaultsManager.resetAll()
         
         XCTAssertTrue(UserDefaultsManager.loadUsers().isEmpty)
         XCTAssertTrue(UserDefaultsManager.loadEvents().isEmpty)
         XCTAssertTrue(UserDefaultsManager.loadGroups().isEmpty)
+        
+        XCTAssertFalse(UserDefaultsManager.getDidSeedSampleData())
+        XCTAssertFalse(UserDefaultsManager.getDidSyncContacts())
+        XCTAssertNil(UserDefaultsManager.loadCurrentUser())
     }
 }

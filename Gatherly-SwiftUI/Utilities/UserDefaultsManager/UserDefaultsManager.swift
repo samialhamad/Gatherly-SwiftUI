@@ -38,12 +38,12 @@ enum UserDefaultsManager {
     
     // MARK: - Events
     
-    static func saveEvents(_ events: [Event]) {
-        defaults.setCodable(events, forKey: Keys.events)
+    static func saveEvents(_ eventsByID: [Int: Event]) {
+        defaults.setCodable(eventsByID, forKey: Keys.events)
     }
     
-    static func loadEvents() -> [Event] {
-        defaults.getCodable(forKey: Keys.events, type: [Event].self) ?? []
+    static func loadEvents() -> [Int: Event] {
+        defaults.getCodable(forKey: Keys.events, type: [Int: Event].self) ?? [:]
     }
     
     static func removeEvents() {
@@ -52,12 +52,12 @@ enum UserDefaultsManager {
     
     // MARK: - Groups
     
-    static func saveGroups(_ groups: [UserGroup]) {
-        defaults.setCodable(groups, forKey: Keys.groups)
+    static func saveGroups(_ groupsByID: [Int: UserGroup]) {
+        defaults.setCodable(groupsByID, forKey: Keys.groups)
     }
     
-    static func loadGroups() -> [UserGroup] {
-        defaults.getCodable(forKey: Keys.groups, type: [UserGroup].self) ?? []
+    static func loadGroups() -> [Int: UserGroup] {
+        defaults.getCodable(forKey: Keys.groups, type: [Int: UserGroup].self) ?? [:]
     }
     
     static func removeGroups() {
@@ -66,12 +66,12 @@ enum UserDefaultsManager {
     
     // MARK: - Users
     
-    static func saveUsers(_ users: [User]) {
-        defaults.setCodable(users, forKey: Keys.users)
+    static func saveUsers(_ usersByID: [Int: User]) {
+        defaults.setCodable(usersByID, forKey: Keys.users)
     }
     
-    static func loadUsers() -> [User] {
-        defaults.getCodable(forKey: Keys.users, type: [User].self) ?? []
+    static func loadUsers() -> [Int: User] {
+        defaults.getCodable(forKey: Keys.users, type: [Int: User].self) ?? [:]
     }
     
     static func removeUsers() {
