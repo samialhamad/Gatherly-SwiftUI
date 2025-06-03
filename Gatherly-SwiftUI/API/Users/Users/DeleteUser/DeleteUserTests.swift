@@ -18,6 +18,11 @@ final class DeleteUserTests: XCTestCase {
         UserDefaultsManager.removeUsers()
     }
     
+    override func tearDown() {
+        UserDefaultsManager.removeUsers()
+        super.tearDown()
+    }
+    
     func testDeleteUser() {
         let expectation = XCTestExpectation(description: "User is deleted and remaining users are returned")
         
@@ -47,17 +52,29 @@ final class DeleteUserTests: XCTestCase {
             phone: nil
         )
         
-        UserDefaultsManager.saveUsers([userToDelete, userToKeep])
+        UserDefaultsManager.saveUsers([
+            userToDelete.id!: userToDelete,
+            userToKeep.id!: userToKeep
+        ])
         
         GatherlyAPI.deleteUser(userToDelete)
             .sink { success in
                 XCTAssertTrue(success, "Expected deleteUser to return true")
                 
-                let storedUsers = UserDefaultsManager.loadUsers()
+                let storedDict = UserDefaultsManager.loadUsers()
                 
-                XCTAssertEqual(storedUsers.count, 1)
-                XCTAssertFalse(storedUsers.contains { $0.id == userToDelete.id })
-                XCTAssertTrue(storedUsers.contains { $0.id == userToKeep.id })
+                XCTAssertEqual(storedDict.count, 1)
+                XCTAssertFalse(storedDict.keys.contains(userToDelete.id!))
+                XCTAssertTrue(storedDict.keys.contains(userToKeep.id!))
+                
+                if let keptUser = storedDict[userToKeep.id!] {
+                    XCTAssertEqual(keptUser.email, "keep@example.com")
+                    XCTAssertEqual(keptUser.firstName, "Keep")
+                    XCTAssertEqual(keptUser.lastName, "Me")
+                } else {
+                    XCTFail("No user found under key \(userToKeep.id!)")
+                }
+                
                 expectation.fulfill()
             }
             .store(in: &cancellables)
@@ -81,11 +98,11 @@ final class DeleteUserTests: XCTestCase {
             phone: nil
         )
         
-        UserDefaultsManager.saveUsers([])
+        UserDefaultsManager.saveUsers([:])
         
         GatherlyAPI.deleteUser(fakeUser)
             .sink { success in
-                XCTAssertFalse(success, "Expected deleteUser to return false for nonexistent user")
+                XCTAssertFalse(success)
                 
                 expectation.fulfill()
             }

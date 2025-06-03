@@ -18,6 +18,11 @@ final class UpdateUserTests: XCTestCase {
         UserDefaultsManager.removeUsers()
     }
     
+    override func tearDown() {
+        UserDefaultsManager.removeUsers()
+        super.tearDown()
+    }
+    
     func makeSampleUser(id: Int = 1) -> User {
         User(
             createdTimestamp: Int(Date().timestamp),
@@ -37,7 +42,8 @@ final class UpdateUserTests: XCTestCase {
         let expectation = XCTestExpectation(description: "User name is updated")
         
         var originalUser = makeSampleUser(id: 1)
-        UserDefaultsManager.saveUsers([originalUser])
+        
+        UserDefaultsManager.saveUsers([originalUser.id!: originalUser])
         
         originalUser.firstName = "New"
         originalUser.lastName = "User"
@@ -47,10 +53,15 @@ final class UpdateUserTests: XCTestCase {
                 XCTAssertEqual(updatedUser.firstName, "New")
                 XCTAssertEqual(updatedUser.lastName, "User")
                 
-                let storedUsers = UserDefaultsManager.loadUsers()
-                XCTAssertEqual(storedUsers.count, 1)
-                XCTAssertEqual(storedUsers.first?.firstName, "New")
-                XCTAssertEqual(storedUsers.first?.lastName, "User")
+                let storedDict = UserDefaultsManager.loadUsers()
+                XCTAssertEqual(storedDict.count, 1)
+                
+                if let storedUser = storedDict[1] {
+                    XCTAssertEqual(storedUser.firstName, "New")
+                    XCTAssertEqual(storedUser.lastName, "User")
+                } else {
+                    XCTFail("No user found under key 1")
+                }
                 
                 expectation.fulfill()
             }
@@ -63,7 +74,7 @@ final class UpdateUserTests: XCTestCase {
         let expectation = XCTestExpectation(description: "User avatar and banner are updated")
         
         var originalUser = makeSampleUser(id: 1)
-        UserDefaultsManager.saveUsers([originalUser])
+        UserDefaultsManager.saveUsers([originalUser.id!: originalUser])
         
         originalUser.avatarImageName = "avatar123.png"
         originalUser.bannerImageName = "banner123.png"
@@ -73,9 +84,15 @@ final class UpdateUserTests: XCTestCase {
                 XCTAssertEqual(updatedUser.avatarImageName, "avatar123.png")
                 XCTAssertEqual(updatedUser.bannerImageName, "banner123.png")
                 
-                let storedUser = UserDefaultsManager.loadUsers().first
-                XCTAssertEqual(storedUser?.avatarImageName, "avatar123.png")
-                XCTAssertEqual(storedUser?.bannerImageName, "banner123.png")
+                let storedDict = UserDefaultsManager.loadUsers()
+                XCTAssertTrue(storedDict.keys.contains(1))
+                
+                if let storedUser = storedDict[1] {
+                    XCTAssertEqual(storedUser.avatarImageName, "avatar123.png")
+                    XCTAssertEqual(storedUser.bannerImageName, "banner123.png")
+                } else {
+                    XCTFail("No user found under key 1")
+                }
                 
                 expectation.fulfill()
             }

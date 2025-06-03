@@ -13,13 +13,16 @@ extension GatherlyAPI {
     // MARK: - Create Manually
     
     static func createUser(_ user: User) -> AnyPublisher<User, Never> {
-        var storedUser = assignIDIfNeeded(user)
-        
+        var newUser = assignIDIfNeeded(user)
         var users = UserDefaultsManager.loadUsers()
-        users = deduplicatedUsersAppended(existing: users, newUser: storedUser)
+        
+        if let id = newUser.id {
+            users[id] = newUser
+        }
+        
         UserDefaultsManager.saveUsers(users)
         
-        return Just(storedUser)
+        return Just(newUser)
             .delay(for: .seconds(2), scheduler: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
@@ -59,17 +62,12 @@ extension GatherlyAPI {
         }
         
         var newUser = user
-        let existingIDs = Set(UserDefaultsManager.loadUsers().compactMap { $0.id })
+        let existingIDs = Set(UserDefaultsManager.loadUsers().keys)
         var newID = (existingIDs.max() ?? 999) + 1
         while existingIDs.contains(newID) {
             newID += 1
         }
         newUser.id = newID
         return newUser
-    }
-    
-    private static func deduplicatedUsersAppended(existing users: [User], newUser: User) -> [User] {
-        let filtered = users.filter { $0.id != newUser.id }
-        return filtered + [newUser]
     }
 }

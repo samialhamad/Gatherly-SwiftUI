@@ -18,6 +18,11 @@ final class GetUsersTests: XCTestCase {
         UserDefaultsManager.removeUsers()
     }
     
+    override func tearDown() {
+        UserDefaultsManager.removeUsers()
+        super.tearDown()
+    }
+    
     func testGetUsersReturnsFriendsOnly() {
         let expectation = XCTestExpectation(description: "Only friends of user ID 1 are returned")
         
@@ -52,15 +57,23 @@ final class GetUsersTests: XCTestCase {
             lastName: "Hacker"
         )
         
-        UserDefaultsManager.saveUsers([currentUser, friend1, friend2, stranger])
+        UserDefaultsManager.saveUsers([
+            currentUser.id!: currentUser,
+            friend1.id!: friend1,
+            friend2.id!: friend2,
+            stranger.id!: stranger
+        ])
         
         GatherlyAPI.getUsers(forUserID: 1)
             .sink { friends in
                 XCTAssertEqual(friends.count, 2)
+                
                 let friendIDs = friends.compactMap { $0.id }
+                
                 XCTAssertTrue(friendIDs.contains(2))
                 XCTAssertTrue(friendIDs.contains(3))
                 XCTAssertFalse(friendIDs.contains(4))
+                
                 expectation.fulfill()
             }
             .store(in: &cancellables)
