@@ -39,14 +39,16 @@ enum AppInitializer {
             updatedUsers[samiIndex] = sami
         }
         
-        UserDefaultsManager.saveUsers(updatedUsers)
+        let usersDict  = updatedUsers.keyedBy(\.id)
+        let eventsDict = events.keyedBy(\.id)
+        let groupsDict = groups.keyedBy(\.id)
         
-        if let currentUser = updatedUsers.first(where: { $0.id == 1 }) {
-            UserDefaultsManager.saveCurrentUser(currentUser)
+        UserDefaultsManager.saveUsers(usersDict)
+        if let current = usersDict[1] {
+            UserDefaultsManager.saveCurrentUser(current)
         }
-        
-        UserDefaultsManager.saveEvents(events)
-        UserDefaultsManager.saveGroups(groups)
+        UserDefaultsManager.saveEvents(eventsDict)
+        UserDefaultsManager.saveGroups(groupsDict)
         UserDefaultsManager.setDidSeedSampleData(true)
     }
 }

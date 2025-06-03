@@ -30,7 +30,7 @@ final class AppInitializerTests: XCTestCase {
         AppInitializer.runIfNeeded()
         XCTAssertTrue(UserDefaultsManager.getDidSeedSampleData())
         
-        let allUsers = UserDefaultsManager.loadUsers()
+        let allUsers = Array(UserDefaultsManager.loadUsers().values)
         let allEvents = UserDefaultsManager.loadEvents()
         let allGroups = UserDefaultsManager.loadGroups()
         
@@ -56,6 +56,7 @@ final class AppInitializerTests: XCTestCase {
         XCTAssertEqual(Set(sami.groupIDs ?? []), Set(expectedGroupIDs))
         
         let currentUser = UserDefaultsManager.loadCurrentUser()
+        
         XCTAssertNotNil(currentUser)
         XCTAssertEqual(currentUser?.id, 1)
         XCTAssertEqual(allEvents.count, SampleData.sampleEvents.count)
@@ -80,9 +81,9 @@ final class AppInitializerTests: XCTestCase {
             lastName: "User",
             phone: nil
         )
-        UserDefaultsManager.saveUsers([dummyUser])
-        UserDefaultsManager.saveEvents([])
-        UserDefaultsManager.saveGroups([])
+        UserDefaultsManager.saveUsers([dummyUser.id!: dummyUser])
+        UserDefaultsManager.saveEvents([:])
+        UserDefaultsManager.saveGroups([:])
         UserDefaultsManager.saveCurrentUser(dummyUser)
         
         XCTAssertTrue(UserDefaultsManager.getDidSeedSampleData())
@@ -92,7 +93,7 @@ final class AppInitializerTests: XCTestCase {
         XCTAssertTrue(UserDefaultsManager.getDidSeedSampleData())
         
         // The dummy user should be gone only sampleUsers should remain
-        let storedIDs = Set(UserDefaultsManager.loadUsers().map { $0.id })
+        let storedIDs = Set(UserDefaultsManager.loadUsers().keys)
         let expectedIDs = Set(SampleData.sampleUsers.map { $0.id })
         
         XCTAssertEqual(storedIDs, expectedIDs)
@@ -106,25 +107,20 @@ final class AppInitializerTests: XCTestCase {
         AppInitializer.runIfNeeded()
         XCTAssertTrue(UserDefaultsManager.getDidSeedSampleData())
         
-        var usersAfterFirstSeed = UserDefaultsManager.loadUsers()
-        
-        if var sami = usersAfterFirstSeed.first(where: { $0.id == 1 }) {
+        var usersDict = UserDefaultsManager.loadUsers()
+        if var sami = usersDict[1] {
             sami.firstName = "Modified"
-            if let index = usersAfterFirstSeed.firstIndex(where: { $0.id == 1 }) {
-                usersAfterFirstSeed[index] = sami
-                UserDefaultsManager.saveUsers(usersAfterFirstSeed)
-            }
+            usersDict[1] = sami
+            UserDefaultsManager.saveUsers(usersDict)
         }
         
-        let updatedUser = UserDefaultsManager
-            .loadUsers()
-            .first(where: { $0.id == 1 })
+        let updatedUser = UserDefaultsManager.loadUsers()[1]
         XCTAssertEqual(updatedUser?.firstName, "Modified")
         
         AppInitializer.runIfNeeded()
         
         let usersAfterSecondRun = UserDefaultsManager.loadUsers()
-        let samiAfterSecondRun = usersAfterSecondRun.first(where: { $0.id == 1 })
+        let samiAfterSecondRun = usersAfterSecondRun[1]
         
         XCTAssertEqual(samiAfterSecondRun?.firstName, "Modified")
     }
