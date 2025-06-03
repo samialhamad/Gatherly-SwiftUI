@@ -38,7 +38,9 @@ struct ContentView: View {
         .task {
             AppInitializer.runIfNeeded()
             await ContactSyncHelper.runIfNeeded(currentUserID: 1)
-            usersViewModel.fetch()
+            usersViewModel.loadIfNeeded() 
+            eventsViewModel.loadIfNeeded()
+            groupsViewModel.loadIfNeeded()
         }
     }
 }
