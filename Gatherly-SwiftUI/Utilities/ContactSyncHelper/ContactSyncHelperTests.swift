@@ -27,7 +27,7 @@ final class ContactSyncHelperTests: XCTestCase {
             lastName: "Alhamad",
             phone: "1112223333"
         )
-        UserDefaultsManager.saveUsers([dummyUser])
+        UserDefaultsManager.saveUsers([dummyUser.id!: dummyUser])
         UserDefaultsManager.saveCurrentUser(dummyUser)
     }
     
@@ -43,28 +43,30 @@ final class ContactSyncHelperTests: XCTestCase {
         
         await ContactSyncHelper.runIfNeeded(currentUserID: 1)
         
-        XCTAssertTrue(
-            UserDefaultsManager.getDidSyncContacts()
-        )
+        XCTAssertTrue(UserDefaultsManager.getDidSyncContacts())
         
-        let allUsers = UserDefaultsManager.loadUsers()
+        let allUsersDict = UserDefaultsManager.loadUsers()
+        let allUsers = Array(allUsersDict.values)
         XCTAssertGreaterThanOrEqual(allUsers.count, 1)
-
-        let foundIDs = allUsers.map { $0.id }
+        
+        let foundIDs = allUsers.compactMap { $0.id }
         XCTAssertTrue(foundIDs.contains(1))
     }
     
     func testRunIfNeeded_doesNothing_whenAlreadySynced() async {
         UserDefaultsManager.setDidSyncContacts(true)
         
-        let beforeUsers = UserDefaultsManager.loadUsers()
+        let beforeUsersDict = UserDefaultsManager.loadUsers()
+        let beforeIDs = Array(beforeUsersDict.values).compactMap { $0.id }
         
         await ContactSyncHelper.runIfNeeded(currentUserID: 1)
         
         XCTAssertTrue(UserDefaultsManager.getDidSyncContacts())
         
-        let afterUsers = UserDefaultsManager.loadUsers()
-        XCTAssertEqual(beforeUsers.map { $0.id }, afterUsers.map { $0.id })
+        let afterUsersDict = UserDefaultsManager.loadUsers()
+        let afterIDs = Array(afterUsersDict.values).compactMap { $0.id }
+        
+        XCTAssertEqual(beforeIDs, afterIDs)
     }
     
     func testForceSync_setsFlagAndInvokesCompletion() {
