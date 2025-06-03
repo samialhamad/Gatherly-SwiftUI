@@ -19,23 +19,48 @@ final class GetEventsTests: XCTestCase {
         UserDefaultsManager.removeEvents()
     }
     
-    func testGetEventsReturnsStoredEvents() {
-        let expectation = XCTestExpectation(description: "Events are loaded from UserDefaults")
-        
+    private func makeEvent(
+        id: Int,
+        title: String,
+        description: String
+    ) -> Event {
         let sampleDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
         let startTimestamp = Int(calendar.date(bySettingHour: 10, minute: 0, second: 0, of: sampleDate)!.timestamp)
         let endTimestamp = Int(calendar.date(bySettingHour: 12, minute: 0, second: 0, of: sampleDate)!.timestamp)
         
-        let event = Event(
+        return Event(
             categories: [.entertainment],
             date: sampleDate,
-            description: "Event from UserDefaults",
+            description: description,
             endTimestamp: endTimestamp,
-            id: 123,
+            id: id,
             plannerID: 1,
             memberIDs: [2, 3],
-            title: "Loaded Event",
+            title: title,
             startTimestamp: startTimestamp
+        )
+    }
+    
+    func testGetEventsReturnsNoEvents() {
+        let expectation = XCTestExpectation(description: "No Events are loaded from UserDefaults")
+        
+        GatherlyAPI.getEvents()
+            .sink { events in
+                XCTAssertEqual(events.count, 0)
+                expectation.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        wait(for: [expectation], timeout: 3)
+    }
+    
+    func testGetEventsReturnsStoredEvent() {
+        let expectation = XCTestExpectation(description: "Events are loaded from UserDefaults")
+        
+        let event = makeEvent(
+            id: 123,
+            title: "Loaded Event",
+            description: "Event from UserDefaults"
         )
         
         UserDefaultsManager.saveEvents([event])
@@ -48,6 +73,44 @@ final class GetEventsTests: XCTestCase {
                 XCTAssertEqual(events.first?.plannerID, 1)
                 XCTAssertEqual(Set(events.first?.memberIDs ?? []), Set([2, 3]))
                 XCTAssertEqual(events.first?.categories, [.entertainment])
+                expectation.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        wait(for: [expectation], timeout: 3)
+    }
+    
+    func testGetEventsReturnsStoredEvents() {
+        let expectation = XCTestExpectation(description: "Two Events are loaded from UserDefaults")
+        
+        let event1 = makeEvent(
+            id: 123,
+            title: "Loaded Event 1",
+            description: "Event 1 from UserDefaults"
+        )
+        let event2 = makeEvent(
+            id: 333,
+            title: "Loaded Event 2",
+            description: "Event 2 from UserDefaults"
+        )
+        
+        UserDefaultsManager.saveEvents([event1, event2])
+        
+        GatherlyAPI.getEvents()
+            .sink { events in
+                XCTAssertEqual(events.count, 2)
+                
+                if events.count >= 2 {
+                    let second = events[1]
+                    XCTAssertEqual(second.title, "Loaded Event 2")
+                    XCTAssertEqual(second.id, 333)
+                    XCTAssertEqual(second.plannerID, 1)
+                    XCTAssertEqual(Set(second.memberIDs ?? []), Set([2, 3]))
+                    XCTAssertEqual(second.categories, [.entertainment])
+                } else {
+                    XCTFail("Expected at least two events")
+                }
+                
                 expectation.fulfill()
             }
             .store(in: &cancellables)
