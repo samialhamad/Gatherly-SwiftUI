@@ -24,12 +24,13 @@ final class UsersViewModelTests: XCTestCase {
     override func tearDownWithError() throws {
         viewModel = nil
         cancellables = []
+        UserDefaultsManager.resetAll()
         try super.tearDownWithError()
     }
     
     private func makeUser(id: Int?, friendIDs: [Int]? = nil) -> User {
         return User(
-            createdTimestamp: Int(Date().timeIntervalSince1970),
+            createdTimestamp: Int(Date().timestamp),
             deviceToken: nil,
             email: "user@example.com",
             eventIDs: nil,
@@ -46,7 +47,8 @@ final class UsersViewModelTests: XCTestCase {
     private func seedCurrentUserAndAllUsers(current: User, others: [User]) {
         var all = others
         all.append(current)
-        UserDefaultsManager.saveUsers(all)
+        let usersDict = all.keyedBy(\.id)
+        UserDefaultsManager.saveUsers(usersDict)
         UserDefaultsManager.saveCurrentUser(current)
     }
     
@@ -129,9 +131,11 @@ final class UsersViewModelTests: XCTestCase {
         XCTAssertTrue(viewModel.users.isEmpty)
         
         let currentB = makeUser(id: 2, friendIDs: [])
+        let dictB = [currentB.id!: currentB]
+
         UserDefaultsManager.saveCurrentUser(currentB)
-        UserDefaultsManager.saveUsers([currentB])
-        
+        UserDefaultsManager.saveUsers(dictB)
+
         viewModel.loadIfNeeded()
         
         XCTAssertEqual(viewModel.currentUser?.id, 1)
@@ -162,11 +166,13 @@ final class UsersViewModelTests: XCTestCase {
         var user = makeUser(id: nil, friendIDs: []) // API will make ID if needed
         
         let createExpectation = expectation(description: "create() should append a user to viewModel.users")
+        
         viewModel.$users
             .dropFirst()
             .sink { publishedUsers in
                 XCTAssertEqual(publishedUsers.count, 1)
                 XCTAssertNotNil(publishedUsers.first?.id)
+                
                 createExpectation.fulfill()
             }
             .store(in: &cancellables)
@@ -187,9 +193,8 @@ final class UsersViewModelTests: XCTestCase {
         XCTAssertFalse(viewModel.isLoading)
         
         viewModel.create(user) { returnedUser in
-            let loadedUsers = UserDefaultsManager.loadUsers()
-            XCTAssertEqual(loadedUsers.count, 1)
-            XCTAssertEqual(loadedUsers.first?.id, returnedUser.id)
+            let loadedDict = UserDefaultsManager.loadUsers()
+            XCTAssertTrue(loadedDict.keys.contains(returnedUser.id!))
         }
         
         wait(for: [createExpectation, loadingExpectation], timeout: 3.0)
@@ -202,6 +207,7 @@ final class UsersViewModelTests: XCTestCase {
         seedCurrentUserAndAllUsers(current: currentUser, others: [userB])
         
         let fetchExpectation = expectation(description: "fetch() loads currentUser and userB")
+        
         viewModel.$users
             .dropFirst()
             .first(where: { publishedUsers in
@@ -211,6 +217,7 @@ final class UsersViewModelTests: XCTestCase {
             .store(in: &cancellables)
         
         viewModel.fetch()
+        
         wait(for: [fetchExpectation], timeout: 3.0)
         
         XCTAssertEqual(viewModel.users.count, 1)
@@ -235,8 +242,8 @@ final class UsersViewModelTests: XCTestCase {
         wait(for: [updateExpectation], timeout: 2.0)
         XCTAssertEqual(viewModel.users.first?.firstName, "Edited Name")
         
-        let persisted = UserDefaultsManager.loadUsers()
-        XCTAssertTrue(persisted.contains(where: { $0.id == 2 && $0.firstName == "Edited Name" }))
+        let loadedDict = UserDefaultsManager.loadUsers()
+        XCTAssertTrue(loadedDict.values.contains(where: { $0.id == 2 && $0.firstName == "Edited Name" }))
     }
     
     func testUpdateReplacesCurrentUser() {
@@ -318,7 +325,7 @@ final class UsersViewModelTests: XCTestCase {
         
         wait(for: [deleteExpectation], timeout: 2.0)
         
-        let persisted = UserDefaultsManager.loadUsers()
-        XCTAssertFalse(persisted.contains(where: { $0.id == 2 }))
+        let loadedDict = UserDefaultsManager.loadUsers()
+        XCTAssertFalse(loadedDict.values.contains(where: { $0.id == 2 }))
     }
 }

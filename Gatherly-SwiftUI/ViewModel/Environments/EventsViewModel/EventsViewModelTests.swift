@@ -24,12 +24,13 @@ final class EventsViewModelTests: XCTestCase {
     override func tearDownWithError() throws {
         viewModel = nil
         cancellables = []
-        
+        UserDefaultsManager.removeEvents()
         try super.tearDownWithError()
     }
     
     private func saveSampleEventsToDefaults(_ events: [Event]) {
-        UserDefaultsManager.saveEvents(events)
+        let eventsDict = events.keyedBy(\.id)
+        UserDefaultsManager.saveEvents(eventsDict)
     }
     
     private func makeSampleEvent(id: Int?) -> Event {
@@ -50,6 +51,7 @@ final class EventsViewModelTests: XCTestCase {
     func testFetch() {
         let event1 = makeSampleEvent(id: 11)
         let event2 = makeSampleEvent(id: 99)
+        
         saveSampleEventsToDefaults([event1, event2])
         
         let eventsLoaded = expectation(description: "fetch() should populate viewModel.events")
@@ -112,10 +114,11 @@ final class EventsViewModelTests: XCTestCase {
             .store(in: &cancellables)
         
         XCTAssertFalse(viewModel.isLoading)
+        
         viewModel.create(newEvent) { returnedEvent in
-            let stored = UserDefaultsManager.loadEvents()
-            XCTAssertEqual(stored.count, 1)
-            XCTAssertEqual(stored.first?.title, newEvent.title)
+            let storedDict = UserDefaultsManager.loadEvents()
+            XCTAssertEqual(storedDict.count, 1)
+            XCTAssertEqual(storedDict.values.first?.title, newEvent.title)
         }
         
         wait(for: [creationExpectation, loadingExpectation], timeout: 3.0, enforceOrder: true)
@@ -127,6 +130,7 @@ final class EventsViewModelTests: XCTestCase {
         saveSampleEventsToDefaults([originalEvent])
         
         let fetchExpectation = expectation(description: "Initial fetch() to load the original event")
+        
         viewModel.$events
             .dropFirst()
             .first(where: { loadedEvents in
@@ -162,14 +166,15 @@ final class EventsViewModelTests: XCTestCase {
             .store(in: &cancellables)
         
         XCTAssertFalse(viewModel.isLoading)
+        
         viewModel.update(editedEvent)
         
         wait(for: [updateExpectation], timeout: 2.0)
         XCTAssertFalse(viewModel.isLoading)
         
-        let persisted = UserDefaultsManager.loadEvents()
-        XCTAssertEqual(persisted.count, 1)
-        XCTAssertEqual(persisted.first?.title, "Updated Title")
+        let storedDict = UserDefaultsManager.loadEvents()
+        XCTAssertEqual(storedDict.count, 1)
+        XCTAssertEqual(storedDict.values.first?.title, "Updated Title")
     }
     
     func testDeleteRemovesEvent() {
@@ -187,6 +192,7 @@ final class EventsViewModelTests: XCTestCase {
             .store(in: &cancellables)
         
         viewModel.fetch()
+        
         wait(for: [fetchExpectation], timeout: 3.0)
         XCTAssertEqual(viewModel.events.count, 1)
         
@@ -199,7 +205,7 @@ final class EventsViewModelTests: XCTestCase {
                 deleteExpectation.fulfill()
             }
             .store(in: &cancellables)
-                
+        
         viewModel.delete(eventToDelete)
         
         wait(for: [deleteExpectation], timeout: 2.0)
