@@ -10,7 +10,8 @@ import ComposableArchitecture
 import SwiftUI
 
 protocol UserFormViewDelegate {
-    func userFormViewDidUpdateUser(updatedUser: User)
+    func didCancel()
+    func didUpdateUser(updatedUser: User)
 }
 
 struct UserFormView: View {
@@ -103,6 +104,7 @@ private extension UserFormView {
         ToolbarItem(placement: .navigationBarLeading) {
             Button("Cancel") {
                 viewStore.send(.cancel)
+                delegate?.didCancel()
             }
         }
     }
@@ -114,8 +116,7 @@ private extension UserFormView {
             Button("Save") {
                 isSaving = true
                 viewStore.send(.saveChanges)
-                delegate?.userFormViewDidUpdateUser(updatedUser: viewStore.currentUser)
-                
+                delegate?.didUpdateUser(updatedUser: viewStore.currentUser)
             }
             .accessibilityIdentifier("userFormSaveButton")
             .disabled(isDisabled)
