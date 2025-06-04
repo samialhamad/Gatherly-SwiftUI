@@ -129,7 +129,6 @@ private extension EventDetailView {
                 dismiss()
             }
         )
-        .refreshOnDismiss()
     }
     
     var eventBannerImageView: some View {

@@ -58,8 +58,4 @@ extension View {
     func refreshOnAppear() -> some View {
         self.modifier(RefreshOnAppearModifier())
     }
-    
-    func refreshOnDismiss() -> some View {
-        self.modifier(RefreshOnDismissModifier())
-    }
 }
