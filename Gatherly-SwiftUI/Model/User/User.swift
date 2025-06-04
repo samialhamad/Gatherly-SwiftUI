@@ -39,21 +39,21 @@ class User: Codable, Equatable, Identifiable, ObservableObject {
     // MARK: - Functions
     
     func resolvedFriends(from lookup: [Int: User]) -> [User] {
-        guard let ids = friendIDs else {
+        guard let friendIDs else {
             return []
         }
         
-        return ids.compactMap { lookup[$0] }
+        return friendIDs.compactMap { lookup[$0] }
     }
     
     func resolvedGroups(from groups: [UserGroup]) -> [UserGroup] {
-        guard let ids = groupIDs else {
+        guard let groupIDs else {
             return []
         }
         
         return groups.filter { group in
             if let id = group.id {
-                return ids.contains(id)
+                return groupIDs.contains(id)
             }
             return false
         }
