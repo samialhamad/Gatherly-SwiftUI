@@ -7,7 +7,7 @@
 
 import Foundation
 
-class User: Codable, Equatable, Hashable, Identifiable, ObservableObject {
+class User: Codable, Equatable, Identifiable, ObservableObject {
     @Published var avatarImageName: String?
     @Published var bannerImageName: String?
     @Published var createdTimestamp: Int?
@@ -161,13 +161,9 @@ class User: Codable, Equatable, Hashable, Identifiable, ObservableObject {
         try container.encode(phone, forKey: .phone)
     }
     
-    // MARK: - Equatable & Hashable
+    // MARK: - Equatable
     
     static func == (lhs: User, rhs: User) -> Bool {
         lhs.id == rhs.id
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
     }
 }

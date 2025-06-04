@@ -7,7 +7,7 @@
 
 import CoreLocation
 
-struct Location: Codable, Equatable, Hashable {
+struct Location: Codable, Equatable {
     var address: String?
     var latitude: Double
     var longitude: Double

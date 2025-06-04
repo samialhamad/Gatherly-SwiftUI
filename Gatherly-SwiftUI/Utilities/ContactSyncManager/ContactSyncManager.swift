@@ -7,7 +7,7 @@
 
 import Contacts
 
-struct SyncedContact: Hashable, Equatable {
+struct SyncedContact: Equatable {
     let fullName: String
     let phoneNumber: String
 }
