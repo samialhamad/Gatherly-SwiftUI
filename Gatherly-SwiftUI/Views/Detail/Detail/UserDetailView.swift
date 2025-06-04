@@ -67,7 +67,10 @@ struct UserDetailView: View {
                     set: { if !$0 { userFormStore = nil } }
                 )) {
                     if let store = userFormStore {
-                        UserFormView(store: store, onComplete: handleEditComplete)
+                        UserFormView(
+                            store: store,
+                            delegate: self
+                        )
                     }
                 }
             }
@@ -84,16 +87,6 @@ private extension UserDetailView {
     }
     
     // MARK: - Functions
-    
-    func handleEditComplete(_ action: UserFormFeature.Action) {
-        guard case let .delegate(.didSave(updatedUser)) = action else {
-            userFormStore = nil
-            return
-        }
-        
-        usersViewModel.update(updatedUser)
-        userFormStore = nil
-    }
     
     private func removeFriend() async {
         guard let targetID = user.id else {
@@ -136,6 +129,15 @@ private extension UserDetailView {
             }
         }
         .padding()
+    }
+}
+
+//MARK: - UserFormViewDelegate
+
+extension UserDetailView: UserFormViewDelegate {
+    func userFormViewDidUpdateUser(updatedUser: User) {
+        usersViewModel.update(updatedUser)
+        userFormStore = nil
     }
 }
 

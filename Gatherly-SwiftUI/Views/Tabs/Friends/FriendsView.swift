@@ -76,30 +76,6 @@ struct FriendsView: View {
 
 extension FriendsView {
     
-    // MARK: - Functions
-    
-    func handleCreateFriendComplete(_ action: UserFormFeature.Action) {
-        guard case let .delegate(.didSave(newFriend)) = action else {
-            createFriendStore = nil
-            return
-        }
-
-        usersViewModel.create(newFriend) { createdFriend in
-            guard var currentUser = usersViewModel.currentUser else {
-                createFriendStore = nil
-                return
-            }
-
-            if let newID = createdFriend.id, !(currentUser.friendIDs ?? []).contains(newID) {
-                currentUser.friendIDs?.append(newID)
-                currentUser.friendIDs = currentUser.friendIDs?.sorted()
-                usersViewModel.update(currentUser)
-            }
-
-            createFriendStore = nil
-        }
-    }
-    
     // MARK: - Subviews
     
     var createFriendSheet: some View {
@@ -107,7 +83,7 @@ extension FriendsView {
             if let store = createFriendStore {
                 UserFormView(
                     store: store,
-                    onComplete: handleCreateFriendComplete
+                    delegate: self
                 )
             }
         }
@@ -160,6 +136,27 @@ extension FriendsView {
         }
         .labelStyle(.iconOnly)
         .accessibilityIdentifier("addFriendOrGroupButton")
+    }
+}
+
+//MARK: - UserFormViewDelegate
+
+extension FriendsView: UserFormViewDelegate {
+    func userFormViewDidUpdateUser(updatedUser: User) {
+        usersViewModel.create(updatedUser) { createdFriend in
+            guard var currentUser = usersViewModel.currentUser else {
+                createFriendStore = nil
+                return
+            }
+
+            if let newID = createdFriend.id, !(currentUser.friendIDs ?? []).contains(newID) {
+                currentUser.friendIDs?.append(newID)
+                currentUser.friendIDs = currentUser.friendIDs?.sorted()
+                usersViewModel.update(currentUser)
+            }
+
+            createFriendStore = nil
+        }
     }
 }
 

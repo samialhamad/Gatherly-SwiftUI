@@ -9,14 +9,18 @@ import Combine
 import ComposableArchitecture
 import SwiftUI
 
+protocol UserFormViewDelegate {
+    func userFormViewDidUpdateUser(updatedUser: User)
+}
+
 struct UserFormView: View {
     @State private var cancellables = Set<AnyCancellable>()
     @State private var isSaving = false
     @State private var showingDeleteAlert = false
     
     let store: Store<UserFormFeature.State, UserFormFeature.Action>
-    let onComplete: (UserFormFeature.Action) -> Void
-    
+    var delegate: UserFormViewDelegate?
+
     var body: some View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             ZStack {
@@ -99,7 +103,6 @@ private extension UserFormView {
         ToolbarItem(placement: .navigationBarLeading) {
             Button("Cancel") {
                 viewStore.send(.cancel)
-                onComplete(.cancel)
             }
         }
     }
@@ -111,10 +114,8 @@ private extension UserFormView {
             Button("Save") {
                 isSaving = true
                 viewStore.send(.saveChanges)
+                delegate?.userFormViewDidUpdateUser(updatedUser: viewStore.currentUser)
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    onComplete(.delegate(.didSave(viewStore.currentUser)))
-                }
             }
             .accessibilityIdentifier("userFormSaveButton")
             .disabled(isDisabled)
@@ -134,7 +135,6 @@ private extension UserFormView {
                 bannerImageName: nil
             ),
             reducer: { UserFormFeature() }
-        ),
-        onComplete: { _ in }
+        )
     )
 }

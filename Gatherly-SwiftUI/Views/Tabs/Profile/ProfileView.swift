@@ -48,7 +48,7 @@ struct ProfileView: View {
             if let store = userFormStore {
                 UserFormView(
                     store: store,
-                    onComplete: handleEditComplete
+                    delegate: self
                 )
             }
         }
@@ -65,24 +65,6 @@ private extension ProfileView {
     
     func fullName(for user: User) -> String {
         "\(user.firstName ?? "") \(user.lastName ?? "")"
-    }
-    
-    // MARK: Functions
-    
-    func handleEditComplete(_ action: UserFormFeature.Action) {
-        switch action {
-        case .cancel:
-            break
-        case .delegate(let delegateAction):
-            if case let .didSave(updatedUser) = delegateAction {
-                usersViewModel.update(updatedUser)
-                refreshID = UUID()
-            }
-        default:
-            break
-        }
-        
-        userFormStore = nil
     }
     
     // MARK: - Subviews
@@ -167,6 +149,16 @@ private extension ProfileView {
                        isDestructive: true,
                        identifier: "deleteAccountButton")
         }
+    }
+}
+
+//MARK: - UserFormViewDelegate
+
+extension ProfileView: UserFormViewDelegate {
+    func userFormViewDidUpdateUser(updatedUser: User) {
+        usersViewModel.update(updatedUser)
+        refreshID = UUID()
+        userFormStore = nil
     }
 }
 

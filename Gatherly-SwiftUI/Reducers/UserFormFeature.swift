@@ -28,13 +28,8 @@ struct UserFormFeature: Reducer {
         case setAvatarImage(UIImage?)
         case setBannerImage(UIImage?)
         case saveChanges
-        case userSaved(User)
         case cancel
-        case delegate(DelegateAction)
-        
-        enum DelegateAction: Equatable {
-            case didSave(User)
-        }
+        case didSave(User)
     }
     
     func reduce(into state: inout State, action: Action) -> Effect<Action> {
@@ -75,22 +70,14 @@ struct UserFormFeature: Reducer {
             }
             
             return .publisher {
-                publisher.map(Action.userSaved)
+                publisher.map(Action.didSave)
             }
             
-        case .userSaved(let updatedUser):
-            state.currentUser.firstName = updatedUser.firstName
-            state.currentUser.lastName = updatedUser.lastName
-            state.currentUser.avatarImageName = updatedUser.avatarImageName
-            state.currentUser.bannerImageName = updatedUser.bannerImageName
-            
-            return .send(.delegate(.didSave(updatedUser)))
+        case .didSave:
+            return .none
             
         case .cancel:
             state.isPresented = false
-            return .none
-            
-        case .delegate:
             return .none
         }
     }
