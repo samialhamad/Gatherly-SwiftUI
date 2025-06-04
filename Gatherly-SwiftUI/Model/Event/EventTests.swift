@@ -66,4 +66,75 @@ final class EventTests: XCTestCase {
         
         XCTAssertFalse(event.isOngoing)
     }
+    
+    // MARK: - Sorting
+    
+    func testSortKey_EarlierDateComesFirst() {
+        // Event A on Jan 1, 2025 at 10:00
+        var components = DateComponents()
+        components.year = 2025
+        components.month = 1
+        components.day = 1
+        components.hour = 10
+        let dateA = Calendar.current.date(from: components)!
+        let timestampA = Int(dateA.timestamp)
+        let eventA = Event(date: dateA, startTimestamp: timestampA)
+        
+        // Event B on Jan 2, 2025 at 09:00
+        components.day = 2
+        components.hour = 9
+        let dateB = Calendar.current.date(from: components)!
+        let timestampB = Int(dateB.timestamp)
+        let eventB = Event(date: dateB, startTimestamp: timestampB)
+        
+        XCTAssertTrue(eventA.sortKey < eventB.sortKey)
+    }
+    
+    func testSortKey_NilDateIsTreatedAsDistantFuture() {
+        // Event A has no date (nil)
+        let eventA = Event(date: nil, startTimestamp: 1_000_000)
+        
+        // Event B is today
+        let today = Date()
+        let eventB = Event(date: today, startTimestamp: Int(today.timestamp))
+        
+        XCTAssertTrue(eventB.sortKey < eventA.sortKey)
+    }
+    
+    func testSortKey_SameDay_ComparesStartTimestamp() {
+        // Both events on Jan 1, 2025, but one at 08:00 and one at 17:00
+        var components = DateComponents()
+        components.year = 2025
+        components.month = 1
+        components.day = 1
+        
+        components.hour = 8
+        let dateA = Calendar.current.date(from: components)!
+        let eventEarly = Event(date: dateA, startTimestamp: Int(dateA.timestamp))
+        
+        components.hour = 17
+        let dateB = Calendar.current.date(from: components)!
+        let eventLate = Event(date: dateB, startTimestamp: Int(dateB.timestamp))
+        
+        XCTAssertTrue(eventEarly.sortKey < eventLate.sortKey)
+    }
+    
+    func testSortKey_SameDay_NilStartTimestampDefaultsToZero() {
+        // Both events on Jan 1, 2025
+        var components = DateComponents()
+        components.year = 2025
+        components.month = 1
+        components.day = 1
+        
+        // Event A has no startTimestamp so defaults to 0
+        let dateA = Calendar.current.date(from: components)!
+        let eventA = Event(date: dateA, startTimestamp: nil)
+        
+        // Event B explicitly set to a later timestamp
+        components.hour = 12
+        let dateB = Calendar.current.date(from: components)!
+        let eventB = Event(date: dateB, startTimestamp: Int(dateB.timestamp))
+        
+        XCTAssertTrue(eventA.sortKey < eventB.sortKey)
+    }
 }
