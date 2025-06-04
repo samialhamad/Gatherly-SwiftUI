@@ -25,7 +25,6 @@ struct GatherlyCalendarView: View {
             
             return Date.isSameDay(date1: eventDate, date2: selectedDate)
         }
-        .sorted { ($0.startTimestamp ?? 0) < ($1.startTimestamp ?? 0) }
     }
     
     var body: some View {
