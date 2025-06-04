@@ -65,15 +65,13 @@ private extension DayEventsView {
     // MARK: - Computed Vars
     
     var allEventsForDate: [Event] {
-        eventsViewModel.events
-            .filter { event in
-                guard let eventDate = event.date else {
-                    return false
-                }
-                
-                return Date.isSameDay(date1: eventDate, date2: selectedDate)
+        eventsViewModel.events.filter { event in
+            guard let eventDate = event.date else {
+                return false
             }
-            .sorted(by: { ($0.startTimestamp ?? 0) < ($1.startTimestamp ?? 0) })
+            
+            return Date.isSameDay(date1: eventDate, date2: selectedDate)
+        }
     }
     
     var finishedEvents: [Event] {
