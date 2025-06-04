@@ -24,21 +24,21 @@ struct Event: Codable, Equatable, Identifiable {
     // MARK: - Computed Vars
     
     var hasStarted: Bool {
-        guard let eventStartTimestamp = startTimestamp else {
+        guard let startTimestamp else {
             return false
         }
         
         let currentTimestamp = Int(Date().timestamp)
-        return eventStartTimestamp < currentTimestamp
+        return startTimestamp < currentTimestamp
     }
     
     var hasEnded: Bool {
-        guard let eventEndTimestamp = endTimestamp else {
+        guard let endTimestamp else {
             return false
         }
         
         let currentTimestamp = Int(Date().timestamp)
-        return eventEndTimestamp < currentTimestamp
+        return endTimestamp < currentTimestamp
     }
     
     var isOngoing: Bool {
