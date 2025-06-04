@@ -77,7 +77,7 @@ final class UsersViewModelTests: XCTestCase {
         viewModel.$currentUser
             .dropFirst()
             .first { publishedUser in
-                return publishedUser?.id == 1
+                return publishedUser?.id == Constants.currentUserID
             }
             .sink { publishedUser in
                 XCTAssertEqual(publishedUser?.id, 1)
@@ -118,7 +118,7 @@ final class UsersViewModelTests: XCTestCase {
         viewModel.$currentUser
             .dropFirst()
             .sink { publishedUser in
-                if publishedUser?.id == 1 {
+                if publishedUser?.id == Constants.currentUserID {
                     firstFetchExpectation.fulfill()
                 }
             }
@@ -255,7 +255,7 @@ final class UsersViewModelTests: XCTestCase {
         
         viewModel.$currentUser
             .dropFirst()
-            .first { $0?.id == 1 }
+            .first { $0?.id == Constants.currentUserID }
             .sink { _ in
                 fetchExpectation.fulfill()
             }

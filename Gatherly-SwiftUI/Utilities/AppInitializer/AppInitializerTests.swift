@@ -36,7 +36,7 @@ final class AppInitializerTests: XCTestCase {
         
         XCTAssertEqual(allUsers.count, SampleData.sampleUsers.count)
         
-        guard let sami = allUsers.first(where: { $0.id == 1 }) else {
+        guard let sami = allUsers.first(where: { $0.id == Constants.currentUserID }) else {
             XCTFail("Expected to find a user whose id == 1 in saved users")
             return
         }
@@ -45,20 +45,20 @@ final class AppInitializerTests: XCTestCase {
         
         let expectedEventIDs: [Int] = SampleData
             .sampleEvents
-            .filter { $0.plannerID == 1 || ($0.memberIDs?.contains(1) ?? false) }
+            .filter { $0.plannerID == Constants.currentUserID || ($0.memberIDs?.contains(Constants.currentUserID) ?? false) }
             .compactMap { $0.id }
         XCTAssertEqual(Set(sami.eventIDs ?? []), Set(expectedEventIDs))
         
         let expectedGroupIDs: [Int] = SampleData
             .sampleGroups
-            .filter { $0.leaderID == 1 || $0.memberIDs.contains(1) }
+            .filter { $0.leaderID == Constants.currentUserID || $0.memberIDs.contains(Constants.currentUserID) }
             .compactMap { $0.id }
         XCTAssertEqual(Set(sami.groupIDs ?? []), Set(expectedGroupIDs))
         
         let currentUser = UserDefaultsManager.loadCurrentUser()
         
         XCTAssertNotNil(currentUser)
-        XCTAssertEqual(currentUser?.id, 1)
+        XCTAssertEqual(currentUser?.id, Constants.currentUserID)
         XCTAssertEqual(allEvents.count, SampleData.sampleEvents.count)
         XCTAssertEqual(allGroups.count, SampleData.sampleGroups.count)
     }
@@ -108,19 +108,19 @@ final class AppInitializerTests: XCTestCase {
         XCTAssertTrue(UserDefaultsManager.getDidSeedSampleData())
         
         var usersDict = UserDefaultsManager.loadUsers()
-        if var sami = usersDict[1] {
+        if var sami = usersDict[Constants.currentUserID] {
             sami.firstName = "Modified"
-            usersDict[1] = sami
+            usersDict[Constants.currentUserID] = sami
             UserDefaultsManager.saveUsers(usersDict)
         }
         
-        let updatedUser = UserDefaultsManager.loadUsers()[1]
+        let updatedUser = UserDefaultsManager.loadUsers()[Constants.currentUserID]
         XCTAssertEqual(updatedUser?.firstName, "Modified")
         
         AppInitializer.runIfNeeded()
         
         let usersAfterSecondRun = UserDefaultsManager.loadUsers()
-        let samiAfterSecondRun = usersAfterSecondRun[1]
+        let samiAfterSecondRun = usersAfterSecondRun[Constants.currentUserID]
         
         XCTAssertEqual(samiAfterSecondRun?.firstName, "Modified")
     }

@@ -66,7 +66,7 @@ struct UserFormFeature: Reducer {
             let publisher: AnyPublisher<User, Never>
             if state.isCreatingFriend {
                 publisher = GatherlyAPI.createUser(updatedUser)
-            } else if updatedUser.id == 1 {
+            } else if updatedUser.id == Constants.currentUserID {
                 publisher = GatherlyAPI.updateCurrentUser(updatedUser)
             } else {
                 publisher = GatherlyAPI.updateUser(updatedUser)

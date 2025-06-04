@@ -24,15 +24,15 @@ enum AppInitializer {
         
         var updatedUsers = users
         
-        if let samiIndex = updatedUsers.firstIndex(where: { $0.id == 1 }) {
+        if let samiIndex = updatedUsers.firstIndex(where: { $0.id == Constants.currentUserID }) {
             var sami = updatedUsers[samiIndex]
             
             sami.eventIDs = events
-                .filter { $0.plannerID == 1 || ($0.memberIDs?.contains(1) ?? false) }
+                .filter { $0.plannerID == Constants.currentUserID || ($0.memberIDs?.contains(Constants.currentUserID) ?? false) }
                 .compactMap { $0.id }
             
             sami.groupIDs = groups
-                .filter { $0.leaderID == 1 || $0.memberIDs.contains(1) }
+                .filter { $0.leaderID == Constants.currentUserID || $0.memberIDs.contains(Constants.currentUserID) }
                 .compactMap { $0.id }
             
             sami.friendIDs = [2, 3, 4]
@@ -44,7 +44,7 @@ enum AppInitializer {
         let groupsDict = groups.keyedBy(\.id)
         
         UserDefaultsManager.saveUsers(usersDict)
-        if let current = usersDict[1] {
+        if let current = usersDict[Constants.currentUserID] {
             UserDefaultsManager.saveCurrentUser(current)
         }
         UserDefaultsManager.saveEvents(eventsDict)

@@ -62,7 +62,7 @@ private extension UserFormView {
     private func activityMessage(for viewStore: ViewStore<UserFormFeature.State, UserFormFeature.Action>) -> String {
         if viewStore.isCreatingFriend {
             return Constants.UserFormView.addingFriendString
-        } else if viewStore.currentUser.id == 1 {
+        } else if viewStore.currentUser.id == Constants.currentUserID {
             return Constants.UserFormView.updatingProfileString
         } else {
             return Constants.UserFormView.updatingFriendString
