@@ -10,7 +10,9 @@ import UIKit
 struct ImageUtility {
     
     static func saveImageToDocuments(image: UIImage) -> String? {
-        guard let data = image.jpegData(compressionQuality: 0.8) else { return nil }
+        guard let data = image.jpegData(compressionQuality: 0.8) else {
+            return nil
+        }
         
         let filename = UUID().uuidString + ".jpg"
         let fileURL = getDocumentsDirectory().appendingPathComponent(filename)
@@ -26,11 +28,13 @@ struct ImageUtility {
     
     static func loadImageFromDocuments(named filename: String) -> UIImage? {
         let fileURL = getDocumentsDirectory().appendingPathComponent(filename)
+        
         return UIImage(contentsOfFile: fileURL.path)
     }
     
     static func deleteImageFromDocuments(named filename: String) {
         let fileURL = getDocumentsDirectory().appendingPathComponent(filename)
+        
         do {
             try FileManager.default.removeItem(at: fileURL)
         } catch {
