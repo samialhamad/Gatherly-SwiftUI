@@ -69,18 +69,21 @@ final class GroupsViewModel: ObservableObject {
     }
     
     func delete(_ group: UserGroup) {
-        let index = groups.firstIndex { $0.id == group.id }
-        if let index {
-            let removed = groups.remove(at: index)
-            
-            GatherlyAPI.deleteGroup(group)
-                .receive(on: RunLoop.main)
-                .sink { [weak self] success in
-                    if !success {
-                        self?.groups.insert(removed, at: index)
-                    }
-                }
-                .store(in: &cancellables)
+        guard let id = group.id,
+              let index = groups.firstIndex(where: { $0.id == id })
+        else {
+            return
         }
+        
+        let removed = groups.remove(at: index)
+        
+        GatherlyAPI.deleteGroup(id: id)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] success in
+                if !success {
+                    self?.groups.insert(removed, at: index)
+                }
+            }
+            .store(in: &cancellables)
     }
 }
