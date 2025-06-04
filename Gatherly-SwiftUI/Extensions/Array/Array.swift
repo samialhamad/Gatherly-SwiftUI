@@ -40,11 +40,7 @@ extension Array where Element == Event {
             : "\(count) upcoming events!"
         }
     }
-    
-    var groupEventsByDay: [Date: [Event]] {
-        Dictionary(grouping: self, by: { Date.startOfDay($0.date) })
-    }
-    
+
     func filterEvents(by day: Date) -> [Event] {
         self.filter { event in
             guard let eventDate = event.date else {

@@ -75,6 +75,7 @@
 				ViewModel/Environments/EventsViewModel/EventsViewModelTests.swift,
 				ViewModel/Environments/GroupsViewModel/GroupsViewModelTests.swift,
 				ViewModel/Environments/UsersViewModel/UsersViewModelTests.swift,
+				ViewModel/Events/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
 			);
 			target = F11CDC2F2D77958B007BC1F1 /* Gatherly-SwiftUITests */;
 		};

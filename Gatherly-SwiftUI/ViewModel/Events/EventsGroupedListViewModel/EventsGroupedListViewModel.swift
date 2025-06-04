@@ -10,6 +10,10 @@ import SwiftUI
 
 class EventsGroupedListViewModel: ObservableObject {
     
+    func groupEventsByDay(events: [Event]) -> [Date: [Event]] {
+        Dictionary(grouping: events, by: { Date.startOfDay($0.date) })
+    }
+    
     func shouldShowTodayButton(keys: [Date]) -> Bool {
         let today = Date.startOfDay(Date())
         return !keys.contains(today) || keys.first != today

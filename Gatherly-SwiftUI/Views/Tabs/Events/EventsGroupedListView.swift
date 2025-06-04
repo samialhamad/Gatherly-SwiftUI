@@ -13,7 +13,7 @@ struct EventsGroupedListView: View {
     @StateObject private var eventsGroupedListViewModel = EventsGroupedListViewModel()
     
     var body: some View {
-        let groupedEvents = eventsViewModel.events.groupEventsByDay
+        let groupedEvents = eventsGroupedListViewModel.groupEventsByDay(events: eventsViewModel.events)
         let keys = groupedEvents.keys.sorted()
         
         ScrollViewReader { proxy in
