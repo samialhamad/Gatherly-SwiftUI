@@ -142,11 +142,11 @@ extension FriendsView {
 //MARK: - UserFormViewDelegate
 
 extension FriendsView: UserFormViewDelegate {
-    func didCancel() {
+    func userFormViewDidCancel() {
         createFriendStore = nil
     }
     
-    func didUpdateUser(updatedUser: User) {
+    func userFormViewDidUpdateUser(updatedUser: User) {
         usersViewModel.create(updatedUser) { createdFriend in
             guard var currentUser = usersViewModel.currentUser else {
                 createFriendStore = nil

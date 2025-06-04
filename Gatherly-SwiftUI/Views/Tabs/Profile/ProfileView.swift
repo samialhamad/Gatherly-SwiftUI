@@ -155,11 +155,11 @@ private extension ProfileView {
 //MARK: - UserFormViewDelegate
 
 extension ProfileView: UserFormViewDelegate {
-    func didCancel() {
+    func userFormViewDidCancel() {
         userFormStore = nil
     }
     
-    func didUpdateUser(updatedUser: User) {
+    func userFormViewDidUpdateUser(updatedUser: User) {
         usersViewModel.update(updatedUser)
         refreshID = UUID()
         userFormStore = nil

@@ -10,8 +10,8 @@ import ComposableArchitecture
 import SwiftUI
 
 protocol UserFormViewDelegate {
-    func didCancel()
-    func didUpdateUser(updatedUser: User)
+    func userFormViewDidCancel()
+    func userFormViewDidUpdateUser(updatedUser: User)
 }
 
 struct UserFormView: View {
@@ -54,7 +54,7 @@ private extension UserFormView {
     // MARK: - Functions
     
     private func didUpdateUser(updatedUser: User) {
-        delegate?.didUpdateUser(updatedUser: updatedUser)
+        delegate?.userFormViewDidUpdateUser(updatedUser: updatedUser)
     }
     
     // MARK: - Subviews
@@ -114,7 +114,7 @@ private extension UserFormView {
         ToolbarItem(placement: .navigationBarLeading) {
             Button("Cancel") {
                 viewStore.send(.cancel)
-                delegate?.didCancel()
+                delegate?.userFormViewDidCancel()
             }
         }
     }

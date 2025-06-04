@@ -135,11 +135,11 @@ private extension UserDetailView {
 //MARK: - UserFormViewDelegate
 
 extension UserDetailView: UserFormViewDelegate {
-    func didCancel() {
+    func userFormViewDidCancel() {
         userFormStore = nil
     }
     
-    func didUpdateUser(updatedUser: User) {
+    func userFormViewDidUpdateUser(updatedUser: User) {
         usersViewModel.update(updatedUser)
         userFormStore = nil
     }
