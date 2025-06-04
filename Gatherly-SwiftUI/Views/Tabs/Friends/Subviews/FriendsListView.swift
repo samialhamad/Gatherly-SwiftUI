@@ -8,6 +8,11 @@
 import Combine
 import SwiftUI
 
+enum SelectionMode {
+    case view
+    case select(selectedIDs: Binding<Set<Int>>)
+}
+
 struct FriendsListView: View {
     @Binding var searchText: String
     @EnvironmentObject var usersViewModel: UsersViewModel

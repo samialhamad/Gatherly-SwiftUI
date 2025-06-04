@@ -38,13 +38,6 @@ struct GatherlyAppearance {
     }
 }
 
-// MARK: - SelectionMode
-
-enum SelectionMode {
-    case view
-    case select(selectedIDs: Binding<Set<Int>>)
-}
-
 // MARK: - Tabs
 
 enum Tab: Int {
