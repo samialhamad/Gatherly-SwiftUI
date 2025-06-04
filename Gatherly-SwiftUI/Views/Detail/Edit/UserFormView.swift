@@ -16,7 +16,6 @@ protocol UserFormViewDelegate {
 
 struct UserFormView: View {
     @State private var cancellables = Set<AnyCancellable>()
-    @State private var isSaving = false
     @State private var showingDeleteAlert = false
     
     let store: Store<UserFormFeature.State, UserFormFeature.Action>
@@ -36,7 +35,12 @@ struct UserFormView: View {
                         saveToolbarButton(viewStore)
                     }
                 }
-                if isSaving {
+                .onChange(of: viewStore.didUpdateUser) {
+                    if viewStore.didUpdateUser {
+                        didUpdateUser(updatedUser: viewStore.currentUser)
+                    }
+                }
+                if viewStore.isSaving {
                     ActivityIndicator(message: activityMessage(for: viewStore))
                 }
             }
@@ -46,6 +50,12 @@ struct UserFormView: View {
 }
 
 private extension UserFormView {
+    
+    // MARK: - Functions
+    
+    private func didUpdateUser(updatedUser: User) {
+        delegate?.didUpdateUser(updatedUser: updatedUser)
+    }
     
     // MARK: - Subviews
     
@@ -114,9 +124,7 @@ private extension UserFormView {
             let isDisabled = viewStore.firstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             
             Button("Save") {
-                isSaving = true
                 viewStore.send(.saveChanges)
-                delegate?.didUpdateUser(updatedUser: viewStore.currentUser)
             }
             .accessibilityIdentifier("userFormSaveButton")
             .disabled(isDisabled)

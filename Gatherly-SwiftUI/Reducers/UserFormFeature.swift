@@ -20,6 +20,8 @@ struct UserFormFeature: Reducer {
         var bannerImage: UIImage?
         var isCreatingFriend: Bool = false
         var isPresented: Bool = false
+        var isSaving = false
+        var didUpdateUser = false
     }
     
     enum Action: Equatable {
@@ -53,6 +55,7 @@ struct UserFormFeature: Reducer {
         case .saveChanges:
             let avatarImageName = state.avatarImage.flatMap { ImageUtility.saveImageToDocuments(image: $0) }
             let bannerImageName = state.bannerImage.flatMap { ImageUtility.saveImageToDocuments(image: $0) }
+            state.isSaving = true
             
             var updatedUser = state.currentUser
             updatedUser.firstName = state.firstName
@@ -74,6 +77,8 @@ struct UserFormFeature: Reducer {
             }
             
         case .didSave:
+            state.isSaving = false
+            state.didUpdateUser = true
             return .none
             
         case .cancel:
