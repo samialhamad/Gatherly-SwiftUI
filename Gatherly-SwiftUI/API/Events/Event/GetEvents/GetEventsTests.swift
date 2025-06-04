@@ -106,18 +106,16 @@ final class GetEventsTests: XCTestCase {
         
         GatherlyAPI.getEvents()
             .sink { events in
-                let sortedEvents = events.sorted { ($0.id ?? 0) < ($1.id ?? 0) }
+                XCTAssertEqual(events.count, 2)
                 
-                XCTAssertEqual(sortedEvents.count, 2)
-                
-                let first = sortedEvents[0]
+                let first = events[0]
                 XCTAssertEqual(first.title, "Loaded Event 1")
                 XCTAssertEqual(first.id, 123)
                 XCTAssertEqual(first.plannerID, 1)
                 XCTAssertEqual(Set(first.memberIDs ?? []), Set([2, 3]))
                 XCTAssertEqual(first.categories, [.entertainment])
                 
-                let second = sortedEvents[1]
+                let second = events[1]
                 XCTAssertEqual(second.title, "Loaded Event 2")
                 XCTAssertEqual(second.id, 333)
                 XCTAssertEqual(second.plannerID, 1)
