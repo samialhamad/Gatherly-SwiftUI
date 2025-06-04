@@ -35,7 +35,7 @@ final class DeleteEventTests: XCTestCase {
         ]
         UserDefaultsManager.saveEvents(initialDict)
         
-        GatherlyAPI.deleteEvent(eventToDelete)
+        GatherlyAPI.deleteEvent(id: eventToDelete.id!)
             .sink { success in
                 XCTAssertTrue(success, "Expected deleteEvent to return true")
                 
@@ -62,7 +62,7 @@ final class DeleteEventTests: XCTestCase {
         
         UserDefaultsManager.saveEvents([:])
         
-        GatherlyAPI.deleteEvent(fakeEvent)
+        GatherlyAPI.deleteEvent(id: fakeEvent.id!)
             .sink { success in
                 XCTAssertFalse(success, "Expected deletion to fail")
                 expectation.fulfill()
