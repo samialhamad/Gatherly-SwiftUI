@@ -86,18 +86,21 @@ final class UsersViewModel: ObservableObject {
     }
     
     func delete(_ user: User) {
-        let index = users.firstIndex { $0.id == user.id }
-        if let index {
-            let removed = users.remove(at: index)
-            
-            GatherlyAPI.deleteUser(user)
-                .receive(on: RunLoop.main)
-                .sink { [weak self] success in
-                    if !success {
-                        self?.users.insert(removed, at: index)
-                    }
-                }
-                .store(in: &cancellables)
+        guard let id = user.id,
+              let index = users.firstIndex(where: { $0.id == id })
+        else {
+            return
         }
+        
+        let removed = users.remove(at: index)
+        
+        GatherlyAPI.deleteUser(id: id)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] success in
+                if !success {
+                    self?.users.insert(removed, at: index)
+                }
+            }
+            .store(in: &cancellables)
     }
 }
