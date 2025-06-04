@@ -48,8 +48,6 @@ enum EventCategory: String, Codable, CaseIterable {
     case education = "Education"
     case networking = "Networking"
     case other = "Other"
-    
-    static let allCases: [EventCategory] = [.food, .entertainment, .travel, .sports, .education, .networking, .other]
 }
 
 // MARK: - SelectionMode
