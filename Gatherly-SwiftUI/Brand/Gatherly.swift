@@ -37,12 +37,3 @@ struct GatherlyAppearance {
         UIButton.appearance(whenContainedInInstancesOf: [UICalendarView.self]).tintColor = Colors.primary // buttons in Calendar
     }
 }
-
-// MARK: - Tabs
-
-enum Tab: Int {
-    case calendar = 0
-    case create = 1
-    case friends = 2
-    case profile = 3
-}
