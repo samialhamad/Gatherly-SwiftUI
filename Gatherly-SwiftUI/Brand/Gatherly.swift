@@ -38,18 +38,6 @@ struct GatherlyAppearance {
     }
 }
 
-// MARK: - Categories
-
-enum EventCategory: String, Codable, CaseIterable {
-    case food = "Food"
-    case entertainment = "Entertainment"
-    case travel = "Travel"
-    case sports = "Sports"
-    case education = "Education"
-    case networking = "Networking"
-    case other = "Other"
-}
-
 // MARK: - SelectionMode
 
 enum SelectionMode {

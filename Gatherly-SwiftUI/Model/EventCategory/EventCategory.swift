@@ -1,13 +1,21 @@
 //
-//  Brand+EventCategoryIcon.swift
+//  EventCategory.swift
 //  Gatherly-SwiftUI
 //
-//  Created by Sami Alhamad on 3/24/25.
+//  Created by Sami Alhamad on 6/4/25.
 //
 
 import SwiftUI
 
-extension EventCategory {
+enum EventCategory: String, Codable, CaseIterable {
+    case food = "Food"
+    case entertainment = "Entertainment"
+    case travel = "Travel"
+    case sports = "Sports"
+    case education = "Education"
+    case networking = "Networking"
+    case other = "Other"
+    
     var iconName: String {
         switch self {
         case .food:
@@ -27,11 +35,15 @@ extension EventCategory {
         }
     }
     
+    @ViewBuilder
     var icon: some View {
         Image(systemName: iconName)
             .resizable()
             .scaledToFit()
-            .frame(width: Constants.EventCategoryIcon.iconFrameWidth, height: Constants.EventCategoryIcon.iconFrameHeight)
+            .frame(
+                width: Constants.EventCategoryIcon.iconFrameWidth,
+                height: Constants.EventCategoryIcon.iconFrameHeight
+            )
             .padding(Constants.EventCategoryIcon.iconPadding)
             .background(Circle().fill(Color(Colors.primary)))
             .foregroundColor(.white)
