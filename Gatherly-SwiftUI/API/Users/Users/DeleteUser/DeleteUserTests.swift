@@ -57,7 +57,7 @@ final class DeleteUserTests: XCTestCase {
             userToKeep.id!: userToKeep
         ])
         
-        GatherlyAPI.deleteUser(userToDelete)
+        GatherlyAPI.deleteUser(id: userToDelete.id!)
             .sink { success in
                 XCTAssertTrue(success, "Expected deleteUser to return true")
                 
@@ -100,7 +100,7 @@ final class DeleteUserTests: XCTestCase {
         
         UserDefaultsManager.saveUsers([:])
         
-        GatherlyAPI.deleteUser(fakeUser)
+        GatherlyAPI.deleteUser(id: fakeUser.id!)
             .sink { success in
                 XCTAssertFalse(success)
                 
