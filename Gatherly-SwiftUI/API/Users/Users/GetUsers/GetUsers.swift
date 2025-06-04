@@ -10,16 +10,16 @@ import Foundation
 
 extension GatherlyAPI {
     static func getUsers(forUserID id: Int = 1) -> AnyPublisher<[User], Never> {
-        let users = UserDefaultsManager.loadUsers()
-        
-        guard let currentUser = users[id] else {
+        guard let currentUser = UserDefaultsManager.loadCurrentUser(),
+              currentUser.id == id
+        else {
             return Just([])
                 .delay(for: .seconds(2), scheduler: DispatchQueue.main)
                 .eraseToAnyPublisher()
         }
         
-        let friends: [User] = currentUser.friendIDs?
-            .compactMap { users[$0] } ?? []
+        let allUsers = UserDefaultsManager.loadUsers()
+        let friends: [User] = currentUser.friendIDs?.compactMap { allUsers[$0] } ?? []
         
         return Just(friends)
             .delay(for: .seconds(2), scheduler: DispatchQueue.main)

@@ -57,13 +57,17 @@ final class GetUsersTests: XCTestCase {
             lastName: "Hacker"
         )
         
+        UserDefaultsManager.removeUsers()
+        UserDefaultsManager.removeCurrentUser()
+        
         UserDefaultsManager.saveUsers([
             currentUser.id!: currentUser,
             friend1.id!: friend1,
             friend2.id!: friend2,
             stranger.id!: stranger
         ])
-        
+        UserDefaultsManager.saveCurrentUser(currentUser)
+
         GatherlyAPI.getUsers(forUserID: 1)
             .sink { friends in
                 XCTAssertEqual(friends.count, 2)
