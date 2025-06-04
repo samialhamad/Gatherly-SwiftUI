@@ -40,7 +40,7 @@ final class DeleteGroupTests: XCTestCase {
             groupToKeep.id!: groupToKeep
         ])
         
-        GatherlyAPI.deleteGroup(groupToDelete)
+        GatherlyAPI.deleteGroup(id: groupToDelete.id!)
             .sink { success in
                 XCTAssertTrue(success, "Expected deleteGroup to return true")
                 
@@ -69,7 +69,7 @@ final class DeleteGroupTests: XCTestCase {
         
         UserDefaultsManager.saveGroups([:])
         
-        GatherlyAPI.deleteGroup(fakeGroup)
+        GatherlyAPI.deleteGroup(id: fakeGroup.id!)
             .sink { success in
                 XCTAssertFalse(success)
                 

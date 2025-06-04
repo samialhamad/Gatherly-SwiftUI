@@ -9,12 +9,11 @@ import Combine
 import Foundation
 
 extension GatherlyAPI {
-    static func deleteGroup(_ group: UserGroup) -> AnyPublisher<Bool, Never> {
+    static func deleteGroup(id: Int) -> AnyPublisher<Bool, Never> {
         var groups = UserDefaultsManager.loadGroups()
         
-        let existed = (group.id != nil && groups.keys.contains(group.id!))
-        
-        if let id = group.id {
+        let existed = groups.keys.contains(id)
+        if existed {
             groups.removeValue(forKey: id)
             UserDefaultsManager.saveGroups(groups)
         }
