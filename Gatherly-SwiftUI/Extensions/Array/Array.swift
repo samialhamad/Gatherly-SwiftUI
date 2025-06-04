@@ -40,14 +40,4 @@ extension Array where Element == Event {
             : "\(count) upcoming events!"
         }
     }
-
-    func filterEvents(by day: Date) -> [Event] {
-        self.filter { event in
-            guard let eventDate = event.date else {
-                return false
-            }
-            
-            return Calendar.current.isDate(eventDate, inSameDayAs: day)
-        }
-    }
 }
