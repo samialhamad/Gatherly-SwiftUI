@@ -8,7 +8,7 @@
 import Foundation
 
 struct Event: Codable, Equatable, Hashable, Identifiable {
-    var bannerImageName: String? 
+    var bannerImageName: String?
     var categories: [EventCategory] = []
     var date: Date?
     var description: String?
@@ -31,7 +31,7 @@ struct Event: Codable, Equatable, Hashable, Identifiable {
         let currentTimestamp = Int(Date().timestamp)
         return eventStartTimestamp < currentTimestamp
     }
-
+    
     var hasEnded: Bool {
         guard let eventEndTimestamp = endTimestamp else {
             return false
@@ -43,5 +43,13 @@ struct Event: Codable, Equatable, Hashable, Identifiable {
     
     var isOngoing: Bool {
         return hasStarted && !hasEnded
+    }
+    
+    // MARK: - Sort
+    
+    var sortKey: (Date, Int) {
+        let day = date ?? .distantFuture
+        let start = startTimestamp ?? 0
+        return (day, start)
     }
 }
