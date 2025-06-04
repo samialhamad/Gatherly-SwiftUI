@@ -91,7 +91,7 @@ class User: Codable, Equatable, Identifiable, ObservableObject {
         self.phone = phone
     }
     
-    // MARK: - Codable Conformance (Manual Implementation)
+    // MARK: - Codable
     
     private enum CodingKeys: String, CodingKey {
         case avatarImageName
