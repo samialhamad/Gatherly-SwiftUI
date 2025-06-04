@@ -9,15 +9,15 @@ import Combine
 import Foundation
 
 extension GatherlyAPI {
-    static func updateEvent(_ updatedEvent: Event) -> AnyPublisher<Event, Never> {
+    static func updateEvent(_ event: Event) -> AnyPublisher<Event, Never> {
         var events = UserDefaultsManager.loadEvents()
         
-        if let id = updatedEvent.id {
-            events[id] = updatedEvent
+        if let id = event.id {
+            events[id] = event
             UserDefaultsManager.saveEvents(events)
         }
         
-        return Just(updatedEvent)
+        return Just(event)
             .delay(for: .seconds(2), scheduler: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
