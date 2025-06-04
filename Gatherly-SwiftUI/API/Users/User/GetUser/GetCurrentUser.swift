@@ -1,5 +1,5 @@
 //
-//  GetUser.swift
+//  GetCurrentUser.swift
 //  Gatherly-SwiftUI
 //
 //  Created by Sami Alhamad on 5/23/25.
@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 extension GatherlyAPI {
-    static func getUser() -> AnyPublisher<User?, Never> {
+    static func getCurrentUser() -> AnyPublisher<User?, Never> {
         let user = UserDefaultsManager.loadCurrentUser()
         
         return Just(user)
