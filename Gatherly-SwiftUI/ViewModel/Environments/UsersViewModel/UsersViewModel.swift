@@ -29,7 +29,7 @@ final class UsersViewModel: ObservableObject {
     func fetch() {
         isLoading = true
         
-        let currentUserPublisher = GatherlyAPI.getUser()
+        let currentUserPublisher = GatherlyAPI.getCurrentUser()
         let usersPublisher = GatherlyAPI.getUsers()
         
         Publishers.CombineLatest(currentUserPublisher, usersPublisher)
