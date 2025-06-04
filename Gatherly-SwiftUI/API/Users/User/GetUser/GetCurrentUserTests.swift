@@ -1,5 +1,5 @@
 //
-//  GetUserTests.swift
+//  GetCurrentUserTests.swift
 //  Gatherly-SwiftUITests
 //
 //  Created by Sami Alhamad on 5/27/25.
@@ -9,7 +9,7 @@ import Combine
 import XCTest
 @testable import Gatherly_SwiftUI
 
-final class GetUserTests: XCTestCase {
+final class GetCurrentUserTests: XCTestCase {
     
     var cancellables = Set<AnyCancellable>()
     
@@ -18,7 +18,7 @@ final class GetUserTests: XCTestCase {
         UserDefaultsManager.removeCurrentUser()
     }
     
-    func testGetUserReturnsStoredUser() {
+    func testGetCurrentUser() {
         let expectation = XCTestExpectation(description: "Current user is retrieved from UserDefaults")
         
         let testUser = User(
@@ -35,7 +35,7 @@ final class GetUserTests: XCTestCase {
         
         UserDefaultsManager.saveCurrentUser(testUser)
         
-        GatherlyAPI.getUser()
+        GatherlyAPI.getCurrentUser()
             .sink { user in
                 XCTAssertNotNil(user)
                 XCTAssertEqual(user?.id, 1)
@@ -54,10 +54,10 @@ final class GetUserTests: XCTestCase {
         wait(for: [expectation], timeout: 3)
     }
     
-    func testGetUserReturnsNilWhenNotSet() {
+    func testGetCurrentUser_returnsNilWhenNotSet() {
         let expectation = XCTestExpectation(description: "Returns nil when no current user is stored")
                 
-        GatherlyAPI.getUser()
+        GatherlyAPI.getCurrentUser()
             .sink { user in
                 XCTAssertNil(user)
                 expectation.fulfill()
