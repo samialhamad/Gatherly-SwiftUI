@@ -67,18 +67,21 @@ final class EventsViewModel: ObservableObject {
     }
     
     func delete(_ event: Event) {
-        let index = events.firstIndex { $0.id == event.id }
-        if let index {
-            let removed = events.remove(at: index)
-            
-            GatherlyAPI.deleteEvent(event)
-                .receive(on: RunLoop.main)
-                .sink { [weak self] success in
-                    if !success {
-                        self?.events.insert(removed, at: index)
-                    }
-                }
-                .store(in: &cancellables)
+        guard let id = event.id,
+              let index = events.firstIndex(where: { $0.id == id })
+        else {
+            return
         }
+        let removed = events.remove(at: index)
+        
+        GatherlyAPI.deleteEvent(id: id)
+            .receive(on: RunLoop.main)
+            .sink { [weak self] success in
+                if !success {
+                    self?.events.insert(removed, at: index)
+                }
+            }
+            .store(in: &cancellables)
+        
     }
 }
