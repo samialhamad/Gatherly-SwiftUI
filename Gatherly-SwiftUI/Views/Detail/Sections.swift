@@ -96,7 +96,7 @@ public struct EventMembersSection: View {
                         
                         self.friends = user
                             .friends(from: friendsDict)
-                            .filter { $0.id != Constants.currentUserID }
+                            .filter { $0.id != SampleData.currentUserID }
                     }
                 }
                 .store(in: &cancellables)

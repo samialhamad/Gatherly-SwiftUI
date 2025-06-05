@@ -22,11 +22,11 @@ struct AppInitializer {
         let events = SampleData.sampleEvents
         let groups = SampleData.sampleGroups
                 
-        if let currentUserIndex = users.firstIndex(where: { $0.id == Constants.currentUserID }) {
+        if let currentUserIndex = users.firstIndex(where: { $0.id == SampleData.currentUserID }) {
             var currentUser = users[currentUserIndex]
             
             currentUser.groupIDs = groups
-                .filter { $0.leaderID == Constants.currentUserID || $0.memberIDs.contains(Constants.currentUserID) }
+                .filter { $0.leaderID == SampleData.currentUserID || $0.memberIDs.contains(SampleData.currentUserID) }
                 .compactMap { $0.id }
             
             currentUser.friendIDs = [2, 3, 4]
@@ -38,7 +38,7 @@ struct AppInitializer {
         let groupsDict = groups.keyedBy(\.id)
         
         UserDefaultsManager.saveUsers(usersDict)
-        if let currentUser = usersDict[Constants.currentUserID] {
+        if let currentUser = usersDict[SampleData.currentUserID] {
             UserDefaultsManager.saveCurrentUser(currentUser)
         }
         UserDefaultsManager.saveEvents(eventsDict)

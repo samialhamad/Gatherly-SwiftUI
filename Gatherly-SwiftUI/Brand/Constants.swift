@@ -9,8 +9,6 @@ import SwiftUI
 
 struct Constants {
     
-    static let currentUserID: Int = 1
-    
     struct ActivityIndicator {
         static let scaleEffect: CGFloat = 1.5
         static let vstackSpacing: CGFloat = 16

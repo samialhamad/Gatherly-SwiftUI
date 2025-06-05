@@ -8,7 +8,7 @@
 import Foundation
 
 enum ContactSyncHelper {
-    static func runIfNeeded(currentUserID: Int = 1) async {
+    static func runIfNeeded(currentUserID: Int = SampleData.currentUserID) async {
         guard !UserDefaultsManager.getDidSyncContacts() else {
             return
         }

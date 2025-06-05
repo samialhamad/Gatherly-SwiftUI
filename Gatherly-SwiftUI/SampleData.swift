@@ -8,6 +8,9 @@
 import Foundation
 
 struct SampleData {
+    
+    static let currentUserID: Int = 1
+    
     static let sampleUsers: [User] = [
         User(
             createdTimestamp: Int(Date().timestamp),

@@ -37,7 +37,7 @@ class CreateEventViewModel: ObservableObject {
     
     var builtEvent: Event {
         var built = event
-        built.plannerID = Constants.currentUserID
+        built.plannerID = SampleData.currentUserID
         
         built.memberIDs = event.memberIDs?.sorted()
         
