@@ -146,7 +146,7 @@ private extension ProfileView {
             
             Button {
                 usersViewModel.isLoading = true
-                ContactSyncHelper.forceSync(currentUserID: 1) {
+                ContactSyncHelper.forceSync(currentUserID: Constants.currentUserID) {
                     usersViewModel.forceReload()
                 }
             } label: {
