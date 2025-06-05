@@ -55,13 +55,12 @@ class CreateEventViewModel: ObservableObject {
     func clearFields() {
         let now = Date()
         let nowTimestamp = Int(now.timestamp)
-        let defaultEndTimestamp = Int((now.plus(calendarComponent: .hour, value: 1)?.timestamp) ?? now.timestamp)
 
         self.event = Event(
             bannerImageName: nil,
             categories: [],
             description: "",
-            endTimestamp: defaultEndTimestamp,
+            endTimestamp: nowTimestamp,
             location: nil,
             memberIDs: [],
             title: "",
