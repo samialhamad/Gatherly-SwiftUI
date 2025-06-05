@@ -77,13 +77,11 @@ final class UserFormFeatureTests: XCTestCase {
 //    func testSaveChanges_updatesUser() async {
 //        var originalUser = User(
 //            createdTimestamp: 1234567890,
-//            email: "sam@example.com",
 //            eventIDs: [],
 //            firstName: "Sami",
 //            friendIDs: [],
 //            groupIDs: [],
 //            id: 1,
-//            isEmailEnabled: false,
 //            lastName: "Alhamad",
 //            phone: nil
 //        )

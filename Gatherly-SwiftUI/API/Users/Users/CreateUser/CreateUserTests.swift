@@ -28,13 +28,11 @@ final class CreateUserTests: XCTestCase {
             avatarImageName: nil,
             bannerImageName: nil,
             createdTimestamp: Int(Date().timestamp),
-            email: nil,
             eventIDs: [],
             firstName: firstName,
             friendIDs: [],
             groupIDs: [],
             id: id,
-            isEmailEnabled: false,
             lastName: lastName,
             phone: nil
         )

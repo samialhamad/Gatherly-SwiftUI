@@ -11,14 +11,11 @@ class User: Codable, Equatable, Identifiable, ObservableObject {
     @Published var avatarImageName: String?
     @Published var bannerImageName: String?
     @Published var createdTimestamp: Int?
-    @Published var deviceToken: String?
-    @Published var email: String?
     @Published var eventIDs: [Int]?
     @Published var firstName: String?
     @Published var friendIDs: [Int]?
     @Published var groupIDs: [Int]?
     @Published var id: Int?
-    @Published var isEmailEnabled: Bool?
     @Published var lastName: String?
     @Published var phone: String?
     
@@ -65,28 +62,22 @@ class User: Codable, Equatable, Identifiable, ObservableObject {
         avatarImageName: String? = nil,
         bannerImageName: String? = nil,
         createdTimestamp: Int? = nil,
-        deviceToken: String? = nil,
-        email: String? = nil,
         eventIDs: [Int]? = nil,
         firstName: String? = nil,
         friendIDs: [Int]? = nil,
         groupIDs: [Int]? = nil,
         id: Int? = nil,
-        isEmailEnabled: Bool? = nil,
         lastName: String? = nil,
         phone: String? = nil
     ) {
         self.avatarImageName = avatarImageName
         self.bannerImageName = bannerImageName
         self.createdTimestamp = createdTimestamp
-        self.deviceToken = deviceToken
-        self.email = email
         self.eventIDs = eventIDs
         self.firstName = firstName
         self.friendIDs = friendIDs
         self.groupIDs = groupIDs
         self.id = id
-        self.isEmailEnabled = isEmailEnabled
         self.lastName = lastName
         self.phone = phone
     }
@@ -97,14 +88,11 @@ class User: Codable, Equatable, Identifiable, ObservableObject {
         case avatarImageName
         case bannerImageName
         case createdTimestamp
-        case deviceToken
-        case email
         case eventIDs
         case firstName
         case friendIDs
         case groupIDs
         case id
-        case isEmailEnabled
         case lastName
         case phone
     }
@@ -115,14 +103,11 @@ class User: Codable, Equatable, Identifiable, ObservableObject {
         let avatarImageName = try container.decodeIfPresent(String.self, forKey: .avatarImageName)
         let bannerImageName = try container.decodeIfPresent(String.self, forKey: .bannerImageName)
         let createdTimestamp = try container.decodeIfPresent(Int.self, forKey: .createdTimestamp)
-        let deviceToken = try container.decodeIfPresent(String.self, forKey: .deviceToken)
-        let email = try container.decodeIfPresent(String.self, forKey: .email)
         let eventIDs = try container.decodeIfPresent([Int].self, forKey: .eventIDs)
         let firstName = try container.decodeIfPresent(String.self, forKey: .firstName)
         let friendIDs = try container.decodeIfPresent([Int].self, forKey: .friendIDs)
         let groupIDs = try container.decodeIfPresent([Int].self, forKey: .groupIDs)
         let id = try container.decodeIfPresent(Int.self, forKey: .id)
-        let isEmailEnabled = try container.decodeIfPresent(Bool.self, forKey: .isEmailEnabled)
         let lastName = try container.decodeIfPresent(String.self, forKey: .lastName)
         let phone = try container.decodeIfPresent(String.self, forKey: .phone)
         
@@ -130,14 +115,11 @@ class User: Codable, Equatable, Identifiable, ObservableObject {
             avatarImageName: avatarImageName,
             bannerImageName: bannerImageName,
             createdTimestamp: createdTimestamp,
-            deviceToken: deviceToken,
-            email: email,
             eventIDs: eventIDs,
             firstName: firstName,
             friendIDs: friendIDs,
             groupIDs: groupIDs,
             id: id,
-            isEmailEnabled: isEmailEnabled,
             lastName: lastName,
             phone: phone
         )
@@ -149,14 +131,11 @@ class User: Codable, Equatable, Identifiable, ObservableObject {
         try container.encode(avatarImageName, forKey: .avatarImageName)
         try container.encode(bannerImageName, forKey: .bannerImageName)
         try container.encode(createdTimestamp, forKey: .createdTimestamp)
-        try container.encode(deviceToken, forKey: .deviceToken)
-        try container.encode(email, forKey: .email)
         try container.encode(eventIDs, forKey: .eventIDs)
         try container.encode(firstName, forKey: .firstName)
         try container.encode(friendIDs, forKey: .friendIDs)
         try container.encode(groupIDs, forKey: .groupIDs)
         try container.encode(id, forKey: .id)
-        try container.encode(isEmailEnabled, forKey: .isEmailEnabled)
         try container.encode(lastName, forKey: .lastName)
         try container.encode(phone, forKey: .phone)
     }

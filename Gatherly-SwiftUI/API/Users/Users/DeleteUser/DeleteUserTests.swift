@@ -28,26 +28,22 @@ final class DeleteUserTests: XCTestCase {
         
         let userToDelete = User(
             createdTimestamp: Int(Date().timestamp),
-            email: "delete@example.com",
             eventIDs: [],
             firstName: "Delete",
             friendIDs: [],
             groupIDs: [],
             id: 101,
-            isEmailEnabled: false,
             lastName: "Me",
             phone: nil
         )
         
         let userToKeep = User(
             createdTimestamp: Int(Date().timestamp),
-            email: "keep@example.com",
             eventIDs: [],
             firstName: "Keep",
             friendIDs: [],
             groupIDs: [],
             id: 102,
-            isEmailEnabled: false,
             lastName: "Me",
             phone: nil
         )
@@ -68,7 +64,6 @@ final class DeleteUserTests: XCTestCase {
                 XCTAssertTrue(storedDict.keys.contains(userToKeep.id!))
                 
                 if let keptUser = storedDict[userToKeep.id!] {
-                    XCTAssertEqual(keptUser.email, "keep@example.com")
                     XCTAssertEqual(keptUser.firstName, "Keep")
                     XCTAssertEqual(keptUser.lastName, "Me")
                 } else {
@@ -87,13 +82,11 @@ final class DeleteUserTests: XCTestCase {
         
         let fakeUser = User(
             createdTimestamp: Int(Date().timestamp),
-            email: "ghost@example.com",
             eventIDs: [],
             firstName: "Ghost",
             friendIDs: [],
             groupIDs: [],
             id: 999,
-            isEmailEnabled: false,
             lastName: "User",
             phone: nil
         )

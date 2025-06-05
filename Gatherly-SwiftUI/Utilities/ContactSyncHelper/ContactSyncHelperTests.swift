@@ -16,14 +16,11 @@ final class ContactSyncHelperTests: XCTestCase {
         
         let dummyUser = User(
             createdTimestamp: Int(Date().timeIntervalSince1970),
-            deviceToken: nil,
-            email: "sami@example.com",
             eventIDs: [],
             firstName: "Sami",
             friendIDs: [],
             groupIDs: [],
             id: 1,
-            isEmailEnabled: true,
             lastName: "Alhamad",
             phone: "1112223333"
         )

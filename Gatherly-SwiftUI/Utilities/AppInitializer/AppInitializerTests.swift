@@ -70,14 +70,11 @@ final class AppInitializerTests: XCTestCase {
         
         let dummyUser = User(
             createdTimestamp: Int(Date().timeIntervalSince1970),
-            deviceToken: nil,
-            email: "dummy@example.com",
             eventIDs: [],
             firstName: "Dummy",
             friendIDs: [],
             groupIDs: [],
             id: 99,
-            isEmailEnabled: true,
             lastName: "User",
             phone: nil
         )

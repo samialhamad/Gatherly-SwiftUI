@@ -11,50 +11,38 @@ struct SampleData {
     static let sampleUsers: [User] = [
         User(
             createdTimestamp: Int(Date().timestamp),
-            deviceToken: "abc123",
-            email: "sami@example.com",
             eventIDs: nil,
             firstName: "Sami",
             friendIDs: [2, 3, 4],
             groupIDs: [1, 2],
             id: 1,
-            isEmailEnabled: true,
             lastName: "Alhamad",
             phone: "1234567890"
         ),
         User(
             createdTimestamp: Int(Date().timestamp),
-            deviceToken: "def456",
-            email: "bob@example.com",
             eventIDs: nil,
             firstName: "Bob",
             friendIDs: nil,
             id: 2,
-            isEmailEnabled: true,
             lastName: "Jones",
             phone: "9876543210"
         ),
         User(
             createdTimestamp: Int(Date().timestamp),
-            deviceToken: "ghi789",
-            email: "charlie@example.com",
             eventIDs: nil,
             firstName: "Charlie",
             friendIDs: nil,
             id: 3,
-            isEmailEnabled: true,
             lastName: "Brown",
             phone: "5555555555"
         ),
         User(
             createdTimestamp: Int(Date().timestamp),
-            deviceToken: "fxc96",
-            email: "bob@example.com",
             eventIDs: nil,
             firstName: "Zebra",
             friendIDs: nil,
             id: 4,
-            isEmailEnabled: true,
             lastName: "Zebrus",
             phone: "9876543210"
         )

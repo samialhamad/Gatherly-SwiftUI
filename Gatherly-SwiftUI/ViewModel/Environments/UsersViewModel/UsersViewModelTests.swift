@@ -31,14 +31,11 @@ final class UsersViewModelTests: XCTestCase {
     private func makeUser(id: Int?, friendIDs: [Int]? = nil) -> User {
         return User(
             createdTimestamp: Int(Date().timestamp),
-            deviceToken: nil,
-            email: "user@example.com",
             eventIDs: nil,
             firstName: "First",
             friendIDs: friendIDs,
             groupIDs: nil,
             id: id,
-            isEmailEnabled: false,
             lastName: "Last",
             phone: nil
         )

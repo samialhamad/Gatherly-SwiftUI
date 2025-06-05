@@ -26,13 +26,11 @@ final class UpdateUserTests: XCTestCase {
     func makeSampleUser(id: Int = 1) -> User {
         User(
             createdTimestamp: Int(Date().timestamp),
-            email: nil,
             eventIDs: [],
             firstName: "Old",
             friendIDs: [],
             groupIDs: [],
             id: id,
-            isEmailEnabled: false,
             lastName: "Name",
             phone: nil
         )

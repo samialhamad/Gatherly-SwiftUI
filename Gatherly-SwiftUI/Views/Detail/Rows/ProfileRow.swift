@@ -37,13 +37,10 @@ private extension ProfileRow {
 #Preview {
     ProfileRow(user: User(
         createdTimestamp: nil,
-        deviceToken: nil,
-        email: "example@example.com",
         eventIDs: nil,
         firstName: "John",
         friendIDs: nil,
         id: 1,
-        isEmailEnabled: nil,
         lastName: "Doe",
         phone: nil
     ))
