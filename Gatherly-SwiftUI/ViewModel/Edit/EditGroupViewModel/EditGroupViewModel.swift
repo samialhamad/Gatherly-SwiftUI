@@ -22,8 +22,17 @@ class EditGroupViewModel: ObservableObject {
         self.original = group
         self.group = group
         
-        self.groupImage = group.imageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) }
-        self.bannerImage = group.bannerImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) }
+        if let groupimageName = group.imageName {
+            self.groupImage = ImageUtility.loadImageFromDocuments(named: groupimageName)
+        } else {
+            self.groupImage = nil
+        }
+        
+        if let bannerImageName = group.bannerImageName {
+            self.bannerImage = ImageUtility.loadImageFromDocuments(named: bannerImageName)
+        } else {
+            self.bannerImage = nil
+        }
     }
     
     // MARK: - Preapre Group

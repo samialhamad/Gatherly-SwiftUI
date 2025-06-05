@@ -112,6 +112,20 @@ private extension ProfileView {
     func profileRowsSection(_ currentUser: User) -> some View {
         VStack(spacing: Constants.ProfileView.profileVStackSpacing) {
             Button {
+                let avatarImage: UIImage?
+                if let avatarImageName = currentUser.avatarImageName {
+                    avatarImage = ImageUtility.loadImageFromDocuments(named: avatarImageName)
+                } else {
+                    avatarImage = nil
+                }
+                
+                let bannerImage: UIImage?
+                if let bannerImageName = currentUser.bannerImageName {
+                    bannerImage = ImageUtility.loadImageFromDocuments(named: bannerImageName)
+                } else {
+                    bannerImage = nil
+                }
+                
                 userFormStore = Store(
                     initialState: UserFormReducer.State(
                         currentUser: currentUser,
@@ -119,8 +133,8 @@ private extension ProfileView {
                         lastName: currentUser.lastName ?? "",
                         avatarImageName: currentUser.avatarImageName,
                         bannerImageName: currentUser.bannerImageName,
-                        avatarImage: currentUser.avatarImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) },
-                        bannerImage: currentUser.bannerImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) },
+                        avatarImage: avatarImage,
+                        bannerImage: bannerImage,
                         mode: .updateCurrentUser
                     ),
                     reducer: { UserFormReducer() }

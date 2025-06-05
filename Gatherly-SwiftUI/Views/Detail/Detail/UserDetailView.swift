@@ -39,6 +39,20 @@ struct UserDetailView: View {
                 }
                 .confirmationDialog("Options", isPresented: $isShowingActionSheet, titleVisibility: .visible) {
                     Button("Edit") {
+                        let avatarImage: UIImage?
+                        if let avatarImageName = user.avatarImageName {
+                            avatarImage = ImageUtility.loadImageFromDocuments(named: avatarImageName)
+                        } else {
+                            avatarImage = nil
+                        }
+                        
+                        let bannerImage: UIImage?
+                        if let bannerImageName = user.bannerImageName {
+                            bannerImage = ImageUtility.loadImageFromDocuments(named: bannerImageName)
+                        } else {
+                            bannerImage = nil
+                        }
+                        
                         userFormStore = Store(
                             initialState: UserFormReducer.State(
                                 currentUser: user,
@@ -46,8 +60,8 @@ struct UserDetailView: View {
                                 lastName: user.lastName ?? "",
                                 avatarImageName: user.avatarImageName,
                                 bannerImageName: user.bannerImageName,
-                                avatarImage: user.avatarImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) },
-                                bannerImage: user.bannerImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) },
+                                avatarImage: avatarImage,
+                                bannerImage: bannerImage,
                                 mode: .updateFriend
                             ),
                             reducer: { UserFormReducer() }

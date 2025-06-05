@@ -61,9 +61,14 @@ struct UserFormReducer: Reducer {
         case .saveChanges:
             state.isSaving = true
             
-            let avatarImageName = state.avatarImage.flatMap { ImageUtility.saveImageToDocuments(image: $0)
+            var avatarImageName: String? = nil
+            if let avatarImage = state.avatarImage {
+                avatarImageName = ImageUtility.saveImageToDocuments(image: avatarImage)
             }
-            let bannerImageName = state.bannerImage.flatMap { ImageUtility.saveImageToDocuments(image: $0)
+            
+            var bannerImageName: String? = nil
+            if let bannerImage = state.bannerImage {
+                bannerImageName = ImageUtility.saveImageToDocuments(image: bannerImage)
             }
             
             var updatedUser = state.currentUser
