@@ -18,7 +18,7 @@ struct CreateEventView: View {
         _createEventViewModel = StateObject(wrappedValue: CreateEventViewModel())
     }
     
-    // Used for automatic date population from CalendarView
+    // Used for automatic date population from DayEventsView
     init(date: Date) {
         let createEventViewModel = CreateEventViewModel()
         createEventViewModel.selectedDate = Date.startOfDay(date)
