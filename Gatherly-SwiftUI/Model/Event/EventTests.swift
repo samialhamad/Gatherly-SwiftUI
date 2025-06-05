@@ -10,6 +10,32 @@ import XCTest
 
 final class EventTests: XCTestCase {
     
+    // MARK: - Computed Vars
+    
+    func testDate_ReturnsNilWhenStartTimestampIsNil() {
+        let event = Event(startTimestamp: nil)
+        XCTAssertNil(event.date)
+    }
+    
+    func testDate_ReturnsStartOfDayForGivenTimestamp() {
+        var components = DateComponents()
+        components.year = 2025
+        components.month = 1
+        components.day = 1
+        components.hour = 14
+        components.minute = 30
+        
+        let calendar = Calendar.current
+        let dateTime = calendar.date(from: components)!
+        let timestamp = Int(dateTime.timestamp)
+        
+        let event = Event(startTimestamp: timestamp)
+        
+        let expectedStartOfDay = Date.startOfDay(dateTime)
+        
+        XCTAssertEqual(event.date, expectedStartOfDay)
+    }
+    
     func testEventHasStartedTrue() {
         let pastDate = Date().minus(calendarComponent: .hour, value: 1)!
         let pastTimestamp = pastDate.timestamp
@@ -67,7 +93,7 @@ final class EventTests: XCTestCase {
         XCTAssertFalse(event.isOngoing)
     }
     
-    // MARK: - Sorting
+    // MARK: - SortKey
     
     func testSortKey_EarlierDateComesFirst() {
         // Event A on Jan 1, 2025 at 10:00
