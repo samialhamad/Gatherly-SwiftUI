@@ -12,19 +12,19 @@ extension View {
     // MARK: - Tint Accent
     
     func applyGatherlyAccentColor() -> some View {
-        self.tint(Color(Colors.secondary))
+        tint(Color(Colors.secondary))
     }
     
     // MARK: - Text
     
     func centerText() -> some View {
-        self.modifier(CenteredTextModifier())
+        modifier(CenteredTextModifier())
     }
     
     // MARK: - Disclosure Icon
     
     func addDisclosureIcon(color: Color = .gray) -> some View {
-        self.modifier(DisclosureIconModifier())
+        modifier(DisclosureIconModifier())
     }
     
     // MARK: - Keyboard
@@ -41,6 +41,6 @@ extension View {
     // MARK: - Refresh
     
     func refreshOnAppear() -> some View {
-        self.modifier(RefreshOnAppearModifier())
+        modifier(RefreshOnAppearModifier())
     }
 }
