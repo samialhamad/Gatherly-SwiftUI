@@ -21,7 +21,7 @@ struct CreateEventView: View {
     // Used for automatic date population from CalendarView
     init(date: Date) {
         let createEventViewModel = CreateEventViewModel()
-        createEventViewModel.event.date = date
+        createEventViewModel.selectedDate = Date.startOfDay(date)
         _createEventViewModel = StateObject(wrappedValue: createEventViewModel)
     }
     
@@ -107,11 +107,17 @@ private extension CreateEventView {
     }
     
     var eventDateBinding: Binding<Date> {
-        Binding(
-            get: { createEventViewModel.event.date ?? Date() },
-            set: { createEventViewModel.event.date = $0 }
-        )
-    }
+            Binding(
+                get: { createEventViewModel.selectedDate },
+                set: { newDate in
+                    createEventViewModel.selectedDate = newDate
+                    let oldStartTime = createEventViewModel.startTime
+                    createEventViewModel.startTime = oldStartTime
+                    let oldEndTime = createEventViewModel.endTime
+                    createEventViewModel.endTime = oldEndTime
+                }
+            )
+        }
     
     var locationNameBinding: Binding<String> {
         Binding(
@@ -140,12 +146,8 @@ private extension CreateEventView {
     
     var startTimeBinding: Binding<Date> {
         Binding(
-            get: {
-                Date(timeIntervalSince1970: TimeInterval(createEventViewModel.event.startTimestamp ?? Int(Date().timestamp)))
-            },
-            set: {
-                createEventViewModel.event.startTimestamp = Int($0.timestamp)
-            }
+            get: { createEventViewModel.startTime },
+            set: { createEventViewModel.startTime = $0 }
         )
     }
     
