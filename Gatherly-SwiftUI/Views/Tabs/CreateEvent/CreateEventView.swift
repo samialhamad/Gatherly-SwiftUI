@@ -107,17 +107,17 @@ private extension CreateEventView {
     }
     
     var eventDateBinding: Binding<Date> {
-            Binding(
-                get: { createEventViewModel.selectedDate },
-                set: { newDate in
-                    createEventViewModel.selectedDate = newDate
-                    let oldStartTime = createEventViewModel.startTime
-                    createEventViewModel.startTime = oldStartTime
-                    let oldEndTime = createEventViewModel.endTime
-                    createEventViewModel.endTime = oldEndTime
-                }
-            )
-        }
+        Binding(
+            get: { createEventViewModel.selectedDate },
+            set: { newDate in
+                createEventViewModel.selectedDate = newDate
+                let oldStartTime = createEventViewModel.startTime
+                createEventViewModel.startTime = oldStartTime
+                let oldEndTime = createEventViewModel.endTime
+                createEventViewModel.endTime = oldEndTime
+            }
+        )
+    }
     
     var locationNameBinding: Binding<String> {
         Binding(
