@@ -101,12 +101,8 @@ private extension CreateEventView {
     
     var endTimeBinding: Binding<Date> {
         Binding(
-            get: {
-                Date(timeIntervalSince1970: TimeInterval(createEventViewModel.event.endTimestamp ?? Int(Date().timestamp + 3600)))
-            },
-            set: {
-                createEventViewModel.event.endTimestamp = Int($0.timestamp)
-            }
+            get: { createEventViewModel.endTime },
+            set: { createEventViewModel.endTime = $0 }
         )
     }
     

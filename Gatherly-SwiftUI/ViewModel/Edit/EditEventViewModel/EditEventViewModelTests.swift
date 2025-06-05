@@ -22,7 +22,6 @@ final class EditEventViewModelTests: XCTestCase {
         let end   = (now.plus(calendarComponent: .hour, value: 2) ?? now).timestamp
         
         return Event(
-            date: Calendar.current.startOfDay(for: now),
             description: "Initial description",
             endTimestamp: Int(end),
             id: 123,
@@ -60,12 +59,10 @@ final class EditEventViewModelTests: XCTestCase {
         let expectedEnd = calendar.date(bySettingHour: 12, minute: 0, second: 0, of: fixedDate)!
         
         var event = makeSampleEvent()
-        event.date = fixedDate
         event.startTimestamp = Int(expectedStart.timestamp)
         event.endTimestamp = Int(expectedEnd.timestamp)
         
         let viewModel = EditEventViewModel(event: event)
-        viewModel.event.date = fixedDate
         viewModel.event.startTimestamp = Int(expectedStart.timestamp)
         viewModel.event.endTimestamp = Int(expectedEnd.timestamp)
         

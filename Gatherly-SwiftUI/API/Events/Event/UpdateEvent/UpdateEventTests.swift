@@ -34,7 +34,6 @@ final class UpdateEventTests: XCTestCase {
         var event = Event(
             bannerImageName: "old_banner.jpg",
             categories: [.entertainment],
-            date: calendar.startOfDay(for: originalDate),
             description: "Old Description",
             endTimestamp: Int(originalEnd.timestamp),
             id: 101,
@@ -52,7 +51,6 @@ final class UpdateEventTests: XCTestCase {
         
         event.title = "Updated Title"
         event.description = "Updated Description"
-        event.date = updatedDate
         event.startTimestamp = Int(updatedStart.timestamp)
         event.endTimestamp = Int(updatedEnd.timestamp)
         event.memberIDs = [2, 3]

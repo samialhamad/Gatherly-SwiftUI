@@ -34,7 +34,6 @@ final class CreateEventTests: XCTestCase {
         var event = Event()
         event.title = "New Event"
         event.description = "Description"
-        event.date = fixedDate
         event.startTimestamp = Int(startTime.timestamp)
         event.endTimestamp = Int(endTime.timestamp)
         event.memberIDs = [2, 3]

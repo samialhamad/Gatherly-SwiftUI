@@ -51,19 +51,17 @@ struct SampleData {
     static let sampleEvents: [Event] = [
         Event(
             categories: randomCategories(),
-            date: Date().minus(calendarComponent: .day, value: 1),
             description: "Event from yesterday",
-            endTimestamp: Int((Date().minus(calendarComponent: .hour, value: 1) ?? Date()).timestamp),
+            endTimestamp: Int((Date().minus(calendarComponent: .hour, value: 22) ?? Date()).timestamp),
             id: 1,
             plannerID: 1,
             location: Location(latitude: 37.7749, longitude: -122.4194, name: "San Francisco"),
             memberIDs: [2, 3],
             title: "Event Yesterday",
-            startTimestamp: Int((Date().minus(calendarComponent: .hour, value: 2) ?? Date()).timestamp)
+            startTimestamp: Int((Date().minus(calendarComponent: .hour, value: 24) ?? Date()).timestamp)
         ),
         Event(
             categories: randomCategories(),
-            date: Date(),
             description: "Event 1 for today, finished, test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test",
             endTimestamp: Int((Date().minus(calendarComponent: .hour, value: 1) ?? Date()).timestamp),
             id: 2,
@@ -75,7 +73,6 @@ struct SampleData {
         ),
         Event(
             categories: randomCategories(),
-            date: Date(),
             description: "Event 2 for today, ongoing",
             endTimestamp: Int((Date().plus(calendarComponent: .hour, value: 1) ?? Date()).timestamp),
             id: 3,
@@ -87,7 +84,6 @@ struct SampleData {
         ),
         Event(
             categories: randomCategories(),
-            date: Date(),
             description: "Event 3 for today, in an hour",
             endTimestamp: Int((Date().plus(calendarComponent: .hour, value: 2) ?? Date()).timestamp),
             id: 4,
@@ -99,7 +95,6 @@ struct SampleData {
         ),
         Event(
             categories: randomCategories(),
-            date: Date().plus(calendarComponent: .day, value: 1),
             description: "Event planned for tomorrow, hope to see you there!",
             endTimestamp: Int((Date().plus(calendarComponent: .hour, value: 25) ?? Date()).timestamp),
             id: 5,

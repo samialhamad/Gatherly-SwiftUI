@@ -106,19 +106,21 @@ private extension EditEventView {
     
     var endTimeBinding: Binding<Date> {
         Binding(
-            get: {
-                Date(timeIntervalSince1970: TimeInterval(editEventViewModel.event.endTimestamp ?? Int((Date().plus(calendarComponent: .hour, value: 1) ?? Date()).timestamp)))
-            },
-            set: {
-                editEventViewModel.event.endTimestamp = Int($0.timestamp)
-            }
+            get: { editEventViewModel.endTime },
+            set: { editEventViewModel.endTime = $0 }
         )
     }
     
     var eventDateBinding: Binding<Date> {
         Binding(
-            get: { editEventViewModel.event.date ?? Date() },
-            set: { editEventViewModel.event.date = $0 }
+            get: { editEventViewModel.selectedDate },
+            set: { newDate in
+                editEventViewModel.selectedDate = newDate
+                let oldStartTime = editEventViewModel.startTime
+                editEventViewModel.startTime = oldStartTime
+                let oldEndTime = editEventViewModel.endTime
+                editEventViewModel.endTime = oldEndTime
+            }
         )
     }
     
@@ -142,12 +144,8 @@ private extension EditEventView {
     
     var startTimeBinding: Binding<Date> {
         Binding(
-            get: {
-                Date(timeIntervalSince1970: TimeInterval(editEventViewModel.event.startTimestamp ?? Int(Date().timestamp)))
-            },
-            set: {
-                editEventViewModel.event.startTimestamp = Int($0.timestamp)
-            }
+            get: { editEventViewModel.startTime },
+            set: { editEventViewModel.startTime = $0 }
         )
     }
     

@@ -37,7 +37,6 @@ final class EventsViewModelTests: XCTestCase {
         let eventID = id ?? 0
         return Event(
             categories: [],
-            date: Date(),
             description: "Sample Event \(eventID)",
             endTimestamp: Int((Date().plus(calendarComponent: .hour, value: 1) ?? Date()).timestamp),
             id: id,

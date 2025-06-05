@@ -36,8 +36,8 @@ final class UserDefaultsManagerTests: XCTestCase {
     
     func testSaveAndLoadEvents() {
         let sampleEvents = [
-            Event(date: Date(), id: 1, title: "One"),
-            Event(date: Date(), id: 2, title: "Two")
+            Event(id: 1, title: "One"),
+            Event(id: 2, title: "Two")
         ]
         
         let sampleEventsDict = sampleEvents.keyedBy(\.id)

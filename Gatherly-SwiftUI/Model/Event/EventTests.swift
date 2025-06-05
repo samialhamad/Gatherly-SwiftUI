@@ -78,25 +78,25 @@ final class EventTests: XCTestCase {
         components.hour = 10
         let dateA = Calendar.current.date(from: components)!
         let timestampA = Int(dateA.timestamp)
-        let eventA = Event(date: dateA, startTimestamp: timestampA)
+        let eventA = Event(startTimestamp: timestampA)
         
         // Event B on Jan 2, 2025 at 09:00
         components.day = 2
         components.hour = 9
         let dateB = Calendar.current.date(from: components)!
         let timestampB = Int(dateB.timestamp)
-        let eventB = Event(date: dateB, startTimestamp: timestampB)
+        let eventB = Event(startTimestamp: timestampB)
         
         XCTAssertTrue(eventA.sortKey < eventB.sortKey)
     }
     
     func testSortKey_NilDateIsTreatedAsDistantFuture() {
         // Event A has no date (nil)
-        let eventA = Event(date: nil, startTimestamp: 1_000_000)
+        let eventA = Event(startTimestamp: nil)
         
         // Event B is today
         let today = Date()
-        let eventB = Event(date: today, startTimestamp: Int(today.timestamp))
+        let eventB = Event(startTimestamp: Int(today.timestamp))
         
         XCTAssertTrue(eventB.sortKey < eventA.sortKey)
     }
@@ -110,11 +110,11 @@ final class EventTests: XCTestCase {
         
         components.hour = 8
         let dateA = Calendar.current.date(from: components)!
-        let eventEarly = Event(date: dateA, startTimestamp: Int(dateA.timestamp))
+        let eventEarly = Event(startTimestamp: Int(dateA.timestamp))
         
         components.hour = 17
         let dateB = Calendar.current.date(from: components)!
-        let eventLate = Event(date: dateB, startTimestamp: Int(dateB.timestamp))
+        let eventLate = Event(startTimestamp: Int(dateB.timestamp))
         
         XCTAssertTrue(eventEarly.sortKey < eventLate.sortKey)
     }
@@ -126,14 +126,14 @@ final class EventTests: XCTestCase {
         components.month = 1
         components.day = 1
         
-        // Event A has no startTimestamp so defaults to 0
+        // Event A has startTimeStamp should to 0
         let dateA = Calendar.current.date(from: components)!
-        let eventA = Event(date: dateA, startTimestamp: nil)
+        let eventA = Event(startTimestamp: Int(dateA.timestamp))
         
-        // Event B explicitly set to a later timestamp
+        // Event B set to a later timestamp
         components.hour = 12
         let dateB = Calendar.current.date(from: components)!
-        let eventB = Event(date: dateB, startTimestamp: Int(dateB.timestamp))
+        let eventB = Event(startTimestamp: Int(dateB.timestamp))
         
         XCTAssertTrue(eventA.sortKey < eventB.sortKey)
     }

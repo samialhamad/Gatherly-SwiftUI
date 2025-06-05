@@ -14,7 +14,10 @@ final class GatherlyCalendarViewModelTests: XCTestCase {
     let gatherlyCalendarViewModel = GatherlyCalendarViewModel()
     
     func makeEvent(id: Int, date: Date) -> Event {
-        Event(date: date, id: id)
+        Event(
+            id: id,
+            startTimestamp: Int(date.timestamp)
+        )
     }
     
     // MARK: - eventCountLabel

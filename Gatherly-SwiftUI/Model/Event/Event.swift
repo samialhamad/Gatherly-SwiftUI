@@ -10,7 +10,6 @@ import Foundation
 struct Event: Codable, Equatable, Identifiable {
     var bannerImageName: String?
     var categories: [EventCategory] = []
-    var date: Date?
     var description: String?
     var endTimestamp: Int?
     var id: Int?
@@ -22,6 +21,15 @@ struct Event: Codable, Equatable, Identifiable {
     var startTimestamp: Int?
     
     // MARK: - Computed Vars
+    
+    var date: Date? {
+        guard let startTimestamp else {
+            return nil
+        }
+        
+        let startDate = Date(startTimestamp)
+        return Date.startOfDay(startDate)
+    }
     
     var hasStarted: Bool {
         guard let startTimestamp else {

@@ -26,14 +26,14 @@ final class EventsGroupedListViewModelTests: XCTestCase {
         }
         
         let event1 = Event(
-            date: date1,
             id: 1,
-            title: "Event1"
+            title: "Event1",
+            startTimestamp: Int(date1.timestamp)
         )
         let event2 = Event(
-            date: date2,
             id: 2,
-            title: "Event2"
+            title: "Event2",
+            startTimestamp: Int(date2.timestamp)
         )
         
         let events = [event1, event2]
@@ -61,18 +61,19 @@ final class EventsGroupedListViewModelTests: XCTestCase {
         }
         
         let event1 = Event(
-            date: date1,
             id: 1,
-            title: "Event1")
+            title: "Event1",
+            startTimestamp: Int(date1.timestamp)
+        )
         let event2 = Event(
-            date: date2,
             id: 2,
-            title: "Event2"
+            title: "Event2",
+            startTimestamp: Int(date2.timestamp)
         )
         let event3 = Event(
-            date: date3,
             id: 3,
-            title: "Event3"
+            title: "Event3",
+            startTimestamp: Int(date3.timestamp)
         )
         
         let events = [event1, event2, event3]

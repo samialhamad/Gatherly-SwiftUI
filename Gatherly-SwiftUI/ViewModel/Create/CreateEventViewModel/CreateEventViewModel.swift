@@ -11,77 +11,109 @@ import SwiftUI
 class CreateEventViewModel: ObservableObject {
     @Published var event: Event
     @Published var selectedBannerImage: UIImage?
+    @Published var selectedDate: Date
     
     // MARK: - Init
     
     init() {
+        let now = Date()
+        let nowTimestamp = Int(now.timestamp)
+        let defaultEndTimestamp = Int((now.plus(calendarComponent: .hour, value: 1)?.timestamp) ?? now.timestamp)
+        
         self.event = Event(
             bannerImageName: nil,
             categories: [],
-            date: Date(),
             description: "",
-            endTimestamp: Int((Date().plus(calendarComponent: .hour, value: 1) ?? Date()).timestamp),
+            endTimestamp: defaultEndTimestamp,
             location: nil,
             memberIDs: [],
             title: "",
-            startTimestamp: Int(Date().timestamp)
+            startTimestamp: nowTimestamp
         )
+        
+        self.selectedDate = Date.startOfDay(now)
     }
     
     // MARK: - Event Creation
     
     var builtEvent: Event {
-        let calendar = Calendar.current
-        let mergedStart = Date.merge(
-            date: event.date ?? Date(),
-            time: Date(timeIntervalSince1970: TimeInterval(event.startTimestamp ?? Int(Date().timestamp)))
-        )
-        let mergedEnd = Date.merge(
-            date: event.date ?? Date(),
-            time: Date(timeIntervalSince1970: TimeInterval(event.endTimestamp ?? Int(Date().timestamp + 3600)))
-        )
-        let bannerImageName = selectedBannerImage.flatMap { ImageUtility.saveImageToDocuments(image: $0) }
-
         var built = event
-        built.plannerID = 1
-        built.date = calendar.startOfDay(for: event.date ?? Date())
-        built.startTimestamp = Int(mergedStart.timestamp)
-        built.endTimestamp = Int(mergedEnd.timestamp)
+        built.plannerID = Constants.currentUserID
+        
         built.memberIDs = event.memberIDs?.sorted()
-        built.bannerImageName = bannerImageName
-
+        
+        if let image = selectedBannerImage {
+            built.bannerImageName = ImageUtility.saveImageToDocuments(image: image)
+        } else {
+            built.bannerImageName = nil
+        }
+        
         return built
     }
     
     // MARK: - Helpers
     
     func clearFields() {
+        let now = Date()
+        let nowTimestamp = Int(now.timestamp)
+        let defaultEndTimestamp = Int((now.plus(calendarComponent: .hour, value: 1)?.timestamp) ?? now.timestamp)
+
         self.event = Event(
             bannerImageName: nil,
             categories: [],
-            date: Date(),
             description: "",
-            endTimestamp: Int((Date().plus(calendarComponent: .hour, value: 1) ?? Date()).timestamp),
+            endTimestamp: defaultEndTimestamp,
             location: nil,
             memberIDs: [],
             title: "",
-            startTimestamp: Int(Date().timestamp)
+            startTimestamp: nowTimestamp
         )
         self.selectedBannerImage = nil
+        self.selectedDate = Date.startOfDay(now)
     }
     
     var isFormEmpty: Bool {
         (event.title ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
+    // MARK: - Time & Ranges
+    
+    var startTime: Date {
+        get {
+            guard let timestamp = event.startTimestamp else {
+                return Date()
+            }
+            
+            return Date(timestamp)
+        }
+        set {
+            let merged = Date.merge(date: selectedDate, time: newValue)
+            event.startTimestamp = Int(merged.timestamp)
+        }
+    }
+    
+    var endTime: Date {
+        get {
+            guard let timestamp = event.endTimestamp else {
+                return Date()
+            }
+            
+            return Date(timestamp)
+        }
+        set {
+            let merged = Date.merge(date: selectedDate, time: newValue)
+            event.endTimestamp = Int(merged.timestamp)
+        }
+    }
+    
     var startTimeRange: ClosedRange<Date> {
-        Date.startTimeRange(for: event.date ?? Date())
+        Date.startTimeRange(for: selectedDate)
     }
     
     var endTimeRange: ClosedRange<Date> {
         Date.endTimeRange(
-            for: event.date ?? Date(),
-            startTime: Date(timeIntervalSince1970: TimeInterval(event.startTimestamp ?? Int(Date().timestamp)))
+            for: selectedDate,
+            startTime: startTime
         )
     }
 }

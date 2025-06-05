@@ -35,7 +35,6 @@ final class GetEventsTests: XCTestCase {
         
         return Event(
             categories: [.entertainment],
-            date: sampleDate,
             description: description,
             endTimestamp: endTimestamp,
             id: id,
@@ -78,6 +77,10 @@ final class GetEventsTests: XCTestCase {
                 XCTAssertEqual(events.first?.plannerID, 1)
                 XCTAssertEqual(Set(events.first?.memberIDs ?? []), Set([2, 3]))
                 XCTAssertEqual(events.first?.categories, [.entertainment])
+                
+                let sampleDate = self.calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
+                XCTAssertEqual(events.first?.date, self.calendar.startOfDay(for: sampleDate))
+                
                 expectation.fulfill()
             }
             .store(in: &cancellables)
@@ -114,6 +117,8 @@ final class GetEventsTests: XCTestCase {
                 XCTAssertEqual(first.plannerID, 1)
                 XCTAssertEqual(Set(first.memberIDs ?? []), Set([2, 3]))
                 XCTAssertEqual(first.categories, [.entertainment])
+                let sampleDate = self.calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
+                XCTAssertEqual(first.date, self.calendar.startOfDay(for: sampleDate))
                 
                 let second = events[1]
                 XCTAssertEqual(second.title, "Loaded Event 2")
@@ -121,6 +126,7 @@ final class GetEventsTests: XCTestCase {
                 XCTAssertEqual(second.plannerID, 1)
                 XCTAssertEqual(Set(second.memberIDs ?? []), Set([2, 3]))
                 XCTAssertEqual(second.categories, [.entertainment])
+                XCTAssertEqual(second.date, self.calendar.startOfDay(for: sampleDate))
                 
                 expectation.fulfill()
             }
