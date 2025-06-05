@@ -16,22 +16,21 @@ class CreateEventViewModel: ObservableObject {
     // MARK: - Init
     
     init() {
-        let now = Date()
-        let nowTimestamp = Int(now.timestamp)
-        let defaultEndTimestamp = Int((now.plus(calendarComponent: .hour, value: 1)?.timestamp) ?? now.timestamp)
+        let today = Date()
+        let nowTimestamp = Int(today.timestamp)
         
         self.event = Event(
             bannerImageName: nil,
             categories: [],
             description: "",
-            endTimestamp: defaultEndTimestamp,
+            endTimestamp: nowTimestamp,
             location: nil,
             memberIDs: [],
             title: "",
             startTimestamp: nowTimestamp
         )
         
-        self.selectedDate = Date.startOfDay(now)
+        self.selectedDate = Date.startOfDay(today)
     }
     
     // MARK: - Event Creation
