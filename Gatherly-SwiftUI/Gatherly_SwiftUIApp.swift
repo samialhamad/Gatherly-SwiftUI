@@ -16,7 +16,7 @@ struct Gatherly_SwiftUIApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .applyGatherlyToolbarStyle()
+                .applyGatherlyAccentColor()
                 .environmentObject(NavigationState())
         }
     }

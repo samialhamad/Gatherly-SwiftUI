@@ -20,14 +20,10 @@ extension View {
         }
     }
     
-    // MARK: - Toolbar
+    // MARK: - Tint Accent
     
-    func applyGatherlyToolbarStyle() -> some View {
-        self.toolbarColor(Color(Colors.secondary))
-    }
-    
-    private func toolbarColor(_ color: Color) -> some View {
-        self.tint(color)
+    func applyGatherlyAccentColor() -> some View {
+        self.tint(Color(Colors.secondary))
     }
     
     // MARK: - Text
