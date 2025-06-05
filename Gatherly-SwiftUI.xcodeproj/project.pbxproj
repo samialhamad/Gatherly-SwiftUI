@@ -77,6 +77,7 @@
 				ViewModel/Environments/UsersViewModel/UsersViewModelTests.swift,
 				ViewModel/Events/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
 				ViewModel/Events/GatherlyCalendarViewModel/GatherlyCalendarViewModelTests.swift,
+				Views/Detail/Edit/UserFormView/UserFormViewTests.swift,
 			);
 			target = F11CDC2F2D77958B007BC1F1 /* Gatherly-SwiftUITests */;
 		};
@@ -122,6 +123,7 @@
 				ViewModel/Events/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
 				ViewModel/Events/GatherlyCalendarViewModel/GatherlyCalendarViewModelTests.swift,
 				ViewModel/Friends/FriendsListViewModel/FriendsListViewModelTests.swift,
+				Views/Detail/Edit/UserFormView/UserFormViewTests.swift,
 			);
 			target = F11CDC1F2D77958A007BC1F1 /* Gatherly-SwiftUI */;
 		};
