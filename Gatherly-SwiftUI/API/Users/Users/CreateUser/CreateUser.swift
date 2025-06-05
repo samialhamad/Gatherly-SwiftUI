@@ -33,11 +33,11 @@ extension GatherlyAPI {
         let user = User(
             createdTimestamp: Int(Date().timestamp),
             eventIDs: [],
-            firstName: contact.fullName.components(separatedBy: " ").first,
+            firstName: contact.firstName,
             friendIDs: [],
             groupIDs: [],
             id: id,
-            lastName: contact.fullName.components(separatedBy: " ").dropFirst().joined(separator: " "),
+            lastName: contact.lastName,
             phone: contact.phoneNumber
         )
         

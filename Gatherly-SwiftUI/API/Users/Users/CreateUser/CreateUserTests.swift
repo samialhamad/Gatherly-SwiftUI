@@ -72,11 +72,15 @@ final class CreateUserTests: XCTestCase {
     }
     
     func testCreateUserFromContact_persistsCorrectly() async {
-        let contact = SyncedContact(fullName: "Charlie Example", phoneNumber: "5551234567")
+        let contact = SyncedContact(
+            firstName: "User",
+            lastName: "Example",
+            phoneNumber: "5551234567"
+        )
         let newUser = await GatherlyAPI.createUser(from: contact, id: 99)
         
         XCTAssertEqual(newUser.id, 99)
-        XCTAssertEqual(newUser.firstName, "Charlie")
+        XCTAssertEqual(newUser.firstName, "User")
         XCTAssertEqual(newUser.lastName, "Example")
         XCTAssertEqual(newUser.phone, "5551234567")
         

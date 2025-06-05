@@ -20,7 +20,8 @@ final class ContactSyncManagerTests: XCTestCase {
         let parsed = ContactSyncManager.shared.parseContacts([mockContact])
         
         XCTAssertEqual(parsed.count, 1)
-        XCTAssertEqual(parsed[0].fullName, "Sami Alhamad")
+        XCTAssertEqual(parsed[0].firstName, "Sami")
+        XCTAssertEqual(parsed[0].lastName, "Alhamad")
         XCTAssertEqual(parsed[0].phoneNumber, "1234567890")
     }
 

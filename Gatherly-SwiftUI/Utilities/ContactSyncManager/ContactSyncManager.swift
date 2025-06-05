@@ -8,7 +8,8 @@
 import Contacts
 
 struct SyncedContact: Equatable {
-    let fullName: String
+    let firstName: String
+    let lastName: String
     let phoneNumber: String
 }
 
@@ -59,13 +60,18 @@ class ContactSyncManager {
         var results: [SyncedContact] = []
         
         for contact in contacts {
-            let fullName = "\(contact.givenName) \(contact.familyName)".trimmingCharacters(in: .whitespaces)
+            let firstName = contact.givenName
+            let lastName = contact.familyName
             
             if let number = contact.phoneNumbers.first {
                 let raw = number.value.stringValue
                 let digits = raw.filter(\.isWholeNumber)
                 if !digits.isEmpty {
-                    results.append(SyncedContact(fullName: fullName, phoneNumber: digits))
+                    results.append(SyncedContact(
+                        firstName: firstName,
+                        lastName: lastName,
+                        phoneNumber: digits
+                    ))
                 }
             }
         }
