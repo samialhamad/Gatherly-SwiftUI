@@ -82,6 +82,5 @@ final class EventsViewModel: ObservableObject {
                 }
             }
             .store(in: &cancellables)
-        
     }
 }
