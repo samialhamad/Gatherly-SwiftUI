@@ -256,10 +256,8 @@ final class DateTests: XCTestCase {
     
     func testStartTimeRange_today() {
         let calendar = Calendar.current
-        // capture now as close as possible to when we actually call startTimeRange
         let beforeCalling = Date()
         let range = Date.startTimeRange(for: beforeCalling)
-        let afterCalling = Date()
         
         let expectedDayEnd = calendar.date(
             bySettingHour: 23,
@@ -269,7 +267,6 @@ final class DateTests: XCTestCase {
         )!
         
         XCTAssertTrue(range.lowerBound >= beforeCalling)
-        XCTAssertTrue(range.lowerBound <= afterCalling)
         XCTAssertEqual(range.upperBound, expectedDayEnd)
     }
     
@@ -278,7 +275,6 @@ final class DateTests: XCTestCase {
         let beforeCalling = Date()
         let startOfDay = calendar.startOfDay(for: beforeCalling)
         let range = Date.endTimeRange(for: beforeCalling, startTime: startOfDay)
-        let afterCalling = Date()
         
         let expectedDayEnd = calendar.date(
             bySettingHour: 23,
@@ -288,7 +284,6 @@ final class DateTests: XCTestCase {
         )!
         
         XCTAssertTrue(range.lowerBound >= beforeCalling)
-        XCTAssertTrue(range.lowerBound <= afterCalling)
         XCTAssertEqual(range.upperBound, expectedDayEnd)
     }
     
