@@ -26,48 +26,6 @@ final class UserTests: XCTestCase {
         XCTAssertNotEqual(user0, user1)
     }
     
-    // MARK: - Computed Vars
-    
-    func testUserHasEventsTrue() {
-        let user0 = User(eventIDs: [1], firstName: "Sami", id: 0)
-        XCTAssertTrue(user0.hasEvents)
-    }
-    
-    func testUserHasEventsFalse() {
-        let user0 = User(eventIDs: [], firstName: "Sami", id: 0)
-        XCTAssertFalse(user0.hasEvents)
-    }
-    
-    func testUserHasEventsNil() {
-        let user0 = User(firstName: "Sami", id: 0)
-        XCTAssertFalse(user0.hasEvents)
-    }
-    
-    func testUserHasFriendsTrue() {
-        let user0 = User(firstName: "Sami", friendIDs: [1], id: 0)
-        XCTAssertTrue(user0.hasFriends)
-    }
-    
-    func testUserHasFriendsFalse() {
-        let user0 = User(firstName: "Sami", friendIDs: [], id: 0)
-        XCTAssertFalse(user0.hasFriends)
-    }
-    
-    func testUserHasFriendsNil() {
-        let user0 = User(firstName: "Sami", id: 0)
-        XCTAssertFalse(user0.hasFriends)
-    }
-    
-    func testUserHasGroupsTrue() {
-        let user = User(firstName: "Sami", groupIDs: [1, 2], id: 0)
-        XCTAssertTrue(user.hasGroups)
-    }
-    
-    func testUserHasGroupsFalse() {
-        let user = User(firstName: "Sami", groupIDs: [], id: 0)
-        XCTAssertFalse(user.hasGroups)
-    }
-    
     // MARK: - Functions
     
     func testFriends_returnsCorrectUsers() {

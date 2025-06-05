@@ -11,27 +11,12 @@ class User: Codable, Equatable, Identifiable, ObservableObject {
     @Published var avatarImageName: String?
     @Published var bannerImageName: String?
     @Published var createdTimestamp: Int?
-    @Published var eventIDs: [Int]?
     @Published var firstName: String?
     @Published var friendIDs: [Int]?
     @Published var groupIDs: [Int]?
     @Published var id: Int?
     @Published var lastName: String?
     @Published var phone: String?
-    
-    // MARK: - Computed Vars
-    
-    var hasEvents: Bool {
-        return !(eventIDs?.isEmpty ?? true)
-    }
-    
-    var hasFriends: Bool {
-        return !(friendIDs?.isEmpty ?? true)
-    }
-    
-    var hasGroups: Bool {
-        return !(groupIDs?.isEmpty ?? true)
-    }
     
     // MARK: - Functions
     
@@ -73,7 +58,6 @@ class User: Codable, Equatable, Identifiable, ObservableObject {
         self.avatarImageName = avatarImageName
         self.bannerImageName = bannerImageName
         self.createdTimestamp = createdTimestamp
-        self.eventIDs = eventIDs
         self.firstName = firstName
         self.friendIDs = friendIDs
         self.groupIDs = groupIDs
@@ -88,7 +72,6 @@ class User: Codable, Equatable, Identifiable, ObservableObject {
         case avatarImageName
         case bannerImageName
         case createdTimestamp
-        case eventIDs
         case firstName
         case friendIDs
         case groupIDs
@@ -103,7 +86,6 @@ class User: Codable, Equatable, Identifiable, ObservableObject {
         let avatarImageName = try container.decodeIfPresent(String.self, forKey: .avatarImageName)
         let bannerImageName = try container.decodeIfPresent(String.self, forKey: .bannerImageName)
         let createdTimestamp = try container.decodeIfPresent(Int.self, forKey: .createdTimestamp)
-        let eventIDs = try container.decodeIfPresent([Int].self, forKey: .eventIDs)
         let firstName = try container.decodeIfPresent(String.self, forKey: .firstName)
         let friendIDs = try container.decodeIfPresent([Int].self, forKey: .friendIDs)
         let groupIDs = try container.decodeIfPresent([Int].self, forKey: .groupIDs)
@@ -115,7 +97,6 @@ class User: Codable, Equatable, Identifiable, ObservableObject {
             avatarImageName: avatarImageName,
             bannerImageName: bannerImageName,
             createdTimestamp: createdTimestamp,
-            eventIDs: eventIDs,
             firstName: firstName,
             friendIDs: friendIDs,
             groupIDs: groupIDs,
@@ -131,7 +112,6 @@ class User: Codable, Equatable, Identifiable, ObservableObject {
         try container.encode(avatarImageName, forKey: .avatarImageName)
         try container.encode(bannerImageName, forKey: .bannerImageName)
         try container.encode(createdTimestamp, forKey: .createdTimestamp)
-        try container.encode(eventIDs, forKey: .eventIDs)
         try container.encode(firstName, forKey: .firstName)
         try container.encode(friendIDs, forKey: .friendIDs)
         try container.encode(groupIDs, forKey: .groupIDs)

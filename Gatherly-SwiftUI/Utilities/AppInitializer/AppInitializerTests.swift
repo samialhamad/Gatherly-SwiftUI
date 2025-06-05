@@ -43,12 +43,6 @@ final class AppInitializerTests: XCTestCase {
         
         XCTAssertEqual(sami.friendIDs?.sorted(), [2, 3, 4])
         
-        let expectedEventIDs: [Int] = SampleData
-            .sampleEvents
-            .filter { $0.plannerID == Constants.currentUserID || ($0.memberIDs?.contains(Constants.currentUserID) ?? false) }
-            .compactMap { $0.id }
-        XCTAssertEqual(Set(sami.eventIDs ?? []), Set(expectedEventIDs))
-        
         let expectedGroupIDs: [Int] = SampleData
             .sampleGroups
             .filter { $0.leaderID == Constants.currentUserID || $0.memberIDs.contains(Constants.currentUserID) }

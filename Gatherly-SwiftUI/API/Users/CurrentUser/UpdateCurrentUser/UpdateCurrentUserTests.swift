@@ -24,7 +24,6 @@ final class UpdateCurrentUserTests: XCTestCase {
         let updatedUser = User(
             avatarImageName: "updated_avatar.png",
             bannerImageName: "updated_banner.png",
-            eventIDs: [200],
             firstName: "Updated",
             friendIDs: [2, 4],
             groupIDs: [20],
@@ -39,7 +38,6 @@ final class UpdateCurrentUserTests: XCTestCase {
                 XCTAssertEqual(savedUser.lastName, "User")
                 XCTAssertEqual(savedUser.friendIDs, [2, 4])
                 XCTAssertEqual(savedUser.groupIDs, [20])
-                XCTAssertEqual(savedUser.eventIDs, [200])
                 XCTAssertEqual(savedUser.avatarImageName, "updated_avatar.png")
                 XCTAssertEqual(savedUser.bannerImageName, "updated_banner.png")
                 
