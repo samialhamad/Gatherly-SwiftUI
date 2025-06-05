@@ -64,6 +64,12 @@ struct Constants {
         static let groupBannerImageHeight: CGFloat = 150
     }
     
+    struct DotsLoader {
+        static let circleHeight: CGFloat = 12
+        static let circleWidth: CGFloat = 12
+        static let hstackSpacing: CGFloat = 8
+    }
+    
     struct EditEventView {
         static let bannerImageHeight: CGFloat = 150
         static let savingChangesString: String = "Saving your changes!"

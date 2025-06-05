@@ -11,11 +11,15 @@ struct DotsLoader: View {
     @State private var scale: [CGFloat] = [1.0, 1.0, 1.0]
     
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: Constants.DotsLoader
+            .hstackSpacing) {
             ForEach(0..<3) { i in
                 Circle()
                     .fill(Color(Colors.primary))
-                    .frame(width: 12, height: 12)
+                    .frame(
+                        width: Constants.DotsLoader.circleWidth,
+                        height: Constants.DotsLoader.circleHeight
+                    )
                     .scaleEffect(scale[i])
                     .animation(
                         Animation.easeInOut(duration: 0.6)
