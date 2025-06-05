@@ -121,5 +121,5 @@ private extension CreateGroupView {
 }
 
 #Preview {
-    CreateGroupView(currentUserID: 1)
+    CreateGroupView(currentUserID: SampleData.currentUserID)
 }
