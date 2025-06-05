@@ -54,7 +54,7 @@ final class DeleteGroupTests: XCTestCase {
             }
             .store(in: &cancellables)
         
-        wait(for: [expectation], timeout: 2)
+        wait(for: [expectation], timeout: TimeInterval(GatherlyAPI.delayTime))
     }
     
     func testDeleteGroupFailsForNonexistentGroup() {
@@ -77,6 +77,6 @@ final class DeleteGroupTests: XCTestCase {
             }
             .store(in: &cancellables)
         
-        wait(for: [expectation], timeout: 2)
+        wait(for: [expectation], timeout: TimeInterval(GatherlyAPI.delayTime))
     }
 }

@@ -14,7 +14,7 @@ extension GatherlyAPI {
         let groupsArray = Array(groups.values)
 
         return Just(groupsArray)
-            .delay(for: .seconds(2), scheduler: DispatchQueue.main)
+            .delay(for: .seconds(GatherlyAPI.delayTime), scheduler: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 }

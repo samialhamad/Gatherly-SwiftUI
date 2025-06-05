@@ -24,7 +24,7 @@ extension GatherlyAPI {
         UserDefaultsManager.saveEvents(events)
         
         return Just(newEvent)
-            .delay(for: .seconds(2), scheduler: DispatchQueue.main)
+            .delay(for: .seconds(GatherlyAPI.delayTime), scheduler: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 }

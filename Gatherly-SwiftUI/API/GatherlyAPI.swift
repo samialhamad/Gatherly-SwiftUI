@@ -9,6 +9,9 @@ import Foundation
 import Combine
 
 struct GatherlyAPI {
+    
+    static let delayTime: Int = 2
+    
     static func generateID() -> Int {
         Int(Date().timestamp)
     }

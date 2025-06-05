@@ -66,6 +66,6 @@ final class UpdateGroupTests: XCTestCase {
             }
             .store(in: &cancellables)
         
-        wait(for: [expectation], timeout: 2)
+        wait(for: [expectation], timeout: TimeInterval(GatherlyAPI.delayTime))
     }
 }

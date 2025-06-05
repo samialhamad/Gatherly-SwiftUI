@@ -52,7 +52,7 @@ final class DeleteEventTests: XCTestCase {
             }
             .store(in: &cancellables)
         
-        wait(for: [expectation], timeout: 2)
+        wait(for: [expectation], timeout: TimeInterval(GatherlyAPI.delayTime))
     }
     
     func testDeleteEventFailsForNonexistentEvent() {
@@ -69,6 +69,6 @@ final class DeleteEventTests: XCTestCase {
             }
             .store(in: &cancellables)
         
-        wait(for: [expectation], timeout: 1)
+        wait(for: [expectation], timeout: TimeInterval(GatherlyAPI.delayTime))
     }
 }

@@ -18,7 +18,7 @@ extension GatherlyAPI {
         }
         
         return Just(event)
-            .delay(for: .seconds(2), scheduler: DispatchQueue.main)
+            .delay(for: .seconds(GatherlyAPI.delayTime), scheduler: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 }

@@ -65,7 +65,7 @@ final class UpdateUserTests: XCTestCase {
             }
             .store(in: &cancellables)
         
-        wait(for: [expectation], timeout: 3)
+        wait(for: [expectation], timeout: TimeInterval(GatherlyAPI.delayTime))
     }
     
     func testUpdateUser_updatesAvatarAndBanner() {
@@ -96,6 +96,6 @@ final class UpdateUserTests: XCTestCase {
             }
             .store(in: &cancellables)
         
-        wait(for: [expectation], timeout: 3)
+        wait(for: [expectation], timeout: TimeInterval(GatherlyAPI.delayTime + 2))
     }
 }

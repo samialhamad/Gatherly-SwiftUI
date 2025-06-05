@@ -16,7 +16,7 @@ extension GatherlyAPI {
         let sortedEvents = eventsArray.sorted { $0.sortKey < $1.sortKey }
         
         return Just(sortedEvents)
-            .delay(for: .seconds(2), scheduler: DispatchQueue.main)
+            .delay(for: .seconds(GatherlyAPI.delayTime), scheduler: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 }

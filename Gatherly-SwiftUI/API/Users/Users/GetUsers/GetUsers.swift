@@ -9,12 +9,12 @@ import Combine
 import Foundation
 
 extension GatherlyAPI {
-    static func getUsers(forUserID id: Int = 1) -> AnyPublisher<[User], Never> {
+    static func getUsers(forUserID id: Int = SampleData.currentUserID) -> AnyPublisher<[User], Never> {
         guard let currentUser = UserDefaultsManager.loadCurrentUser(),
               currentUser.id == id
         else {
             return Just([])
-                .delay(for: .seconds(2), scheduler: DispatchQueue.main)
+                .delay(for: .seconds(GatherlyAPI.delayTime), scheduler: DispatchQueue.main)
                 .eraseToAnyPublisher()
         }
         
@@ -22,7 +22,7 @@ extension GatherlyAPI {
         let friends: [User] = currentUser.friendIDs?.compactMap { allUsers[$0] } ?? []
         
         return Just(friends)
-            .delay(for: .seconds(2), scheduler: DispatchQueue.main)
+            .delay(for: .seconds(GatherlyAPI.delayTime), scheduler: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
 }
