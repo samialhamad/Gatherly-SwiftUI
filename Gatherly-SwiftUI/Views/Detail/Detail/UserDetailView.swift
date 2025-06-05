@@ -102,6 +102,10 @@ private extension UserDetailView {
     
     // MARK: - Functions
     
+    func dismissUserFormView() {
+        userFormStore = nil
+    }
+    
     private func removeFriend() async {
         guard let targetID = user.id else {
             return
@@ -150,12 +154,12 @@ private extension UserDetailView {
 
 extension UserDetailView: UserFormViewDelegate {
     func userFormViewDidCancel() {
-        userFormStore = nil
+        dismissUserFormView()
     }
     
     func userFormViewDidUpdateUser(updatedUser: User) {
         usersViewModel.update(updatedUser)
-        userFormStore = nil
+        dismissUserFormView()
     }
 }
 

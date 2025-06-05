@@ -67,6 +67,12 @@ private extension ProfileView {
         "\(user.firstName ?? "") \(user.lastName ?? "")"
     }
     
+    // MARK: - Functions
+    
+    func dismissUserFormView() {
+        userFormStore = nil
+    }
+    
     // MARK: - Subviews
     
     @ViewBuilder
@@ -171,13 +177,13 @@ private extension ProfileView {
 
 extension ProfileView: UserFormViewDelegate {
     func userFormViewDidCancel() {
-        userFormStore = nil
+        dismissUserFormView()
     }
     
     func userFormViewDidUpdateUser(updatedUser: User) {
         usersViewModel.update(updatedUser)
         refreshID = UUID()
-        userFormStore = nil
+        dismissUserFormView()
     }
 }
 

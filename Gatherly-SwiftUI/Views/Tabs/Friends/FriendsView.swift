@@ -76,6 +76,12 @@ struct FriendsView: View {
 
 extension FriendsView {
     
+    // MARK: - Functions
+    
+    func dismissCreateFriendSheet() {
+        createFriendStore = nil
+    }
+    
     // MARK: - Subviews
     
     var createFriendSheet: some View {
@@ -143,13 +149,13 @@ extension FriendsView {
 
 extension FriendsView: UserFormViewDelegate {
     func userFormViewDidCancel() {
-        createFriendStore = nil
+        dismissCreateFriendSheet()
     }
     
     func userFormViewDidUpdateUser(updatedUser: User) {
         usersViewModel.create(updatedUser) { createdFriend in
             guard var currentUser = usersViewModel.currentUser else {
-                createFriendStore = nil
+                dismissCreateFriendSheet()
                 return
             }
 
@@ -159,7 +165,7 @@ extension FriendsView: UserFormViewDelegate {
                 usersViewModel.update(currentUser)
             }
 
-            createFriendStore = nil
+            dismissCreateFriendSheet()
         }
     }
 }
