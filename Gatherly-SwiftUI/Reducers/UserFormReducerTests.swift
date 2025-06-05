@@ -77,41 +77,68 @@ final class UserFormReducerTests: XCTestCase {
         }
     }
     
-    // Failing test - something with User being a class?
-//    func testSaveChanges_updatesUser() async {
-//        var originalUser = User(
-//            createdTimestamp: 1234567890,
-//            eventIDs: [],
-//            firstName: "Sami",
-//            friendIDs: [],
-//            groupIDs: [],
-//            id: 1,
-//            lastName: "Alhamad",
-//            phone: nil
-//        )
-//        
-//        let store = await TestStore(
-//            initialState: UserFormReducer.State(
-//                currentUser: originalUser,
-//                firstName: "New",
-//                lastName: "Name"
-//            ),
-//            reducer: { UserFormReducer() }
-//        )
-//        
-//        await store.send(.saveChanges)
-//        
-//        var updatedUser = originalUser
-//        updatedUser.firstName = "New"
-//        updatedUser.lastName = "Name"
-//        
-//        await store.receive(.userSaved(updatedUser)) {
-//            $0.currentUser.firstName = "New"
-//            $0.currentUser.lastName = "Name"
-//        }
-//        
-//        await store.receive(.delegate(.didSave(updatedUser)))
-//    }
+    func testSaveChanges() async throws {
+        let initialUser = User(
+            avatarImageName: nil,
+            bannerImageName: nil,
+            createdTimestamp: Int(Date().timestamp),
+            eventIDs: [],
+            firstName: "Old First",
+            friendIDs: nil,
+            groupIDs: nil,
+            id: 1,
+            lastName: "Old Last",
+            phone: nil
+        )
+        
+        let store = await TestStore(
+            initialState: UserFormReducer.State(
+                currentUser: initialUser,
+                firstName: initialUser.firstName!,
+                lastName: initialUser.lastName!,
+                avatarImageName: initialUser.avatarImageName,
+                bannerImageName: initialUser.bannerImageName,
+                avatarImage: nil,
+                bannerImage: nil,
+                isPresented: false,
+                isSaving: false,
+                didUpdateUser: false,
+                mode: .updateCurrentUser
+            ),
+            reducer: { UserFormReducer() }
+        )
+        
+        await store.send(.setFirstName("New First")) {
+            $0.firstName = "New First"
+        }
+        await store.send(.setLastName("New Last")) {
+            $0.lastName = "New Last"
+        }
+        
+        await store.send(.saveChanges) {
+            $0.isSaving = true
+        }
+        
+        try await Task.sleep(nanoseconds: 2_000_000_000)
+        
+        let expectedUser = User(
+            avatarImageName: nil,
+            bannerImageName: nil,
+            createdTimestamp: initialUser.createdTimestamp,
+            eventIDs: [],
+            firstName: "New First",
+            friendIDs: nil,
+            groupIDs: nil,
+            id: 1,
+            lastName: "New Last",
+            phone: nil
+        )
+        
+        await store.receive(.didSave(expectedUser)) {
+            $0.isSaving = false
+            $0.didUpdateUser = true
+        }
+    }
     
     func testCancel() async {
         let store = await TestStore(
