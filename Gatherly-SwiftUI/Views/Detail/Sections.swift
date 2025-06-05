@@ -111,7 +111,7 @@ struct EventLocationSection: View {
     
     @State private var isSelectingSuggestion = false
     @State private var selectedLocationAddress: String = ""
-    @StateObject private var searchVM = LocationSearchViewModel()
+    @StateObject private var searchViewModel = LocationSearchViewModel()
     
     var body: some View {
         Section(header: Text(header)) {
@@ -126,7 +126,7 @@ struct EventLocationSection: View {
                             return
                         }
                         
-                        searchVM.queryFragment = newValue
+                        searchViewModel.queryFragment = newValue
                         
                         //check if a user clears the location, if so location is now nil (editing bug fix)
                         if newValue.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
@@ -141,11 +141,11 @@ struct EventLocationSection: View {
                     .foregroundColor(.gray)
             }
             
-            if !searchVM.suggestions.isEmpty {
-                List(searchVM.suggestions, id: \.self) { suggestion in
+            if !searchViewModel.suggestions.isEmpty {
+                List(searchViewModel.suggestions, id: \.self) { suggestion in
                     Button(action: {
                         isSelectingSuggestion = true
-                        searchVM.search(for: suggestion) { location in
+                        searchViewModel.search(for: suggestion) { location in
                             onSetLocation(location)
                             
                             if let name = location?.name {
@@ -153,7 +153,7 @@ struct EventLocationSection: View {
                             }
                             
                             selectedLocationAddress = location?.address ?? ""
-                            searchVM.suggestions = []
+                            searchViewModel.suggestions = []
                         }
                     }) {
                         VStack(alignment: .leading) {
