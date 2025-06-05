@@ -24,7 +24,7 @@ enum ContactSyncHelper {
         UserDefaultsManager.setDidSyncContacts(true)
     }
     
-    static func forceSync(currentUserID: Int = 1, completion: @escaping () -> Void = {}) {
+    static func forceSync(currentUserID: Int = SampleData.currentUserID, completion: @escaping () -> Void = {}) {
         ContactSyncManager.shared.fetchContacts { contacts in
             Task {
                 let (newUsers, newFriendIDs) = await generateUsersFromContacts(contacts)
