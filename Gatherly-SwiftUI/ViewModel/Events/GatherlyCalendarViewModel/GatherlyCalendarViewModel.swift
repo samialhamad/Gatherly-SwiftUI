@@ -1,22 +1,21 @@
 //
-//  Array.swift
+//  GatherlyCalendarViewModel.swift
 //  Gatherly-SwiftUI
 //
-//  Created by Sami Alhamad on 3/12/25.
+//  Created by Sami Alhamad on 6/4/25.
 //
 
 import Foundation
+import SwiftUI
 
-// MARK: - Event
-
-extension Array where Element == Event {
+class GatherlyCalendarViewModel: ObservableObject {
     
-    func eventCountLabel(for date: Date) -> String {
+    func eventCountLabel(for date: Date, events: [Event]) -> String {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         let selectedDay = calendar.startOfDay(for: date)
         
-        let count = self.filter {
+        let count = events.filter {
             guard let eventDate = $0.date else {
                 return false
             }

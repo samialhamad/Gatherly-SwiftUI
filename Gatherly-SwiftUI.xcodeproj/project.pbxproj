@@ -56,7 +56,6 @@
 				API/Users/Users/DeleteUser/DeleteUserTests.swift,
 				API/Users/Users/GetUsers/GetUsersTests.swift,
 				API/Users/Users/UpdateUser/UpdateUserTests.swift,
-				Extensions/Array/ArrayTests.swift,
 				Extensions/Date/DateTests.swift,
 				Extensions/Sequence/SequenceTests.swift,
 				Extensions/UserDefaults/UserDefaultsTests.swift,
@@ -76,6 +75,7 @@
 				ViewModel/Environments/GroupsViewModel/GroupsViewModelTests.swift,
 				ViewModel/Environments/UsersViewModel/UsersViewModelTests.swift,
 				ViewModel/Events/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
+				ViewModel/Events/GatherlyCalendarViewModel/GatherlyCalendarViewModelTests.swift,
 			);
 			target = F11CDC2F2D77958B007BC1F1 /* Gatherly-SwiftUITests */;
 		};
@@ -96,7 +96,6 @@
 				API/Users/Users/DeleteUser/DeleteUserTests.swift,
 				API/Users/Users/GetUsers/GetUsersTests.swift,
 				API/Users/Users/UpdateUser/UpdateUserTests.swift,
-				Extensions/Array/ArrayTests.swift,
 				Extensions/Date/DateTests.swift,
 				Extensions/Sequence/SequenceTests.swift,
 				Extensions/UserDefaults/UserDefaultsTests.swift,
@@ -119,6 +118,7 @@
 				ViewModel/Environments/GroupsViewModel/GroupsViewModelTests.swift,
 				ViewModel/Environments/UsersViewModel/UsersViewModelTests.swift,
 				ViewModel/Events/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
+				ViewModel/Events/GatherlyCalendarViewModel/GatherlyCalendarViewModelTests.swift,
 				ViewModel/Friends/FriendsListViewModel/FriendsListViewModelTests.swift,
 			);
 			target = F11CDC1F2D77958A007BC1F1 /* Gatherly-SwiftUI */;

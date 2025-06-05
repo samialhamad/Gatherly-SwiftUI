@@ -8,6 +8,7 @@ import SwiftUI
 
 struct GatherlyCalendarView: View {
     @Binding var allEvents: [Event]
+    @StateObject private var gatherlyCalendarViewModel = GatherlyCalendarViewModel()
     @State private var isShowingDayEvents = false
     @Binding var selectedDate: Date?
     
@@ -77,7 +78,7 @@ struct GatherlyCalendarView: View {
         VStack(spacing: Constants.GatherlyCalendarView.dayEventsViewButtonSpacing) {
             let selected = selectedDate ?? Date()
             
-            Text(allEvents.eventCountLabel(for: selected))
+            Text(gatherlyCalendarViewModel.eventCountLabel(for: selected, events: allEvents))
                 .font(.title3.weight(.semibold))
                 .foregroundColor(.primary)
                 .multilineTextAlignment(.center)
