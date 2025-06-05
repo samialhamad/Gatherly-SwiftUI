@@ -120,7 +120,7 @@ private extension EditGroupView {
                     let updatedGroup = await editGroupViewModel.prepareUpdatedGroup()
                     groupsViewModel.update(updatedGroup)
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                         isSaving = false
                         onSave(updatedGroup)
                     }
