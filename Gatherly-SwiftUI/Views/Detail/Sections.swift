@@ -99,7 +99,7 @@ public struct EventMembersSection: View {
                         let friendsDict = friendsList.keyedBy(\.id)
                         
                         self.friends = user
-                            .resolvedFriends(from: friendsDict)
+                            .friends(from: friendsDict)
                             .filter { $0.id != currentUserID }
                     }
                 }

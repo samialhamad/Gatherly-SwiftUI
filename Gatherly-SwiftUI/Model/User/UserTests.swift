@@ -70,7 +70,7 @@ final class UserTests: XCTestCase {
     
     // MARK: - Functions
     
-    func testResolvedFriends_returnsCorrectUsers() {
+    func testFriends_returnsCorrectUsers() {
         let user = User(friendIDs: [2, 3], id: 1)
         
         let friend2 = User(firstName: "Alice", id: 2)
@@ -83,23 +83,23 @@ final class UserTests: XCTestCase {
             99: unrelated
         ]
         
-        let resolvedFriends = user.resolvedFriends(from: lookup)
+        let friends = user.friends(from: lookup)
         
-        XCTAssertEqual(resolvedFriends.count, 2)
-        XCTAssertTrue(resolvedFriends.contains(where: { $0.id == 2 }))
-        XCTAssertTrue(resolvedFriends.contains(where: { $0.id == 3 }))
+        XCTAssertEqual(friends.count, 2)
+        XCTAssertTrue(friends.contains(where: { $0.id == 2 }))
+        XCTAssertTrue(friends.contains(where: { $0.id == 3 }))
     }
     
-    func testResolvedFriends_returnsEmptyIfNoIDs() {
+    func testFriends_returnsEmptyIfNoIDs() {
         let user = User(friendIDs: nil, id: 1)
         let lookup: [Int: User] = [2: User(id: 2), 3: User(id: 3)]
         
-        let resolvedFriends = user.resolvedFriends(from: lookup)
+        let friends = user.friends(from: lookup)
         
-        XCTAssertTrue(resolvedFriends.isEmpty)
+        XCTAssertTrue(friends.isEmpty)
     }
     
-    func testResolvedGroups_returnsCorrectGroups() {
+    func testGroups_returnsCorrectGroups() {
         let user = User(groupIDs: [10, 20], id: 1)
         
         let groupA = UserGroup(id: 10, leaderID: 1, memberIDs: [1], name: "Group A")
@@ -108,20 +108,19 @@ final class UserTests: XCTestCase {
         
         let allGroups = [groupA, groupB, groupC]
         
-        let resolvedGroups = user.resolvedGroups(from: allGroups)
+        let groups = user.groups(from: allGroups)
         
-        XCTAssertEqual(resolvedGroups.count, 2)
-        XCTAssertTrue(resolvedGroups.contains(where: { $0.id == 10 }))
-        XCTAssertTrue(resolvedGroups.contains(where: { $0.id == 20 }))
+        XCTAssertEqual(groups.count, 2)
+        XCTAssertTrue(groups.contains(where: { $0.id == 10 }))
+        XCTAssertTrue(groups.contains(where: { $0.id == 20 }))
     }
     
-    func testResolvedGroups_returnsEmptyIfNoIDs() {
+    func testGroups_returnsEmptyIfNoIDs() {
         let user = User(groupIDs: nil, id: 1)
-        let groups = [UserGroup(id: 1, leaderID: 1, memberIDs: [1], name: "Test")]
+        let group = [UserGroup(id: 1, leaderID: 1, memberIDs: [1], name: "Test")]
         
-        let resolvedGroups = user.resolvedGroups(from: groups)
+        let groups = user.groups(from: group)
         
-        XCTAssertTrue(resolvedGroups.isEmpty)
+        XCTAssertTrue(groups.isEmpty)
     }
-    
 }

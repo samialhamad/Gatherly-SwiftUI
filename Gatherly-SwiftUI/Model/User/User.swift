@@ -35,7 +35,7 @@ class User: Codable, Equatable, Identifiable, ObservableObject {
     
     // MARK: - Functions
     
-    func resolvedFriends(from lookup: [Int: User]) -> [User] {
+    func friends(from lookup: [Int: User]) -> [User] {
         guard let friendIDs else {
             return []
         }
@@ -43,7 +43,7 @@ class User: Codable, Equatable, Identifiable, ObservableObject {
         return friendIDs.compactMap { lookup[$0] }
     }
     
-    func resolvedGroups(from groups: [UserGroup]) -> [UserGroup] {
+    func groups(from groups: [UserGroup]) -> [UserGroup] {
         guard let groupIDs else {
             return []
         }
