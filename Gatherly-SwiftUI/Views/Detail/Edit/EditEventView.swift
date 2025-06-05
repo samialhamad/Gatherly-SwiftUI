@@ -116,10 +116,8 @@ private extension EditEventView {
             get: { editEventViewModel.selectedDate },
             set: { newDate in
                 editEventViewModel.selectedDate = newDate
-                let oldStartTime = editEventViewModel.startTime
-                editEventViewModel.startTime = oldStartTime
-                let oldEndTime = editEventViewModel.endTime
-                editEventViewModel.endTime = oldEndTime
+                editEventViewModel.startTime = editEventViewModel.startTime
+                editEventViewModel.endTime = editEventViewModel.endTime
             }
         )
     }

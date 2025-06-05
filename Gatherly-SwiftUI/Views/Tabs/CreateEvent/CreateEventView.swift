@@ -111,10 +111,8 @@ private extension CreateEventView {
             get: { createEventViewModel.selectedDate },
             set: { newDate in
                 createEventViewModel.selectedDate = newDate
-                let oldStartTime = createEventViewModel.startTime
-                createEventViewModel.startTime = oldStartTime
-                let oldEndTime = createEventViewModel.endTime
-                createEventViewModel.endTime = oldEndTime
+                createEventViewModel.startTime = createEventViewModel.startTime
+                createEventViewModel.endTime = createEventViewModel.endTime
             }
         )
     }
