@@ -26,9 +26,6 @@ class NavigationState: ObservableObject {
         
         calendarSelectedDate = eventDate
         navigateToEventsForDate = eventDate
-        
-        DispatchQueue.main.async {
-            self.navigateToEvent = event
-        }
+        navigateToEvent = event
     }
 }
