@@ -19,18 +19,13 @@ enum ContactSyncHelper {
             }
         }
 
-        let (newUsers, newFriendIDs) = await generateUsersFromContacts(contacts)
-        appendUsersAndUpdateFriends(newUsers, newFriendIDs, currentUserID: currentUserID)
-        UserDefaultsManager.setDidSyncContacts(true)
+        await mergeContactsIntoFriends(contacts, currentUserID: currentUserID)
     }
     
     static func forceSync(currentUserID: Int = SampleData.currentUserID, completion: @escaping () -> Void = {}) {
         ContactSyncManager.shared.fetchContacts { contacts in
             Task {
-                let (newUsers, newFriendIDs) = await generateUsersFromContacts(contacts)
-                
-                appendUsersAndUpdateFriends(newUsers, newFriendIDs, currentUserID: currentUserID)
-                UserDefaultsManager.setDidSyncContacts(true)
+                await mergeContactsIntoFriends(contacts, currentUserID: currentUserID)
                 
                 DispatchQueue.main.async {
                     completion()
@@ -38,6 +33,12 @@ enum ContactSyncHelper {
             }
         }
     }
+    
+    private static func mergeContactsIntoFriends(_ contacts: [SyncedContact], currentUserID: Int) async {
+            let (newUsers, newFriendIDs) = await generateUsersFromContacts(contacts)
+            appendUsersAndUpdateFriends(newUsers, newFriendIDs, currentUserID: currentUserID)
+            UserDefaultsManager.setDidSyncContacts(true)
+        }
     
     private static func generateUsersFromContacts(_ contacts: [SyncedContact]) async -> ([User], [Int]) {
         let usersDict = UserDefaultsManager.loadUsers()
