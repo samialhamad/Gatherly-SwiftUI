@@ -110,8 +110,9 @@ final class GetEventsTests: XCTestCase {
         GatherlyAPI.getEvents()
             .sink { events in
                 XCTAssertEqual(events.count, 2)
+                let sorted = events.sorted { ($0.id ?? 0) < ($1.id ?? 0) }
                 
-                let first = events[0]
+                let first = sorted[0]
                 XCTAssertEqual(first.title, "Loaded Event 1")
                 XCTAssertEqual(first.id, 123)
                 XCTAssertEqual(first.plannerID, 1)
@@ -120,7 +121,7 @@ final class GetEventsTests: XCTestCase {
                 let sampleDate = self.calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
                 XCTAssertEqual(first.date, self.calendar.startOfDay(for: sampleDate))
                 
-                let second = events[1]
+                let second = sorted[1]
                 XCTAssertEqual(second.title, "Loaded Event 2")
                 XCTAssertEqual(second.id, 333)
                 XCTAssertEqual(second.plannerID, 1)
