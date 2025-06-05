@@ -62,7 +62,7 @@ final class FriendsListViewUITests: GatherlyUITestCase {
         lastNameField.tap()
         lastNameField.clearAndEnterText(newLastName)
 
-        app.navigationBars["Edit Profile"].tap()
+        app.navigationBars["Edit Friend"].tap()
         let saveButton = app.buttons["userFormSaveButton"]
         XCTAssertTrue(saveButton.exists)
         saveButton.tap()

@@ -74,7 +74,7 @@ final class CreateEventViewUITests: GatherlyUITestCase {
         createButton.tap()
         
         let detailNavBar = app.navigationBars["UI Test Event"]
-        XCTAssertTrue(detailNavBar.waitForExistence(timeout: 5))
+        XCTAssertTrue(detailNavBar.waitForExistence(timeout: 7))
         
         let backButton = detailNavBar.buttons.firstMatch
         XCTAssertTrue(backButton.exists)

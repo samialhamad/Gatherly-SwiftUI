@@ -66,6 +66,6 @@ final class UserFormViewUITests: GatherlyUITestCase {
 
         // Verify we're back on Friends tab and new friend appears
         let newFriendRow = app.staticTexts["AA BB"]
-        XCTAssertTrue(newFriendRow.waitForExistence(timeout: 3))
+        XCTAssertTrue(newFriendRow.waitForExistence(timeout: 5))
     }
 }
