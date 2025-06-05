@@ -22,16 +22,12 @@ class EditGroupViewModel: ObservableObject {
         self.original = group
         self.group = group
         
-        if let groupimageName = group.imageName {
-            self.groupImage = ImageUtility.loadImageFromDocuments(named: groupimageName)
-        } else {
-            self.groupImage = nil
+        if let groupImageName = group.imageName {
+            self.groupImage = ImageUtility.loadImageFromDocuments(named: groupImageName)
         }
         
         if let bannerImageName = group.bannerImageName {
             self.bannerImage = ImageUtility.loadImageFromDocuments(named: bannerImageName)
-        } else {
-            self.bannerImage = nil
         }
     }
     
