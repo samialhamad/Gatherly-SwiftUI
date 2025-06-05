@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AppInitializer {
+struct AppInitializer {
     static func runIfNeeded() {
         if ProcessInfo.processInfo.environment["UITESTING"] == "1" {
             UserDefaultsManager.resetAll()
