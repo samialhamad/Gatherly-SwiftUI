@@ -16,7 +16,8 @@ final class UserFormReducerTests: XCTestCase {
             initialState: UserFormReducer.State(
                 currentUser: User(firstName: "Old", id: 1, lastName: "Name"),
                 firstName: "Old",
-                lastName: "Name"
+                lastName: "Name",
+                mode: .updateCurrentUser
             ),
             reducer: { UserFormReducer() }
         )
@@ -31,7 +32,8 @@ final class UserFormReducerTests: XCTestCase {
             initialState: UserFormReducer.State(
                 currentUser: User(firstName: "Test", id: 1, lastName: "Old"),
                 firstName: "Test",
-                lastName: "Old"
+                lastName: "Old",
+                mode: .updateCurrentUser
             ),
             reducer: { UserFormReducer() }
         )
@@ -47,7 +49,8 @@ final class UserFormReducerTests: XCTestCase {
             initialState: UserFormReducer.State(
                 currentUser: User(id: 1),
                 firstName: "Test",
-                lastName: "User"
+                lastName: "User",
+                mode: .updateCurrentUser
             ),
             reducer: { UserFormReducer() }
         )
@@ -63,7 +66,8 @@ final class UserFormReducerTests: XCTestCase {
             initialState: UserFormReducer.State(
                 currentUser: User(id: 1),
                 firstName: "Test",
-                lastName: "User"
+                lastName: "User",
+                mode: .updateCurrentUser
             ),
             reducer: { UserFormReducer() }
         )
@@ -115,7 +119,8 @@ final class UserFormReducerTests: XCTestCase {
                 currentUser: User(id: 1),
                 firstName: "Test",
                 lastName: "User",
-                isPresented: true
+                isPresented: true,
+                mode: .updateCurrentUser
             ),
             reducer: { UserFormReducer() }
         )
