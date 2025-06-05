@@ -79,6 +79,8 @@ class EditGroupViewModel: ObservableObject {
         (group.name ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
+    // MARK: - leaderID
+    
     var leaderID: Int {
         group.leaderID
     }
