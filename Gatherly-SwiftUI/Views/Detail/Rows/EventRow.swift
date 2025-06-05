@@ -27,7 +27,7 @@ private extension EventRow {
     // MARK: - Functions
     
     func formattedTime(_ timestamp: Int) -> String {
-        let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
+        let date = Date(timestamp)
         let formatter = DateFormatter()
         formatter.timeStyle = .short
         return formatter.string(from: date)

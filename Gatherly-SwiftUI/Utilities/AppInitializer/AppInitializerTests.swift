@@ -69,7 +69,7 @@ final class AppInitializerTests: XCTestCase {
         UserDefaultsManager.setDidSeedSampleData(true)
         
         let dummyUser = User(
-            createdTimestamp: Int(Date().timeIntervalSince1970),
+            createdTimestamp: Int(Date().timestamp),
             eventIDs: [],
             firstName: "Dummy",
             friendIDs: [],

@@ -15,7 +15,7 @@ final class ContactSyncHelperTests: XCTestCase {
         UserDefaultsManager.resetAll()
         
         let dummyUser = User(
-            createdTimestamp: Int(Date().timeIntervalSince1970),
+            createdTimestamp: Int(Date().timestamp),
             eventIDs: [],
             firstName: "Sami",
             friendIDs: [],

@@ -31,7 +31,7 @@ extension GatherlyAPI {
     
     static func createUser(from contact: SyncedContact, id: Int) async -> User {
         let user = User(
-            createdTimestamp: Int(Date().timeIntervalSince1970),
+            createdTimestamp: Int(Date().timestamp),
             eventIDs: [],
             firstName: contact.fullName.components(separatedBy: " ").first,
             friendIDs: [],

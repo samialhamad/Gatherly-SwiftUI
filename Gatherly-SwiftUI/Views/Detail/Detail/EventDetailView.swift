@@ -259,8 +259,8 @@ private extension EventDetailView {
         Group {
             if let startTimestamp = updatedEvent.startTimestamp,
                let endTimestamp = updatedEvent.endTimestamp {
-                let startDate = Date(timeIntervalSince1970: TimeInterval(startTimestamp))
-                let endDate = Date(timeIntervalSince1970: TimeInterval(endTimestamp))
+                let startDate = Date(startTimestamp)
+                let endDate = Date(endTimestamp)
                 
                 Text("Time: \(startDate.formatted(date: .omitted, time: .shortened)) - \(endDate.formatted(date: .omitted, time: .shortened))")
                     .foregroundColor(.secondary)
