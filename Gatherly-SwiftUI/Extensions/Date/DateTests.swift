@@ -180,6 +180,118 @@ final class DateTests: XCTestCase {
         XCTAssertEqual(mergedDate, expectedDate)
     }
     
+    // MARK: - Range
+    
+    func testStartTimeRange_notTodayDate() {
+        let calendar = Calendar.current
+        var components = DateComponents(year: 2025, month: 1, day: 1, hour: 12, minute: 0, second: 0)
+        guard let sampleDate = calendar.date(from: components) else {
+            XCTFail("Failed to create sample date")
+            return
+        }
+        
+        let range = Date.startTimeRange(for: sampleDate)
+        
+        let expectedStartOfDay = calendar.startOfDay(for: sampleDate)
+        let expectedDayEnd = calendar.date(
+            bySettingHour: 23,
+            minute: 59,
+            second: 59,
+            of: sampleDate
+        )!
+        
+        XCTAssertEqual(range.lowerBound, expectedStartOfDay)
+        XCTAssertEqual(range.upperBound, expectedDayEnd)
+    }
+    
+    func testEndTimeRange_notTodayDate_startTimeBeforeDayEnd() {
+        let calendar = Calendar.current
+        var components = DateComponents(year: 2025, month: 1, day: 1, hour: 10, minute: 0, second: 0)
+        guard let sampleDate = calendar.date(from: components) else {
+            XCTFail("Failed to create sample date")
+            return
+        }
+        
+        let startTime = calendar.date(from: DateComponents(
+            year: 2025, month: 1, day: 1, hour: 10, minute: 0, second: 0
+        ))!
+        
+        let range = Date.endTimeRange(for: sampleDate, startTime: startTime)
+        
+        let expectedDayEnd = calendar.date(
+            bySettingHour: 23,
+            minute: 59,
+            second: 59,
+            of: sampleDate
+        )!
+        
+        XCTAssertEqual(range.lowerBound, startTime)
+        XCTAssertEqual(range.upperBound, expectedDayEnd)
+    }
+    
+    func testEndTimeRange_notTodayDate_startTimeAfterDayEnd() {
+        let calendar = Calendar.current
+        var components = DateComponents(year: 2025, month: 1, day: 1, hour: 12, minute: 0, second: 0)
+        guard let sampleDate = calendar.date(from: components) else {
+            XCTFail("Failed to create sample date")
+            return
+        }
+        
+        let afterEndDate = calendar.date(from: DateComponents(
+            year: 2025, month: 1, day: 2, hour: 0, minute: 0, second: 1
+        ))!
+        
+        let range = Date.endTimeRange(for: sampleDate, startTime: afterEndDate)
+        
+        let expectedDayEnd = calendar.date(
+            bySettingHour: 23,
+            minute: 59,
+            second: 59,
+            of: sampleDate
+        )!
+        
+        XCTAssertEqual(range.lowerBound, expectedDayEnd)
+        XCTAssertEqual(range.upperBound, expectedDayEnd)
+    }
+    
+    func testStartTimeRange_today() {
+        let calendar = Calendar.current
+        // capture now as close as possible to when we actually call startTimeRange
+        let beforeCalling = Date()
+        let range = Date.startTimeRange(for: beforeCalling)
+        let afterCalling = Date()
+        
+        let expectedDayEnd = calendar.date(
+            bySettingHour: 23,
+            minute: 59,
+            second: 59,
+            of: beforeCalling
+        )!
+        
+        XCTAssertTrue(range.lowerBound >= beforeCalling)
+        XCTAssertTrue(range.lowerBound <= afterCalling)
+        XCTAssertEqual(range.upperBound, expectedDayEnd)
+    }
+    
+    func testEndTimeRange_today_withStartTimeBeforeNow() {
+        let calendar = Calendar.current
+        let beforeCalling = Date()
+        let startOfDay = calendar.startOfDay(for: beforeCalling)
+        let range = Date.endTimeRange(for: beforeCalling, startTime: startOfDay)
+        let afterCalling = Date()
+        
+        let expectedDayEnd = calendar.date(
+            bySettingHour: 23,
+            minute: 59,
+            second: 59,
+            of: beforeCalling
+        )!
+        
+        XCTAssertTrue(range.lowerBound >= beforeCalling)
+        XCTAssertTrue(range.lowerBound <= afterCalling)
+        XCTAssertEqual(range.upperBound, expectedDayEnd)
+    }
+    
     // MARK: - Time String
     
     //    func testTimeString10Days() {
