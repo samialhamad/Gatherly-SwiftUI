@@ -67,9 +67,7 @@ public struct EventMembersSection: View {
     @Binding var selectedMemberIDs: Set<Int>
     
     let header: String
-    
-    let currentUserID = 1
-    
+        
     public var body: some View {
         Section(header: Text(header)) {
             Button(action: {
@@ -100,7 +98,7 @@ public struct EventMembersSection: View {
                         
                         self.friends = user
                             .friends(from: friendsDict)
-                            .filter { $0.id != currentUserID }
+                            .filter { $0.id != Constants.currentUserID }
                     }
                 }
                 .store(in: &cancellables)
