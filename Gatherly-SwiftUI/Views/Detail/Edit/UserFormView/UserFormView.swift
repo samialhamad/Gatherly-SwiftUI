@@ -49,7 +49,7 @@ struct UserFormView: View {
     }
 }
 
-private extension UserFormView {
+extension UserFormView {
     
     // MARK: - Functions
     

@@ -178,8 +178,17 @@ struct Constants {
     }
     
     struct UserFormView {
+        
+        // Activity Indicator Strings
+        
         static let addingFriendString: String = "Adding your friend!"
         static let updatingFriendString: String = "Updating your friend!"
         static let updatingProfileString: String = "Updating your profile!"
+        
+        // Navigation Title Strings
+        
+        static let createFriendString: String = "New Friend"
+        static let updateCurrentUserString: String = "Edit Profile"
+        static let updateFriendString: String = "Edit Friend"
     }
 }
