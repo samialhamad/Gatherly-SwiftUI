@@ -48,7 +48,7 @@ enum ContactSyncHelper {
             }
         )
         
-        let uniqueContacts = contacts.filter {
+        let newContacts = contacts.filter {
             !existingPhones.contains($0.phoneNumber.filter(\.isWholeNumber))
         }
         
@@ -56,7 +56,7 @@ enum ContactSyncHelper {
         var nextID = (usedIDs.max() ?? 999) + 1
         
         let results = await withTaskGroup(of: User.self) { group in
-            for contact in uniqueContacts {
+            for contact in newContacts {
                 
                 while usedIDs.contains(nextID) {
                     nextID += 1
@@ -88,9 +88,9 @@ enum ContactSyncHelper {
         // update currentUser's friend list
         if var currentUser = UserDefaultsManager.loadCurrentUser() {
             let existingFriends = currentUser.friendIDs ?? []
-            let combined = Set(existingFriends + newFriendIDs)
+            let combinedFriends = Set(existingFriends + newFriendIDs)
             
-            currentUser.friendIDs = Array(combined).sorted()
+            currentUser.friendIDs = Array(combinedFriends).sorted()
             usersDict[currentUserID] = currentUser
 
             UserDefaultsManager.saveCurrentUser(currentUser)
