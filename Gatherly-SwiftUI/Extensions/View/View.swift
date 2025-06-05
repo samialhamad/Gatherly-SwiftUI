@@ -9,17 +9,6 @@ import SwiftUI
 
 extension View {
     
-    // MARK: - Activity Indicator
-    
-    func addActivityIndicator(isPresented: Bool, message: String? = nil) -> some View {
-        ZStack {
-            self
-            if isPresented {
-                ActivityIndicator(message: message)
-            }
-        }
-    }
-    
     // MARK: - Tint Accent
     
     func applyGatherlyAccentColor() -> some View {
