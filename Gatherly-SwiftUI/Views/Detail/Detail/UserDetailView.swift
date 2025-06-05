@@ -48,7 +48,7 @@ struct UserDetailView: View {
                                 bannerImageName: user.bannerImageName,
                                 avatarImage: user.avatarImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) },
                                 bannerImage: user.bannerImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) },
-                                isCreatingFriend: false
+                                mode: .updateFriend
                             ),
                             reducer: { UserFormReducer() }
                         )

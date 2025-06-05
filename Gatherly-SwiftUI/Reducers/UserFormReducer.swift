@@ -18,10 +18,16 @@ struct UserFormReducer: Reducer {
         var bannerImageName: String?
         var avatarImage: UIImage?
         var bannerImage: UIImage?
-        var isCreatingFriend: Bool = false
         var isPresented: Bool = false
         var isSaving = false
         var didUpdateUser = false
+        var mode: Mode
+        
+        enum Mode {
+            case createFriend
+            case updateCurrentUser
+            case updateFriend
+        }
     }
     
     enum Action: Equatable {
@@ -68,12 +74,12 @@ struct UserFormReducer: Reducer {
             
             let publisher: AnyPublisher<User, Never>
             
-            // MODES ENUM HERE FOR 3 MODES
-            if state.isCreatingFriend {
+            switch state.mode {
+            case .createFriend:
                 publisher = GatherlyAPI.createUser(updatedUser)
-            } else if updatedUser.id == Constants.currentUserID {
+            case .updateCurrentUser:
                 publisher = GatherlyAPI.updateCurrentUser(updatedUser)
-            } else {
+            case .updateFriend:
                 publisher = GatherlyAPI.updateUser(updatedUser)
             }
             

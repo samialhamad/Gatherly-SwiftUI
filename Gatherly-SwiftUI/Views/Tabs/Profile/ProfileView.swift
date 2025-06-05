@@ -120,7 +120,8 @@ private extension ProfileView {
                         avatarImageName: currentUser.avatarImageName,
                         bannerImageName: currentUser.bannerImageName,
                         avatarImage: currentUser.avatarImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) },
-                        bannerImage: currentUser.bannerImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) }
+                        bannerImage: currentUser.bannerImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) },
+                        mode: .updateCurrentUser
                     ),
                     reducer: { UserFormReducer() }
                 )

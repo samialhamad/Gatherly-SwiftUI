@@ -29,7 +29,7 @@ struct UserFormView: View {
                         nameSection(viewStore)
                         imagePickersSection(viewStore)
                     }
-                    .navigationTitle(viewStore.isCreatingFriend ? "New Friend" : "Edit Profile")
+                    .navigationTitle(navigationTitle(for: viewStore.mode))
                     .toolbar {
                         cancelToolbarButton(viewStore)
                         saveToolbarButton(viewStore)
@@ -60,11 +60,12 @@ private extension UserFormView {
     // MARK: - Subviews
     
     private func activityMessage(for viewStore: ViewStore<UserFormReducer.State, UserFormReducer.Action>) -> String {
-        if viewStore.isCreatingFriend {
+        switch viewStore.mode {
+        case .createFriend:
             return Constants.UserFormView.addingFriendString
-        } else if viewStore.currentUser.id == Constants.currentUserID {
+        case .updateCurrentUser:
             return Constants.UserFormView.updatingProfileString
-        } else {
+        case .updateFriend:
             return Constants.UserFormView.updatingFriendString
         }
     }
@@ -81,6 +82,17 @@ private extension UserFormView {
                 send: UserFormReducer.Action.setLastName
             ))
             .accessibilityIdentifier("userFormLastName")
+        }
+    }
+    
+    private func navigationTitle(for mode: UserFormReducer.State.Mode) -> String {
+        switch mode {
+        case .createFriend:
+            return "New Friend"
+        case .updateCurrentUser:
+            return "Edit Profile"
+        case .updateFriend:
+            return "Edit Friend"
         }
     }
     
@@ -141,7 +153,8 @@ private extension UserFormView {
                 firstName: "Sami",
                 lastName: "Alhamad",
                 avatarImageName: nil,
-                bannerImageName: nil
+                bannerImageName: nil,
+                mode: .updateCurrentUser
             ),
             reducer: { UserFormReducer() }
         )

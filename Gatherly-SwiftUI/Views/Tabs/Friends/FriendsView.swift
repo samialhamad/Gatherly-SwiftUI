@@ -124,7 +124,7 @@ extension FriendsView {
                         bannerImageName: nil,
                         avatarImage: nil,
                         bannerImage: nil,
-                        isCreatingFriend: true
+                        mode: .createFriend
                     ),
                     reducer: { UserFormReducer() }
                 )
