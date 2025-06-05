@@ -29,7 +29,7 @@ struct UserFormView: View {
                         nameSection(viewStore)
                         imagePickersSection(viewStore)
                     }
-                    .navigationTitle(navigationTitle(for: viewStore.mode))
+                    .navigationTitle(Self.navigationTitle(for: viewStore.mode))
                     .toolbar {
                         cancelToolbarButton(viewStore)
                         saveToolbarButton(viewStore)
@@ -77,6 +77,7 @@ extension UserFormView {
                 send: UserFormReducer.Action.setFirstName
             ))
             .accessibilityIdentifier("userFormFirstName")
+            
             TextField("Last Name", text: viewStore.binding(
                 get: \.lastName,
                 send: UserFormReducer.Action.setLastName
@@ -85,14 +86,14 @@ extension UserFormView {
         }
     }
     
-    private func navigationTitle(for mode: UserFormReducer.State.Mode) -> String {
+    static func navigationTitle(for mode: UserFormReducer.State.Mode) -> String {
         switch mode {
         case .createFriend:
-            return "New Friend"
+            return Constants.UserFormView.createFriendString
         case .updateCurrentUser:
-            return "Edit Profile"
+            return Constants.UserFormView.updateCurrentUserString
         case .updateFriend:
-            return "Edit Friend"
+            return Constants.UserFormView.updateFriendString
         }
     }
     
