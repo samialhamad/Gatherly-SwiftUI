@@ -32,7 +32,7 @@ struct EventDetailView: View {
                 ActivityIndicator(message: Constants.EventDetailView.loadingString)
             } else {
                 ScrollView {
-                    VStack(spacing: 0) {
+                    VStack(spacing: Constants.EventDetailView.zeroSpacing) {
                         eventBannerImageView
                         
                         VStack(alignment: .leading, spacing: Constants.EventDetailView.bodyVStackSpacing) {
