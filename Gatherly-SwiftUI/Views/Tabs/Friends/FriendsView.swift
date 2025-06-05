@@ -10,7 +10,7 @@ import ComposableArchitecture
 import SwiftUI
 
 struct FriendsView: View {
-    @State private var createFriendStore: Store<UserFormFeature.State, UserFormFeature.Action>? = nil
+    @State private var createFriendStore: Store<UserFormReducer.State, UserFormReducer.Action>? = nil
     @State private var isShowingCreateGroup = false
     @EnvironmentObject var navigationState: NavigationState
     @State private var searchText = ""
@@ -116,7 +116,7 @@ extension FriendsView {
         Button {
             if selectedTab == 0 {
                 createFriendStore = Store(
-                    initialState: UserFormFeature.State(
+                    initialState: UserFormReducer.State(
                         currentUser: User(),
                         firstName: "",
                         lastName: "",
@@ -126,7 +126,7 @@ extension FriendsView {
                         bannerImage: nil,
                         isCreatingFriend: true
                     ),
-                    reducer: { UserFormFeature() }
+                    reducer: { UserFormReducer() }
                 )
             } else {
                 isShowingCreateGroup = true

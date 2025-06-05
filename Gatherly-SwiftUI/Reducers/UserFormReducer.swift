@@ -1,5 +1,5 @@
 //
-//  UserFormFeature.swift
+//  UserFormReducer.swift
 //  Gatherly-SwiftUI
 //
 //  Created by Sami Alhamad on 4/21/25.
@@ -9,7 +9,7 @@ import Combine
 import ComposableArchitecture
 import SwiftUI
 
-struct UserFormFeature: Reducer {
+struct UserFormReducer: Reducer {
     struct State: Equatable {
         var currentUser: User
         var firstName: String
@@ -53,9 +53,12 @@ struct UserFormFeature: Reducer {
             return .none
             
         case .saveChanges:
-            let avatarImageName = state.avatarImage.flatMap { ImageUtility.saveImageToDocuments(image: $0) }
-            let bannerImageName = state.bannerImage.flatMap { ImageUtility.saveImageToDocuments(image: $0) }
             state.isSaving = true
+            
+            let avatarImageName = state.avatarImage.flatMap { ImageUtility.saveImageToDocuments(image: $0)
+            }
+            let bannerImageName = state.bannerImage.flatMap { ImageUtility.saveImageToDocuments(image: $0)
+            }
             
             var updatedUser = state.currentUser
             updatedUser.firstName = state.firstName
@@ -64,6 +67,8 @@ struct UserFormFeature: Reducer {
             updatedUser.bannerImageName = bannerImageName
             
             let publisher: AnyPublisher<User, Never>
+            
+            // MODES ENUM HERE FOR 3 MODES
             if state.isCreatingFriend {
                 publisher = GatherlyAPI.createUser(updatedUser)
             } else if updatedUser.id == Constants.currentUserID {

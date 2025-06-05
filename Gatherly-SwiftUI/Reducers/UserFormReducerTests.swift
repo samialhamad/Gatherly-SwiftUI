@@ -1,5 +1,5 @@
 //
-//  UserFormFeatureTests.swift
+//  UserFormReducerTests.swift
 //  Gatherly-SwiftUITests
 //
 //  Created by Sami Alhamad on 5/2/25.
@@ -9,16 +9,16 @@ import XCTest
 import ComposableArchitecture
 @testable import Gatherly_SwiftUI
 
-final class UserFormFeatureTests: XCTestCase {
+final class UserFormReducerTests: XCTestCase {
     
     func testSetFirstName() async {
         let store = await TestStore(
-            initialState: UserFormFeature.State(
+            initialState: UserFormReducer.State(
                 currentUser: User(firstName: "Old", id: 1, lastName: "Name"),
                 firstName: "Old",
                 lastName: "Name"
             ),
-            reducer: { UserFormFeature() }
+            reducer: { UserFormReducer() }
         )
         
         await store.send(.setFirstName("New")) {
@@ -28,12 +28,12 @@ final class UserFormFeatureTests: XCTestCase {
     
     func testSetLastName() async {
         let store = await TestStore(
-            initialState: UserFormFeature.State(
+            initialState: UserFormReducer.State(
                 currentUser: User(firstName: "Test", id: 1, lastName: "Old"),
                 firstName: "Test",
                 lastName: "Old"
             ),
-            reducer: { UserFormFeature() }
+            reducer: { UserFormReducer() }
         )
         
         await store.send(.setLastName("New")) {
@@ -44,12 +44,12 @@ final class UserFormFeatureTests: XCTestCase {
     func testSetAvatarImage() async {
         let dummyImage = UIImage(systemName: "person")!
         let store = await TestStore(
-            initialState: UserFormFeature.State(
+            initialState: UserFormReducer.State(
                 currentUser: User(id: 1),
                 firstName: "Test",
                 lastName: "User"
             ),
-            reducer: { UserFormFeature() }
+            reducer: { UserFormReducer() }
         )
         
         await store.send(.setAvatarImage(dummyImage)) {
@@ -60,12 +60,12 @@ final class UserFormFeatureTests: XCTestCase {
     func testSetBannerImage() async {
         let dummyImage = UIImage(systemName: "photo")!
         let store = await TestStore(
-            initialState: UserFormFeature.State(
+            initialState: UserFormReducer.State(
                 currentUser: User(id: 1),
                 firstName: "Test",
                 lastName: "User"
             ),
-            reducer: { UserFormFeature() }
+            reducer: { UserFormReducer() }
         )
         
         await store.send(.setBannerImage(dummyImage)) {
@@ -87,12 +87,12 @@ final class UserFormFeatureTests: XCTestCase {
 //        )
 //        
 //        let store = await TestStore(
-//            initialState: UserFormFeature.State(
+//            initialState: UserFormReducer.State(
 //                currentUser: originalUser,
 //                firstName: "New",
 //                lastName: "Name"
 //            ),
-//            reducer: { UserFormFeature() }
+//            reducer: { UserFormReducer() }
 //        )
 //        
 //        await store.send(.saveChanges)
@@ -111,13 +111,13 @@ final class UserFormFeatureTests: XCTestCase {
     
     func testCancel() async {
         let store = await TestStore(
-            initialState: UserFormFeature.State(
+            initialState: UserFormReducer.State(
                 currentUser: User(id: 1),
                 firstName: "Test",
                 lastName: "User",
                 isPresented: true
             ),
-            reducer: { UserFormFeature() }
+            reducer: { UserFormReducer() }
         )
         
         await store.send(.cancel) {

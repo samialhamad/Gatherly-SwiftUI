@@ -13,7 +13,7 @@ struct UserDetailView: View {
     @State private var cancellables = Set<AnyCancellable>()
     @Environment(\.dismiss) private var dismiss
     @State private var isShowingActionSheet = false
-    @State private var userFormStore: Store<UserFormFeature.State, UserFormFeature.Action>? = nil
+    @State private var userFormStore: Store<UserFormReducer.State, UserFormReducer.Action>? = nil
     @EnvironmentObject var usersViewModel: UsersViewModel
     
     let user: User
@@ -40,7 +40,7 @@ struct UserDetailView: View {
                 .confirmationDialog("Options", isPresented: $isShowingActionSheet, titleVisibility: .visible) {
                     Button("Edit") {
                         userFormStore = Store(
-                            initialState: UserFormFeature.State(
+                            initialState: UserFormReducer.State(
                                 currentUser: user,
                                 firstName: user.firstName ?? "",
                                 lastName: user.lastName ?? "",
@@ -50,7 +50,7 @@ struct UserDetailView: View {
                                 bannerImage: user.bannerImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) },
                                 isCreatingFriend: false
                             ),
-                            reducer: { UserFormFeature() }
+                            reducer: { UserFormReducer() }
                         )
                     }
                     

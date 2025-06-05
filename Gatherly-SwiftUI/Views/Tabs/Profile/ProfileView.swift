@@ -11,7 +11,7 @@ import SwiftUI
 
 struct ProfileView: View {
     @State private var cancellables = Set<AnyCancellable>()
-    @State private var userFormStore: Store<UserFormFeature.State, UserFormFeature.Action>? = nil
+    @State private var userFormStore: Store<UserFormReducer.State, UserFormReducer.Action>? = nil
     @EnvironmentObject var usersViewModel: UsersViewModel
     @State private var refreshID = UUID()
     
@@ -113,7 +113,7 @@ private extension ProfileView {
         VStack(spacing: Constants.ProfileView.profileVStackSpacing) {
             Button {
                 userFormStore = Store(
-                    initialState: UserFormFeature.State(
+                    initialState: UserFormReducer.State(
                         currentUser: currentUser,
                         firstName: currentUser.firstName ?? "",
                         lastName: currentUser.lastName ?? "",
@@ -122,7 +122,7 @@ private extension ProfileView {
                         avatarImage: currentUser.avatarImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) },
                         bannerImage: currentUser.bannerImageName.flatMap { ImageUtility.loadImageFromDocuments(named: $0) }
                     ),
-                    reducer: { UserFormFeature() }
+                    reducer: { UserFormReducer() }
                 )
             } label: {
                 profileRowContent(title: "Profile", icon: "person.fill")

@@ -18,7 +18,7 @@ struct UserFormView: View {
     @State private var cancellables = Set<AnyCancellable>()
     @State private var showingDeleteAlert = false
     
-    let store: Store<UserFormFeature.State, UserFormFeature.Action>
+    let store: Store<UserFormReducer.State, UserFormReducer.Action>
     var delegate: UserFormViewDelegate?
 
     var body: some View {
@@ -59,7 +59,7 @@ private extension UserFormView {
     
     // MARK: - Subviews
     
-    private func activityMessage(for viewStore: ViewStore<UserFormFeature.State, UserFormFeature.Action>) -> String {
+    private func activityMessage(for viewStore: ViewStore<UserFormReducer.State, UserFormReducer.Action>) -> String {
         if viewStore.isCreatingFriend {
             return Constants.UserFormView.addingFriendString
         } else if viewStore.currentUser.id == Constants.currentUserID {
@@ -69,22 +69,22 @@ private extension UserFormView {
         }
     }
     
-    private func nameSection(_ viewStore: ViewStore<UserFormFeature.State, UserFormFeature.Action>) -> some View {
+    private func nameSection(_ viewStore: ViewStore<UserFormReducer.State, UserFormReducer.Action>) -> some View {
         Section(header: Text("Name")) {
             TextField("First Name", text: viewStore.binding(
                 get: \.firstName,
-                send: UserFormFeature.Action.setFirstName
+                send: UserFormReducer.Action.setFirstName
             ))
             .accessibilityIdentifier("userFormFirstName")
             TextField("Last Name", text: viewStore.binding(
                 get: \.lastName,
-                send: UserFormFeature.Action.setLastName
+                send: UserFormReducer.Action.setLastName
             ))
             .accessibilityIdentifier("userFormLastName")
         }
     }
     
-    private func imagePickersSection(_ viewStore: ViewStore<UserFormFeature.State, UserFormFeature.Action>) -> some View {
+    private func imagePickersSection(_ viewStore: ViewStore<UserFormReducer.State, UserFormReducer.Action>) -> some View {
         Group {
             ImagePicker(
                 title: "Avatar Image",
@@ -92,7 +92,7 @@ private extension UserFormView {
                 maskShape: .circle,
                 selectedImage: viewStore.binding(
                     get: \.avatarImage,
-                    send: UserFormFeature.Action.setAvatarImage
+                    send: UserFormReducer.Action.setAvatarImage
                 )
             )
             
@@ -102,7 +102,7 @@ private extension UserFormView {
                 maskShape: .rectangle,
                 selectedImage: viewStore.binding(
                     get: \.bannerImage,
-                    send: UserFormFeature.Action.setBannerImage
+                    send: UserFormReducer.Action.setBannerImage
                 )
             )
         }
@@ -110,7 +110,7 @@ private extension UserFormView {
     
     // MARK: - Buttons
     
-    func cancelToolbarButton(_ viewStore: ViewStore<UserFormFeature.State, UserFormFeature.Action>) -> some ToolbarContent {
+    func cancelToolbarButton(_ viewStore: ViewStore<UserFormReducer.State, UserFormReducer.Action>) -> some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
             Button("Cancel") {
                 viewStore.send(.cancel)
@@ -119,7 +119,7 @@ private extension UserFormView {
         }
     }
     
-    func saveToolbarButton(_ viewStore: ViewStore<UserFormFeature.State, UserFormFeature.Action>) -> some ToolbarContent {
+    func saveToolbarButton(_ viewStore: ViewStore<UserFormReducer.State, UserFormReducer.Action>) -> some ToolbarContent {
         ToolbarItem(placement: .navigationBarTrailing) {
             let isDisabled = viewStore.firstName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
             
@@ -136,14 +136,14 @@ private extension UserFormView {
 #Preview {
     UserFormView(
         store: Store(
-            initialState: UserFormFeature.State(
+            initialState: UserFormReducer.State(
                 currentUser: SampleData.sampleUsers.first!,
                 firstName: "Sami",
                 lastName: "Alhamad",
                 avatarImageName: nil,
                 bannerImageName: nil
             ),
-            reducer: { UserFormFeature() }
+            reducer: { UserFormReducer() }
         )
     )
 }
