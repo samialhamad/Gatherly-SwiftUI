@@ -36,6 +36,16 @@ struct SwiftUICalendarView: UIViewRepresentable {
         }
     }
     
+    static func hasEvent(in events: [Event], on date: Date) -> Bool {
+        return events.contains { event in
+            guard let eventDate = event.date else {
+                return false
+            }
+            
+            return Date.isSameDay(date1: eventDate, date2: date)
+        }
+    }
+    
     class Coordinator: NSObject, UICalendarSelectionSingleDateDelegate, UICalendarViewDelegate {
         var parent: SwiftUICalendarView
         
@@ -43,14 +53,8 @@ struct SwiftUICalendarView: UIViewRepresentable {
             self.parent = parent
         }
         
-        private func hasEvent(on date: Date) -> Bool {
-            parent.events.contains {
-                guard let eventDate = $0.date else {
-                    return false
-                }
-                
-                return Date.isSameDay(date1: eventDate, date2: date)
-            }
+        func hasEvent(on date: Date) -> Bool {
+            SwiftUICalendarView.hasEvent(in: parent.events, on: date)
         }
         
         func dateSelection(_ selection: UICalendarSelectionSingleDate, didSelectDate dateComponents: DateComponents?) {
