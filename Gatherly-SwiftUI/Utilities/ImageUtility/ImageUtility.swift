@@ -10,7 +10,7 @@ import UIKit
 struct ImageUtility {
     
     static func saveImageToDocuments(image: UIImage) -> String? {
-        guard let data = image.jpegData(compressionQuality: 0.8) else {
+        guard let data = image.jpegData(compressionQuality: 1) else {
             return nil
         }
         
