@@ -31,7 +31,7 @@ class EditGroupViewModel: ObservableObject {
         }
     }
     
-    // MARK: - Preapre Group
+    // MARK: - Prepare Group
     
     func prepareUpdatedGroup() async -> UserGroup {
         await MainActor.run {
