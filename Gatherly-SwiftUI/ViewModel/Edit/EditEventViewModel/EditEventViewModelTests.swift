@@ -118,4 +118,90 @@ final class EditEventViewModelTests: XCTestCase {
         viewModel.event.title = "Conference"
         XCTAssertFalse(viewModel.isFormEmpty)
     }
+    
+    // MARK: - startTime & endTime
+    
+    func testStartTime() {
+        let calendar = Calendar.current
+        
+        let fixedDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
+        let fixedTime = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 10, minute: 0))!
+        
+        // initializer will set selectedDate to start of day
+        let initialEvent = Event(
+            description: "Test",
+            endTimestamp: nil,
+            id: 42,
+            plannerID: 1,
+            memberIDs: [2],
+            title: "Test",
+            startTimestamp: Int(fixedTime.timestamp)
+        )
+        
+        let viewModel = EditEventViewModel(event: initialEvent)
+        
+        // selectedDate should now be March 5, 2025 at midnight
+        XCTAssertEqual(viewModel.selectedDate, Date.startOfDay(fixedDate))
+        
+        viewModel.startTime = fixedTime
+        
+        let expectedMerged = Date.merge(date: fixedDate, time: fixedTime)
+        
+        // event.startTimestamp must have become that merged timestamp
+        XCTAssertEqual(viewModel.event.startTimestamp, Int(expectedMerged.timestamp))
+        
+        // startTime must return exactly that Date
+        XCTAssertEqual(viewModel.startTime, expectedMerged)
+    }
+    
+    func testEndTime() {
+        let calendar = Calendar.current
+        
+        let fixedDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
+        
+        let fixedTime = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 15, minute: 30))!
+        
+        let initialEvent = Event(
+            description: "Test",
+            endTimestamp: Int(fixedTime.timestamp),
+            id: 99,
+            plannerID: 1,
+            memberIDs: [2],
+            title: "Test",
+            startTimestamp: nil
+        )
+        let viewModel = EditEventViewModel(event: initialEvent)
+                
+        // have to explicitly set selectedDate here since its computed off startTimestamp usually
+        viewModel.selectedDate = fixedDate
+        viewModel.endTime = fixedTime
+        
+        let expectedMerged = Date.merge(date: fixedDate, time: fixedTime)
+        
+        // event.endTimestamp must have become that merged timestamp
+        XCTAssertEqual(viewModel.event.endTimestamp, Int(expectedMerged.timestamp))
+        
+        // endTime must return exactly that Date
+        XCTAssertEqual(viewModel.endTime, expectedMerged)
+    }
+    
+    func testStartTime_whenTimestampIsNil_returnsNow() {
+        let event = makeSampleEvent()
+        var viewModel = EditEventViewModel(event: event)
+        viewModel.event.startTimestamp = nil
+        
+        // abs since timeIntervalSinceNow can be negative, 1 second window
+        let startTime = viewModel.startTime
+        XCTAssertLessThan(abs(startTime.timeIntervalSinceNow), 1.0)
+    }
+    
+    func testEndTime_whenTimestampIsNil_returnsNow() {
+        let event = makeSampleEvent()
+        var viewModel = EditEventViewModel(event: event)
+        viewModel.event.endTimestamp = nil
+        
+        // abs since timeIntervalSinceNow can be negative, 1 second window
+        let endTime = viewModel.endTime
+        XCTAssertLessThan(abs(endTime.timeIntervalSinceNow), 1.0)
+    }
 }
