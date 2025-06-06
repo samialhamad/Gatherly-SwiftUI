@@ -51,7 +51,7 @@ struct GatherlyCalendarView: View {
         .navigationDestination(isPresented: $isShowingDayEvents) {
             DayEventsView()
         }
-        .onChange(of: navigationState.navigateToEventsForDate) { _oldItem, newDate in
+        .onChange(of: navigationState.navigateToEventsForDate) { _, newDate in
             guard let date = newDate else {
                 return
             }

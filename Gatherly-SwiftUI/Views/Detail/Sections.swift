@@ -120,7 +120,7 @@ struct EventLocationSection: View {
                     .accessibilityIdentifier("eventLocationTextField")
                     .autocapitalization(.words)
                     .disableAutocorrection(true)
-                    .onChange(of: locationName) { _oldItem, newValue in
+                    .onChange(of: locationName) { _, newValue in
                         guard !isSelectingSuggestion else {
                             isSelectingSuggestion = false
                             return
