@@ -38,7 +38,7 @@ struct DayEventsView: View {
             }
         }
         .navigationDestination(isPresented: $isShowingCreateEvent) {
-            CreateEventView(date: selectedDate)
+            EventFormView(date: selectedDate)
         }
         .navigationDestination(isPresented: Binding(
             get: { navigationState.navigateToEvent != nil },

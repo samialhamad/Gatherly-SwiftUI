@@ -8,7 +8,7 @@
 import Foundation
 import XCTest
 
-final class CreateEventViewUITests: GatherlyUITestCase {
+final class CreateEventFormViewUITests: GatherlyUITestCase {
     
     override func setUpWithError() throws {
         try super.setUpWithError()

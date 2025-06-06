@@ -111,9 +111,8 @@ private extension EventDetailView {
     }
     
     var editEventSheet: some View {
-        EditEventView(
-            editEventViewModel: EditEventViewModel(event: updatedEvent),
-            friendsDict: friendsDict,
+        EventFormView(
+            event: updatedEvent,
             onSave: { savedEvent in
                 self.updatedEvent = savedEvent
                 eventsViewModel.update(savedEvent)

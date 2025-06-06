@@ -61,7 +61,7 @@ private extension ContentView {
     
     var createEventTab: some View {
         NavigationStack {
-            CreateEventView()
+            EventFormView()
                 .navigationTitle("Create Event")
         }
         .tabItem {

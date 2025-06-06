@@ -50,12 +50,7 @@ struct Constants {
     struct ContentView {
         static let loadingString: String = "Gathering!"
     }
-    
-    struct CreateEventView {
-        static let creatingEventString: String = "Creating your event!"
-        static let bannerImageHeight: CGFloat = 150
-    }
-    
+   
     struct CreateGroupView {
         static let creatingGroupString: String = "Creating your group!"
         static let groupImageHeight: CGFloat = 100
@@ -66,11 +61,6 @@ struct Constants {
         static let circleHeight: CGFloat = 12
         static let circleWidth: CGFloat = 12
         static let hstackSpacing: CGFloat = 8
-    }
-    
-    struct EditEventView {
-        static let bannerImageHeight: CGFloat = 150
-        static let savingChangesString: String = "Saving your changes!"
     }
     
     struct EditGroupView {
@@ -98,6 +88,12 @@ struct Constants {
         static let eventMapPreviewShadow: CGFloat = 2
         static let loadingString: String = "Loading this event!"
         static let zeroSpacing: CGFloat = 0
+    }
+    
+    struct EventFormView {
+        static let bannerImageHeight: CGFloat = 150
+        static let creatingEventString: String = "Creating your event!"
+        static let savingChangesString: String = "Saving your changes!"
     }
     
     struct EventsGroupedListView {

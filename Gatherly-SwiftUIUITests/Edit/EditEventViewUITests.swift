@@ -7,7 +7,7 @@
 
 import XCTest
 
-final class EditEventViewUITests: GatherlyUITestCase {
+final class EditEventFormViewUITests: GatherlyUITestCase {
     
     override func setUpWithError() throws {
         try super.setUpWithError()
@@ -26,7 +26,7 @@ final class EditEventViewUITests: GatherlyUITestCase {
         editButton.tap()
     }
     
-    func testEditEventViewLoads() {
+    func testEditEventFormViewLoads() {
         XCTAssertTrue(app.navigationBars["Edit Event"].waitForExistence(timeout: 2))
     }
     
