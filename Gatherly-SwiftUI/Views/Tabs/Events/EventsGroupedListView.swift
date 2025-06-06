@@ -70,7 +70,11 @@ private extension EventsGroupedListView {
         ToolbarItem(placement: .navigationBarLeading) {
             if eventsGroupedListViewModel.shouldShowTodayButton(keys: keys) {
                 Button {
-                    eventsGroupedListViewModel.scrollToNearestAvailableDay(keys: keys, proxy: proxy)
+                    eventsGroupedListViewModel.scrollToNearestAvailableDay(
+                        keys: keys,
+                        proxy: proxy,
+                        iniatied: true
+                    )
                 } label: {
                     Image(systemName: "calendar.badge.clock.rtl")
                         .font(.headline)

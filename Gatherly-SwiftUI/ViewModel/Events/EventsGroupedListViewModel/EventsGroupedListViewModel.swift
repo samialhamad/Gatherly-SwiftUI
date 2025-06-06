@@ -10,6 +10,8 @@ import SwiftUI
 
 class EventsGroupedListViewModel: ObservableObject {
     
+    private var hasPerformedInitialScroll = false
+    
     func groupEventsByDay(events: [Event]) -> [Date: [Event]] {
         Dictionary(grouping: events, by: { Date.startOfDay($0.date) })
     }
@@ -19,9 +21,17 @@ class EventsGroupedListViewModel: ObservableObject {
         return !keys.contains(today) || keys.first != today
     }
     
-    func scrollToNearestAvailableDay(keys: [Date], proxy: ScrollViewProxy) {
-        let todayStart = Date.startOfDay(Date())
+    func scrollToNearestAvailableDay(
+        keys: [Date],
+        proxy: ScrollViewProxy,
+        iniatied: Bool = false
+    ) {
+        guard iniatied || !hasPerformedInitialScroll else {
+            return
+        }
 
+        let todayStart = Date.startOfDay(Date())
+        
         if let index = keys.firstIndex(where: { $0 >= todayStart }) {
             let scrollID = "header-\(keys[index])"
             DispatchQueue.main.async { [weak self] in
@@ -31,6 +41,10 @@ class EventsGroupedListViewModel: ObservableObject {
                 
                 proxy.scrollTo(scrollID, anchor: .top)
             }
+        }
+        
+        if !iniatied {
+            hasPerformedInitialScroll = true
         }
     }
 }
