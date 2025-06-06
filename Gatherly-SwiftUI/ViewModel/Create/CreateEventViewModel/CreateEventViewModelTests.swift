@@ -83,7 +83,7 @@ final class CreateEventViewModelTests: XCTestCase {
     
     // MARK: - startTime & endTime
     
-    func testStartTime_getterAndSetter_mergeWithSelectedDate() {
+    func testStartTime() {
         let calendar = Calendar.current
         
         let fixedDateComponents = DateComponents(year: 2025, month: 3, day: 5)
@@ -106,7 +106,7 @@ final class CreateEventViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.startTime, expectedMergedStart)
     }
     
-    func testEndTime_getterAndSetter_mergeWithSelectedDate() {
+    func testEndTime() {
         let calendar = Calendar.current
         
         let fixedDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
@@ -123,7 +123,7 @@ final class CreateEventViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.endTime, expectedMergedEnd)
     }
     
-    func testStartTime_getter_whenTimestampIsNil_returnsNow() {
+    func testStartTime_whenTimestampIsNil_returnsNow() {
         let viewModel = CreateEventViewModel()
         viewModel.event.startTimestamp = nil
         let startTime = viewModel.startTime
@@ -132,7 +132,7 @@ final class CreateEventViewModelTests: XCTestCase {
         XCTAssertLessThan(abs(startTime.timeIntervalSinceNow), 1.0)
     }
     
-    func testEndTime_getter_whenTimestampIsNil_returnsNow() {
+    func testEndTime_whenTimestampIsNil_returnsNow() {
         let viewModel = CreateEventViewModel()
         viewModel.event.endTimestamp = nil
         let endTime = viewModel.endTime
