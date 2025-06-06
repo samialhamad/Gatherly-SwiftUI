@@ -18,7 +18,6 @@ class EventFormViewModel: ObservableObject {
     @Published var selectedBannerImage: UIImage?
     @Published var selectedDate: Date
     
-    // if editing
     private let original: Event?
     let mode: EventFormMode
     
@@ -159,8 +158,8 @@ class EventFormViewModel: ObservableObject {
     }
     
     func removeBannerImage() {
-        if let name = event.bannerImageName {
-            ImageUtility.deleteImageFromDocuments(named: name)
+        if let bannerImageName = event.bannerImageName {
+            ImageUtility.deleteImageFromDocuments(named: bannerImageName)
         }
         selectedBannerImage = nil
         event.bannerImageName = nil

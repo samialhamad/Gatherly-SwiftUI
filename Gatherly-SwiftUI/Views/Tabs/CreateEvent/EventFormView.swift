@@ -15,7 +15,6 @@ struct EventFormView: View {
     @EnvironmentObject var navigationState: NavigationState
     @State private var showingDeleteAlert = false
     
-    // For edit mode
     private let onSave: ((Event) -> Void)?
     private let onCancel: (() -> Void)?
     private let onDelete: ((Event) -> Void)?
