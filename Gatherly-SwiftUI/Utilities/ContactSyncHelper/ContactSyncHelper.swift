@@ -35,12 +35,19 @@ enum ContactSyncHelper {
     }
     
     private static func mergeContactsIntoFriends(_ contacts: [SyncedContact], currentUserID: Int) async {
-            let (newUsers, newFriendIDs) = await generateUsersFromContacts(contacts)
-            appendUsersAndUpdateFriends(newUsers, newFriendIDs, currentUserID: currentUserID)
-            UserDefaultsManager.setDidSyncContacts(true)
-        }
+        let newUsers = await generateUsersFromContacts(contacts)
+        let newFriendIDs = newUsers.compactMap { $0.id }
+        
+        appendUsersAndUpdateFriends(
+            newUsers: newUsers,
+            newFriendIDs: newFriendIDs,
+            currentUserID: currentUserID
+        )
+        
+        UserDefaultsManager.setDidSyncContacts(true)
+    }
     
-    private static func generateUsersFromContacts(_ contacts: [SyncedContact]) async -> ([User], [Int]) {
+    private static func generateUsersFromContacts(_ contacts: [SyncedContact]) async -> [User] {
         let usersDict = UserDefaultsManager.loadUsers()
         
         let existingPhones = Set(
@@ -74,10 +81,10 @@ enum ContactSyncHelper {
             return await group.reduce(into: []) { $0.append($1) }
         }
         
-        return (results, results.compactMap { $0.id })
+        return results
     }
     
-    private static func appendUsersAndUpdateFriends(_ newUsers: [User], _ newFriendIDs: [Int], currentUserID: Int) {
+    private static func appendUsersAndUpdateFriends(newUsers: [User], newFriendIDs: [Int], currentUserID: Int) {
         var usersDict = UserDefaultsManager.loadUsers()
         
         let newUsersDict = newUsers.keyedBy(\.id)
