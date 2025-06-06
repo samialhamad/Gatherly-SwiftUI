@@ -46,7 +46,7 @@ struct EventFormView: View {
         onCancel: @escaping () -> Void,
         onDelete: @escaping (Event) -> Void
     ) {
-        let eventFormFiewModel = EventFormViewModel(mode: .edit, event: event)
+        let eventFormFiewModel = EventFormViewModel(mode: .edit(event: event))
         _eventFormFiewModel = StateObject(wrappedValue: eventFormFiewModel)
         self.onSave = onSave
         self.onCancel = onCancel
@@ -107,16 +107,14 @@ struct EventFormView: View {
                 }
                 .navigationTitle(eventFormFiewModel.mode == .create ? "Create Event" : "Edit Event")
                 .toolbar {
-                    if eventFormFiewModel.mode == .edit {
+                    if case .edit(_) = eventFormFiewModel.mode {
                         cancelToolbarButton
                         saveToolbarButton
                     }
                 }
                 .alert("Delete Event?", isPresented: $showingDeleteAlert) {
                     Button("Delete", role: .destructive) {
-                        if let original = eventFormFiewModel.originalEvent {
-                            onDelete?(original)
-                        }
+                        onDelete?(eventFormFiewModel.event)
                     }
                     Button("Cancel", role: .cancel) {}
                 } message: {

@@ -51,8 +51,6 @@ final class EventFormViewModelTests: XCTestCase {
     func testCreateMode_initialValues() {
         let viewModel = EventFormViewModel(mode: .create)
         
-        XCTAssertNil(viewModel.originalEvent)
-        
         XCTAssertNotNil(viewModel.event.startTimestamp)
         XCTAssertNotNil(viewModel.event.endTimestamp)
         XCTAssertEqual(viewModel.event.categories, [])
@@ -166,9 +164,9 @@ final class EventFormViewModelTests: XCTestCase {
     func testEditMode_initialValues() {
         var sampleEvent = makeSampleEvent()
         sampleEvent.bannerImageName = "nonexistent.jpg"
-        let viewModel = EventFormViewModel(mode: .edit, event: sampleEvent)
+        let viewModel = EventFormViewModel(mode: .edit(event: sampleEvent))
         
-        XCTAssertEqual(viewModel.originalEvent, sampleEvent)
+        XCTAssertEqual(viewModel.event, sampleEvent)
         
         XCTAssertEqual(viewModel.event.id, sampleEvent.id)
         XCTAssertEqual(viewModel.event.plannerID, sampleEvent.plannerID)
@@ -182,8 +180,8 @@ final class EventFormViewModelTests: XCTestCase {
     }
     
     func testIsFormEmpty_inEditMode() {
-        let sample = makeSampleEvent()
-        let viewModel = EventFormViewModel(mode: .edit, event: sample)
+        let sampleEvent = makeSampleEvent()
+        let viewModel = EventFormViewModel(mode: .edit(event: sampleEvent))
         
         XCTAssertFalse(viewModel.isFormEmpty)
         
@@ -195,14 +193,14 @@ final class EventFormViewModelTests: XCTestCase {
     }
     
     func testStartTime_andEndTime_inEditMode() {
-        var sample = makeSampleEvent()
+        var sampleEvent = makeSampleEvent()
         // override start and end timestamps to
         let startTimestamp = Int(fixedStartTime.timestamp)
         let endTimestamp = Int(fixedEndTime.timestamp)
-        sample.startTimestamp = startTimestamp
-        sample.endTimestamp = endTimestamp
+        sampleEvent.startTimestamp = startTimestamp
+        sampleEvent.endTimestamp = endTimestamp
         
-        let viewModel = EventFormViewModel(mode: .edit, event: sample)
+        let viewModel = EventFormViewModel(mode: .edit(event: sampleEvent))
         
         // selectedDate should be the day of fixedStartTime
         let expectedDayStart = Calendar.current.startOfDay(for: fixedStartTime)
@@ -230,7 +228,7 @@ final class EventFormViewModelTests: XCTestCase {
     func testStartTime_whenTimestampIsNil_returnsNow_inEditMode() {
         var sampleEvent = makeSampleEvent()
         sampleEvent.startTimestamp = nil
-        let viewModel = EventFormViewModel(mode: .edit, event: sampleEvent)
+        let viewModel = EventFormViewModel(mode: .edit(event: sampleEvent))
         
         let startTime = viewModel.startTime
         XCTAssertLessThan(abs(startTime.timeIntervalSinceNow), 1.0)
@@ -239,7 +237,7 @@ final class EventFormViewModelTests: XCTestCase {
     func testEndTime_whenTimestampIsNil_returnsNow_inEditMode() {
         var sampleEvent = makeSampleEvent()
         sampleEvent.endTimestamp = nil
-        let viewModel = EventFormViewModel(mode: .edit, event: sampleEvent)
+        let viewModel = EventFormViewModel(mode: .edit(event: sampleEvent))
         
         let endTime = viewModel.endTime
         XCTAssertLessThan(abs(endTime.timeIntervalSinceNow), 1.0)
@@ -249,7 +247,7 @@ final class EventFormViewModelTests: XCTestCase {
         var sampleEvent = makeSampleEvent()
         sampleEvent.bannerImageName = nil
         
-        let viewModel = EventFormViewModel(mode: .edit, event: sampleEvent)
+        let viewModel = EventFormViewModel(mode: .edit(event: sampleEvent))
         let dummyImage = UIImage(systemName: "star.fill")!
         viewModel.selectedBannerImage = dummyImage
         
@@ -261,7 +259,7 @@ final class EventFormViewModelTests: XCTestCase {
         var sampleEvent = makeSampleEvent()
         sampleEvent.bannerImageName = "dummy_banner.jpg"
         
-        let viewModel = EventFormViewModel(mode: .edit, event: sampleEvent)
+        let viewModel = EventFormViewModel(mode: .edit(event: sampleEvent))
         
         let updatedEvent = await viewModel.prepareUpdatedEvent()
         XCTAssertNil(updatedEvent.bannerImageName)
@@ -271,7 +269,7 @@ final class EventFormViewModelTests: XCTestCase {
         var sampleEvent = makeSampleEvent()
         sampleEvent.bannerImageName = "toBeDeleted.jpg"
         
-        let viewModel = EventFormViewModel(mode: .edit, event: sampleEvent)
+        let viewModel = EventFormViewModel(mode: .edit(event: sampleEvent))
         viewModel.selectedBannerImage = UIImage(systemName: "photo")!
         viewModel.event.bannerImageName = "toBeDeleted.jpg"
         
@@ -283,7 +281,7 @@ final class EventFormViewModelTests: XCTestCase {
     
     func testPlannerID_reflectsEventPlannerID_inEditMode() {
         let sampleEvent = makeSampleEvent()
-        let viewModel = EventFormViewModel(mode: .edit, event: sampleEvent)
+        let viewModel = EventFormViewModel(mode: .edit(event: sampleEvent))
         
         XCTAssertEqual(viewModel.plannerID, sampleEvent.plannerID)
     }
