@@ -96,7 +96,7 @@ extension FriendsView {
     }
     
     var createGroupSheet: some View {
-        CreateGroupView(currentUserID: SampleData.currentUserID)
+        GroupFormView(currentUserID: SampleData.currentUserID)
     }
     
     struct pickerView: View {

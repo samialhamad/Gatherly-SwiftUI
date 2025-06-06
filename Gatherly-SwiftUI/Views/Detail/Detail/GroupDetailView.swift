@@ -88,23 +88,22 @@ private extension GroupDetailView {
     // MARK: - Subviews
     
     var editGroupSheet: some View {
-        if let group {
-            return AnyView(EditGroupView(
-                editGroupViewModel: EditGroupViewModel(group: group),
-                friendsDict: friendsDict,
-                onSave: { _ in
-                    isShowingEditView = false
-                },
-                onCancel: { isShowingEditView = false },
-                onDelete: { deletedGroup in
-                    groupsViewModel.delete(deletedGroup)
-                    isShowingEditView = false
-                    dismiss()
-                }
-            ))
-        } else {
-            return AnyView(EmptyView())
-        }
+        let originalGroup = group!
+        return GroupFormView(
+            existingGroup: originalGroup,
+            onSave: { savedGroup in
+                groupsViewModel.update(savedGroup)
+                isShowingEditView = false
+            },
+            onCancel: {
+                isShowingEditView = false
+            },
+            onDelete: { groupToDelete in
+                groupsViewModel.delete(groupToDelete)
+                isShowingEditView = false
+                dismiss()
+            }
+        )
     }
     
     var groupLeaderAndMembersView: some View {

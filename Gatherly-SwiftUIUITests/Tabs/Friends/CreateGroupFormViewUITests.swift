@@ -1,5 +1,5 @@
 //
-//  CreateGroupViewUITests.swift
+//  CreateGroupFormViewUITests.swift
 //  Gatherly-SwiftUI
 //
 //  Created by Sami Alhamad on 5/19/25.
@@ -7,7 +7,7 @@
 
 import XCTest
 
-final class CreateGroupViewUITests: GatherlyUITestCase {
+final class CreateGroupFormViewUITests: GatherlyUITestCase {
     
     override func setUpWithError() throws {
         try super.setUpWithError()

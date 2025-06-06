@@ -50,21 +50,11 @@ struct Constants {
     struct ContentView {
         static let loadingString: String = "Gathering!"
     }
-   
-    struct CreateGroupView {
-        static let creatingGroupString: String = "Creating your group!"
-        static let groupImageHeight: CGFloat = 100
-        static let groupBannerImageHeight: CGFloat = 150
-    }
     
     struct DotsLoader {
         static let circleHeight: CGFloat = 12
         static let circleWidth: CGFloat = 12
         static let hstackSpacing: CGFloat = 8
-    }
-    
-    struct EditGroupView {
-        static let savingChangesString: String = "Saving your changes!"
     }
     
     struct EventCategoryIcon {
@@ -135,6 +125,13 @@ struct Constants {
     struct GroupDetailView {
         static let topPadding: CGFloat = 10
         static let vstackSpacing: CGFloat = 16
+    }
+    
+    struct GroupFormView {
+        static let creatingGroupString: String = "Creating your group!"
+        static let groupImageHeight: CGFloat = 100
+        static let groupBannerImageHeight: CGFloat = 150
+        static let savingChangesString: String = "Saving your changes!"
     }
     
     struct GroupsListView {

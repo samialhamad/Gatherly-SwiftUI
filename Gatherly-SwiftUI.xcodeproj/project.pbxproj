@@ -70,13 +70,13 @@
 				Utilities/ContactSyncManager/ContactSyncManagerTests.swift,
 				Utilities/ImageUtility/ImageUtilityTests.swift,
 				Utilities/UserDefaultsManager/UserDefaultsManagerTests.swift,
-				ViewModel/Edit/EditGroupViewModel/EditGroupViewModelTests.swift,
 				ViewModel/Environments/EventsViewModel/EventsViewModelTests.swift,
 				ViewModel/Environments/GroupsViewModel/GroupsViewModelTests.swift,
 				ViewModel/Environments/UsersViewModel/UsersViewModelTests.swift,
 				ViewModel/EventForm/EventFormViewModelTests.swift,
 				ViewModel/Events/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
 				ViewModel/Events/GatherlyCalendarViewModel/GatherlyCalendarViewModelTests.swift,
+				ViewModel/GroupForm/GroupFormViewModelTests.swift,
 				Views/Detail/Edit/UserFormView/UserFormViewTests.swift,
 			);
 			target = F11CDC2F2D77958B007BC1F1 /* Gatherly-SwiftUITests */;
@@ -113,8 +113,6 @@
 				Utilities/ContactSyncManager/ContactSyncManagerTests.swift,
 				Utilities/ImageUtility/ImageUtilityTests.swift,
 				Utilities/UserDefaultsManager/UserDefaultsManagerTests.swift,
-				ViewModel/Create/CreateGroupViewModel/CreateGroupViewModelTests.swift,
-				ViewModel/Edit/EditGroupViewModel/EditGroupViewModelTests.swift,
 				ViewModel/Environments/EventsViewModel/EventsViewModelTests.swift,
 				ViewModel/Environments/GroupsViewModel/GroupsViewModelTests.swift,
 				ViewModel/Environments/UsersViewModel/UsersViewModelTests.swift,
@@ -122,6 +120,7 @@
 				ViewModel/Events/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
 				ViewModel/Events/GatherlyCalendarViewModel/GatherlyCalendarViewModelTests.swift,
 				ViewModel/Friends/FriendsListViewModel/FriendsListViewModelTests.swift,
+				ViewModel/GroupForm/GroupFormViewModelTests.swift,
 				Views/Detail/Edit/UserFormView/UserFormViewTests.swift,
 			);
 			target = F11CDC1F2D77958A007BC1F1 /* Gatherly-SwiftUI */;

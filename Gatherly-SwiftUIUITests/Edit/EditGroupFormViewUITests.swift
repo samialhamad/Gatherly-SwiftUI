@@ -1,5 +1,5 @@
 //
-//  EditGroupViewUITests.swift
+//  EditGroupFormViewUITests.swift
 //  Gatherly-SwiftUI
 //
 //  Created by Sami Alhamad on 5/20/25.
@@ -7,7 +7,7 @@
 
 import XCTest
 
-final class EditGroupViewUITests: GatherlyUITestCase {
+final class EditGroupFormViewUITests: GatherlyUITestCase {
     
     override func setUpWithError() throws {
         try super.setUpWithError()
@@ -24,14 +24,14 @@ final class EditGroupViewUITests: GatherlyUITestCase {
         editButton.tap()
     }
     
-    func testEditGroupViewLoads() {
+    func testEditGroupFormViewLoads() {
         XCTAssertTrue(app.navigationBars["Edit Group"].waitForExistence(timeout: 2))
     }
     
     // MARK: - Save Button
     
     func testSaveButtonIsDisabledWhenNameIsEmpty() {
-        let nameField = app.textFields["editGroupNameTextField"]
+        let nameField = app.textFields["groupNameTextField"]
         XCTAssertTrue(nameField.waitForExistence(timeout: 2))
         
         nameField.tap()
@@ -46,7 +46,7 @@ final class EditGroupViewUITests: GatherlyUITestCase {
     }
     
     func testSaveButtonIsEnabledWhenNameIsPopulated() {
-        let nameField = app.textFields["editGroupNameTextField"]
+        let nameField = app.textFields["groupNameTextField"]
         XCTAssertTrue(nameField.waitForExistence(timeout: 2))
         nameField.tap()
         nameField.clearAndEnterText("Updated Group Name")
@@ -64,7 +64,7 @@ final class EditGroupViewUITests: GatherlyUITestCase {
     func testSaveGroupUpdatesGroupDetailTitle() {
         let updatedName = "Edited Test Group"
         
-        let nameField = app.textFields["editGroupNameTextField"]
+        let nameField = app.textFields["groupNameTextField"]
         XCTAssertTrue(nameField.waitForExistence(timeout: 2))
         nameField.tap()
         nameField.clearAndEnterText(updatedName)

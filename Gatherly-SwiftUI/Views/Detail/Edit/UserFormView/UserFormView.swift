@@ -101,7 +101,7 @@ extension UserFormView {
         Group {
             ImagePicker(
                 title: "Avatar Image",
-                imageHeight: Constants.CreateGroupView.groupImageHeight,
+                imageHeight: Constants.GroupFormView.groupImageHeight,
                 maskShape: .circle,
                 selectedImage: viewStore.binding(
                     get: \.avatarImage,
@@ -111,7 +111,7 @@ extension UserFormView {
             
             ImagePicker(
                 title: "Banner Image",
-                imageHeight: Constants.CreateGroupView.groupBannerImageHeight,
+                imageHeight: Constants.GroupFormView.groupBannerImageHeight,
                 maskShape: .rectangle,
                 selectedImage: viewStore.binding(
                     get: \.bannerImage,
