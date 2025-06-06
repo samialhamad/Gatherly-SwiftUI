@@ -13,7 +13,7 @@ class GroupFormViewModel: ObservableObject {
     @Published var selectedBannerImage: UIImage?
     @Published var selectedGroupImage: UIImage?
     
-    private let currentUserID: Int?
+    private let currentUserID: Int
     let mode: Mode
     
     enum Mode: Equatable {
@@ -23,19 +23,17 @@ class GroupFormViewModel: ObservableObject {
     
     init(
         mode: Mode,
-        currentUserID: Int? = nil,
-        existingGroup: UserGroup? = nil
+        currentUserID: Int,
+        group: UserGroup? = nil
     ) {
         self.mode = mode
+        self.currentUserID = currentUserID
         
         switch mode {
         case .create:
-            let leaderID = currentUserID ?? 1
-            self.currentUserID = currentUserID
-            
             self.group = UserGroup(
                 id: nil,
-                leaderID: leaderID,
+                leaderID: currentUserID,
                 memberIDs: [],
                 messages: [],
                 name: nil
@@ -43,7 +41,6 @@ class GroupFormViewModel: ObservableObject {
             
         case .edit(let group):
             self.group = group
-            self.currentUserID = currentUserID
             
             if let groupImageName = group.imageName {
                 self.selectedGroupImage = ImageUtility.loadImageFromDocuments(named: groupImageName)
@@ -68,16 +65,16 @@ class GroupFormViewModel: ObservableObject {
     // MARK: – Remove Images
     
     func removeGroupImage() {
-        if let oldImage = group.imageName {
-            ImageUtility.deleteImageFromDocuments(named: oldImage)
+        if let imageName = group.imageName {
+            ImageUtility.deleteImageFromDocuments(named: imageName)
         }
         selectedGroupImage = nil
         group.imageName = nil
     }
     
     func removeBannerImage() {
-        if let oldBannerImageName = group.bannerImageName {
-            ImageUtility.deleteImageFromDocuments(named: oldBannerImageName)
+        if let bannerImageName = group.bannerImageName {
+            ImageUtility.deleteImageFromDocuments(named: bannerImageName)
         }
         selectedBannerImage = nil
         group.bannerImageName = nil

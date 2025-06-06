@@ -56,7 +56,7 @@ final class GroupFormViewModelTests: XCTestCase {
             memberIDs: [2, 3],
             name: "Original"
         )
-        let viewModel = GroupFormViewModel(mode: .edit(group: originalGroup))
+        let viewModel = GroupFormViewModel(mode: .edit(group: originalGroup), currentUserID: 1)
         
         XCTAssertFalse(viewModel.isFormEmpty)
         
@@ -74,7 +74,7 @@ final class GroupFormViewModelTests: XCTestCase {
         originalGroup.imageName = "oldImage.png"
         originalGroup.bannerImageName = "oldBanner.png"
         
-        let viewModel = GroupFormViewModel(mode: .edit(group: originalGroup))
+        let viewModel = GroupFormViewModel(mode: .edit(group: originalGroup), currentUserID: 1)
         
         viewModel.selectedGroupImage = UIImage(systemName: "person.fill")
         viewModel.selectedBannerImage = UIImage(systemName: "star")
@@ -95,7 +95,7 @@ final class GroupFormViewModelTests: XCTestCase {
             memberIDs: [4,5],
             name: "EditMe"
         )
-        let viewModel = GroupFormViewModel(mode: .edit(group: originalGroup))
+        let viewModel = GroupFormViewModel(mode: .edit(group: originalGroup), currentUserID: 1)
         
         viewModel.selectedGroupImage = UIImage(systemName: "pencil.circle")
         viewModel.selectedBannerImage = UIImage(systemName: "sun.max.fill")

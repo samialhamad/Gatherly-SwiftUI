@@ -89,8 +89,11 @@ private extension GroupDetailView {
     
     var editGroupSheet: some View {
         let originalGroup = group!
+        let currentUserID = usersViewModel.currentUser?.id ?? SampleData.currentUserID
+        
         return GroupFormView(
             group: originalGroup,
+            currentUserID: currentUserID,
             onSave: { savedGroup in
                 groupsViewModel.update(savedGroup)
                 isShowingEditView = false

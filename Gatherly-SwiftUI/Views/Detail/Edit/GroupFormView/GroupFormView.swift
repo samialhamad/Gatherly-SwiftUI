@@ -34,11 +34,15 @@ struct GroupFormView: View {
     // edit mode init
     init(
         group: UserGroup,
+        currentUserID: Int,
         onSave: @escaping (UserGroup) -> Void,
         onCancel: @escaping () -> Void,
         onDelete: @escaping (UserGroup) -> Void
     ) {
-        let groupFormViewModel = GroupFormViewModel(mode: .edit( group: group))
+        let groupFormViewModel = GroupFormViewModel(
+            mode: .edit(group: group),
+            currentUserID: currentUserID
+        )
         _groupFormViewModel = StateObject(wrappedValue: groupFormViewModel)
         
         self.onSave = onSave
