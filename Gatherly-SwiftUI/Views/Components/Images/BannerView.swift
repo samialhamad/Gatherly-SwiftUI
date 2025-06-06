@@ -14,7 +14,7 @@ struct BannerView: View {
     var image: UIImage?
 
     var body: some View {
-        if let image = image {
+        if let image {
             Image(uiImage: image)
                 .resizable()
                 .scaledToFill()
