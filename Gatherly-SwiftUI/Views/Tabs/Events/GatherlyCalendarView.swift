@@ -46,6 +46,7 @@ struct GatherlyCalendarView: View {
             dayEventsViewButton
                 .frame(height: Constants.GatherlyCalendarView.dayEventsViewButtonFrameHeight)
         }
+        .refreshOnAppear()
         .padding(.horizontal)
         .navigationDestination(isPresented: $isShowingDayEvents) {
             DayEventsView()
