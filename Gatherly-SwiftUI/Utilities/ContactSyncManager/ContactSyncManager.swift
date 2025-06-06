@@ -11,6 +11,7 @@ struct SyncedContact: Equatable {
     let firstName: String
     let lastName: String
     let phoneNumber: String
+    let imageData: Data?
 }
 
 class ContactSyncManager {
@@ -35,7 +36,8 @@ class ContactSyncManager {
                 let keys: [CNKeyDescriptor] = [
                     CNContactGivenNameKey as CNKeyDescriptor, // first name
                     CNContactFamilyNameKey as CNKeyDescriptor, // last name
-                    CNContactPhoneNumbersKey as CNKeyDescriptor
+                    CNContactPhoneNumbersKey as CNKeyDescriptor,
+                    CNContactThumbnailImageDataKey as CNKeyDescriptor // thumbnail image
                 ]
 
                 let request = CNContactFetchRequest(keysToFetch: keys)
@@ -67,11 +69,15 @@ class ContactSyncManager {
                 let raw = number.value.stringValue
                 let digits = raw.filter(\.isWholeNumber)
                 if !digits.isEmpty {
-                    results.append(SyncedContact(
+                    let imageData: Data? = contact.thumbnailImageData
+
+                    let contact = SyncedContact(
                         firstName: firstName,
                         lastName: lastName,
-                        phoneNumber: digits
-                    ))
+                        phoneNumber: digits,
+                        imageData: imageData
+                    )
+                    results.append(contact)
                 }
             }
         }

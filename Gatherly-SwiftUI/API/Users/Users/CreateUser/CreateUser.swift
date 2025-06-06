@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import UIKit
 
 extension GatherlyAPI {
     
@@ -31,6 +32,8 @@ extension GatherlyAPI {
     
     static func createUser(from contact: SyncedContact, id: Int) async -> User {
         let user = User(
+            avatarImageName: nil,
+            bannerImageName: nil,
             createdTimestamp: Int(Date().timestamp),
             eventIDs: [],
             firstName: contact.firstName,
@@ -40,6 +43,14 @@ extension GatherlyAPI {
             lastName: contact.lastName,
             phone: contact.phoneNumber
         )
+        
+        if let imageData = contact.imageData,
+           let contactImage = UIImage(data: imageData)
+        {
+            if let avatarImageName = ImageUtility.saveImageToDocuments(image: contactImage) {
+                user.avatarImageName = avatarImageName
+            }
+        }
         
         return await withCheckedContinuation { continuation in
             var cancellable: AnyCancellable?

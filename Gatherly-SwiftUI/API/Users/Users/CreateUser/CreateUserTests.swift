@@ -75,7 +75,8 @@ final class CreateUserTests: XCTestCase {
         let contact = SyncedContact(
             firstName: "User",
             lastName: "Example",
-            phoneNumber: "5551234567"
+            phoneNumber: "5551234567",
+            imageData: nil
         )
         let newUser = await GatherlyAPI.createUser(from: contact, id: 99)
         
