@@ -8,13 +8,18 @@
 import SwiftUI
 
 struct AvatarView: View {
+    
+    enum Mode {
+        case user(User)
+        case group(UserGroup)
+    }
+    
     let backgroundColor: Color
     let borderColor: Color?
     let borderWidth: CGFloat?
     let font: Font
-    let group: UserGroup?
     let size: CGFloat
-    let user: User?
+    private let mode: Mode?
     
     init(
         backgroundColor: Color = Color(Colors.primary),
@@ -29,9 +34,15 @@ struct AvatarView: View {
         self.borderColor = borderColor
         self.borderWidth = borderWidth
         self.font = font
-        self.group = group
         self.size = size
-        self.user = user
+        
+        if let user {
+            self.mode = .user(user)
+        } else if let group {
+            self.mode = .group(group)
+        } else {
+            self.mode = nil
+        }
     }
     
     var body: some View {
@@ -48,27 +59,45 @@ private extension AvatarView {
     // MARK: - Computed vars
     
     private var initials: String {
-        if let user {
-            let firstInitial = user.firstName?.first.map(String.init) ?? ""
-            let lastInitial = user.lastName?.first.map(String.init) ?? ""
-            return firstInitial + lastInitial
-        } else if let groupName = group?.name, let firstChar = groupName.first {
-            return String(firstChar).uppercased()
-        } else {
+        guard let mode else {
             return ""
+        }
+        
+        switch mode {
+        case .user(let user):
+            let firstInitial = user.firstName?.first.map(String.init) ?? ""
+            let lastInitial  = user.lastName?.first.map(String.init)  ?? ""
+            return firstInitial + lastInitial
+            
+        case .group(let group):
+            guard let firstChar = group.name?.first else {
+                return ""
+            }
+            
+            return String(firstChar).uppercased()
         }
     }
     
     private var profileImage: UIImage? {
-        if let user, let imageName = user.avatarImageName {
-            return ImageUtility.loadImageFromDocuments(named: imageName)
+        guard let mode = mode else {
+            return nil
         }
         
-        if let group, let imageName = group.imageName {
+        switch mode {
+        case .user(let user):
+            guard let imageName = user.avatarImageName else {
+                return nil
+            }
+            
+            return ImageUtility.loadImageFromDocuments(named: imageName)
+            
+        case .group(let group):
+            guard let imageName = group.imageName else {
+                return nil
+            }
+            
             return ImageUtility.loadImageFromDocuments(named: imageName)
         }
-        
-        return nil
     }
     
     // MARK: - Subviews
