@@ -55,18 +55,15 @@ private extension AvatarHeaderView {
     // MARK: - Computed Vars
     
     private var profileImage: UIImage? {
-        if let user, let imageName = user.avatarImageName {
-            return ImageUtility.loadImageFromDocuments(named: imageName)
-        }
-        if let group, let imageName = group.imageName {
-            return ImageUtility.loadImageFromDocuments(named: imageName)
+        if let avatarImageName = user?.avatarImageName ?? group?.imageName {
+            return ImageUtility.loadImageFromDocuments(named: avatarImageName)
         }
         return nil
     }
     
     private var bannerImage: UIImage? {
-        if let name = user?.bannerImageName ?? group?.bannerImageName {
-            return ImageUtility.loadImageFromDocuments(named: name)
+        if let bannerImageName = user?.bannerImageName ?? group?.bannerImageName {
+            return ImageUtility.loadImageFromDocuments(named: bannerImageName)
         }
         return nil
     }
