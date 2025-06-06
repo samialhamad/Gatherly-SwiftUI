@@ -90,7 +90,7 @@ private extension GroupDetailView {
     var editGroupSheet: some View {
         let originalGroup = group!
         return GroupFormView(
-            existingGroup: originalGroup,
+            group: originalGroup,
             onSave: { savedGroup in
                 groupsViewModel.update(savedGroup)
                 isShowingEditView = false

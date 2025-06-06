@@ -33,12 +33,12 @@ struct GroupFormView: View {
     
     // edit mode init
     init(
-        existingGroup: UserGroup,
+        group: UserGroup,
         onSave: @escaping (UserGroup) -> Void,
         onCancel: @escaping () -> Void,
         onDelete: @escaping (UserGroup) -> Void
     ) {
-        let groupFormViewModel = GroupFormViewModel(mode: .edit, existingGroup: existingGroup)
+        let groupFormViewModel = GroupFormViewModel(mode: .edit( group: group))
         _groupFormViewModel = StateObject(wrappedValue: groupFormViewModel)
         
         self.onSave = onSave
@@ -59,14 +59,14 @@ struct GroupFormView: View {
                         title: "Group Image",
                         imageHeight: Constants.GroupFormView.groupImageHeight,
                         maskShape: .circle,
-                        selectedImage: $groupFormViewModel.groupImage
+                        selectedImage: $groupFormViewModel.selectedGroupImage
                     )
                     
                     ImagePicker(
                         title: "Banner Image",
                         imageHeight: Constants.GroupFormView.groupBannerImageHeight,
                         maskShape: .rectangle,
-                        selectedImage: $groupFormViewModel.bannerImage
+                        selectedImage: $groupFormViewModel.selectedBannerImage
                     )
                     
                     EventMembersSection(
@@ -86,15 +86,13 @@ struct GroupFormView: View {
                 .toolbar {
                     cancelToolbarItem
                     
-                    if groupFormViewModel.mode == .edit {
+                    if case .edit(_) = groupFormViewModel.mode {
                         saveToolbarItem
                     }
                 }
                 .alert("Delete Group?", isPresented: $showingDeleteAlert) {
                     Button("Delete", role: .destructive) {
-                        if let original = groupFormViewModel.originalGroup {
-                            onDelete?(original)
-                        }
+                        onDelete?(groupFormViewModel.group)
                     }
                     Button("Cancel", role: .cancel) { }
                 } message: {
@@ -153,7 +151,7 @@ struct GroupFormView: View {
                 isSaving = true
                 
                 Task {
-                    let preparedGroup = await groupFormViewModel.prepareGroup()
+                    let preparedGroup = await groupFormViewModel.prepareUpdatedGroup()
                     groupsViewModel.update(preparedGroup)
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -183,7 +181,7 @@ struct GroupFormView: View {
                 isSaving = true
                 
                 Task {
-                    let newGroup = await groupFormViewModel.prepareGroup()
+                    let newGroup = await groupFormViewModel.prepareUpdatedGroup()
                     groupsViewModel.create(newGroup) { createdGroup in
                         navigationState.navigateToGroup = createdGroup
                         navigationState.switchToTab(.friends)

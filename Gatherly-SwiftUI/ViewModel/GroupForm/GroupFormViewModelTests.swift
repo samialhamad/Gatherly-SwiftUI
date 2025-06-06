@@ -36,10 +36,10 @@ final class GroupFormViewModelTests: XCTestCase {
         viewModel.group.name = "Test Group"
         viewModel.group.memberIDs = [2, 3]
         
-        viewModel.groupImage = UIImage(systemName: "person.circle")
-        viewModel.bannerImage = UIImage(systemName: "star.fill")
+        viewModel.selectedGroupImage = UIImage(systemName: "person.circle")
+        viewModel.selectedBannerImage = UIImage(systemName: "star.fill")
         
-        let preparedGroup = await viewModel.prepareGroup()
+        let preparedGroup = await viewModel.prepareUpdatedGroup()
         XCTAssertEqual(preparedGroup.name, "Test Group")
         XCTAssertEqual(Set(preparedGroup.memberIDs), Set([2, 3]))
         XCTAssertEqual(preparedGroup.leaderID, 5)
@@ -50,13 +50,13 @@ final class GroupFormViewModelTests: XCTestCase {
     // MARK: - Edit Mode
     
     func testEditIsFormEmpty() {
-        let original = UserGroup(
+        let originalGroup = UserGroup(
             id: 100,
             leaderID: 2,
             memberIDs: [2, 3],
             name: "Original"
         )
-        let viewModel = GroupFormViewModel(mode: .edit, existingGroup: original)
+        let viewModel = GroupFormViewModel(mode: .edit(group: originalGroup))
         
         XCTAssertFalse(viewModel.isFormEmpty)
         
@@ -74,17 +74,17 @@ final class GroupFormViewModelTests: XCTestCase {
         originalGroup.imageName = "oldImage.png"
         originalGroup.bannerImageName = "oldBanner.png"
         
-        let viewModel = GroupFormViewModel(mode: .edit, existingGroup: originalGroup)
+        let viewModel = GroupFormViewModel(mode: .edit(group: originalGroup))
         
-        viewModel.groupImage = UIImage(systemName: "person.fill")
-        viewModel.bannerImage = UIImage(systemName: "star")
+        viewModel.selectedGroupImage = UIImage(systemName: "person.fill")
+        viewModel.selectedBannerImage = UIImage(systemName: "star")
         
         viewModel.removeGroupImage()
-        XCTAssertNil(viewModel.groupImage)
+        XCTAssertNil(viewModel.selectedGroupImage)
         XCTAssertNil(viewModel.group.imageName)
         
         viewModel.removeBannerImage()
-        XCTAssertNil(viewModel.bannerImage)
+        XCTAssertNil(viewModel.selectedBannerImage)
         XCTAssertNil(viewModel.group.bannerImageName)
     }
     
@@ -95,12 +95,12 @@ final class GroupFormViewModelTests: XCTestCase {
             memberIDs: [4,5],
             name: "EditMe"
         )
-        let viewModel = GroupFormViewModel(mode: .edit, existingGroup: originalGroup)
+        let viewModel = GroupFormViewModel(mode: .edit(group: originalGroup))
         
-        viewModel.groupImage = UIImage(systemName: "pencil.circle")
-        viewModel.bannerImage = UIImage(systemName: "sun.max.fill")
+        viewModel.selectedGroupImage = UIImage(systemName: "pencil.circle")
+        viewModel.selectedBannerImage = UIImage(systemName: "sun.max.fill")
         
-        let preparedGroup = await viewModel.prepareGroup()
+        let preparedGroup = await viewModel.prepareUpdatedGroup()
         XCTAssertNotNil(preparedGroup.imageName)
         XCTAssertNotNil(preparedGroup.bannerImageName)
     }
