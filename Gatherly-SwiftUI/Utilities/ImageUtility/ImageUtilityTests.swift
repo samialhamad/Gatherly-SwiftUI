@@ -11,7 +11,7 @@ import UIKit
 
 final class ImageUtilityTests: XCTestCase {
     
-    func testSaveImage() {
+    func testSaveAndLoadImage() {
         let image = UIImage(systemName: "star")!
         
         guard let filename = ImageUtility.saveImageToDocuments(image: image) else {
@@ -19,10 +19,9 @@ final class ImageUtilityTests: XCTestCase {
             return
         }
         
-        let fileURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent(filename)
-        let fileExists = FileManager.default.fileExists(atPath: fileURL.path)
+        let loadedImage = ImageUtility.loadImageFromDocuments(named: filename)
         
-        XCTAssertTrue(fileExists)
+        XCTAssertNotNil(loadedImage)
     }
     
     func testDeleteImage() {
