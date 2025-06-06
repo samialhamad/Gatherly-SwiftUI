@@ -70,6 +70,7 @@
 				Utilities/ContactSyncManager/ContactSyncManagerTests.swift,
 				Utilities/ImageUtility/ImageUtilityTests.swift,
 				Utilities/UserDefaultsManager/UserDefaultsManagerTests.swift,
+				ViewModel/Create/CreateEventViewModel/CreateEventViewModelTests.swift,
 				ViewModel/Edit/EditEventViewModel/EditEventViewModelTests.swift,
 				ViewModel/Edit/EditGroupViewModel/EditGroupViewModelTests.swift,
 				ViewModel/Environments/EventsViewModel/EventsViewModelTests.swift,
