@@ -95,10 +95,10 @@ enum ContactSyncHelper {
                 
         // update currentUser's friend list
         if var currentUser = UserDefaultsManager.loadCurrentUser() {
-            let existingFriends = currentUser.friendIDs ?? []
-            let combinedFriends = Set(existingFriends + newFriendIDs)
+            let existingFriendIDs = currentUser.friendIDs ?? []
+            let combinedFriendIDs = Set(existingFriendIDs + newFriendIDs)
             
-            currentUser.friendIDs = Array(combinedFriends).sorted()
+            currentUser.friendIDs = Array(combinedFriendIDs).sorted()
             usersDict[currentUserID] = currentUser
 
             UserDefaultsManager.saveCurrentUser(currentUser)
