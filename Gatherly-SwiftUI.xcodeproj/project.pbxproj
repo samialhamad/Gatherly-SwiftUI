@@ -76,6 +76,7 @@
 				ViewModel/EventForm/EventFormViewModelTests.swift,
 				ViewModel/Events/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
 				ViewModel/Events/GatherlyCalendarViewModel/GatherlyCalendarViewModelTests.swift,
+				ViewModel/Friends/FriendsListViewModel/FriendsListViewModelTests.swift,
 				ViewModel/GroupForm/GroupFormViewModelTests.swift,
 				Views/Detail/Edit/UserFormView/UserFormViewTests.swift,
 			);

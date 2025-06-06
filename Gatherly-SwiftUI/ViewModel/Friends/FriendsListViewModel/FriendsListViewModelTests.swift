@@ -23,7 +23,7 @@ final class FriendsListViewModelTests: XCTestCase {
     
     func testFilteredFriends() {
         let viewModel = FriendsListViewModel()
-        let searchText = "two"
+        let searchText = "tw"
         
         let filtered = viewModel.filteredFriends(from: sampleFriends(), searchText: searchText)
         
