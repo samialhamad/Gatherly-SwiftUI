@@ -9,7 +9,7 @@ import SwiftUI
 import PhotosUI
 
 struct EventFormView: View {
-    @StateObject private var eventFormFiewModel: EventFormViewModel
+    @StateObject private var eventFormViewModel: EventFormViewModel
     @EnvironmentObject var eventsViewModel: EventsViewModel
     @State private var isSaving = false
     @EnvironmentObject var navigationState: NavigationState
@@ -21,8 +21,8 @@ struct EventFormView: View {
     
     // create mode init
     init() {
-        let eventFormFiewModel = EventFormViewModel(mode: .create, event: nil)
-        _eventFormFiewModel = StateObject(wrappedValue: eventFormFiewModel)
+        let eventFormViewModel = EventFormViewModel(mode: .create, event: nil)
+        _eventFormViewModel = StateObject(wrappedValue: eventFormViewModel)
         onSave = nil
         onCancel = nil
         onDelete = nil
@@ -31,9 +31,9 @@ struct EventFormView: View {
     // create mode init with date passed from DayEventsView
     
     init(date: Date) {
-        let eventFormFiewModel = EventFormViewModel(mode: .create, event: nil)
-        eventFormFiewModel.selectedDate = Date.startOfDay(date)
-        _eventFormFiewModel = StateObject(wrappedValue: eventFormFiewModel)
+        let eventFormViewModel = EventFormViewModel(mode: .create, event: nil)
+        eventFormViewModel.selectedDate = Date.startOfDay(date)
+        _eventFormViewModel = StateObject(wrappedValue: eventFormViewModel)
         onSave = nil
         onCancel = nil
         onDelete = nil
@@ -46,8 +46,8 @@ struct EventFormView: View {
         onCancel: @escaping () -> Void,
         onDelete: @escaping (Event) -> Void
     ) {
-        let eventFormFiewModel = EventFormViewModel(mode: .edit(event: event))
-        _eventFormFiewModel = StateObject(wrappedValue: eventFormFiewModel)
+        let eventFormViewModel = EventFormViewModel(mode: .edit(event: event))
+        _eventFormViewModel = StateObject(wrappedValue: eventFormViewModel)
         self.onSave = onSave
         self.onCancel = onCancel
         self.onDelete = onDelete
@@ -69,8 +69,8 @@ struct EventFormView: View {
                         eventDate: eventDateBinding,
                         startTime: startTimeBinding,
                         endTime: endTimeBinding,
-                        startTimeRange: eventFormFiewModel.startTimeRange,
-                        endTimeRange: eventFormFiewModel.endTimeRange
+                        startTimeRange: eventFormViewModel.startTimeRange,
+                        endTimeRange: eventFormViewModel.endTimeRange
                     )
                     
                     EventMembersSection(
@@ -82,7 +82,7 @@ struct EventFormView: View {
                         header: "Location",
                         locationName: locationNameBinding
                     ) { location in
-                        eventFormFiewModel.event.location = location
+                        eventFormViewModel.event.location = location
                     }
                     
                     EventCategorySection(
@@ -92,29 +92,29 @@ struct EventFormView: View {
                     
                     ImagePicker(
                         title: "Banner Image",
-                        imageHeight: eventFormFiewModel.mode == .create
+                        imageHeight: eventFormViewModel.mode == .create
                         ? Constants.EventFormView.bannerImageHeight
                         : Constants.EventFormView.bannerImageHeight,
                         maskShape: .rectangle,
-                        selectedImage: $eventFormFiewModel.selectedBannerImage
+                        selectedImage: $eventFormViewModel.selectedBannerImage
                     )
                     
-                    if eventFormFiewModel.mode == .create {
+                    if eventFormViewModel.mode == .create {
                         createButtonSection
                     } else {
                         deleteButtonSection
                     }
                 }
-                .navigationTitle(eventFormFiewModel.mode == .create ? "Create Event" : "Edit Event")
+                .navigationTitle(eventFormViewModel.mode == .create ? "Create Event" : "Edit Event")
                 .toolbar {
-                    if case .edit(_) = eventFormFiewModel.mode {
+                    if case .edit(_) = eventFormViewModel.mode {
                         cancelToolbarButton
                         saveToolbarButton
                     }
                 }
                 .alert("Delete Event?", isPresented: $showingDeleteAlert) {
                     Button("Delete", role: .destructive) {
-                        onDelete?(eventFormFiewModel.event)
+                        onDelete?(eventFormViewModel.event)
                     }
                     Button("Cancel", role: .cancel) {}
                 } message: {
@@ -124,7 +124,7 @@ struct EventFormView: View {
             
             if isSaving {
                 ActivityIndicator(
-                    message: eventFormFiewModel.mode == .create
+                    message: eventFormViewModel.mode == .create
                     ? Constants.EventFormView.creatingEventString
                     : Constants.EventFormView.savingChangesString
                 )
@@ -137,65 +137,65 @@ struct EventFormView: View {
     
     private var titleBinding: Binding<String> {
         Binding(
-            get: { eventFormFiewModel.event.title ?? "" },
-            set: { eventFormFiewModel.event.title = $0 }
+            get: { eventFormViewModel.event.title ?? "" },
+            set: { eventFormViewModel.event.title = $0 }
         )
     }
     
     private var descriptionBinding: Binding<String> {
         Binding(
-            get: { eventFormFiewModel.event.description ?? "" },
-            set: { eventFormFiewModel.event.description = $0 }
+            get: { eventFormViewModel.event.description ?? "" },
+            set: { eventFormViewModel.event.description = $0 }
         )
     }
     
     private var eventDateBinding: Binding<Date> {
         Binding(
-            get: { eventFormFiewModel.selectedDate },
+            get: { eventFormViewModel.selectedDate },
             set: { newDate in
-                eventFormFiewModel.selectedDate = newDate
-                eventFormFiewModel.startTime = eventFormFiewModel.startTime
-                eventFormFiewModel.endTime = eventFormFiewModel.endTime
+                eventFormViewModel.selectedDate = newDate
+                eventFormViewModel.startTime = eventFormViewModel.startTime
+                eventFormViewModel.endTime = eventFormViewModel.endTime
             }
         )
     }
     
     private var startTimeBinding: Binding<Date> {
         Binding(
-            get: { eventFormFiewModel.startTime },
-            set: { eventFormFiewModel.startTime = $0 }
+            get: { eventFormViewModel.startTime },
+            set: { eventFormViewModel.startTime = $0 }
         )
     }
     
     private var endTimeBinding: Binding<Date> {
         Binding(
-            get: { eventFormFiewModel.endTime },
-            set: { eventFormFiewModel.endTime = $0 }
+            get: { eventFormViewModel.endTime },
+            set: { eventFormViewModel.endTime = $0 }
         )
     }
     
     private var memberIDsBinding: Binding<Set<Int>> {
         Binding(
-            get: { Set(eventFormFiewModel.event.memberIDs ?? []) },
+            get: { Set(eventFormViewModel.event.memberIDs ?? []) },
             set: { newSet in
-                eventFormFiewModel.event.memberIDs = Array(newSet).sorted()
+                eventFormViewModel.event.memberIDs = Array(newSet).sorted()
             }
         )
     }
     
     private var locationNameBinding: Binding<String> {
         Binding(
-            get: { eventFormFiewModel.event.location?.name ?? "" },
+            get: { eventFormViewModel.event.location?.name ?? "" },
             set: { newName in
-                if eventFormFiewModel.event.location == nil {
-                    eventFormFiewModel.event.location = Location(
+                if eventFormViewModel.event.location == nil {
+                    eventFormViewModel.event.location = Location(
                         address: nil,
                         latitude: 0,
                         longitude: 0,
                         name: newName
                     )
                 } else {
-                    eventFormFiewModel.event.location?.name = newName
+                    eventFormViewModel.event.location?.name = newName
                 }
             }
         )
@@ -203,8 +203,8 @@ struct EventFormView: View {
     
     private var categoriesBinding: Binding<[EventCategory]> {
         Binding(
-            get: { eventFormFiewModel.event.categories },
-            set: { eventFormFiewModel.event.categories = $0 }
+            get: { eventFormViewModel.event.categories },
+            set: { eventFormViewModel.event.categories = $0 }
         )
     }
     
@@ -214,9 +214,9 @@ struct EventFormView: View {
         Section {
             Button {
                 isSaving = true
-                let newEvent = eventFormFiewModel.builtEvent
+                let newEvent = eventFormViewModel.builtEvent
                 eventsViewModel.create(newEvent) { createdEvent in
-                    eventFormFiewModel.clearFields()
+                    eventFormViewModel.clearFields()
                     navigationState.pushToEventDetailView(createdEvent)
                     isSaving = false
                 }
@@ -224,11 +224,11 @@ struct EventFormView: View {
                 Text("Create")
                     .font(.headline)
                     .foregroundColor(
-                        eventFormFiewModel.isFormEmpty ? .gray : Color(Colors.primary)
+                        eventFormViewModel.isFormEmpty ? .gray : Color(Colors.primary)
                     )
             }
             .accessibilityIdentifier("createEventButton")
-            .disabled(eventFormFiewModel.isFormEmpty || isSaving)
+            .disabled(eventFormViewModel.isFormEmpty || isSaving)
         }
     }
     
@@ -255,7 +255,7 @@ struct EventFormView: View {
             Button("Save") {
                 isSaving = true
                 Task {
-                    let updated = await eventFormFiewModel.prepareUpdatedEvent()
+                    let updated = await eventFormViewModel.prepareUpdatedEvent()
                     eventsViewModel.update(updated)
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
@@ -266,11 +266,11 @@ struct EventFormView: View {
             }
             .accessibilityIdentifier("saveEventButton")
             .foregroundColor(
-                eventFormFiewModel.isFormEmpty
+                eventFormViewModel.isFormEmpty
                 ? .gray
                 : Color(Colors.secondary)
             )
-            .disabled(eventFormFiewModel.isFormEmpty)
+            .disabled(eventFormViewModel.isFormEmpty)
         }
     }
 }
