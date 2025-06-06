@@ -118,9 +118,7 @@ final class UserFormReducerTests: XCTestCase {
         await store.send(.saveChanges) {
             $0.isSaving = true
         }
-        
-        try await Task.sleep(nanoseconds: 2_000_000_000)
-        
+                
         let expectedUser = User(
             avatarImageName: nil,
             bannerImageName: nil,
@@ -134,7 +132,7 @@ final class UserFormReducerTests: XCTestCase {
             phone: nil
         )
         
-        await store.receive(.didSave(expectedUser)) {
+        await store.receive(.didSave(expectedUser), timeout: .seconds(GatherlyAPI.delayTime)) {
             $0.isSaving = false
             $0.didUpdateUser = true
         }
