@@ -123,7 +123,6 @@ final class EditEventViewModelTests: XCTestCase {
     
     func testStartTime() {
         let calendar = Calendar.current
-        
         let fixedDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
         let fixedTime = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 10, minute: 0))!
         
@@ -156,9 +155,7 @@ final class EditEventViewModelTests: XCTestCase {
     
     func testEndTime() {
         let calendar = Calendar.current
-        
         let fixedDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
-        
         let fixedTime = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 15, minute: 30))!
         
         let initialEvent = Event(

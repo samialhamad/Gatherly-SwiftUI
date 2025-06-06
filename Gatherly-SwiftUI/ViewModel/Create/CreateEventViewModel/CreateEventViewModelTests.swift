@@ -108,7 +108,6 @@ final class CreateEventViewModelTests: XCTestCase {
     
     func testEndTime() {
         let calendar = Calendar.current
-        
         let fixedDate = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5))!
         let fixedTime = calendar.date(from: DateComponents(year: 2025, month: 3, day: 5, hour: 15, minute: 30))!
         
