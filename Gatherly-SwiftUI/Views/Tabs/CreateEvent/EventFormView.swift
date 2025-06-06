@@ -11,9 +11,8 @@ import PhotosUI
 struct EventFormView: View {
     @StateObject private var eventFormFiewModel: EventFormViewModel
     @EnvironmentObject var eventsViewModel: EventsViewModel
-    @EnvironmentObject var navigationState: NavigationState
-    
     @State private var isSaving = false
+    @EnvironmentObject var navigationState: NavigationState
     @State private var showingDeleteAlert = false
     
     // For edit mode
