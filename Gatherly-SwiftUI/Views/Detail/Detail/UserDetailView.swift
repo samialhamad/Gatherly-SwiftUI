@@ -70,7 +70,8 @@ struct UserDetailView: View {
                     
                     Button("Remove Friend", role: .destructive) {
                         Task {
-                            await removeFriend()
+                            usersViewModel.removeFriend(user)
+                            dismiss()
                         }
                     }
                     
@@ -104,22 +105,6 @@ private extension UserDetailView {
     
     func dismissUserFormView() {
         userFormStore = nil
-    }
-    
-    private func removeFriend() async {
-        guard let targetID = user.id else {
-            return
-        }
-        
-        guard let currentUser = usersViewModel.currentUser else {
-            return
-        }
-        
-        currentUser.friendIDs?.removeAll(where: { $0 == targetID })
-        usersViewModel.update(currentUser)
-        usersViewModel.delete(user)
-        
-        dismiss()
     }
     
     // MARK: - Subviews

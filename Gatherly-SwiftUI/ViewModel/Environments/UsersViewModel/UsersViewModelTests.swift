@@ -49,6 +49,8 @@ final class UsersViewModelTests: XCTestCase {
         UserDefaultsManager.saveCurrentUser(current)
     }
     
+    // MARK: - Loaders
+    
     func testFetch() {
         let current = makeUser(id: 1, friendIDs: [2, 3])
         let friend2 = makeUser(id: 2, friendIDs: nil)
@@ -153,6 +155,8 @@ final class UsersViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.currentUser?.id, 2)
         XCTAssertTrue(viewModel.users.isEmpty)
     }
+    
+    // MARK: - CRUD
     
     func testCreate() {
         XCTAssertTrue(UserDefaultsManager.loadUsers().isEmpty)
@@ -324,5 +328,52 @@ final class UsersViewModelTests: XCTestCase {
         
         let loadedDict = UserDefaultsManager.loadUsers()
         XCTAssertFalse(loadedDict.values.contains(where: { $0.id == 2 }))
+    }
+    
+    // MARK: - Remove Friend
+
+    func testRemoveFriend() {
+        let currentUser = makeUser(id: 1, friendIDs: [2])
+        let friend = makeUser(id: 2)
+        seedCurrentUserAndAllUsers(current: currentUser, others: [friend])
+        
+        
+        let fetchExpectation = expectation(description: "fetch() loads currentUser and friend")
+        viewModel.$users
+            .dropFirst()
+            .first { published in
+                published.contains(where: { $0.id == friend.id })
+            }
+            .sink { _ in fetchExpectation.fulfill() }
+            .store(in: &cancellables)
+        viewModel.fetch()
+        wait(for: [fetchExpectation], timeout: 3.0)
+        
+        let removedUserExpectation = expectation(description: "removeFriend() removes friend from users")
+        viewModel.$users
+            .dropFirst()
+            .sink { published in
+                XCTAssertFalse(published.contains(where: { $0.id == friend.id }))
+                removedUserExpectation.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        let updatedCurrentUserExpectation = expectation(description: "removeFriend() updates currentUser.friendIDs")
+        viewModel.$currentUser
+            .dropFirst()
+            .sink { updated in
+                XCTAssertFalse(updated?.friendIDs?.contains(friend.id!) ?? true)
+                updatedCurrentUserExpectation.fulfill()
+            }
+            .store(in: &cancellables)
+        
+        viewModel.removeFriend(friend)
+        
+        wait(for: [removedUserExpectation, updatedCurrentUserExpectation], timeout: 3.0)
+        
+        let storedUsers = UserDefaultsManager.loadUsers()
+        let storedCurrentUser = UserDefaultsManager.loadCurrentUser()
+        XCTAssertFalse(storedUsers.values.contains(where: { $0.id == friend.id }))
+        XCTAssertFalse(storedCurrentUser?.friendIDs?.contains(friend.id!) ?? true)
     }
 }

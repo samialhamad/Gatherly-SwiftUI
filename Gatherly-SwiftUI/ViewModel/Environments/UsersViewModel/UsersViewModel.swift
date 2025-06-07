@@ -103,4 +103,16 @@ final class UsersViewModel: ObservableObject {
             }
             .store(in: &cancellables)
     }
+    
+    // MARK: - Remove Friend
+    
+    func removeFriend(_ friend: User) {
+        guard let friendID = friend.id, let currentUser else {
+            return
+        }
+        
+        currentUser.friendIDs?.removeAll(where: { $0 == friendID })
+        update(currentUser)
+        delete(friend)
+    }
 }
