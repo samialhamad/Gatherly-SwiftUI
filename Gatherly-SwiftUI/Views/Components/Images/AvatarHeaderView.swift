@@ -8,24 +8,24 @@
 import SwiftUI
 
 struct AvatarHeaderView: View {
+    
+    typealias Mode = AvatarView.Mode
+    
     let font: Font
-    let group: UserGroup?
     let refreshID: UUID
     let size: CGFloat
-    let user: User?
+    let mode: Mode
     
     init(
         font: Font = .largeTitle,
-        group: UserGroup? = nil,
         refreshID: UUID = UUID(),
         size: CGFloat = Constants.AvatarHeaderView.size,
-        user: User? = nil
+        mode: Mode
     ) {
         self.font = font
-        self.group = group
         self.refreshID = refreshID
         self.size = size
-        self.user = user
+        self.mode = mode
     }
     
     var body: some View {
@@ -39,9 +39,8 @@ struct AvatarHeaderView: View {
                 borderColor: .white,
                 borderWidth: Constants.AvatarHeaderView.avatarBorderWidth,
                 font: font,
-                group: group,
                 size: size,
-                user: user
+                mode: mode
             )
             .padding(.top, bannerImage == nil ? Constants.AvatarHeaderView.bannerImageTopPadding : -size / 2)
         }
@@ -55,17 +54,39 @@ private extension AvatarHeaderView {
     // MARK: - Computed Vars
     
     private var profileImage: UIImage? {
-        if let avatarImageName = user?.avatarImageName ?? group?.imageName {
-            return ImageUtility.loadImageFromDocuments(named: avatarImageName)
+        switch mode {
+        case .user(let user):
+            guard let imageName = user.avatarImageName else {
+                return nil
+            }
+            
+            return ImageUtility.loadImageFromDocuments(named: imageName)
+            
+        case .group(let group):
+            guard let imageName = group.imageName else {
+                return nil
+            }
+            
+            return ImageUtility.loadImageFromDocuments(named: imageName)
         }
-        return nil
     }
     
     private var bannerImage: UIImage? {
-        if let bannerImageName = user?.bannerImageName ?? group?.bannerImageName {
+        switch mode {
+        case .user(let user):
+            guard let bannerImageName = user.bannerImageName else {
+                return nil
+            }
+            
+            return ImageUtility.loadImageFromDocuments(named: bannerImageName)
+            
+        case .group(let group):
+            guard let bannerImageName = group.bannerImageName else {
+                return nil
+            }
+            
             return ImageUtility.loadImageFromDocuments(named: bannerImageName)
         }
-        return nil
     }
     
     // MARK: - Subviews

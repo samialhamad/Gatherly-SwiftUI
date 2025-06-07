@@ -9,9 +9,9 @@ import SwiftUI
 
 struct AvatarView: View {
     
-    enum Mode {
-        case user(User)
-        case group(UserGroup)
+    enum Mode: Equatable {
+        case user(user: User)
+        case group(group: UserGroup)
     }
     
     let backgroundColor: Color
@@ -19,30 +19,22 @@ struct AvatarView: View {
     let borderWidth: CGFloat?
     let font: Font
     let size: CGFloat
-    private let mode: Mode?
+    let mode: Mode
     
     init(
         backgroundColor: Color = Color(Colors.primary),
         borderColor: Color? = nil,
         borderWidth: CGFloat? = nil,
         font: Font = .headline,
-        group: UserGroup? = nil,
         size: CGFloat,
-        user: User? = nil
+        mode: Mode
     ) {
         self.backgroundColor = backgroundColor
         self.borderColor = borderColor
         self.borderWidth = borderWidth
         self.font = font
         self.size = size
-        
-        if let user {
-            self.mode = .user(user)
-        } else if let group {
-            self.mode = .group(group)
-        } else {
-            self.mode = nil
-        }
+        self.mode = mode
     }
     
     var body: some View {
@@ -57,12 +49,8 @@ struct AvatarView: View {
 private extension AvatarView {
     
     // MARK: - Computed vars
-    
-    private var initials: String {
-        guard let mode else {
-            return ""
-        }
         
+    private var initials: String {
         switch mode {
         case .user(let user):
             let firstInitial = user.firstName?.first.map(String.init) ?? ""
@@ -77,12 +65,8 @@ private extension AvatarView {
             return String(firstChar).uppercased()
         }
     }
-    
-    private var profileImage: UIImage? {
-        guard let mode = mode else {
-            return nil
-        }
         
+    private var profileImage: UIImage? {
         switch mode {
         case .user(let user):
             guard let imageName = user.avatarImageName else {

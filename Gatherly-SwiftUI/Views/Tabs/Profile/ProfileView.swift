@@ -28,7 +28,7 @@ struct ProfileView: View {
                     VStack(spacing: Constants.ProfileView.vstackSpacing) {
                         AvatarHeaderView(
                             refreshID: refreshID,
-                            user: currentUser
+                            mode: .user(user: currentUser)
                         )
                         profileRowsSection(currentUser)
                     }

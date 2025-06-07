@@ -14,7 +14,7 @@ struct ProfileRow: View {
         HStack {
             AvatarView(
                 size: Constants.ProfileRow.avatarCircleSize,
-                user: user
+                mode: .user(user: user)
             )
             
             nameView

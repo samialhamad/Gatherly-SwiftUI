@@ -23,7 +23,7 @@ struct GroupDetailView: View {
                 ZStack {
                     ScrollView {
                         VStack(spacing: Constants.GroupDetailView.vstackSpacing) {
-                            AvatarHeaderView(group: group)
+                            AvatarHeaderView(mode: .group(group: group))
                             groupLeaderAndMembersView
                             Spacer()
                         }
