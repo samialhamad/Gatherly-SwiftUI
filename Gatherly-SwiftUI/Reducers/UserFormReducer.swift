@@ -71,7 +71,7 @@ struct UserFormReducer: Reducer {
                 bannerImageName = ImageUtility.saveImageToDocuments(image: bannerImage)
             }
             
-            var updatedUser = state.currentUser
+            let updatedUser = state.currentUser
             updatedUser.firstName = state.firstName
             updatedUser.lastName = state.lastName
             updatedUser.avatarImageName = avatarImageName

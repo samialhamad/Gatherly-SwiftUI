@@ -11,10 +11,10 @@ import UIKit
 
 extension GatherlyAPI {
     
-    // MARK: - Create Manually
+    // MARK: - Create
     
     static func createUser(_ user: User) -> AnyPublisher<User, Never> {
-        var newUser = assignIDIfNeeded(user)
+        let newUser = assignIDIfNeeded(user)
         var users = UserDefaultsManager.loadUsers()
         
         if let id = newUser.id {
@@ -70,7 +70,7 @@ extension GatherlyAPI {
             return user
         }
         
-        var newUser = user
+        let newUser = user
         let existingIDs = Set(UserDefaultsManager.loadUsers().keys)
         var newID = (existingIDs.max() ?? 999) + 1
         while existingIDs.contains(newID) {

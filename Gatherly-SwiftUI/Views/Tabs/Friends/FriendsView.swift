@@ -154,7 +154,7 @@ extension FriendsView: UserFormViewDelegate {
     
     func userFormViewDidUpdateUser(updatedUser: User) {
         usersViewModel.create(updatedUser) { createdFriend in
-            guard var currentUser = usersViewModel.currentUser else {
+            guard let currentUser = usersViewModel.currentUser else {
                 dismissCreateFriendSheet()
                 return
             }

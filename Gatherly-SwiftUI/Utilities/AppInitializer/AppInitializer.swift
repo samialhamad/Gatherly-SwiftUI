@@ -23,7 +23,7 @@ struct AppInitializer {
         let groups = SampleData.sampleGroups
                 
         if let currentUserIndex = users.firstIndex(where: { $0.id == SampleData.currentUserID }) {
-            var currentUser = users[currentUserIndex]
+            let currentUser = users[currentUserIndex]
             
             currentUser.groupIDs = groups
                 .filter { $0.leaderID == SampleData.currentUserID || $0.memberIDs.contains(SampleData.currentUserID) }

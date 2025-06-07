@@ -20,7 +20,7 @@ struct GroupDetailView: View {
     
     var body: some View {
         NavigationStack {
-            if let group, let currentUser = usersViewModel.currentUser {
+            if let group {
                 ZStack {
                     ScrollView {
                         VStack(spacing: Constants.GroupDetailView.vstackSpacing) {

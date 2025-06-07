@@ -111,7 +111,7 @@ private extension UserDetailView {
             return
         }
         
-        guard var currentUser = usersViewModel.currentUser else {
+        guard let currentUser = usersViewModel.currentUser else {
             return
         }
         
