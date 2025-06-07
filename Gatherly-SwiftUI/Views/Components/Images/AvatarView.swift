@@ -86,13 +86,16 @@ private extension AvatarView {
     
     // MARK: - Subviews
     
-    private func profileImageView(_ image: UIImage) -> some View {
-        Image(uiImage: profileImage!)
-            .resizable()
-            .scaledToFill()
-            .frame(width: size, height: size)
-            .clipShape(Circle())
-            .overlay(borderOverlay)
+    @ViewBuilder
+    private func profileImageView(_ image: UIImage?) -> some View {
+        if let image {
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFill()
+                .frame(width: size, height: size)
+                .clipShape(Circle())
+                .overlay(borderOverlay)
+        }
     }
     
     private var initialsView: some View {
