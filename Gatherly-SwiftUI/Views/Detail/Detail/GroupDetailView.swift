@@ -88,26 +88,26 @@ private extension GroupDetailView {
     
     // MARK: - Subviews
     
+    @ViewBuilder
     var editGroupSheet: some View {
-        let originalGroup = group!
-        let currentUserID = usersViewModel.currentUser?.id ?? SampleData.currentUserID
-        
-        return GroupFormView(
-            group: originalGroup,
-            currentUserID: currentUserID,
-            onSave: { savedGroup in
-                groupsViewModel.update(savedGroup)
-                isShowingEditView = false
-            },
-            onCancel: {
-                isShowingEditView = false
-            },
-            onDelete: { groupToDelete in
-                groupsViewModel.delete(groupToDelete)
-                isShowingEditView = false
-                dismiss()
-            }
-        )
+        if let group {
+            GroupFormView(
+                group: group,
+                currentUserID: usersViewModel.currentUser?.id ?? SampleData.currentUserID,
+                onSave: { savedGroup in
+                    groupsViewModel.update(savedGroup)
+                    isShowingEditView = false
+                },
+                onCancel: {
+                    isShowingEditView = false
+                },
+                onDelete: { groupToDelete in
+                    groupsViewModel.delete(groupToDelete)
+                    isShowingEditView = false
+                    dismiss()
+                }
+            )
+        }
     }
     
     var groupLeaderAndMembersView: some View {
