@@ -68,8 +68,8 @@ private extension GroupDetailView {
     // MARK: - Functions
     
     func leaveGroup() {
-        guard var currentUser = usersViewModel.currentUser,
-              let userID = currentUser.id,
+        guard let currentUser = usersViewModel.currentUser,
+              let currentUserID = currentUser.id,
               let group else {
             return
         }
@@ -77,7 +77,7 @@ private extension GroupDetailView {
         currentUser.groupIDs?.removeAll(where: { $0 == group.id })
         
         var updatedGroup = group
-        updatedGroup.memberIDs.removeAll(where: { $0 == userID })
+        updatedGroup.memberIDs.removeAll(where: { $0 == currentUserID })
         
         usersViewModel.update(currentUser)
         groupsViewModel.update(updatedGroup)
