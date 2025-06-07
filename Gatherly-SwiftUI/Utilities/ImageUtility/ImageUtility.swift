@@ -43,6 +43,15 @@ struct ImageUtility {
     }
     
     private static func getDocumentsDirectory() -> URL {
-        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        let urls = FileManager.default.urls(
+            for: .documentDirectory,
+            in: .userDomainMask
+        )
+        
+        guard let url = urls.first else {
+            fatalError("Could not find the documents directory.")
+        }
+        
+        return url
     }
 }
