@@ -74,29 +74,6 @@ struct EventDetailView: View {
 
 private extension EventDetailView {
     
-    // MARK: - Computed Vars
-    
-    private var planner: User? {
-        guard let currentUser = usersViewModel.currentUser,
-              let plannerID = updatedEvent.plannerID else {
-            return nil
-        }
-        
-        return plannerID == currentUser.id ? currentUser : friendsDict[plannerID]
-    }
-    
-    private var members: [User] {
-        guard let memberIDs = updatedEvent.memberIDs else {
-            return []
-        }
-        
-        return memberIDs
-            .filter { $0 != updatedEvent.plannerID }
-            .compactMap { id in
-                id == usersViewModel.currentUser?.id ? usersViewModel.currentUser : friendsDict[id]
-            }
-    }
-    
     // MARK: - Subviews
     
     var editButton: some ToolbarContent {
@@ -233,7 +210,19 @@ private extension EventDetailView {
     }
     
     var eventPlannerAndMembersView: some View {
-        Group {
+        let planner = eventDetailViewModel.planner(
+            for: updatedEvent,
+            currentUser: usersViewModel.currentUser,
+            friendsDict: friendsDict
+        )
+        
+        let members = eventDetailViewModel.members(
+            for: updatedEvent,
+            currentUser: usersViewModel.currentUser,
+            friendsDict: friendsDict
+        )
+        
+        return Group {
             if let planner {
                 Text("Planner")
                     .font(.headline)

@@ -10,6 +10,41 @@ import MapKit
 
 class EventDetailViewModel: ObservableObject {
     
+    // MARK: - Computed Vars
+    
+    func planner(for event: Event,
+                 currentUser: User?,
+                 friendsDict: [Int: User]) -> User? {
+        guard let plannerID = event.plannerID else {
+            return nil
+        }
+        
+        if let currentUser, plannerID == currentUser.id {
+            return currentUser
+        } else {
+            return friendsDict[plannerID]
+        }
+    }
+    
+    func members(for event: Event,
+                 currentUser: User?,
+                 friendsDict: [Int: User]) -> [User] {
+        guard let memberIDs = event.memberIDs else {
+            return []
+        }
+        
+        return memberIDs
+            .filter { $0 != event.plannerID }
+            .compactMap { id in
+                if let currentUser, id == currentUser.id {
+                    return currentUser
+                }
+                return friendsDict[id]
+            }
+    }
+    
+    // MARK: - Maps
+    
     func mapOptions(for location: Location) -> [ActionSheet.Button] {
         var buttons: [ActionSheet.Button] = []
         
