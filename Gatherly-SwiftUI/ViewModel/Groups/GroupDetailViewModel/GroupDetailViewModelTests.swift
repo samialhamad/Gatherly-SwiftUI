@@ -22,6 +22,8 @@ final class GroupDetailViewModelTests: XCTestCase {
         super.tearDown()
     }
     
+    // MARK: - Computed Vars
+    
     func testFriendsDict() {
         var userA = User(id: 1)
         var userB = User(id: 2)
@@ -53,5 +55,65 @@ final class GroupDetailViewModelTests: XCTestCase {
         let group = viewModel.group(forID: 0, in: [group1])
         
         XCTAssertNil(group)
+    }
+    
+    // MARK: - Functions
+    
+    func testLeader_returnsCurrentUser() {
+        let currentUser = User(id: 1)
+        let group = UserGroup(id: 1, leaderID: 1, memberIDs: [])
+        let friendsDict: [Int: User] = [:]
+        
+        let leader = viewModel.leader(
+            for: group,
+            currentUser: currentUser,
+            friendsDict: friendsDict
+        )
+        
+        XCTAssertEqual(leader?.id, currentUser.id)
+    }
+    
+    func testLeader_returnsFriend() {
+        let friend = User(id: 2)
+        let group = UserGroup(id: 1, leaderID: 2, memberIDs: [])
+        let friendsDict: [Int: User] = [2: friend]
+        
+        let leader = viewModel.leader(
+            for: group,
+            currentUser: nil,
+            friendsDict: friendsDict
+        )
+        
+        XCTAssertEqual(leader?.id, friend.id)
+    }
+    
+    func testMembers() {
+        let currentUser = User(id: 1)
+        let friendA = User(id: 2)
+        let friendB = User(id: 3)
+        
+        let group = UserGroup(id: 1, leaderID: 5, memberIDs: [1, 2, 3])
+        let friendsDict: [Int: User] = [2: friendA, 3: friendB]
+        
+        let members = viewModel.members(
+            for: group,
+            currentUser: currentUser,
+            friendsDict: friendsDict
+        )
+        
+        XCTAssertEqual(members.map { $0.id }, [1, 2, 3])
+    }
+    
+    func testMembers_returnsEmpty() {
+        let group = UserGroup(id: 1, leaderID: 1, memberIDs: [3, 4])
+        let friendsDict: [Int: User] = [:]
+        
+        let members = viewModel.members(
+            for: group,
+            currentUser: nil,
+            friendsDict: friendsDict
+        )
+        
+        XCTAssertTrue(members.isEmpty)
     }
 }

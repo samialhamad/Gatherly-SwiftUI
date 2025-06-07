@@ -112,16 +112,20 @@ private extension GroupDetailView {
     
     var groupLeaderAndMembersView: some View {
         Group {
-            if let group {
-                let resolvedLeader: User? = group.leaderID == usersViewModel.currentUser?.id
-                ? usersViewModel.currentUser
-                : friendsDict[group.leaderID]
+            if let group, let currentUser = usersViewModel.currentUser {
+                let leader = groupDetailViewModel.leader(
+                    for: group,
+                    currentUser: currentUser,
+                    friendsDict: friendsDict
+                )
                 
-                let memberUsers: [User] = group.memberIDs.compactMap {
-                    $0 == usersViewModel.currentUser?.id ? usersViewModel.currentUser : friendsDict[$0]
-                }
+                let members = groupDetailViewModel.members(
+                    for: group,
+                    currentUser: currentUser,
+                    friendsDict: friendsDict
+                )
                 
-                if let leader = resolvedLeader {
+                if let leader {
                     Text("Leader")
                         .font(.headline)
                     NavigationLink(destination: UserDetailView(user: leader)) {
@@ -130,10 +134,10 @@ private extension GroupDetailView {
                     .accessibilityIdentifier("groupMemberRow-\(leader.firstName ?? "")")
                 }
                 
-                if !memberUsers.isEmpty {
+                if !members.isEmpty {
                     Text("Members")
                         .font(.headline)
-                    ForEach(memberUsers, id: \.id) { user in
+                    ForEach(members, id: \.id) { user in
                         NavigationLink(destination: UserDetailView(user: user)) {
                             ProfileRow(user: user)
                         }
