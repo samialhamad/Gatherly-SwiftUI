@@ -125,10 +125,10 @@ private extension UserDetailView {
                 .font(.title)
                 .fontWeight(.bold)
             
-            if let phone = user.phone {
-                Text(phone)
+            if let phone = user.phone, let url = URL(string: "tel:\(phone)") {
+                Link(phone, destination: url)
                     .font(.subheadline)
-                    .foregroundColor(.gray)
+                    .foregroundColor(Color(Colors.primary))
             }
         }
         .padding()
