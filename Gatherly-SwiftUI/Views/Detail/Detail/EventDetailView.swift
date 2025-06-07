@@ -165,7 +165,7 @@ private extension EventDetailView {
         Group {
             if let date = updatedEvent.date {
                 Text("Date: \(date.formatted(date: .long, time: .omitted))")
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.primary)
             }
         }
     }
@@ -262,7 +262,7 @@ private extension EventDetailView {
                 let endDate = Date(endTimestamp)
                 
                 Text("Time: \(startDate.formatted(date: .omitted, time: .shortened)) - \(endDate.formatted(date: .omitted, time: .shortened))")
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.primary)
             }
         }
     }
