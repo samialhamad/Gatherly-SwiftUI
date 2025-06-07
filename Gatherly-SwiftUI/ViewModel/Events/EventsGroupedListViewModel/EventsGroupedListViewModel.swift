@@ -16,13 +16,13 @@ class EventsGroupedListViewModel: ObservableObject {
         Dictionary(grouping: events, by: { Date.startOfDay($0.date) })
     }
     
-    func shouldShowTodayButton(keys: [Date]) -> Bool {
+    func shouldShowTodayButton(dateKeys: [Date]) -> Bool {
         let today = Date.startOfDay(Date())
-        return !keys.contains(today) || keys.first != today
+        return !dateKeys.contains(today) || dateKeys.first != today
     }
     
     func scrollToNearestAvailableDay(
-        keys: [Date],
+        dateKeys: [Date],
         proxy: ScrollViewProxy,
         iniatied: Bool = false
     ) {
@@ -32,8 +32,8 @@ class EventsGroupedListViewModel: ObservableObject {
 
         let todayStart = Date.startOfDay(Date())
         
-        if let index = keys.firstIndex(where: { $0 >= todayStart }) {
-            let scrollID = "header-\(keys[index])"
+        if let index = dateKeys.firstIndex(where: { $0 >= todayStart }) {
+            let scrollID = "header-\(dateKeys[index])"
             DispatchQueue.main.async { [weak self] in
                 guard let self else {
                     return

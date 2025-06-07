@@ -14,17 +14,15 @@ struct EventsGroupedListView: View {
     
     var body: some View {
         let groupedEvents = eventsGroupedListViewModel.groupEventsByDay(events: eventsViewModel.events)
-        let keys = groupedEvents.keys.sorted()
+        let dateKeys = groupedEvents.keys.sorted()
         
         ScrollViewReader { proxy in
-            groupedEventsList(keys: keys, groupedEvents: groupedEvents, proxy: proxy)
+            groupedEventsList(dateKeys: dateKeys, groupedEvents: groupedEvents, proxy: proxy)
                 .toolbar {
-                    scrollToTodayToolbarButton(keys: keys, proxy: proxy)
+                    scrollToTodayToolbarButton(dateKeys: dateKeys, proxy: proxy)
                 }
                 .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                        eventsGroupedListViewModel.scrollToNearestAvailableDay(keys: keys, proxy: proxy)
-                    }
+                    eventsGroupedListViewModel.scrollToNearestAvailableDay(dateKeys: dateKeys, proxy: proxy)
                 }
         }
     }
@@ -35,12 +33,12 @@ private extension EventsGroupedListView {
     // MARK: - Subviews
     
     func groupedEventsList(
-        keys: [Date],
+        dateKeys: [Date],
         groupedEvents: [Date: [Event]],
         proxy: ScrollViewProxy
     ) -> some View {
         List {
-            ForEach(keys, id: \.self) { date in
+            ForEach(dateKeys, id: \.self) { date in
                 let dateLabel = date.formatted(date: .long, time: .omitted)
                 let eventsForDate = groupedEvents[date] ?? []
                 
@@ -60,18 +58,16 @@ private extension EventsGroupedListView {
             Color.clear.frame(height: Constants.EventsGroupedListView.topFrameHeight)
         }
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) {
-                eventsGroupedListViewModel.scrollToNearestAvailableDay(keys: keys, proxy: proxy)
-            }
+            eventsGroupedListViewModel.scrollToNearestAvailableDay(dateKeys: dateKeys, proxy: proxy)
         }
     }
     
-    func scrollToTodayToolbarButton(keys: [Date], proxy: ScrollViewProxy) -> some ToolbarContent {
+    func scrollToTodayToolbarButton(dateKeys: [Date], proxy: ScrollViewProxy) -> some ToolbarContent {
         ToolbarItem(placement: .navigationBarLeading) {
-            if eventsGroupedListViewModel.shouldShowTodayButton(keys: keys) {
+            if eventsGroupedListViewModel.shouldShowTodayButton(dateKeys: dateKeys) {
                 Button {
                     eventsGroupedListViewModel.scrollToNearestAvailableDay(
-                        keys: keys,
+                        dateKeys: dateKeys,
                         proxy: proxy,
                         iniatied: true
                     )

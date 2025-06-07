@@ -41,10 +41,10 @@ final class EventsGroupedListViewModelTests: XCTestCase {
         let groupedEvents = viewModel.groupEventsByDay(events: events)
         
         // expecting a single key, start of day for march 11 2025.
-        let expectedKey = calendar.startOfDay(for: date1)
+        let expectedDateKey = calendar.startOfDay(for: date1)
         XCTAssertEqual(groupedEvents.count, 1)
-        XCTAssertNotNil(groupedEvents[expectedKey])
-        XCTAssertEqual(groupedEvents[expectedKey]?.count, 2)
+        XCTAssertNotNil(groupedEvents[expectedDateKey])
+        XCTAssertEqual(groupedEvents[expectedDateKey]?.count, 2)
     }
     
     func testGroupEventsByDay_MultipleDays() {
@@ -80,11 +80,11 @@ final class EventsGroupedListViewModelTests: XCTestCase {
         let viewModel = EventsGroupedListViewModel()
         let groupedEvents = viewModel.groupEventsByDay(events: events)
         
-        let key1 = calendar.startOfDay(for: date1)
-        let key2 = calendar.startOfDay(for: date3)
+        let dateKey1 = calendar.startOfDay(for: date1)
+        let dateKey2 = calendar.startOfDay(for: date3)
         
         XCTAssertEqual(groupedEvents.count, 2)
-        XCTAssertEqual(groupedEvents[key1]?.count, 2)
-        XCTAssertEqual(groupedEvents[key2]?.count, 1)
+        XCTAssertEqual(groupedEvents[dateKey1]?.count, 2)
+        XCTAssertEqual(groupedEvents[dateKey2]?.count, 1)
     }
 }
