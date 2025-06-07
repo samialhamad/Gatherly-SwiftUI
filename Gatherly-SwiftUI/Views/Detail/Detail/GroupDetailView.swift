@@ -10,6 +10,7 @@ import SwiftUI
 
 struct GroupDetailView: View {
     @Environment(\.dismiss) private var dismiss
+    @StateObject private var groupDetailViewModel = GroupDetailViewModel()
     @EnvironmentObject var groupsViewModel: GroupsViewModel
     @State private var isShowingEditView = false
     @State private var isShowingActionSheet = false
@@ -58,11 +59,11 @@ private extension GroupDetailView {
     // MARK: - Computed Vars
     
     var friendsDict: [Int: User] {
-        usersViewModel.users.keyedBy(\.id)
+        groupDetailViewModel.friendsDict(for: usersViewModel.users)
     }
     
     var group: UserGroup? {
-        groupsViewModel.groups.first { $0.id == groupID }
+        groupDetailViewModel.group(forID: groupID, in: groupsViewModel.groups)
     }
     
     // MARK: - Functions

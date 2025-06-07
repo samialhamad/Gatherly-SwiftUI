@@ -78,6 +78,7 @@
 				ViewModel/Events/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
 				ViewModel/Events/GatherlyCalendarViewModel/GatherlyCalendarViewModelTests.swift,
 				ViewModel/Friends/FriendsListViewModel/FriendsListViewModelTests.swift,
+				ViewModel/Groups/GroupDetailViewModel/GroupDetailViewModelTests.swift,
 				ViewModel/Groups/GroupForm/GroupFormViewModelTests.swift,
 				Views/Detail/Edit/UserFormView/UserFormViewTests.swift,
 			);
@@ -123,6 +124,7 @@
 				ViewModel/Events/EventsGroupedListViewModel/EventsGroupedListViewModelTests.swift,
 				ViewModel/Events/GatherlyCalendarViewModel/GatherlyCalendarViewModelTests.swift,
 				ViewModel/Friends/FriendsListViewModel/FriendsListViewModelTests.swift,
+				ViewModel/Groups/GroupDetailViewModel/GroupDetailViewModelTests.swift,
 				ViewModel/Groups/GroupForm/GroupFormViewModelTests.swift,
 				Views/Detail/Edit/UserFormView/UserFormViewTests.swift,
 			);
