@@ -103,6 +103,23 @@ final class EventFormViewModelTests: XCTestCase {
         XCTAssertLessThan(abs(startTime.timeIntervalSinceNow), 1.0)
     }
     
+    func testStartTime_bumpsEndTime_whenPastExistingEndTime_inCreateMode() {
+        let viewModel = EventFormViewModel(mode: .create)
+        viewModel.selectedDate = fixedDayStart
+
+        let endTime = Calendar.current.date(bySettingHour: 9, minute: 0, second: 0, of: fixedDayStart)!
+        viewModel.endTime = endTime
+
+        // move startTime past that
+        let newStartTime = Calendar.current.date(bySettingHour: 11, minute: 0, second: 0, of: fixedDayStart)!
+        viewModel.startTime = newStartTime
+
+        let merged = Date.merge(date: fixedDayStart, time: newStartTime)
+        XCTAssertEqual(viewModel.startTime, merged)
+        // endTime should have been bumped to match
+        XCTAssertEqual(viewModel.endTime, merged)
+    }
+    
     func testEndTime_whenTimestampIsNil_returnsNow_inCreateMode() {
         let viewModel = EventFormViewModel(mode: .create)
         viewModel.event.endTimestamp = nil
@@ -234,6 +251,23 @@ final class EventFormViewModelTests: XCTestCase {
         
         let startTime = viewModel.startTime
         XCTAssertLessThan(abs(startTime.timeIntervalSinceNow), 1.0)
+    }
+    
+    func testStartTime_bumpsEndTime_whenPastExistingEndTime_inEditMode() async {
+        var event = makeSampleEvent()
+        event.startTimestamp = Int(fixedStartTime.timestamp)
+        event.endTimestamp   = Int(fixedEndTime.timestamp)
+        let viewModel = EventFormViewModel(mode: .edit(event: event))
+        viewModel.selectedDate = fixedDayStart
+
+        // move start time past end time
+        let newStartTime = Calendar.current.date(bySettingHour: 13, minute: 30, second: 0, of: fixedDayStart)!
+        viewModel.startTime = newStartTime
+
+        let merged = Date.merge(date: fixedDayStart, time: newStartTime)
+        XCTAssertEqual(viewModel.startTime, merged)
+        // endTime should now be bumped
+        XCTAssertEqual(viewModel.endTime, merged)
     }
     
     func testEndTime_whenTimestampIsNil_returnsNow_inEditMode() {

@@ -73,7 +73,12 @@ class EventFormViewModel: ObservableObject {
         }
         set {
             let merged = Date.merge(date: selectedDate, time: newValue)
-            event.startTimestamp = Int(merged.timestamp)
+            let newStartTime = Int(merged.timestamp)
+            event.startTimestamp = newStartTime
+            
+            if (event.endTimestamp ?? 0) < newStartTime {
+                  event.endTimestamp = newStartTime
+            }
         }
     }
     
