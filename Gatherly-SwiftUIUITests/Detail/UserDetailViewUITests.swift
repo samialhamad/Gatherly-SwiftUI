@@ -29,7 +29,7 @@ final class UserDetailViewUITests: GatherlyUITestCase {
     }
 
     func testPhoneNumberIsVisible() {
-        let phoneNumber = app.staticTexts["9876543210"]
+        let phoneNumber = app.buttons["userPhoneNumber"]
         XCTAssertTrue(phoneNumber.exists)
     }
 

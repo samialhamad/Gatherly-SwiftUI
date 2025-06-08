@@ -127,6 +127,7 @@ private extension UserDetailView {
             
             if let phone = user.phone, let url = URL(string: "tel:\(phone)") {
                 Link(phone, destination: url)
+                    .accessibilityIdentifier("userPhoneNumber")
                     .font(.subheadline)
                     .foregroundColor(Color(Colors.primary))
             }
