@@ -12,22 +12,21 @@ struct FriendsPicker: View {
     @Binding var selectedMemberIDs: Set<Int>
     
     @State private var searchText = ""
-    @State private var selectedTab = 0
-    
-    private let tabTitles = ["Friends", "Groups"]
+    @State private var selectedTab: FriendsTab = .friends
     
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                FriendsView.pickerView(selectedTab: $selectedTab, tabTitles: tabTitles)
+                FriendsView.pickerView(selectedTab: $selectedTab)
                 SearchBarView(searchText: $searchText)
                 
-                if selectedTab == 0 {
+                switch selectedTab {
+                case .friends:
                     FriendsListView(
                         searchText: $searchText,
                         mode: .select(selectedIDs: $selectedMemberIDs)
                     )
-                } else {
+                case .groups:
                     GroupsListView(
                         searchText: $searchText,
                         mode: .select(selectedIDs: $selectedMemberIDs)

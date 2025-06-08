@@ -9,30 +9,36 @@ import Combine
 import ComposableArchitecture
 import SwiftUI
 
+enum FriendsTab: String, CaseIterable, Identifiable {
+    case friends = "Friends"
+    case groups = "Groups"
+    var id: Self { self }
+    var title: String { rawValue }
+}
+
 struct FriendsView: View {
     @State private var createFriendStore: Store<UserFormReducer.State, UserFormReducer.Action>? = nil
     @State private var isShowingCreateGroup = false
     @EnvironmentObject var navigationState: NavigationState
     @State private var searchText = ""
-    @State private var selectedTab = 0
+    @State private var selectedTab: FriendsTab = .friends
     @EnvironmentObject var usersViewModel: UsersViewModel
-    
-    private let tabTitles = ["Friends", "Groups"]
     
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
-                pickerView(selectedTab: $selectedTab, tabTitles: tabTitles)
+                pickerView(selectedTab: $selectedTab)
                 SearchBarView(searchText: $searchText)
                 
-                if selectedTab == 0 {
+                switch selectedTab {
+                case .friends:
                     FriendsListView(searchText: $searchText, mode: .view)
-                } else {
-                    GroupsListView(searchText: $searchText, mode:. view)
+                case .groups:
+                    GroupsListView(searchText: $searchText, mode: .view)
                 }
             }
             .accessibilityIdentifier("friendsViewRoot")
-            .navigationTitle(tabTitles[selectedTab])
+            .navigationTitle(selectedTab.title)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     toolbarButton
@@ -100,15 +106,14 @@ extension FriendsView {
     }
     
     struct pickerView: View {
-        @Binding var selectedTab: Int
-        let tabTitles: [String]
+        @Binding var selectedTab: FriendsTab
         
         var body: some View {
             Picker("", selection: $selectedTab) {
-                ForEach(tabTitles.indices, id: \.self) { index in
-                    Text(tabTitles[index])
-                        .tag(index)
-                        .accessibilityIdentifier("friendsTabSegment-\(tabTitles[index])")
+                ForEach(FriendsTab.allCases, id: \.self) { tab in
+                    Text(tab.title)
+                        .tag(tab)
+                        .accessibilityIdentifier("friendsTabSegment-\(tab.title)")
                 }
             }
             .pickerStyle(.segmented)
@@ -120,7 +125,8 @@ extension FriendsView {
     
     var toolbarButton: some View {
         Button {
-            if selectedTab == 0 {
+            switch selectedTab {
+            case .friends:
                 createFriendStore = Store(
                     initialState: UserFormReducer.State(
                         currentUser: User(),
@@ -134,7 +140,7 @@ extension FriendsView {
                     ),
                     reducer: { UserFormReducer() }
                 )
-            } else {
+            case .groups:
                 isShowingCreateGroup = true
             }
         } label: {
@@ -158,13 +164,13 @@ extension FriendsView: UserFormViewDelegate {
                 dismissCreateFriendSheet()
                 return
             }
-
+            
             if let newID = createdFriend.id, !(currentUser.friendIDs ?? []).contains(newID) {
                 currentUser.friendIDs?.append(newID)
                 currentUser.friendIDs = currentUser.friendIDs?.sorted()
                 usersViewModel.update(currentUser)
             }
-
+            
             dismissCreateFriendSheet()
         }
     }
