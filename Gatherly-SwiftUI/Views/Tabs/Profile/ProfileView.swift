@@ -76,30 +76,14 @@ private extension ProfileView {
     // MARK: - Subviews
     
     @ViewBuilder
-    private func profileRowContent(title: String, icon: String, isDestructive: Bool = false) -> some View {
-        HStack {
-            Image(systemName: icon)
-                .foregroundColor(isDestructive ? .red : Color(Colors.primary))
-                .frame(width: Constants.ProfileView.profileRowIconFrameWidth)
-            Text(title)
-                .foregroundColor(isDestructive ? .red : Color(Colors.primary))
-            Spacer()
-            Image(systemName: "chevron.right")
-                .foregroundColor(Color(Colors.primary))
-        }
-        .padding()
-    }
-    
-    @ViewBuilder
     private func profileRow(
         title: String,
         icon: String,
         isDestructive: Bool = false,
-        identifier: String? = nil
+        identifier: String? = nil,
+        action: @escaping () -> Void
     ) -> some View {
-        Button {
-            // Action placeholder – to be implemented with TCA
-        } label: {
+        Button(action: action) {
             HStack {
                 Image(systemName: icon)
                     .foregroundColor(isDestructive ? .red : Color(Colors.primary))
@@ -117,7 +101,11 @@ private extension ProfileView {
     
     func profileRowsSection(_ currentUser: User) -> some View {
         VStack(spacing: Constants.ProfileView.profileVStackSpacing) {
-            Button {
+            profileRow(
+                title: "Profile",
+                icon: "person.fill",
+                identifier: "editProfileButton"
+            ) {
                 let avatarImage: UIImage?
                 if let avatarImageName = currentUser.avatarImageName {
                     avatarImage = ImageUtility.loadImageFromDocuments(named: avatarImageName)
@@ -145,30 +133,35 @@ private extension ProfileView {
                     ),
                     reducer: { UserFormReducer() }
                 )
-            } label: {
-                profileRowContent(title: "Profile", icon: "person.fill")
             }
-            .accessibilityIdentifier("editProfileButton")
             
-            Button {
+            profileRow(
+                title: "Sync Contacts",
+                icon: "arrow.trianglehead.2.clockwise.rotate.90.circle.fill",
+                identifier: "syncContactsButton"
+            ) {
                 usersViewModel.isLoading = true
                 ContactSyncHelper.forceSync(currentUserID: SampleData.currentUserID) {
                     usersViewModel.forceReload()
                 }
-            } label: {
-                profileRowContent(
-                    title: "Sync Contacts", icon: "arrow.trianglehead.2.clockwise.rotate.90.circle.fill")
             }
-            .accessibilityIdentifier("syncContactsButton")
             
-            profileRow(title: "Logout",
-                       icon: "arrow.backward.circle.fill",
-                       identifier: "logoutButton")
+            profileRow(
+                title: "Logout",
+                icon: "arrow.backward.circle.fill",
+                identifier: "logoutButton"
+            ) {
+                // No log out implementation at this time
+            }
             
-            profileRow(title: "Delete Account",
-                       icon: "minus.circle.fill",
-                       isDestructive: true,
-                       identifier: "deleteAccountButton")
+            profileRow(
+                title: "Delete Account",
+                icon: "minus.circle.fill",
+                isDestructive: true,
+                identifier: "deleteAccountButton"
+            ) {
+                // No delete acount implementation at this time
+            }
         }
     }
 }
