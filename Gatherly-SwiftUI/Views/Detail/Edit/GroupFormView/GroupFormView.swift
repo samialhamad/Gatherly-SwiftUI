@@ -73,7 +73,7 @@ struct GroupFormView: View {
                         selectedImage: $groupFormViewModel.selectedBannerImage
                     )
                     
-                    EventMembersSection(
+                    FriendsSection(
                         selectedMemberIDs: memberIDsBinding,
                         header: "Invite Friends"
                     )

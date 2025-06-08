@@ -73,7 +73,7 @@ struct EventFormView: View {
                         endTimeRange: eventFormViewModel.endTimeRange
                     )
                     
-                    EventMembersSection(
+                    FriendsSection(
                         selectedMemberIDs: memberIDsBinding,
                         header: "Invite Friends"
                     )
