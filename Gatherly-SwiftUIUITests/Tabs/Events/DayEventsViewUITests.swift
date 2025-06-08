@@ -26,7 +26,7 @@ final class DayEventsViewUITests: GatherlyUITestCase {
 
     func testEventSectionsExistIfEventsPresent() {
         XCTAssertTrue(app.staticTexts["sectionHeader-Finished"].exists ||
-                      app.staticTexts["sectionHeader-In Progress"].exists ||
+                      app.staticTexts["sectionHeader-On Going"].exists ||
                       app.staticTexts["sectionHeader-Upcoming"].exists)
     }
 

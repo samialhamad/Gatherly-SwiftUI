@@ -21,7 +21,7 @@ struct DayEventsView: View {
     var body: some View {
         List {
             finishedEventsSection
-            inProgressEventsSection
+            onGoingEventsSection
             upcomingEventsSection
         }
         .listStyle(.insetGrouped)
@@ -65,25 +65,19 @@ private extension DayEventsView {
     // MARK: - Computed Vars
     
     var allEventsForDate: [Event] {
-        eventsViewModel.events.filter { event in
-            guard let eventDate = event.date else {
-                return false
-            }
-            
-            return Date.isSameDay(date1: eventDate, date2: selectedDate)
-        }
+        DayEventsViewModel.allEvents(for: eventsViewModel.events, on: selectedDate)
     }
     
     var finishedEvents: [Event] {
-        allEventsForDate.filter { $0.hasEnded }
+        DayEventsViewModel.finishedEvents(for: eventsViewModel.events, on: selectedDate)
     }
     
-    var inProgressEvents: [Event] {
-        allEventsForDate.filter { $0.isOngoing }
+    var onGoingEvents: [Event] {
+        DayEventsViewModel.onGoingEvents(for: eventsViewModel.events, on: selectedDate)
     }
     
     var upcomingEvents: [Event] {
-        allEventsForDate.filter { !$0.hasStarted && !$0.hasEnded }
+        DayEventsViewModel.upcomingEvents(for: eventsViewModel.events, on: selectedDate)
     }
     
     // MARK: - Subviews
@@ -103,21 +97,20 @@ private extension DayEventsView {
         }
     }
     
-    var inProgressEventsSection: some View {
+    var onGoingEventsSection: some View {
         Group {
-            if !inProgressEvents.isEmpty {
+            if !onGoingEvents.isEmpty {
                 Section {
-                    ForEach(inProgressEvents) { event in
+                    ForEach(onGoingEvents) { event in
                         EventRowLink(event: event, showDisclosure: false)
                     }
                 } header: {
-                    Text("In Progress")
-                        .accessibilityIdentifier("sectionHeader-In Progress")
+                    Text("Happening now")
+                        .accessibilityIdentifier("sectionHeader-Happening Now")
                 }
             }
         }
     }
-    
     
     var upcomingEventsSection: some View {
         Group {
