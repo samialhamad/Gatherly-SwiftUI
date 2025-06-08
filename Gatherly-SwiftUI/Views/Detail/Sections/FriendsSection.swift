@@ -10,9 +10,9 @@ import SwiftUI
 
 public struct FriendsSection: View {
     @State var cancellables = Set<AnyCancellable>()
-    @State var friends: [User] = []
     @State var isMembersPickerPresented = false
     @Binding var selectedMemberIDs: Set<Int>
+    @EnvironmentObject private var usersViewModel: UsersViewModel
     
     let header: String
         
@@ -38,18 +38,7 @@ public struct FriendsSection: View {
             }
         }
         .onAppear {
-            Publishers.CombineLatest(GatherlyAPI.getCurrentUser(), GatherlyAPI.getUsers())
-                .receive(on: RunLoop.main)
-                .sink { user, friendsList in
-                    if let user {
-                        let friendsDict = friendsList.keyedBy(\.id)
-                        
-                        self.friends = user
-                            .friends(from: friendsDict)
-                            .filter { $0.id != SampleData.currentUserID }
-                    }
-                }
-                .store(in: &cancellables)
+            usersViewModel.loadIfNeeded()
         }
     }
 }
