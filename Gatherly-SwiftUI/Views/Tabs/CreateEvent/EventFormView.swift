@@ -79,8 +79,8 @@ struct EventFormView: View {
                     )
                     
                     EventLocationSection(
-                        header: "Location",
-                        locationName: locationNameBinding
+                        locationName: $eventFormViewModel.locationName,
+                        header: "Location"
                     ) { location in
                         eventFormViewModel.event.location = location
                     }
@@ -179,24 +179,6 @@ struct EventFormView: View {
             get: { Set(eventFormViewModel.event.memberIDs ?? []) },
             set: { newSet in
                 eventFormViewModel.event.memberIDs = Array(newSet).sorted()
-            }
-        )
-    }
-    
-    private var locationNameBinding: Binding<String> {
-        Binding(
-            get: { eventFormViewModel.event.location?.name ?? "" },
-            set: { newName in
-                if eventFormViewModel.event.location == nil {
-                    eventFormViewModel.event.location = Location(
-                        address: nil,
-                        latitude: 0,
-                        longitude: 0,
-                        name: newName
-                    )
-                } else {
-                    eventFormViewModel.event.location?.name = newName
-                }
             }
         )
     }

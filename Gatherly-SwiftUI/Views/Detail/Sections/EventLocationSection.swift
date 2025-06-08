@@ -8,13 +8,13 @@
 import SwiftUI
 
 struct EventLocationSection: View {
-    let header: String
-    @Binding var locationName: String
-    let onSetLocation: (Location?) -> Void
-    
     @State private var isSelectingSuggestion = false
+    @Binding var locationName: String
     @State private var selectedLocationAddress: String = ""
     @StateObject private var searchViewModel = LocationSearchViewModel()
+    
+    let header: String
+    let onSetLocation: (Location?) -> Void
     
     var body: some View {
         Section(header: Text(header)) {
@@ -29,10 +29,12 @@ struct EventLocationSection: View {
                             return
                         }
                         
-                        searchViewModel.queryFragment = newValue
-                        
                         if newValue.isEmpty {
+                            selectedLocationAddress = ""
                             onSetLocation(nil)
+                            searchViewModel.queryFragment = ""
+                        } else {
+                            searchViewModel.queryFragment = newValue
                         }
                     }
             }
@@ -49,11 +51,7 @@ struct EventLocationSection: View {
                         isSelectingSuggestion = true
                         searchViewModel.search(for: suggestion) { location in
                             onSetLocation(location)
-                            
-                            if let name = location?.name {
-                                locationName = name
-                            }
-                            
+                            locationName = location?.name ?? ""
                             selectedLocationAddress = location?.address ?? ""
                             searchViewModel.suggestions = []
                         }

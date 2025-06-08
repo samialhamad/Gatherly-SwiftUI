@@ -59,6 +59,7 @@ final class EventFormViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.event.description, "")
         XCTAssertNil(viewModel.event.bannerImageName)
         XCTAssertNil(viewModel.selectedBannerImage)
+        XCTAssertEqual(viewModel.locationName, "")
         
         let expectedDayStart = Date.startOfDay(Date())
         XCTAssertEqual(viewModel.selectedDate, expectedDayStart)
@@ -153,6 +154,7 @@ final class EventFormViewModelTests: XCTestCase {
         XCTAssertEqual(viewModel.event.description, "")
         XCTAssertEqual(viewModel.event.memberIDs, [])
         XCTAssertEqual(viewModel.event.categories, [])
+        XCTAssertEqual(viewModel.locationName, "")
         XCTAssertNil(viewModel.selectedBannerImage)
         
         let expectedDayStart = Date.startOfDay(Date())
