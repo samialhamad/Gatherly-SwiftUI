@@ -69,7 +69,7 @@ struct GatherlyCalendarView: View {
                     .font(.title2.bold())
                     .foregroundColor(.primary)
                     .padding(.vertical)
-                    .padding(.horizontal)
+                    .padding(.horizontal, Constants.GatherlyCalendarView.calendarMonthHeaderHorziontalPadding)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
         }
