@@ -12,41 +12,9 @@ final class DayEventsViewModelTests: XCTestCase {
     
     let today = Date()
     
-    let finishedEvent: Event = Event(
-        categories: [],
-        description: "",
-        endTimestamp: Int((Date().minus(calendarComponent: .hour, value: 1) ?? Date()).timestamp),
-        id: 1,
-        plannerID: 1,
-        location: nil,
-        memberIDs: [2, 3],
-        title: "Finished Event",
-        startTimestamp: Int((Date().minus(calendarComponent: .hour, value: 2) ?? Date()).timestamp)
-    )
-    
-    let onGoingEvent: Event = Event(
-        categories: [],
-        description: "",
-        endTimestamp: Int((Date().plus(calendarComponent: .hour, value: 1) ?? Date()).timestamp),
-        id: 3,
-        plannerID: 1,
-        location: nil,
-        memberIDs: [2, 3],
-        title: "On Going Event",
-        startTimestamp: Int((Date().minus(calendarComponent: .hour, value: 1) ?? Date()).timestamp)
-    )
-    
-    let upcomingEvent: Event = Event(
-        categories: [],
-        description: "",
-        endTimestamp: Int((Date().plus(calendarComponent: .hour, value: 2) ?? Date()).timestamp),
-        id: 4,
-        plannerID: 1,
-        location: nil,
-        memberIDs: [2, 3],
-        title: "Upcoming Event",
-        startTimestamp: Int((Date().plus(calendarComponent: .hour, value: 1) ?? Date()).timestamp)
-    )
+    let finishedEvent: Event = SampleData.sampleEvents[1]
+    let onGoingEvent: Event = SampleData.sampleEvents[2]
+    let upcomingEvent: Event = SampleData.sampleEvents[3]
     
     func testFinishedEvents() {
         let finishedEvents = DayEventsViewModel.finishedEvents(
