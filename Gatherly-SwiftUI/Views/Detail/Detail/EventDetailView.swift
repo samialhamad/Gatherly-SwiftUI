@@ -227,7 +227,7 @@ private extension EventDetailView {
                 Text("Planner")
                     .font(.headline)
                 NavigationLink(destination: UserDetailView(user: planner)) {
-                    ProfileRow(user: planner)
+                    UserRow(user: planner)
                 }
             }
             if !members.isEmpty {
@@ -235,7 +235,7 @@ private extension EventDetailView {
                     .font(.headline)
                 ForEach(members, id: \.id) { user in
                     NavigationLink(destination: UserDetailView(user: user)) {
-                        ProfileRow(user: user)
+                        UserRow(user: user)
                     }
                 }
             }

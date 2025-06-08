@@ -119,7 +119,7 @@ private extension FriendsListView {
         switch mode {
         case .view:
             NavigationLink(destination: UserDetailView(user: friend)) {
-                ProfileRow(user: friend)
+                UserRow(user: friend)
             }
             .accessibilityIdentifier("friendRow-\(friend.firstName ?? "")")
         case .select(let binding):
@@ -127,7 +127,7 @@ private extension FriendsListView {
                 toggleSelection(friend.id, binding: binding)
             } label: {
                 HStack {
-                    ProfileRow(user: friend)
+                    UserRow(user: friend)
                     Spacer()
                     if binding.wrappedValue.contains(friend.id ?? -1) {
                         Image(systemName: "checkmark")

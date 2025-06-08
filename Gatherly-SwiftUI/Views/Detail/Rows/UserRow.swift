@@ -1,5 +1,5 @@
 //
-//  ProfileRow.swift
+//  UserRow.swift
 //  Gatherly-SwiftUI
 //
 //  Created by Sami Alhamad on 3/24/25.
@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct ProfileRow: View {
+struct UserRow: View {
     let user: User
         
     var body: some View {
         HStack {
             AvatarView(
-                size: Constants.ProfileRow.avatarCircleSize,
+                size: Constants.UserRow.avatarCircleSize,
                 mode: .user(user: user)
             )
             
@@ -21,11 +21,11 @@ struct ProfileRow: View {
             
             Spacer()
         }
-        .padding(.vertical, Constants.ProfileRow.hstackPadding)
+        .padding(.vertical, Constants.UserRow.hstackPadding)
     }
 }
 
-private extension ProfileRow {
+private extension UserRow {
     var nameView: some View {
         VStack(alignment: .leading) {
             Text("\(user.firstName ?? "") \(user.lastName ?? "")")
@@ -35,7 +35,7 @@ private extension ProfileRow {
 }
 
 #Preview {
-    ProfileRow(user: User(
+    UserRow(user: User(
         createdTimestamp: nil,
         eventIDs: nil,
         firstName: "John",

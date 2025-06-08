@@ -129,7 +129,7 @@ private extension GroupDetailView {
                     Text("Leader")
                         .font(.headline)
                     NavigationLink(destination: UserDetailView(user: leader)) {
-                        ProfileRow(user: leader)
+                        UserRow(user: leader)
                     }
                     .accessibilityIdentifier("groupMemberRow-\(leader.firstName ?? "")")
                 }
@@ -139,7 +139,7 @@ private extension GroupDetailView {
                         .font(.headline)
                     ForEach(members, id: \.id) { user in
                         NavigationLink(destination: UserDetailView(user: user)) {
-                            ProfileRow(user: user)
+                            UserRow(user: user)
                         }
                         .accessibilityIdentifier("groupMemberRow-\(user.firstName ?? "")")
                     }

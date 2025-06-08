@@ -164,11 +164,6 @@ struct Constants {
         static let friendButtonTopPadding: CGFloat = 8
         static let vstackSpacing: CGFloat = 8
     }
-
-    struct ProfileRow {
-        static let avatarCircleSize: CGFloat = 40
-        static let hstackPadding: CGFloat = 4
-    }
     
     struct UserFormView {
         
@@ -183,5 +178,10 @@ struct Constants {
         static let createFriendString: String = "New Friend"
         static let updateCurrentUserString: String = "Edit Profile"
         static let updateFriendString: String = "Edit Friend"
+    }
+    
+    struct UserRow {
+        static let avatarCircleSize: CGFloat = 40
+        static let hstackPadding: CGFloat = 4
     }
 }

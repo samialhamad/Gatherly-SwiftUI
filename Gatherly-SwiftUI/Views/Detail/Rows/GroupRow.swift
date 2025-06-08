@@ -21,7 +21,7 @@ struct GroupRow: View {
             
             Spacer()
         }
-        .padding(.vertical, Constants.ProfileRow.hstackPadding)
+        .padding(.vertical, Constants.GroupRow.hstackPadding)
     }
 }
 
