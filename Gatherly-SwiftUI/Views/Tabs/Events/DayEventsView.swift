@@ -82,48 +82,44 @@ private extension DayEventsView {
     
     // MARK: - Subviews
     
-    var finishedEventsSection: some View {
+    func eventsSection(
+        for events: [Event],
+        title: String,
+        identifier: String
+    ) -> some View {
         Group {
-            if !finishedEvents.isEmpty {
-                Section {
-                    ForEach(finishedEvents) { event in
-                        EventRowLink(event: event, showDisclosure: false)
+            if !events.isEmpty {
+                Section(header: Text(title)
+                    .accessibilityIdentifier(identifier)) {
+                        ForEach(events) { event in
+                            EventRowLink(event: event, showDisclosure: false)
+                        }
                     }
-                } header: {
-                    Text("Finished")
-                        .accessibilityIdentifier("sectionHeader-Finished")
-                }
             }
         }
+    }
+    
+    var finishedEventsSection: some View {
+        eventsSection(
+            for: finishedEvents,
+            title: "Finished",
+            identifier: "sectionHeader-Finished"
+        )
     }
     
     var onGoingEventsSection: some View {
-        Group {
-            if !onGoingEvents.isEmpty {
-                Section {
-                    ForEach(onGoingEvents) { event in
-                        EventRowLink(event: event, showDisclosure: false)
-                    }
-                } header: {
-                    Text("Happening now")
-                        .accessibilityIdentifier("sectionHeader-Happening Now")
-                }
-            }
-        }
+        eventsSection(
+            for: onGoingEvents,
+            title: "Happening now",
+            identifier: "sectionHeader-Happening Now"
+        )
     }
     
     var upcomingEventsSection: some View {
-        Group {
-            if !upcomingEvents.isEmpty {
-                Section {
-                    ForEach(upcomingEvents) { event in
-                        EventRowLink(event: event, showDisclosure: false)
-                    }
-                } header: {
-                    Text("Upcoming")
-                        .accessibilityIdentifier("sectionHeader-Upcoming")
-                }
-            }
-        }
+        eventsSection(
+            for: upcomingEvents,
+            title: "Upcoming",
+            identifier: "sectionHeader-Upcoming"
+        )
     }
 }
