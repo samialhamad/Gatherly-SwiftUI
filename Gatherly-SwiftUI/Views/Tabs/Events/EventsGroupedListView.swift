@@ -57,9 +57,6 @@ private extension EventsGroupedListView {
         .safeAreaInset(edge: .top) {
             Color.clear.frame(height: Constants.EventsGroupedListView.topFrameHeight)
         }
-        .onAppear {
-            eventsGroupedListViewModel.scrollToNearestAvailableDay(dateKeys: dateKeys, proxy: proxy)
-        }
     }
     
     func scrollToTodayToolbarButton(dateKeys: [Date], proxy: ScrollViewProxy) -> some ToolbarContent {
