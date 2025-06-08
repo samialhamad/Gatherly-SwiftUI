@@ -19,6 +19,12 @@ class ContactSyncManager {
     private init() {}
     
     func fetchContacts(completion: @escaping ([SyncedContact]) -> Void) {
+        // dont prompt to share contacts if in UI Test mode
+        if ProcessInfo.processInfo.environment["UITESTING"] == "1" {
+            completion([])
+            return
+        }
+        
         let store = CNContactStore()
 
         store.requestAccess(for: .contacts) { granted, _ in
