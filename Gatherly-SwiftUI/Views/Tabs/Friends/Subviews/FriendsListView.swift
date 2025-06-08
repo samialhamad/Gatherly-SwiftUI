@@ -42,23 +42,17 @@ private extension FriendsListView {
     // MARK: - Computed Vars
     
     var friends: [User] {
-        guard let currentUser = usersViewModel.currentUser else {
-            return []
-        }
-        
-        let ids = Set(currentUser.friendIDs ?? [])
-        
-        return usersViewModel.users.filter { user in
-            guard let id = user.id else {
-                return false
-            }
-            
-            return ids.contains(id)
-        }
+        friendsListViewModel.friends(
+            from: usersViewModel.users,
+            currentUser: usersViewModel.currentUser
+        )
     }
     
     private var filteredFriends: [User] {
-        friendsListViewModel.filteredFriends(from: friends, searchText: searchText)
+        friendsListViewModel.filteredFriends(
+            from: friends,
+            searchText: searchText
+        )
     }
     
     private var groupedFriends: [String: [User]] {
@@ -69,25 +63,11 @@ private extension FriendsListView {
         friendsListViewModel.sortedSectionKeys(from: filteredFriends)
     }
     
-    // MARK: - Functions
-    
-    private func toggleSelection(_ id: Int?, binding: Binding<Set<Int>>) {
-        guard let id = id else {
-            return
-        }
-        
-        if binding.wrappedValue.contains(id) {
-            binding.wrappedValue.remove(id)
-        } else {
-            binding.wrappedValue.insert(id)
-        }
-    }
-    
     // MARK: - Subviews
     
     func alphabetOverlay(proxy: ScrollViewProxy) -> some View {
         Group {
-            if friendsListViewModel.searchText.isEmpty {
+            if searchText.isEmpty {
                 AlphabetIndexView(letters: sortedSectionKeys) { letter in
                     withAnimation {
                         proxy.scrollTo(letter, anchor: .top)
@@ -100,14 +80,11 @@ private extension FriendsListView {
     
     func friendList(proxy: ScrollViewProxy) -> some View {
         List {
-            ForEach(friendsListViewModel.sortedSectionKeys(from: friendsListViewModel.filteredFriends(from: friends, searchText: searchText)), id: \.self) { key in
+            ForEach(sortedSectionKeys, id: \.self) { key in
                 Section(header: Text(key).id(key)) {
-                    ForEach(friendsListViewModel.groupedFriends(
-                        from: friendsListViewModel.filteredFriends(
-                            from: friends,
-                            searchText: searchText))[key] ?? []) { friend in
-                                rowView(for: friend)
-                            }
+                    ForEach(groupedFriends[key] ?? []) { friend in
+                        rowView(for: friend)
+                    }
                 }
             }
         }
@@ -124,11 +101,14 @@ private extension FriendsListView {
             .accessibilityIdentifier("friendRow-\(friend.firstName ?? "")")
         case .select(let binding):
             Button {
-                toggleSelection(friend.id, binding: binding)
+                binding.wrappedValue = friendsListViewModel.toggledSelection(
+                    for: friend.id,
+                    in: binding.wrappedValue
+                )
             } label: {
-                HStack {
-                    UserRow(user: friend)
-                    Spacer()
+                    HStack {
+                        UserRow(user: friend)
+                        Spacer()
                     if binding.wrappedValue.contains(friend.id ?? -1) {
                         Image(systemName: "checkmark")
                             .foregroundColor(Color(Colors.primary))

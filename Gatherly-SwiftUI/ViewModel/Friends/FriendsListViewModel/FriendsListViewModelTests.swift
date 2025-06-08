@@ -21,6 +21,26 @@ final class FriendsListViewModelTests: XCTestCase {
         ]
     }
     
+    // MARK: - Friends
+    
+    func testFriends() {
+        let viewModel = FriendsListViewModel()
+        
+        let currentUser = makeUser(id: 1, firstName: "Current", lastName: "User")
+        currentUser.friendIDs = [2, 4]
+        
+        let user2 = makeUser(id: 2, firstName: "Two", lastName: "User")
+        let user3 = makeUser(id: 3, firstName: "Three", lastName: "User")
+        let user4 = makeUser(id: 4, firstName: "Four", lastName: "User")
+        let allUsers = [user2, user3, user4]
+        
+        let result = viewModel.friends(from: allUsers, currentUser: currentUser)
+        
+        XCTAssertEqual(result.count, 2)
+        XCTAssertTrue(result.contains { $0.id == 2 })
+        XCTAssertTrue(result.contains { $0.id == 4 })
+    }
+    
     func testFilteredFriends() {
         let viewModel = FriendsListViewModel()
         let searchText = "tw"
@@ -55,5 +75,20 @@ final class FriendsListViewModelTests: XCTestCase {
         let keys = viewModel.sortedSectionKeys(from: friends)
         
         XCTAssertEqual(keys, ["A", "Z"])
+    }
+    
+    // MARK: - Toggle
+    
+    func testToggledSelection() {
+        let viewModel = FriendsListViewModel()
+        
+        // When ID is not present it should be added
+        let startSet: Set<Int> = [1, 2]
+        let addedSelection = viewModel.toggledSelection(for: 3, in: startSet)
+        XCTAssertEqual(addedSelection, [1, 2, 3])
+        
+        // When ID is present it should be removed
+        let removedSelection = viewModel.toggledSelection(for: 2, in: addedSelection)
+        XCTAssertEqual(removedSelection, [1, 3])
     }
 }

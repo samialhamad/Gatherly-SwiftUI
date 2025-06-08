@@ -10,6 +10,24 @@ import Foundation
 class FriendsListViewModel: ObservableObject {
     @Published var searchText: String = ""
     
+    // MARK: - Friends
+    
+    func friends(from users: [User], currentUser: User?) -> [User] {
+        guard let currentUser else {
+            return []
+        }
+        
+        let ids = Set(currentUser.friendIDs ?? [])
+        
+        return users.filter { user in
+            guard let id = user.id else {
+                return false
+            }
+            
+            return ids.contains(id)
+        }
+    }
+    
     func filteredFriends(from friends: [User], searchText: String) -> [User] {
         if searchText.isEmpty {
             return friends
@@ -32,4 +50,21 @@ class FriendsListViewModel: ObservableObject {
         let grouped = groupedFriends(from: friends)
         return grouped.keys.sorted()
     }
+    
+    // MARK: - Toggle
+    
+    func toggledSelection(for id: Int?, in selectedIDs: Set<Int>) -> Set<Int> {
+            guard let id else {
+                return selectedIDs
+            }
+        
+            var newSet = selectedIDs
+            if newSet.contains(id) {
+                newSet.remove(id)
+            } else {
+                newSet.insert(id)
+            }
+        
+            return newSet
+        }
 }
