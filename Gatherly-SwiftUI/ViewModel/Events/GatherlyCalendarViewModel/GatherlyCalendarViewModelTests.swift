@@ -81,7 +81,7 @@ final class GatherlyCalendarViewModelTests: XCTestCase {
         let events: [Event] = []
         let label = gatherlyCalendarViewModel.eventCountLabel(for: tomorrow, events: events)
         
-        XCTAssertEqual(label, "No plans on \(tomorrow.formatted(.dateTime.weekday(.wide).month(.wide).day()))!")
+        XCTAssertEqual(label, "No plans on \(tomorrow.formatted(.dateTime.month(.wide).day()))!")
     }
     
     func testEventCountLabel_futureOneEvent() {
@@ -89,7 +89,7 @@ final class GatherlyCalendarViewModelTests: XCTestCase {
         let events = [makeEvent(id: 1, date: tomorrow)]
         let label = gatherlyCalendarViewModel.eventCountLabel(for: tomorrow, events: events)
                 
-        XCTAssertEqual(label, "1 upcoming event on \(tomorrow.formatted(.dateTime.weekday(.wide).month(.wide).day()))!")
+        XCTAssertEqual(label, "1 upcoming event on \(tomorrow.formatted(.dateTime.month(.wide).day()))!")
     }
     
     func testEventCountLabel_futureMultipleEvents() {
@@ -100,6 +100,6 @@ final class GatherlyCalendarViewModelTests: XCTestCase {
         ]
         let label = gatherlyCalendarViewModel.eventCountLabel(for: tomorrow, events: events)
         
-        XCTAssertEqual(label, "2 upcoming events on \(tomorrow.formatted(.dateTime.weekday(.wide).month(.wide).day()))!")
+        XCTAssertEqual(label, "2 upcoming events on \(tomorrow.formatted(.dateTime.month(.wide).day()))!")
     }
 }

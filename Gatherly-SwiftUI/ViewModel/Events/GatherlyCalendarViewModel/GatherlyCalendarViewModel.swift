@@ -34,9 +34,9 @@ class GatherlyCalendarViewModel: ObservableObject {
             : "\(count) events planned for today!"
             
         default:
-            return count == 0 ? "No plans on \(selectedDay.formatted(.dateTime.weekday(.wide).month(.wide).day()))!"
-            : count == 1 ? "1 upcoming event on \(selectedDay.formatted(.dateTime.weekday(.wide).month(.wide).day()))!"
-            : "\(count) upcoming events on \(selectedDay.formatted(.dateTime.weekday(.wide).month(.wide).day()))!"
+            return count == 0 ? "No plans on \(selectedDay.formatted(.dateTime.month(.wide).day()))!"
+            : count == 1 ? "1 upcoming event on \(selectedDay.formatted(.dateTime.month(.wide).day()))!"
+            : "\(count) upcoming events on \(selectedDay.formatted(.dateTime.month(.wide).day()))!"
         }
     }
 }
