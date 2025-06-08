@@ -24,9 +24,9 @@ class EventsGroupedListViewModel: ObservableObject {
     func scrollToNearestAvailableDay(
         dateKeys: [Date],
         proxy: ScrollViewProxy,
-        iniatied: Bool = false
+        initiated: Bool = false
     ) {
-        guard iniatied || !hasPerformedInitialScroll else {
+        guard initiated || !hasPerformedInitialScroll else {
             return
         }
 
@@ -43,7 +43,7 @@ class EventsGroupedListViewModel: ObservableObject {
             }
         }
         
-        if !iniatied {
+        if !initiated {
             hasPerformedInitialScroll = true
         }
     }

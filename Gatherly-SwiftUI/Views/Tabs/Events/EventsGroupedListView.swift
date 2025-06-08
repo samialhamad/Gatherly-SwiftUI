@@ -69,7 +69,7 @@ private extension EventsGroupedListView {
                     eventsGroupedListViewModel.scrollToNearestAvailableDay(
                         dateKeys: dateKeys,
                         proxy: proxy,
-                        iniatied: true
+                        initiated: true
                     )
                 } label: {
                     Image(systemName: "calendar.badge.clock.rtl")
