@@ -9,6 +9,7 @@ import Combine
 import SwiftUI
 
 struct GroupsListView: View {
+    @StateObject private var groupsListViewModel = GroupsListViewModel()
     @EnvironmentObject var groupsViewModel: GroupsViewModel
     @Binding var searchText: String
     @EnvironmentObject var usersViewModel: UsersViewModel
@@ -42,38 +43,10 @@ private extension GroupsListView {
     }
     
     var filteredGroups: [UserGroup] {
-        guard let currentUser else {
-            return []
-        }
-        
-        let userGroups = groupsViewModel.groups.filter { group in
-            let isLeader = (group.leaderID == currentUser.id)
-            let isMember = group.id.flatMap { currentUser.groupIDs?.contains($0) } ?? false
-            
-            return isLeader || isMember
-        }
-        
-        if searchText.isEmpty {
-            return userGroups
-        } else {
-            let lowercasedQuery = searchText.lowercased()
-            
-            return userGroups.filter {
-                ($0.name ?? "").lowercased().contains(lowercasedQuery)
-            }
-        }
-    }
-    
-    // MARK: - Functions
-    
-    private func toggleGroupSelection(_ memberIDs: [Int], binding: Binding<Set<Int>>) {
-        let allSelected = memberIDs.allSatisfy { binding.wrappedValue.contains($0) }
-        
-        if allSelected {
-            memberIDs.forEach { binding.wrappedValue.remove($0) }
-        } else {
-            memberIDs.forEach { binding.wrappedValue.insert($0) }
-        }
+        groupsListViewModel.filteredGroups(
+            from: groupsViewModel.groups,
+            currentUser: currentUser,
+            searchText: searchText)
     }
     
     // MARK: - Subviews
@@ -91,7 +64,10 @@ private extension GroupsListView {
             
         case .select(let binding):
             Button {
-                toggleGroupSelection(group.memberIDs, binding: binding)
+                binding.wrappedValue = groupsListViewModel.toggledGroupSelection(
+                    for: group.memberIDs,
+                    in: binding.wrappedValue
+                )
             } label: {
                 HStack {
                     GroupRow(group: group)

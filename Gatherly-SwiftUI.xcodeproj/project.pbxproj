@@ -81,6 +81,7 @@
 				ViewModel/Friends/FriendsListViewModel/FriendsListViewModelTests.swift,
 				ViewModel/Groups/GroupDetailViewModel/GroupDetailViewModelTests.swift,
 				ViewModel/Groups/GroupForm/GroupFormViewModelTests.swift,
+				ViewModel/Groups/GroupsListViewModel/GroupsListViewModelTests.swift,
 				Views/Detail/Edit/UserFormView/UserFormViewTests.swift,
 			);
 			target = F11CDC2F2D77958B007BC1F1 /* Gatherly-SwiftUITests */;
@@ -128,6 +129,7 @@
 				ViewModel/Friends/FriendsListViewModel/FriendsListViewModelTests.swift,
 				ViewModel/Groups/GroupDetailViewModel/GroupDetailViewModelTests.swift,
 				ViewModel/Groups/GroupForm/GroupFormViewModelTests.swift,
+				ViewModel/Groups/GroupsListViewModel/GroupsListViewModelTests.swift,
 				Views/Detail/Edit/UserFormView/UserFormViewTests.swift,
 			);
 			target = F11CDC1F2D77958A007BC1F1 /* Gatherly-SwiftUI */;
