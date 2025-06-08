@@ -24,15 +24,6 @@ struct EventRow: View {
 
 private extension EventRow {
     
-    // MARK: - Functions
-    
-    func formattedTime(_ timestamp: Int) -> String {
-        let date = Date(timestamp)
-        let formatter = DateFormatter()
-        formatter.timeStyle = .short
-        return formatter.string(from: date)
-    }
-    
     // MARK: - Subviews
     
     var iconView: some View {
@@ -58,7 +49,7 @@ private extension EventRow {
     var timeAndDisclosureView: some View {
         HStack(spacing: Constants.EventRow.timeAndDisclosureSpacing) {
             if let start = event.startTimestamp {
-                Text(formattedTime(start))
+                Text(Date.formattedTime(start))
                     .font(.subheadline)
                     .foregroundColor(.gray)
             }

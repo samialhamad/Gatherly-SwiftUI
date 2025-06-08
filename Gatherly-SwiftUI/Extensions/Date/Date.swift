@@ -208,4 +208,11 @@ extension Date {
             return ""
         }
     }
+    
+    public static func formattedTime(_ timestamp: Int) -> String {
+        let date = Date(timestamp)
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        return formatter.string(from: date)
+    }
 }

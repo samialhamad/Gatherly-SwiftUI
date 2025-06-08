@@ -360,4 +360,25 @@ final class DateTests: XCTestCase {
         let expectedTimeString = "00:08"
         XCTAssertEqual(timeString, expectedTimeString)
     }
+    
+    func testFormattedTime() {
+        var components = DateComponents()
+        components.year = 2025
+        components.month = 6
+        components.day = 7
+        components.hour = 10
+        components.minute = 45
+        components.second = 0
+        
+        let date = Calendar.current.date(from: components)!
+        let timestamp = Int(date.timestamp)
+        
+        let formattedTime = Date.formattedTime(timestamp)
+        
+        let formatter = DateFormatter()
+        formatter.timeStyle = .short
+        let expected = formatter.string(from: date)
+        
+        XCTAssertEqual(formattedTime, expected)
+    }
 }
