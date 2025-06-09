@@ -92,7 +92,7 @@ private extension DayEventsView {
                 Section(header: Text(title)
                     .accessibilityIdentifier(identifier)) {
                         ForEach(events) { event in
-                            EventRowLink(event: event, showDisclosure: false)
+                            EventRowLink(event: event)
                         }
                     }
             }

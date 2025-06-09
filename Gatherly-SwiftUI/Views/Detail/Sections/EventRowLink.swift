@@ -9,13 +9,12 @@ import SwiftUI
 
 struct EventRowLink: View {
     let event: Event
-    var showDisclosure: Bool = true
     
     var body: some View {
         NavigationLink {
             EventDetailView(event: event)
         } label: {
-            EventRow(event: event, showDisclosure: showDisclosure)
+            EventRow(event: event)
         }
         .accessibilityIdentifier("eventRow-\(event.title ?? "Untitled")")
     }

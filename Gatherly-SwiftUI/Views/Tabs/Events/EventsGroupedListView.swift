@@ -44,7 +44,7 @@ private extension EventsGroupedListView {
                 
                 Section {
                     ForEach(eventsForDate) { event in
-                        EventRowLink(event: event, showDisclosure: false)
+                        EventRowLink(event: event)
                     }
                 } header: {
                     Text(dateLabel)

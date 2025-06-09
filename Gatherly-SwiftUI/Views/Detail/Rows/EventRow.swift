@@ -9,7 +9,6 @@ import SwiftUI
 
 struct EventRow: View {
     let event: Event
-    var showDisclosure: Bool = true
     
     var body: some View {
         HStack {
@@ -52,11 +51,6 @@ private extension EventRow {
                 Text(Date.formattedTime(start))
                     .font(.subheadline)
                     .foregroundColor(.gray)
-            }
-            
-            if showDisclosure {
-                Image(systemName: "chevron.right")
-                    .foregroundColor(Color(Colors.primary))
             }
         }
     }
