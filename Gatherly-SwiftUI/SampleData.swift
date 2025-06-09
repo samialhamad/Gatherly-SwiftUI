@@ -38,7 +38,7 @@ struct SampleData {
             friendIDs: nil,
             id: 3,
             lastName: "Brown",
-            phone: "5555555555"
+            phone: "4556595585"
         ),
         User(
             createdTimestamp: Int(Date().timestamp),
@@ -47,64 +47,64 @@ struct SampleData {
             friendIDs: nil,
             id: 4,
             lastName: "Zebrus",
-            phone: "9876543210"
+            phone: "5465555990"
         )
     ]
     
     static let sampleEvents: [Event] = [
         Event(
             categories: randomCategories(),
-            description: "Event from yesterday",
+            description: "Practice Jiu Jitsu with friends",
             endTimestamp: Int((Date().minus(calendarComponent: .hour, value: 22) ?? Date()).timestamp),
             id: 1,
             plannerID: 1,
             location: Location(latitude: 37.7749, longitude: -122.4194, name: "San Francisco"),
             memberIDs: [2, 3],
-            title: "Event Yesterday",
+            title: "Jiu Jitsu Class",
             startTimestamp: Int((Date().minus(calendarComponent: .hour, value: 24) ?? Date()).timestamp)
         ),
         Event(
             categories: randomCategories(),
-            description: "Event 1 for today, finished, test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test test",
+            description: "Study session with friends, make sure to cover all topics from lectures, then quiz each other",
             endTimestamp: Int((Date().minus(calendarComponent: .hour, value: 1) ?? Date()).timestamp),
             id: 2,
             plannerID: 1,
             location: Location(latitude: 34.0522, longitude: -118.2437, name: "Los Angeles"),
-            memberIDs: [2, 3],
-            title: "Event 1 Today",
+            memberIDs: [3, 4],
+            title: "Study Session",
             startTimestamp: Int((Date().minus(calendarComponent: .hour, value: 2) ?? Date()).timestamp)
         ),
         Event(
             categories: randomCategories(),
-            description: "Event 2 for today, ongoing",
+            description: "Take my new bike out for a ride on the trail",
             endTimestamp: Int((Date().plus(calendarComponent: .hour, value: 1) ?? Date()).timestamp),
             id: 3,
             plannerID: 1,
             location: Location(latitude: 40.7128, longitude: -74.0060, name: "New York"),
-            memberIDs: [2, 3],
-            title: "Event 2 Today",
+            memberIDs: [2],
+            title: "Bike Ride",
             startTimestamp: Int((Date().minus(calendarComponent: .hour, value: 1) ?? Date()).timestamp)
         ),
         Event(
             categories: randomCategories(),
-            description: "Event 3 for today, in an hour",
+            description: "Try out the new local sushi spot",
             endTimestamp: Int((Date().plus(calendarComponent: .hour, value: 2) ?? Date()).timestamp),
             id: 4,
             plannerID: 1,
             location: Location(latitude: 51.5074, longitude: -0.1278, name: "London"),
-            memberIDs: [2, 3],
-            title: "Event 3 Today",
+            memberIDs: [2, 3, 4],
+            title: "Sushi",
             startTimestamp: Int((Date().plus(calendarComponent: .hour, value: 1) ?? Date()).timestamp)
         ),
         Event(
             categories: randomCategories(),
-            description: "Event planned for tomorrow, hope to see you there!",
+            description: "Have friends help with job interview prep, specifically mock technical questions",
             endTimestamp: Int((Date().plus(calendarComponent: .hour, value: 25) ?? Date()).timestamp),
             id: 5,
             plannerID: 2,
             location: Location(latitude: 48.8566, longitude: 2.3522, name: "Paris"),
             memberIDs: [1, 3],
-            title: "Event Tomorrow",
+            title: "Job Interview Prep",
             startTimestamp: Int((Date().plus(calendarComponent: .hour, value: 24) ?? Date()).timestamp)
         )
     ]
@@ -117,22 +117,22 @@ struct SampleData {
             messages: [
                 Message(id: 1, userID: 1, message: "Welcome to the group!", read: true)
             ],
-            name: "Group Sami Leads"
+            name: "Work Buddies"
         ),
         UserGroup(
             id: 2,
             leaderID: 4,
-            memberIDs: [1, 5],
+            memberIDs: [1, 2],
             messages: [
                 Message(id: 2, userID: 4, message: "Let's plan an event!", read: false)
             ],
-            name: "Group I'm a Member in"
+            name: "Study Group"
         )
     ]
 }
 
 private func randomCategories() -> [EventCategory] {
     let allCategories = EventCategory.allCases
-    let randomCount = Int.random(in: 0...3) // Each event gets 1-3 random categories
+    let randomCount = Int.random(in: 0...3)
     return Array(allCategories.shuffled().prefix(randomCount))
 }
