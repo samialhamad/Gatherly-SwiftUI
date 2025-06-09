@@ -9,21 +9,30 @@ import SwiftUI
 
 struct EventLocationSection: View {
     @State private var isSelectingSuggestion = false
-    @Binding var locationName: String
+    @Binding var locationName: String?
     @State private var selectedLocationAddress: String? = nil
     @StateObject private var searchViewModel = LocationSearchViewModel()
     
     let header: String
     let onSetLocation: (Location?) -> Void
     
+    private var locationNameBinding: Binding<String> {
+        Binding(
+            get: { locationName ?? "" },
+            set: { newValue in
+                locationName = newValue.isEmpty ? nil : newValue
+            }
+        )
+    }
+    
     var body: some View {
         Section(header: Text(header)) {
             HStack {
-                TextField("Enter location name", text: $locationName)
+                TextField("Enter location name", text: locationNameBinding)
                     .accessibilityIdentifier("eventLocationTextField")
                     .autocapitalization(.words)
                     .disableAutocorrection(true)
-                    .onChange(of: locationName) { _, newValue in
+                    .onChange(of: locationNameBinding.wrappedValue) { _, newValue in
                         guard !isSelectingSuggestion else {
                             isSelectingSuggestion = false
                             return
@@ -31,6 +40,7 @@ struct EventLocationSection: View {
                         
                         if newValue.isEmpty {
                             selectedLocationAddress = nil
+                            locationName = nil
                             onSetLocation(nil)
                             searchViewModel.queryFragment = ""
                         } else {
@@ -51,7 +61,7 @@ struct EventLocationSection: View {
                         isSelectingSuggestion = true
                         searchViewModel.search(for: suggestion) { location in
                             onSetLocation(location)
-                            locationName = location?.name ?? ""
+                            locationName = location?.name
                             selectedLocationAddress = location?.address
                             searchViewModel.suggestions = []
                         }

@@ -12,7 +12,7 @@ class EventFormViewModel: ObservableObject {
     @Published var event: Event
     @Published var selectedBannerImage: UIImage?
     @Published var selectedDate: Date
-    @Published var locationName: String
+    @Published var locationName: String?
     
     let mode: Mode
     
@@ -39,13 +39,13 @@ class EventFormViewModel: ObservableObject {
                 title: "",
                 startTimestamp: nowTimestamp
             )
-            self.locationName = ""
+            self.locationName = nil
             self.selectedBannerImage = nil
             self.selectedDate = Date.startOfDay(now)
             
         case .edit(let event):
             self.event = event
-            self.locationName = event.location?.name ?? ""
+            self.locationName = event.location?.name
             
             if let startTimestamp = event.startTimestamp {
                 self.selectedDate = Date.startOfDay(Date(startTimestamp))
@@ -140,7 +140,7 @@ class EventFormViewModel: ObservableObject {
             title: "",
             startTimestamp: nowTimestamp
         )
-        self.locationName = ""
+        self.locationName = nil
         self.selectedBannerImage = nil
         self.selectedDate = Date.startOfDay(now)
     }
