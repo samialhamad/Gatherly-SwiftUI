@@ -81,7 +81,7 @@ private extension ProfileView {
         icon: String,
         isDestructive: Bool = false,
         identifier: String? = nil,
-        action: @escaping () -> Void
+        action: @escaping () -> Void = {}
     ) -> some View {
         Button(action: action) {
             HStack {
@@ -150,18 +150,14 @@ private extension ProfileView {
                 title: "Logout",
                 icon: "arrow.backward.circle.fill",
                 identifier: "logoutButton"
-            ) {
-                // No log out implementation at this time
-            }
+            )
             
             profileRow(
                 title: "Delete Account",
                 icon: "minus.circle.fill",
                 isDestructive: true,
                 identifier: "deleteAccountButton"
-            ) {
-                // No delete acount implementation at this time
-            }
+            )
         }
     }
 }
