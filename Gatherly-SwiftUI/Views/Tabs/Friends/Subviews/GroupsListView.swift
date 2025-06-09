@@ -45,7 +45,6 @@ private extension GroupsListView {
     var filteredGroups: [UserGroup] {
         groupsListViewModel.filteredGroups(
             from: groupsViewModel.groups,
-            currentUser: currentUser,
             searchText: searchText)
     }
     

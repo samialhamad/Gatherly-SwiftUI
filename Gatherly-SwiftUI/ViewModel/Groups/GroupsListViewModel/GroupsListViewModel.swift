@@ -11,29 +11,15 @@ class GroupsListViewModel: ObservableObject {
     
     func filteredGroups(
         from allGroups: [UserGroup],
-        currentUser: User?,
         searchText: String
     ) -> [UserGroup] {
-        guard let currentUser else {
-            return []
-        }
-        
-        let groups = allGroups.filter { group in
-            let isLeader = group.leaderID == currentUser.id
-            let isMember = group.id.map { id in
-                currentUser.groupIDs?.contains(id) ?? false
-            } ?? false
-            
-            return isLeader || isMember
-        }
-        
         guard !searchText.isEmpty else {
-            return groups
+            return allGroups
         }
         
         let query = searchText.lowercased()
         
-        return groups.filter {
+        return allGroups.filter {
             ($0.name ?? "")
                 .lowercased()
                 .contains(query)
