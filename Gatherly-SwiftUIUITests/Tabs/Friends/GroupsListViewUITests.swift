@@ -17,16 +17,16 @@ final class GroupsListViewUITests: GatherlyUITestCase {
     }
 
     func testGroupsAppearInList() {
-        XCTAssertTrue(app.buttons["groupRow-Group Sami Leads"].waitForExistence(timeout: 2))
-        XCTAssertTrue(app.buttons["groupRow-Group I'm a Member in"].exists)
+        XCTAssertTrue(app.buttons["groupRow-Work Buddies"].waitForExistence(timeout: 2))
+        XCTAssertTrue(app.buttons["groupRow-Study Group"].exists)
     }
 
     func testTappingGroupNavigatesToDetail() {
-        let groupRow = app.buttons["groupRow-Group Sami Leads"]
+        let groupRow = app.buttons["groupRow-Work Buddies"]
         XCTAssertTrue(groupRow.waitForExistence(timeout: 2))
         groupRow.tap()
 
-        let navBar = app.navigationBars["Group Sami Leads"]
+        let navBar = app.navigationBars["Work Buddies"]
         XCTAssertTrue(navBar.waitForExistence(timeout: 2))
     }
 }

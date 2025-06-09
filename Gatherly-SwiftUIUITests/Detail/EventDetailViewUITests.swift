@@ -18,18 +18,18 @@ final class EventDetailViewUITests: GatherlyUITestCase {
         XCTAssertTrue(viewEventsButton.waitForExistence(timeout: 3))
         viewEventsButton.tap()
         
-        let eventRow = app.buttons["eventRow-Event 2 Today"]
+        let eventRow = app.buttons["eventRow-Bike Ride"]
         XCTAssertTrue(eventRow.waitForExistence(timeout: 3))
         eventRow.tap()
     }
     
     func testEventDetailTitleAppears() {
-        let navBar = app.navigationBars["Event 2 Today"]
+        let navBar = app.navigationBars["Bike Ride"]
         XCTAssertTrue(navBar.waitForExistence(timeout: 2))
     }
     
     func testDescriptionIsVisible() {
-        let longTextPrefix = "Event 2 for today"
+        let longTextPrefix = "Bike Ride"
         let descriptionText = app.staticTexts.containing(NSPredicate(format: "label BEGINSWITH %@", longTextPrefix)).firstMatch
         XCTAssertTrue(descriptionText.waitForExistence(timeout: 2))
     }

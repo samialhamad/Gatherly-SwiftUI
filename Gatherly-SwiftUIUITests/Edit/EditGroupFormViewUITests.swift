@@ -15,7 +15,7 @@ final class EditGroupFormViewUITests: GatherlyUITestCase {
         app.tabBars.buttons["Friends"].tap()
         app.segmentedControls.buttons["Groups"].tap()
         
-        let groupRow = app.buttons["groupRow-Group Sami Leads"]
+        let groupRow = app.buttons["groupRow-Work Buddies"]
         XCTAssertTrue(groupRow.waitForExistence(timeout: 2))
         groupRow.tap()
         

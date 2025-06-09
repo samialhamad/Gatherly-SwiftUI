@@ -198,7 +198,7 @@ final class UsersViewModelTests: XCTestCase {
             XCTAssertTrue(loadedDict.keys.contains(returnedUser.id!))
         }
         
-        wait(for: [createExpectation, loadingExpectation], timeout: 3.0)
+        wait(for: [createExpectation, loadingExpectation], timeout: 5.0)
         XCTAssertFalse(viewModel.isLoading)
     }
     

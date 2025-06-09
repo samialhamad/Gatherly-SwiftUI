@@ -119,7 +119,7 @@ final class GatherlyCalendarViewUITests: GatherlyUITestCase {
         XCTAssertTrue(dayCell.waitForExistence(timeout: 3))
         dayCell.tap()
         
-        let noPlansText = app.staticTexts["No upcoming plans!"]
-        XCTAssertTrue(noPlansText.waitForExistence(timeout: 2))
+        let expectedLabel = "No plans on \(dayAfterTomorrow.formatted(.dateTime.month(.wide).day()))!"
+        XCTAssertTrue(app.staticTexts[expectedLabel].waitForExistence(timeout: 2))
     }
 }

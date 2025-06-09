@@ -27,7 +27,7 @@ final class EventsGroupedListViewUITests: GatherlyUITestCase {
     }
 
     func testCanTapEventRow() {
-        let eventTitle = "Event 1 Today" // update to match seeded title
+        let eventTitle = "Study Session" // update to match seeded title
         let eventRow = app.buttons["eventRow-\(eventTitle)"]
         XCTAssertTrue(eventRow.waitForExistence(timeout: 2))
         eventRow.tap()

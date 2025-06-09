@@ -31,7 +31,7 @@ final class DayEventsViewUITests: GatherlyUITestCase {
     }
 
     func testCanTapEventRowAndNavigateToDetail() {
-        let knownTitle = "Event 1 Today" // match seeded event
+        let knownTitle = "Study Session" // match seeded event
         let row = app.buttons["eventRow-\(knownTitle)"]
         XCTAssertTrue(row.waitForExistence(timeout: 2))
         row.tap()

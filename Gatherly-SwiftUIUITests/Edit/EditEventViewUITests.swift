@@ -17,7 +17,7 @@ final class EditEventFormViewUITests: GatherlyUITestCase {
         XCTAssertTrue(viewEventsButton.waitForExistence(timeout: 3))
         viewEventsButton.tap()
         
-        let eventRow = app.buttons["eventRow-Event 3 Today"]
+        let eventRow = app.buttons["eventRow-Sushi"]
         XCTAssertTrue(eventRow.waitForExistence(timeout: 3))
         eventRow.tap()
         
@@ -122,7 +122,7 @@ final class EditEventFormViewUITests: GatherlyUITestCase {
         XCTAssertTrue(saveButton.isEnabled)
         saveButton.tap()
         
-        let detailNavBar = app.navigationBars["Event 3 Today"]
+        let detailNavBar = app.navigationBars["Sushi"]
         XCTAssertTrue(detailNavBar.waitForExistence(timeout: 5))
         let detailBackButton = detailNavBar.buttons.element(boundBy: 0)
         XCTAssertTrue(detailBackButton.exists)
