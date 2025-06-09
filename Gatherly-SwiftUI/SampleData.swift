@@ -127,15 +127,6 @@ struct SampleData {
                 Message(id: 2, userID: 4, message: "Let's plan an event!", read: false)
             ],
             name: "Group I'm a Member in"
-        ),
-        UserGroup(
-            id: 3,
-            leaderID: 4,
-            memberIDs: [4, 5, 6],
-            messages: [
-                Message(id: 1, userID: 4, message: "Welcome to the group!", read: true)
-            ],
-            name: "Group Sami is not in"
         )
     ]
 }
