@@ -38,7 +38,9 @@ class GroupDetailViewModel: ObservableObject {
         currentUser: User?,
         friendsDict: [Int: User]
     ) -> [User] {
-        group.memberIDs.compactMap { id in
+        group.memberIDs
+            .filter { $0 != group.leaderID }
+            .compactMap { id in
             if let currentUser, id == currentUser.id {
                 return currentUser
             } else {
