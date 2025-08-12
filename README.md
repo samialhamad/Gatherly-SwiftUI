@@ -15,6 +15,8 @@ Gatherly is an app I built to demonstrate my ability to build a modern iOS app u
 
 ## Demo
 
+[Demo Video - YouTube](https://youtu.be/L7QkI5mkXu0?si=TjrbIjOPUH5lnRDo)
+
 ## Features
 
 Gatherly supports contact syncing, deeplinking into various map apps and prepopulating the destination.
