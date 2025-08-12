@@ -17,7 +17,7 @@ Gatherly is an app I built to demonstrate my ability to build a modern iOS app u
 
 ## Demo
 
-[Demo Video - YouTube](https://youtu.be/L7QkI5mkXu0?si=TjrbIjOPUH5lnRDo)
+https://github.com/user-attachments/assets/b46deece-f689-4ce9-882d-aea9938d341c
 
 ## Features
 
