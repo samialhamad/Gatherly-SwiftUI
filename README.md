@@ -1,4 +1,4 @@
-<img width="800" alt="Screenshot 2025-08-12 at 4 38 23 PM" src="https://github.com/user-attachments/assets/9c978f55-e04a-496e-9ec1-b1f69209d6ad" />
+<img width="250" alt="gatherlyappicon 2" src="https://github.com/user-attachments/assets/e97ee603-73ed-4d4c-95ec-13bba675a9eb" />
 
 # Gatherly
 
