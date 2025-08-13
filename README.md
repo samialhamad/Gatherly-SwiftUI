@@ -4,12 +4,11 @@
 
 ## Table Of Contents
 
-- [Summary](#-summary)
-- [Demo](#-demo)
-- [Structure](#-structure)
-- [Skills](#-skills)
-- [Technical](#-technical)
-- [Libraries](#-libraries)
+- [Summary](#summary)
+- [Demo](#demo)
+- [Features](#features)
+- [Skills](#skills)
+- [Technologies](#technologies)
  
 ## Summary
 
