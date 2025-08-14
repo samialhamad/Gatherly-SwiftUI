@@ -1,4 +1,4 @@
-<img width="250" alt="gatherlyappicon 2" src="https://github.com/user-attachments/assets/e97ee603-73ed-4d4c-95ec-13bba675a9eb" />
+<img width="200" alt="gatherlyappicon 2" src="https://github.com/user-attachments/assets/e97ee603-73ed-4d4c-95ec-13bba675a9eb" />
 
 # Gatherly
 
@@ -16,7 +16,7 @@ Gatherly is an app I built to demonstrate my ability to build a modern iOS app u
 
 ## Demo
 
-https://github.com/user-attachments/assets/b46deece-f689-4ce9-882d-aea9938d341c
+https://github.com/user-attachments/assets/35ad5437-3a2e-4b66-bf75-a653a94e7ed1
 
 ## Features
 
